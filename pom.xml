@@ -9,22 +9,23 @@
     <version>1.0-SNAPSHOT</version>
 
     <name>MyForex</name>
-    <description>MyForex is an open-source backtesting and live trading platform for use in the foreign exchange</description>
+    <description>MyTrade is an open-source backtesting and live trading platform for use in the foreign exchange</description>
 
     <properties>
-
+        <tablesaw-core-version>0.25.2</tablesaw-core-version>
+        <tablesaw-jsplot-version>0.25.2</tablesaw-jsplot-version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>tech.tablesaw</groupId>
             <artifactId>tablesaw-core</artifactId>
-            <version>0.25.2</version>
+            <version>${tablesaw-core-version}</version>
         </dependency>
         <dependency>
             <groupId>tech.tablesaw</groupId>
             <artifactId>tablesaw-jsplot</artifactId>
-            <version>0.25.2</version>
+            <version>${tablesaw-jsplot-version}</version>
         </dependency>
     </dependencies>
 
@@ -40,7 +41,7 @@
                         <manifest>
                             <!--<addClasspath>true</addClasspath>-->
                             <!--<classpathPrefix>lib/</classpathPrefix>-->
-                            <mainClass>com.apssouza.Application</mainClass>
+                            <mainClass>com.apssouza.mytrade.Application</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
