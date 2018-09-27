@@ -10,7 +10,7 @@ public class RangeTimeEventLoop extends AbstractTimeEventLoop {
     protected int current;
     private List<LocalDateTime> range;
 
-    RangeTimeEventLoop(
+    public RangeTimeEventLoop(
             List<LocalDateTime> range
     ) {
         this.range = range;

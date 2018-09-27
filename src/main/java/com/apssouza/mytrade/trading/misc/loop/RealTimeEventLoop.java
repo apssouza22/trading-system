@@ -16,7 +16,7 @@ public class RealTimeEventLoop extends AbstractTimeEventLoop {
     private LocalDateTime previous;
     private LocalDateTime current;
 
-    RealTimeEventLoop(
+    public RealTimeEventLoop(
             LocalDateTime start,
             LocalDateTime end,
             TemporalAmount frequency ,
