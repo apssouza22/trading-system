@@ -43,11 +43,10 @@ public class RealTimeEventLoop extends AbstractTimeEventLoop {
     public void sleep() {
         LocalDateTime next = this.current.plus(this.frequency);
         LocalDateTime now = this.current_time_creator.getNow();
-        LocalDateTime nextNoSec =  next.withSecond(0);
-        if (DateTimeHelper.compare(now,"<", nextNoSec)){
-            Interval interval = DateTimeHelper.calculate(next, nextNoSec);
+        if (DateTimeHelper.compare(now,"<", next)){
+            Interval interval = DateTimeHelper.calculate(now, next);
             try {
-                Thread.sleep(interval.getMilliseconds());
+                Thread.sleep(Math.abs(interval.getMilliseconds()));
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }

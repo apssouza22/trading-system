@@ -11,4 +11,14 @@ public class InteractiveBrokerExecutionHandler implements ExecutionHandler {
         this.brokerPort = brokerPort;
         this.brokerClientId = brokerClientId;
     }
+
+    @Override
+    public void closeAllPositions() {
+
+    }
+
+    @Override
+    public void cancelOpenLimitOrders() {
+
+    }
 }

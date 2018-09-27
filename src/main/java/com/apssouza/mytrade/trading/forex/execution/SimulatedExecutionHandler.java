@@ -9,4 +9,14 @@ public class SimulatedExecutionHandler implements ExecutionHandler{
     public SimulatedExecutionHandler(PriceHandler priceHandler) {
         this.priceHandler = priceHandler;
     }
+
+    @Override
+    public void closeAllPositions() {
+
+    }
+
+    @Override
+    public void cancelOpenLimitOrders() {
+
+    }
 }

@@ -1,5 +1,7 @@
 package com.apssouza.mytrade.trading.misc.helper.time;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -8,13 +10,14 @@ import java.util.Date;
  */
 public class DayHelper {
 
-    public static boolean isWeekend(Date date) {
+    public static boolean isWeekend(LocalDate date) {
+        Date dtDate  = DateTimeConverter.getDateFromLocalDate(date);
         Calendar c1 = Calendar.getInstance();
-        c1.setTime(date);
-        return isSaturday(date) || isSunday(date);
+        c1.setTime(dtDate);
+        return isSaturday(dtDate) || isSunday(dtDate);
     }
 
-    public static boolean isWeekDay(Date date) {
+    public static boolean isWeekDay(LocalDate date) {
         return !isWeekend(date);
     }
 

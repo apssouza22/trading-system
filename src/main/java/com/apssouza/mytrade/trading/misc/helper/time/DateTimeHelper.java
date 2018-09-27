@@ -1,6 +1,8 @@
 package com.apssouza.mytrade.trading.misc.helper.time;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
@@ -43,22 +45,30 @@ public class DateTimeHelper {
         return now.format(DateTimeFormatter.ofPattern(format));
     }
 
-    public static boolean compare(LocalDateTime dt1, String operator , LocalDateTime dt2){
+    public static boolean compare(LocalDateTime dt1, String operator, LocalDateTime dt2) {
         Interval interval = DateTimeHelper.calculate(dt1, dt2);
-        if (operator.equals(">")){
-            return interval.getMilliseconds() > 0;
-        }
-        if (operator.equals( ">=")){
-            return interval.getMilliseconds() >= 0;
-        }
-        if (operator.equals("<")){
+        if (operator.equals(">")) {
             return interval.getMilliseconds() < 0;
         }
-        if (operator.equals("<=")){
+        if (operator.equals(">=")) {
             return interval.getMilliseconds() <= 0;
+        }
+        if (operator.equals("<")) {
+            return interval.getMilliseconds() > 0;
+        }
+        if (operator.equals("<=")) {
+            return interval.getMilliseconds() >= 0;
         }
 
         throw new RuntimeException("Invalid operator");
+    }
+
+    public static boolean compare(LocalDate dt1, String operator, LocalDate dt2) {
+        return DateTimeHelper.compare(
+                LocalDateTime.of(dt1, LocalTime.MIN),
+                operator,
+                LocalDateTime.of(dt2, LocalTime.MIN)
+        );
     }
 
 

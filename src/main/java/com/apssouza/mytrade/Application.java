@@ -13,7 +13,7 @@ import java.time.LocalTime;
 public class Application {
 
     public static void main(String[] args) {
-        LocalDate date = LocalDate.of(2018, 1, 1);
+        LocalDate date = LocalDate.of(2018, 9, 1);
         Connection conn = null;
 
         TradingSession tradingSession = new TradingSession(
@@ -21,10 +21,11 @@ public class Application {
                 LocalDateTime.of(date, LocalTime.MIN),
                 LocalDateTime.of(date.plusDays(30), LocalTime.MIN),
                 conn,
-                SessionType.BACK_TEST,
+                SessionType.LIVE,
                 "test",
                 ExecutionType.SIMULATED
         );
+        tradingSession.start();
     }
 
 }

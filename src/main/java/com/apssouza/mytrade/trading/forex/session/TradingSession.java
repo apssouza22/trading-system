@@ -21,6 +21,8 @@ import com.apssouza.mytrade.trading.forex.risk.PositionSizer;
 import com.apssouza.mytrade.trading.forex.risk.PositionSizerFixed;
 import com.apssouza.mytrade.trading.misc.helper.config.Properties;
 import com.apssouza.mytrade.trading.misc.helper.time.DateRangeHelper;
+import com.apssouza.mytrade.trading.misc.helper.time.DateTimeHelper;
+import com.apssouza.mytrade.trading.misc.helper.time.DayHelper;
 import com.apssouza.mytrade.trading.misc.loop.CurrentTimeCreator;
 import com.apssouza.mytrade.trading.misc.loop.RangeTimeEventLoop;
 import com.apssouza.mytrade.trading.misc.loop.RealTimeEventLoop;
@@ -29,8 +31,11 @@ import com.apssouza.mytrade.trading.misc.loop.TimeEventLoop;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+
+import static com.sun.tools.doclint.Entity.not;
 
 public class TradingSession {
 
@@ -128,18 +133,59 @@ public class TradingSession {
             this.eventLoop = new RealTimeEventLoop(
                     LocalDateTime.now(),
                     this.endDate,
-                    Duration.ofHours(1),
+                    Duration.ofSeconds(1),
                     new CurrentTimeCreator()
             );
         } else {
             List<LocalDateTime> range = DateRangeHelper.getSecondsBetween(this.startDate, this.endDate);
             this.eventLoop = new RangeTimeEventLoop(range);
+        }
+    }
+
+    private void runSession() {
+        if (this.sessionType == SessionType.BACK_TEST) {
+            System.out.println(String.format("Running Backtest from %s to %s", this.startDate, this.endDate));
+        } else {
+            System.out.println(String.format("Running Real-time Session until %s", this.endDate));
+        }
+        this.executionHandler.closeAllPositions();
+        this.executionHandler.cancelOpenLimitOrders();
+        LocalDate lastDayProcessed = this.startDate.toLocalDate().minusDays(1);
+        while (this.eventLoop.hasNext()) {
+
+            LocalDateTime currentTime = this.eventLoop.getNext().withNano(0);
+            System.out.println(currentTime);
+
+            if (DayHelper.isWeekend(currentTime.toLocalDate())) {
+                continue;
+            }
+
+            if (DateTimeHelper.compare(lastDayProcessed, "<", currentTime.toLocalDate())) {
+                this.processStartDay(currentTime);
+            }
+
+            this.processNext(currentTime);
+            this.eventLoop.sleep();
+            lastDayProcessed = currentTime.toLocalDate();
 
         }
     }
 
+    private void processNext(LocalDateTime currentTime) {
+
+    }
+
     private void deleteLogFiles() {
 
+    }
+
+    private void processStartDay(LocalDateTime currentTime) {
+
+
+    }
+
+    public void start(){
+        this.runSession();
     }
 
 }
