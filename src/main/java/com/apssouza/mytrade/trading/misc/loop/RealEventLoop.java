@@ -3,11 +3,10 @@ package com.apssouza.mytrade.trading.misc.loop;
 import com.apssouza.mytrade.trading.misc.helper.time.DateTimeHelper;
 import com.apssouza.mytrade.trading.misc.helper.time.Interval;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.temporal.TemporalAmount;
 
-public class RealTimeEventLoop extends AbstractTimeEventLoop {
+public class RealEventLoop extends AbstractEventLoop {
 
     private final LocalDateTime start;
     private final LocalDateTime end;
@@ -16,7 +15,7 @@ public class RealTimeEventLoop extends AbstractTimeEventLoop {
     private LocalDateTime previous;
     private LocalDateTime current;
 
-    public RealTimeEventLoop(
+    public RealEventLoop(
             LocalDateTime start,
             LocalDateTime end,
             TemporalAmount frequency ,
@@ -54,7 +53,7 @@ public class RealTimeEventLoop extends AbstractTimeEventLoop {
     }
 
     @Override
-    public LocalDateTime getNext() {
+    public LocalDateTime next() {
         this.previous = this.current;
         this.current = this.current_time_creator.getNow();
         return this.current;

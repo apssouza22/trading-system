@@ -3,14 +3,14 @@ package com.apssouza.mytrade.trading.misc.loop;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class RangeTimeEventLoop extends AbstractTimeEventLoop {
+public class RangeEventLoop extends AbstractEventLoop {
 
     protected int previous;
     private final int length;
     protected int current;
     private List<LocalDateTime> range;
 
-    public RangeTimeEventLoop(
+    public RangeEventLoop(
             List<LocalDateTime> range
     ) {
         this.range = range;
@@ -37,7 +37,7 @@ public class RangeTimeEventLoop extends AbstractTimeEventLoop {
     }
 
     @Override
-    public LocalDateTime getNext() {
+    public LocalDateTime next() {
         this.previous = this.current;
         this.current = this.current + 1;
         return this.range.get(this.current);

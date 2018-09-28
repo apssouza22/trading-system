@@ -1,12 +1,11 @@
 package com.apssouza.mytrade.trading.misc.loop;
 
-import java.time.LocalDateTime;
 
-public interface TimeEventLoop {
+public interface EventLoop<T> {
 
     boolean hasNext();
 
-    LocalDateTime getNext();
+    T next();
 
     void abort(boolean bool);
 

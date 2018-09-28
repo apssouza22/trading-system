@@ -4,7 +4,7 @@ import java.sql.Connection;
 
 public class SqlPriceDao implements PriceDao {
 
-    private Connection connection;
+    private final Connection connection;
 
     public SqlPriceDao(Connection connection) {
         this.connection = connection;

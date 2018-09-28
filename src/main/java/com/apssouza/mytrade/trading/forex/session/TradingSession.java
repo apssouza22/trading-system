@@ -5,13 +5,16 @@ import com.apssouza.mytrade.feed.price.PriceDao;
 import com.apssouza.mytrade.feed.price.PriceHandler;
 import com.apssouza.mytrade.feed.price.SqlPriceDao;
 import com.apssouza.mytrade.feed.signal.SignalDao;
+import com.apssouza.mytrade.feed.signal.SignalDto;
 import com.apssouza.mytrade.feed.signal.SignalHandler;
 import com.apssouza.mytrade.feed.signal.SqlSignalDao;
 import com.apssouza.mytrade.trading.forex.execution.ExecutionHandler;
 import com.apssouza.mytrade.trading.forex.execution.InteractiveBrokerExecutionHandler;
 import com.apssouza.mytrade.trading.forex.execution.SimulatedExecutionHandler;
 import com.apssouza.mytrade.trading.forex.order.MemoryOrderDao;
+import com.apssouza.mytrade.trading.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.forex.order.OrderHandler;
+import com.apssouza.mytrade.trading.forex.order.OrderStatus;
 import com.apssouza.mytrade.trading.forex.portfolio.Portfolio;
 import com.apssouza.mytrade.trading.forex.portfolio.PortfolioHandler;
 import com.apssouza.mytrade.trading.forex.portfolio.ReconciliationHandler;
@@ -19,23 +22,23 @@ import com.apssouza.mytrade.trading.forex.portfolio.StopOrderHandler;
 import com.apssouza.mytrade.trading.forex.risk.PositionExitHandler;
 import com.apssouza.mytrade.trading.forex.risk.PositionSizer;
 import com.apssouza.mytrade.trading.forex.risk.PositionSizerFixed;
+import com.apssouza.mytrade.trading.misc.helper.TradingHelper;
 import com.apssouza.mytrade.trading.misc.helper.config.Properties;
 import com.apssouza.mytrade.trading.misc.helper.time.DateRangeHelper;
 import com.apssouza.mytrade.trading.misc.helper.time.DateTimeHelper;
 import com.apssouza.mytrade.trading.misc.helper.time.DayHelper;
 import com.apssouza.mytrade.trading.misc.loop.CurrentTimeCreator;
-import com.apssouza.mytrade.trading.misc.loop.RangeTimeEventLoop;
-import com.apssouza.mytrade.trading.misc.loop.RealTimeEventLoop;
-import com.apssouza.mytrade.trading.misc.loop.TimeEventLoop;
+import com.apssouza.mytrade.trading.misc.loop.RangeEventLoop;
+import com.apssouza.mytrade.trading.misc.loop.RealEventLoop;
+import com.apssouza.mytrade.trading.misc.loop.EventLoop;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.LinkedList;
 import java.util.List;
-
-import static com.sun.tools.doclint.Entity.not;
 
 public class TradingSession {
 
@@ -61,8 +64,9 @@ public class TradingSession {
     private SignalHandler signalHandler;
     private ReconciliationHandler reconciliationHandler;
     private HistoryBookHandler historyHandler;
-    private TimeEventLoop eventLoop;
+    private EventLoop eventLoop;
     private PortfolioHandler portfolioHandler;
+    private boolean processedEndDay;
 
     public TradingSession(
             BigDecimal equity,
@@ -130,7 +134,7 @@ public class TradingSession {
         );
 
         if (this.sessionType == SessionType.LIVE) {
-            this.eventLoop = new RealTimeEventLoop(
+            this.eventLoop = new RealEventLoop(
                     LocalDateTime.now(),
                     this.endDate,
                     Duration.ofSeconds(1),
@@ -138,7 +142,7 @@ public class TradingSession {
             );
         } else {
             List<LocalDateTime> range = DateRangeHelper.getSecondsBetween(this.startDate, this.endDate);
-            this.eventLoop = new RangeTimeEventLoop(range);
+            this.eventLoop = new RangeEventLoop(range);
         }
     }
 
@@ -153,7 +157,7 @@ public class TradingSession {
         LocalDate lastDayProcessed = this.startDate.toLocalDate().minusDays(1);
         while (this.eventLoop.hasNext()) {
 
-            LocalDateTime currentTime = this.eventLoop.getNext().withNano(0);
+            LocalDateTime currentTime = (LocalDateTime) this.eventLoop.next();
             System.out.println(currentTime);
 
             if (DayHelper.isWeekend(currentTime.toLocalDate())) {
@@ -172,20 +176,61 @@ public class TradingSession {
     }
 
     private void processNext(LocalDateTime currentTime) {
+        if (!TradingHelper.isTradingTime(currentTime)) {
+            return;
+        }
 
+        if (this.sessionType == SessionType.BACK_TEST) {
+            this.executionHandler.setCurrentTime(currentTime);
+        }
+        List<SignalDto> signals;
+        if (this.sessionType == SessionType.LIVE) {
+            signals = this.signalHandler.getRealtimeSignal(this.systemName);
+        } else {
+            signals = this.signalHandler.findbySecondSystem(this.systemName, currentTime);
+        }
+        this.portfolioHandler.updatePortfolioValue(currentTime);
+
+        this.portfolioHandler.stopOrderHandle(currentTime);
+        this.portfolioHandler.processExits(currentTime, signals);
+        this.portfolioHandler.onSignal(signals, currentTime);
+
+        List<OrderDto> orders = this.orderDao.getOrderByStatus(OrderStatus.CREATED);
+        orders = this.createPositionIdentifier(orders);
+        this.historyHandler.addSignal(signals, orders);
+
+        this.portfolioHandler.onOrder(orders);
+        this.portfolioHandler.processReconciliation();
+        this.portfolioHandler.createStopOrder(currentTime);
+        this.historyHandler.process(currentTime);
     }
 
-    private void deleteLogFiles() {
-
+    public void setSignalHandler(SignalHandler signalHandler) {
+        this.signalHandler = signalHandler;
     }
 
     private void processStartDay(LocalDateTime currentTime) {
-
-
+        if (Properties.sessionType == SessionType.BACK_TEST)
+            this.priceMemoryDao.loadData(currentTime, currentTime.plusDays(1));
     }
 
-    public void start(){
+    public void start() {
         this.runSession();
     }
 
+    private boolean isEndDay(LocalDateTime currentTime) {
+        return currentTime.getHour() > 22;
+    }
+
+    private List<OrderDto> createPositionIdentifier(List<OrderDto> orders) {
+        List<OrderDto> list = new LinkedList<>();
+        for (OrderDto order : orders) {
+            list.add(new OrderDto(
+                    MultiPositionHandler.getIdentifierFromOrder(order)
+            ));
+        }
+        return list;
+    }
 }
+
+
