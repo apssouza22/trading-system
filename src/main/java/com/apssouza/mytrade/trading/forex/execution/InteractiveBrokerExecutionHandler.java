@@ -1,5 +1,7 @@
 package com.apssouza.mytrade.trading.forex.execution;
 
+import java.time.LocalDateTime;
+
 public class InteractiveBrokerExecutionHandler implements ExecutionHandler {
 
     private final String brokerHost;
@@ -19,6 +21,11 @@ public class InteractiveBrokerExecutionHandler implements ExecutionHandler {
 
     @Override
     public void cancelOpenLimitOrders() {
+
+    }
+
+    @Override
+    public void setCurrentTime(LocalDateTime currentTime) {
 
     }
 }

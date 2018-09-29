@@ -2,6 +2,8 @@ package com.apssouza.mytrade.trading.forex.execution;
 
 import com.apssouza.mytrade.feed.price.PriceHandler;
 
+import java.time.LocalDateTime;
+
 public class SimulatedExecutionHandler implements ExecutionHandler{
 
     private final PriceHandler priceHandler;
@@ -17,6 +19,11 @@ public class SimulatedExecutionHandler implements ExecutionHandler{
 
     @Override
     public void cancelOpenLimitOrders() {
+
+    }
+
+    @Override
+    public void setCurrentTime(LocalDateTime currentTime) {
 
     }
 }

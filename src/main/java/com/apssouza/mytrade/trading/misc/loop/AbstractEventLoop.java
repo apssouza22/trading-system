@@ -2,7 +2,7 @@ package com.apssouza.mytrade.trading.misc.loop;
 
 import java.time.LocalDateTime;
 
-public abstract class AbstractEventLoop implements EventLoop<LocalDateTime> {
+public abstract class AbstractEventLoop implements EventLoop {
 
     protected boolean aborted = false;
 
@@ -10,7 +10,7 @@ public abstract class AbstractEventLoop implements EventLoop<LocalDateTime> {
 
     public abstract void sleep();
 
-    public abstract LocalDateTime next();
+    public abstract LoopEvent next();
 
     public void abort(boolean abort) {
         this.aborted = abort;

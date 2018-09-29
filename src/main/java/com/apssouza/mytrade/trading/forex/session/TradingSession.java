@@ -27,10 +27,7 @@ import com.apssouza.mytrade.trading.misc.helper.config.Properties;
 import com.apssouza.mytrade.trading.misc.helper.time.DateRangeHelper;
 import com.apssouza.mytrade.trading.misc.helper.time.DateTimeHelper;
 import com.apssouza.mytrade.trading.misc.helper.time.DayHelper;
-import com.apssouza.mytrade.trading.misc.loop.CurrentTimeCreator;
-import com.apssouza.mytrade.trading.misc.loop.RangeEventLoop;
-import com.apssouza.mytrade.trading.misc.loop.RealEventLoop;
-import com.apssouza.mytrade.trading.misc.loop.EventLoop;
+import com.apssouza.mytrade.trading.misc.loop.*;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -138,11 +135,12 @@ public class TradingSession {
                     LocalDateTime.now(),
                     this.endDate,
                     Duration.ofSeconds(1),
-                    new CurrentTimeCreator()
+                    new CurrentTimeCreator(),
+                    this.priceHandler
             );
         } else {
             List<LocalDateTime> range = DateRangeHelper.getSecondsBetween(this.startDate, this.endDate);
-            this.eventLoop = new RangeEventLoop(range);
+            this.eventLoop = new RangeEventLoop(range, this.priceHandler);
         }
     }
 
@@ -156,8 +154,8 @@ public class TradingSession {
         this.executionHandler.cancelOpenLimitOrders();
         LocalDate lastDayProcessed = this.startDate.toLocalDate().minusDays(1);
         while (this.eventLoop.hasNext()) {
-
-            LocalDateTime currentTime = (LocalDateTime) this.eventLoop.next();
+            LoopEvent loopEvent = this.eventLoop.next();
+            LocalDateTime currentTime = loopEvent.getTime();
             System.out.println(currentTime);
 
             if (DayHelper.isWeekend(currentTime.toLocalDate())) {

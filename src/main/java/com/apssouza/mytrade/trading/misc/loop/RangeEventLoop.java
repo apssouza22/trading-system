@@ -1,5 +1,7 @@
 package com.apssouza.mytrade.trading.misc.loop;
 
+import com.apssouza.mytrade.feed.price.PriceHandler;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -9,11 +11,14 @@ public class RangeEventLoop extends AbstractEventLoop {
     private final int length;
     protected int current;
     private List<LocalDateTime> range;
+    private final PriceHandler priceHandler;
 
     public RangeEventLoop(
-            List<LocalDateTime> range
+            List<LocalDateTime> range,
+            PriceHandler priceHandler
     ) {
         this.range = range;
+        this.priceHandler = priceHandler;
         this.length = this.range.size();
         this.current = -1;
     }
@@ -37,9 +42,10 @@ public class RangeEventLoop extends AbstractEventLoop {
     }
 
     @Override
-    public LocalDateTime next() {
+    public LoopEvent next() {
         this.previous = this.current;
         this.current = this.current + 1;
-        return this.range.get(this.current);
+        LocalDateTime time = this.range.get(this.current);
+        return new LoopEvent(time, this.priceHandler.getClosestPrice(time));
     }
 }

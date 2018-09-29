@@ -1,11 +1,11 @@
 package com.apssouza.mytrade.trading.misc.loop;
 
 
-public interface EventLoop<T> {
+public interface EventLoop {
 
     boolean hasNext();
 
-    T next();
+    LoopEvent next();
 
     void abort(boolean bool);
 

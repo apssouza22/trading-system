@@ -1,5 +1,6 @@
 package com.apssouza.mytrade.trading.misc.loop;
 
+import com.apssouza.mytrade.feed.price.PriceHandler;
 import com.apssouza.mytrade.trading.misc.helper.time.DateTimeHelper;
 import com.apssouza.mytrade.trading.misc.helper.time.Interval;
 
@@ -12,19 +13,22 @@ public class RealEventLoop extends AbstractEventLoop {
     private final LocalDateTime end;
     private final TemporalAmount frequency;
     private final CurrentTimeCreator current_time_creator;
+    private final PriceHandler priceHandler;
     private LocalDateTime previous;
     private LocalDateTime current;
 
     public RealEventLoop(
             LocalDateTime start,
             LocalDateTime end,
-            TemporalAmount frequency ,
-            CurrentTimeCreator current_time_creator
+            TemporalAmount frequency,
+            CurrentTimeCreator current_time_creator,
+            PriceHandler priceHandler
     ) {
         this.start = start;
         this.end = end;
         this.frequency = frequency;
         this.current_time_creator = current_time_creator;
+        this.priceHandler = priceHandler;
     }
 
     @Override
@@ -33,7 +37,7 @@ public class RealEventLoop extends AbstractEventLoop {
             return false;
         LocalDateTime now = this.current_time_creator.getNow();
 
-        if (DateTimeHelper.compare(this.end,">", now)  && DateTimeHelper.compare(this.end,">=", now))
+        if (DateTimeHelper.compare(this.end, ">", now) && DateTimeHelper.compare(this.end, ">=", now))
             return true;
         return false;
     }
@@ -42,7 +46,7 @@ public class RealEventLoop extends AbstractEventLoop {
     public void sleep() {
         LocalDateTime next = this.current.plus(this.frequency);
         LocalDateTime now = this.current_time_creator.getNow();
-        if (DateTimeHelper.compare(now,"<", next)){
+        if (DateTimeHelper.compare(now, "<", next)) {
             Interval interval = DateTimeHelper.calculate(now, next);
             try {
                 Thread.sleep(Math.abs(interval.getMilliseconds()));
@@ -53,9 +57,9 @@ public class RealEventLoop extends AbstractEventLoop {
     }
 
     @Override
-    public LocalDateTime next() {
+    public LoopEvent next() {
         this.previous = this.current;
         this.current = this.current_time_creator.getNow();
-        return this.current;
+        return new LoopEvent(this.current, this.priceHandler.getClosestPrice(this.current));
     }
 }
