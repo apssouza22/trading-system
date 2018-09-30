@@ -163,7 +163,7 @@ public class TradingSession {
                 continue;
             }
 
-            if (DateTimeHelper.compare(lastDayProcessed, "<", currentTime.toLocalDate())) {
+            if (lastDayProcessed.compareTo(currentTime.toLocalDate()) < 0 ) {
                 this.processStartDay(currentTime);
             }
 

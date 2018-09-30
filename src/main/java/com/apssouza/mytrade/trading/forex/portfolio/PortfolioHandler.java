@@ -9,6 +9,7 @@ import com.apssouza.mytrade.trading.forex.order.OrderHandler;
 import com.apssouza.mytrade.trading.forex.risk.PositionExitHandler;
 import com.apssouza.mytrade.trading.forex.risk.PositionSizer;
 import com.apssouza.mytrade.trading.forex.session.HistoryBookHandler;
+import com.apssouza.mytrade.trading.misc.loop.LoopEvent;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -51,8 +52,8 @@ public class PortfolioHandler {
         this.historyHandler = historyHandler;
     }
 
-    public void updatePortfolioValue(LocalDateTime currentTime) {
-
+    public void updatePortfolioValue(LoopEvent event) {
+        this.portfolio.updatePortfolioValue(event);
     }
 
     public void createStopOrder(LocalDateTime currentTime) {

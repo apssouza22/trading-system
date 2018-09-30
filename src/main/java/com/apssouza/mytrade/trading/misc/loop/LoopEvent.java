@@ -3,22 +3,27 @@ package com.apssouza.mytrade.trading.misc.loop;
 import com.apssouza.mytrade.feed.price.PriceDto;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class LoopEvent {
 
     private final LocalDateTime time;
-    private final PriceDto price;
+    private final Map<String, PriceDto> priceDtoMap = new HashMap<>();
 
-    public LoopEvent(LocalDateTime time, PriceDto price) {
+    public LoopEvent(LocalDateTime time, List<PriceDto> prices) {
         this.time = time;
-        this.price = price;
+        for (PriceDto price : prices) {
+            priceDtoMap.put(price.getSymbol(), price);
+        }
     }
 
     public LocalDateTime getTime() {
         return this.time;
     }
 
-    public PriceDto getPrice() {
-        return price;
+    public Map<String, PriceDto> getPrice() {
+        return priceDtoMap;
     }
 }
