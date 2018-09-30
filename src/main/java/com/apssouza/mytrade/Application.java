@@ -3,6 +3,7 @@ package com.apssouza.mytrade;
 import com.apssouza.mytrade.trading.forex.session.ExecutionType;
 import com.apssouza.mytrade.trading.forex.session.SessionType;
 import com.apssouza.mytrade.trading.forex.session.TradingSession;
+import com.apssouza.mytrade.trading.misc.helper.config.Properties;
 
 import java.math.BigDecimal;
 import java.sql.*;
@@ -20,18 +21,22 @@ public class Application {
         Connection conn = getConnection();
         loadMockedData(conn);
 
-        LocalDate date = LocalDate.of(2018, 9, 1);
+        LocalDate date = LocalDate.of(2018, 9, 10);
+        Properties.tradingStartDay = LocalDateTime.of(date, LocalTime.MIN);
+        Properties.tradingEndDay = LocalDateTime.of(date.plusDays(30), LocalTime.MIN);
+        Properties.tradingStartTime = LocalTime.MIN;
+        Properties.tradingEndTime = LocalTime.MAX;
 
         TradingSession tradingSession = new TradingSession(
                 BigDecimal.valueOf(100000l),
-                LocalDateTime.of(date, LocalTime.MIN),
-                LocalDateTime.of(date.plusDays(30), LocalTime.MIN),
+                Properties.tradingStartDay,
+                Properties.tradingEndDay,
                 conn,
-                SessionType.LIVE,
-                "test",
+                SessionType.BACK_TEST,
+                "signal_test",
                 ExecutionType.SIMULATED
         );
-//        tradingSession.start();
+        tradingSession.start();
     }
 
     private static Connection getConnection() throws ClassNotFoundException, SQLException {
@@ -52,38 +57,33 @@ public class Application {
                 "Volume float NOT NULL," +
                 "Symbol nvarchar(50) NOT NULL," +
                 ")");
-        st.executeUpdate("" +
-                "INSERT INTO price(TimeStamp,OpenPrice,HighPrice,LowPrice,ClosePrice,Volume,Symbol)" +
-                "     VALUES('2018-01-10 00:00:00.000',0.73562,0.73563,0.73562,0.73562,0,'AUDUSD')"
-        );
-        st.executeUpdate("" +
-                "INSERT INTO price(TimeStamp,OpenPrice,HighPrice,LowPrice,ClosePrice,Volume,Symbol)" +
-                "     VALUES('2018-01-11 00:00:00.000',0.73562,0.73563,0.73562,0.73562,0,'AUDUSD')"
-        );
-        st.executeUpdate("" +
-                "INSERT INTO price(TimeStamp,OpenPrice,HighPrice,LowPrice,ClosePrice,Volume,Symbol)" +
-                "     VALUES('2018-01-12 00:00:00.000',0.73562,0.73563,0.73562,0.73562,0,'AUDUSD')"
-        );
-        st.executeUpdate("" +
-                "INSERT INTO price(TimeStamp,OpenPrice,HighPrice,LowPrice,ClosePrice,Volume,Symbol)" +
-                "     VALUES('2018-01-13 00:00:00.000',0.73562,0.73563,0.73562,0.73562,0,'AUDUSD')"
-        );
-        st.executeUpdate("" +
-                "INSERT INTO price(TimeStamp,OpenPrice,HighPrice,LowPrice,ClosePrice,Volume,Symbol)" +
-                "     VALUES('2018-01-14 00:00:00.000',0.73562,0.73563,0.73562,0.73562,0,'AUDUSD')"
-        );
-        st.executeUpdate("" +
-                "INSERT INTO price(TimeStamp,OpenPrice,HighPrice,LowPrice,ClosePrice,Volume,Symbol)" +
-                "     VALUES('2018-01-15 00:00:00.000',0.73562,0.73563,0.73562,0.73562,0,'AUDUSD')"
-        );
-        st.executeUpdate("" +
-                "INSERT INTO price(TimeStamp,OpenPrice,HighPrice,LowPrice,ClosePrice,Volume,Symbol)" +
-                "     VALUES('2018-01-16 00:00:00.000',0.73562,0.73563,0.73562,0.73562,0,'AUDUSD')"
-        );
-        st.executeUpdate("" +
-                "INSERT INTO price(TimeStamp,OpenPrice,HighPrice,LowPrice,ClosePrice,Volume,Symbol)" +
-                "     VALUES('2018-01-17 00:00:00.000',0.73562,0.73563,0.73562,0.73562,0,'AUDUSD')"
-        );
+
+        st.executeUpdate("create table signal(Id int IDENTITY(1,1) NOT NULL," +
+                "created_at datetime NOT NULL," +
+                "action nvarchar(6) NOT NULL," +
+                "symbol nvarchar(50) NOT NULL," +
+                "source_name nvarchar(100) NOT NULL," +
+                ")");
+
+        for (int i = 1; i < 20; i = i + 2) {
+            st.executeUpdate("" +
+                    "INSERT INTO price(TimeStamp,OpenPrice,HighPrice,LowPrice,ClosePrice,Volume,Symbol)" +
+                    "     VALUES('2018-09-"+i+" 01:01:00.000',0.73562,0.73563,0.73562,0.73562,0,'AUDUSD')"
+            );
+        }
+        for (int i = 1; i < 6; i = i + 2) {
+            st.executeUpdate("" +
+                    "INSERT INTO signal(created_at,action, symbol, source_name)" +
+                    "     VALUES('2018-09-1" + i + " 01:01:00.000','BUY', 'AUDUSD', 'signal_test')"
+            );
+        }
+
+        for (int i = 1; i < 10; i = i + 3) {
+            st.executeUpdate("" +
+                    "INSERT INTO signal(created_at,action, symbol, source_name)" +
+                    "     VALUES('2018-09-1" + i + " 01:01:00.000','SELL', 'AUDUSD', 'signal_test')"
+            );
+        }
     }
 
 }

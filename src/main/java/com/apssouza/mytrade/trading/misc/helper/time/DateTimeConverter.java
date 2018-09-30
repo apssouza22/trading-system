@@ -3,7 +3,11 @@ package com.apssouza.mytrade.trading.misc.helper.time;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 /**
@@ -20,14 +24,15 @@ public class DateTimeConverter {
         return new java.sql.Date(date.getTime()).toLocalDate();
     }
 
+    public static LocalDateTime getLocalDateTimeFromDate(Date date) {
+        return LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
+    }
 
-    public static Date getDateFromStringAndFormat(String sDate, String sformat) {
-        SimpleDateFormat format = new SimpleDateFormat(sformat);
-        try {
-            return format.parse(sDate);
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
+
+
+    public static String getDatabaseFormat(LocalDateTime time) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        return time.format(formatter);
     }
 
 }

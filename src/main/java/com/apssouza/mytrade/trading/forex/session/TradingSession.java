@@ -153,6 +153,7 @@ public class TradingSession {
         this.executionHandler.closeAllPositions();
         this.executionHandler.cancelOpenLimitOrders();
         LocalDate lastDayProcessed = this.startDate.toLocalDate().minusDays(1);
+        this.priceMemoryDao.loadData(startDate, startDate.plusDays(30));
         while (this.eventLoop.hasNext()) {
             LoopEvent loopEvent = this.eventLoop.next();
             LocalDateTime currentTime = loopEvent.getTime();
@@ -169,7 +170,6 @@ public class TradingSession {
             this.processNext(currentTime);
             this.eventLoop.sleep();
             lastDayProcessed = currentTime.toLocalDate();
-
         }
     }
 
@@ -185,7 +185,10 @@ public class TradingSession {
         if (this.sessionType == SessionType.LIVE) {
             signals = this.signalHandler.getRealtimeSignal(this.systemName);
         } else {
-            signals = this.signalHandler.findbySecondSystem(this.systemName, currentTime);
+            signals = this.signalHandler.findbySecondAndSource(this.systemName, currentTime);
+        }
+        if (!signals.isEmpty()){
+            System.out.println("signal");
         }
         this.portfolioHandler.updatePortfolioValue(currentTime);
 

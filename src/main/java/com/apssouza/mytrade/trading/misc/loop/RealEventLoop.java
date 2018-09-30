@@ -36,9 +36,9 @@ public class RealEventLoop extends AbstractEventLoop {
         if (this.aborted)
             return false;
         LocalDateTime now = this.current_time_creator.getNow();
-
-        if (DateTimeHelper.compare(this.end, ">", now) && DateTimeHelper.compare(this.end, ">=", now))
+        if (this.end.compareTo(now) >= 0 ){
             return true;
+        }
         return false;
     }
 
@@ -46,7 +46,7 @@ public class RealEventLoop extends AbstractEventLoop {
     public void sleep() {
         LocalDateTime next = this.current.plus(this.frequency);
         LocalDateTime now = this.current_time_creator.getNow();
-        if (DateTimeHelper.compare(now, "<", next)) {
+        if (now.compareTo(next) < 0) {
             Interval interval = DateTimeHelper.calculate(now, next);
             try {
                 Thread.sleep(Math.abs(interval.getMilliseconds()));
