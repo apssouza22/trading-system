@@ -57,7 +57,7 @@ public class Portfolio {
 
     }
 
-    public boolean closePosition(String identfier, LocalDateTime currentTime) {
+    public boolean closePosition(String identfier) {
         if (!this.positions.containsKey(identfier)) {
             throw new RuntimeException("Position not found");
         }

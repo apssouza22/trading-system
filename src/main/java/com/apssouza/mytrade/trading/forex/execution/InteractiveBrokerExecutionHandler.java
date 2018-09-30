@@ -1,6 +1,9 @@
 package com.apssouza.mytrade.trading.forex.execution;
 
+import com.apssouza.mytrade.trading.forex.order.StopOrderDto;
+
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class InteractiveBrokerExecutionHandler implements ExecutionHandler {
 
@@ -20,12 +23,27 @@ public class InteractiveBrokerExecutionHandler implements ExecutionHandler {
     }
 
     @Override
-    public void cancelOpenLimitOrders() {
+    public int cancelOpenLimitOrders() {
+        return 0;
+    }
 
+    @Override
+    public int cancelOpenStopOrders() {
+        return 0;
     }
 
     @Override
     public void setCurrentTime(LocalDateTime currentTime) {
 
+    }
+
+    @Override
+    public List<StopOrderDto> getStopLossOrders() {
+        return null;
+    }
+
+    @Override
+    public List<StopOrderDto> getLimitOrders() {
+        return null;
     }
 }
