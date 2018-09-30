@@ -10,13 +10,11 @@ import java.util.Map;
 public class LoopEvent {
 
     private final LocalDateTime time;
-    private final Map<String, PriceDto> priceDtoMap = new HashMap<>();
+    private final Map<String, PriceDto> priceDtoMap;
 
-    public LoopEvent(LocalDateTime time, List<PriceDto> prices) {
+    public LoopEvent(LocalDateTime time, Map<String, PriceDto> priceDtoMap) {
         this.time = time;
-        for (PriceDto price : prices) {
-            priceDtoMap.put(price.getSymbol(), price);
-        }
+        this.priceDtoMap = priceDtoMap;
     }
 
     public LocalDateTime getTime() {

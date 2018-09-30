@@ -6,6 +6,7 @@ import com.apssouza.mytrade.trading.misc.loop.LoopEvent;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -13,7 +14,7 @@ public class Portfolio {
     private final PriceHandler priceHandler;
     private final BigDecimal equity;
     private BigDecimal balance;
-    private Map<String, Position> positions;
+    private Map<String, Position> positions = new HashMap<>();
     private static Logger log = Logger.getLogger(Portfolio.class.getName());
 
     public Portfolio(PriceHandler priceHandler, BigDecimal equity) {

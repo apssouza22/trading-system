@@ -1,6 +1,9 @@
 package com.apssouza.mytrade.feed.price;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class PriceHandler {
     private final PriceDao priceDao;
@@ -9,7 +12,16 @@ public class PriceHandler {
         this.priceDao = priceDao;
     }
 
-    public PriceDto getClosestPrice(LocalDateTime time) {
-        return null;
+    public List<PriceDto> getClosestPrice(LocalDateTime time) {
+        return this.priceDao.getClosestPrice(time);
+    }
+
+    public Map<String, PriceDto> getPriceSymbolMapped(LocalDateTime time){
+        List<PriceDto> prices = this.getClosestPrice(time);
+        Map<String, PriceDto> priceDtoMap = new HashMap<>();
+        for (PriceDto price : prices) {
+            priceDtoMap.put(price.getSymbol(), price);
+        }
+        return priceDtoMap;
     }
 }

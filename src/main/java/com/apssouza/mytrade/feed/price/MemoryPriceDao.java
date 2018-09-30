@@ -5,7 +5,7 @@ import tech.tablesaw.api.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 public class MemoryPriceDao implements PriceDao {
@@ -55,6 +55,30 @@ public class MemoryPriceDao implements PriceDao {
         Table result = this.priceTable.where(ts.isOnOrAfter(start).and(ts.isOnOrBefore(end)));
         List<PriceDto> list = new ArrayList<>();
         for (Row row : result) {
+            list.add(new PriceDto(
+                    row.getDateTime("timestamp"),
+                    BigDecimal.valueOf(row.getDouble("open")),
+                    BigDecimal.valueOf(row.getDouble("close")),
+                    BigDecimal.valueOf(row.getDouble("high")),
+                    BigDecimal.valueOf(row.getDouble("low")),
+                    row.getString("symbol")
+            ));
+        }
+        return list;
+    }
+
+    @Override
+    public List<PriceDto> getClosestPrice(LocalDateTime time) {
+        DateTimeColumn ts = this.priceTable.dateTimeColumn("timestamp");
+        Table result = this.priceTable.where(ts.isOnOrBefore(time)).first(1);
+        Iterator<Row> iterator = result.iterator();
+        Row next = iterator.next();
+        Table resultList = this.priceTable.where(
+                ts.isEqualTo(next.getDateTime("timestamp"))
+        );
+
+        List<PriceDto> list = new ArrayList<>();
+        for (Row row : resultList) {
             list.add(new PriceDto(
                     row.getDateTime("timestamp"),
                     BigDecimal.valueOf(row.getDouble("open")),

@@ -7,4 +7,6 @@ public interface PriceDao {
     void loadData(LocalDateTime start, LocalDateTime end);
 
     List<PriceDto> getPriceInterval(LocalDateTime start, LocalDateTime end);
+
+    List<PriceDto> getClosestPrice(LocalDateTime time);
 }

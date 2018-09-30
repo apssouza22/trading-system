@@ -59,14 +59,16 @@ public class SqlPriceDao implements PriceDao {
     }
 
     public List<PriceDto> getClosestPrice(LocalDateTime datetime, String symbol) {
-        String query = String.format("select * from price where timestamp <= '%s' and symbol='%'", datetime, symbol);
+        String query = String.format("select * from price where timestamp <= '%s' and symbol='%' LIMIT 1", datetime, symbol);
         return getList(query);
     }
 
 
     public List<PriceDto> getClosestPrice(LocalDateTime datetime) {
         String query = String.format("select * from price where timestamp <= '%s' LIMIT 1", datetime);
-        return getList(query);
+        List<PriceDto> list = getList(query);
+        String query2 = String.format("select * from price where timestamp = '%s' LIMIT 1", list.get(0).getTimestamp());
+        return getList(query2);
     }
 
 }

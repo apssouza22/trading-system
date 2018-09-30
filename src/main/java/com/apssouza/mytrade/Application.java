@@ -65,10 +65,10 @@ public class Application {
                 "source_name nvarchar(100) NOT NULL," +
                 ")");
 
-        for (int i = 1; i < 20; i = i + 2) {
+        for (int i = 1; i < 20; i++) {
             st.executeUpdate("" +
                     "INSERT INTO price(TimeStamp,OpenPrice,HighPrice,LowPrice,ClosePrice,Volume,Symbol)" +
-                    "     VALUES('2018-09-"+i+" 01:01:00.000',0.73562,0.73563,0.73562,0.73562,0,'AUDUSD')"
+                    "     VALUES('2018-09-"+i+" 00:00:00.000',0.73562,0.73563,0.73562,0.73562,0,'AUDUSD')"
             );
         }
         for (int i = 1; i < 6; i = i + 2) {

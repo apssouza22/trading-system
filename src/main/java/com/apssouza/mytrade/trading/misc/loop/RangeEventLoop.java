@@ -46,6 +46,6 @@ public class RangeEventLoop extends AbstractEventLoop {
         this.previous = this.current;
         this.current = this.current + 1;
         LocalDateTime time = this.range.get(this.current);
-        return new LoopEvent(time, this.priceHandler.getClosestPrice(time));
+        return new LoopEvent(time, this.priceHandler.getPriceSymbolMapped(time));
     }
 }
