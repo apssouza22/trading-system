@@ -56,7 +56,7 @@ public class PortfolioHandler {
         this.portfolio.updatePortfolioValue(event);
     }
 
-    public void createStopOrder(LocalDateTime currentTime) {
+    public void createStopOrder(LoopEvent event) {
 
     }
 
@@ -68,15 +68,15 @@ public class PortfolioHandler {
 
     }
 
-    public void stopOrderHandle(LocalDateTime currentTime) {
+    public void stopOrderHandle(LoopEvent event) {
 
     }
 
-    public void processExits(LocalDateTime currentTime, List<SignalDto> signals) {
+    public void processExits(LoopEvent event, List<SignalDto> signals) {
 
     }
 
-    public void onSignal(List<SignalDto> signals, LocalDateTime currentTime) {
+    public void onSignal(LoopEvent event, List<SignalDto> signals) {
 
     }
 }

@@ -1,18 +1,16 @@
 package com.apssouza.mytrade.trading.forex.portfolio;
 
-import com.apssouza.mytrade.feed.price.PriceDto;
 import com.apssouza.mytrade.trading.forex.order.StopOrderDto;
 import com.apssouza.mytrade.trading.forex.order.StopOrderType;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class Position {
 
+    private final PositionType positionType;
     private final String symbol;
     private int quantity;
     private final BigDecimal initPrice;
@@ -29,7 +27,7 @@ public class Position {
     private StopOrderDto placedStopLoss;
 
     public Position(
-            PositionType,
+            PositionType positionType,
             String symbol,
             int quantity,
             BigDecimal initPrice,
@@ -39,6 +37,7 @@ public class Position {
             ExitReason exitReason,
             PositionStatus status
     ) {
+        this.positionType = positionType;
 
         this.symbol = symbol;
         this.quantity = quantity;
@@ -61,7 +60,7 @@ public class Position {
 
     public StopOrderDto getTakeProfitOrder() {
         for (StopOrderDto stopOrder : this.stopOrders) {
-            if (stopOrder.type == StopOrderType.TAKE_PROFIT)
+            if (stopOrder.getType() == StopOrderType.TAKE_PROFIT)
                 return stopOrder;
         }
         return null;

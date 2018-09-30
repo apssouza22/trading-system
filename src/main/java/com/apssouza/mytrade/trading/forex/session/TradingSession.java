@@ -162,39 +162,38 @@ public class TradingSession {
             if (DayHelper.isWeekend(currentTime.toLocalDate())) {
                 continue;
             }
-
+            if (!TradingHelper.isTradingTime(currentTime)) {
+                return;
+            }
             if (lastDayProcessed.compareTo(currentTime.toLocalDate()) < 0 ) {
                 this.processStartDay(currentTime);
             }
 
-            this.processNext(currentTime);
+            this.processNext(loopEvent);
             this.eventLoop.sleep();
             lastDayProcessed = currentTime.toLocalDate();
         }
     }
 
-    private void processNext(LocalDateTime currentTime) {
-        if (!TradingHelper.isTradingTime(currentTime)) {
-            return;
-        }
+    private void processNext(LoopEvent loopEvent) {
 
         if (this.sessionType == SessionType.BACK_TEST) {
-            this.executionHandler.setCurrentTime(currentTime);
+            this.executionHandler.setCurrentTime(loopEvent.getTime());
         }
         List<SignalDto> signals;
         if (this.sessionType == SessionType.LIVE) {
             signals = this.signalHandler.getRealtimeSignal(this.systemName);
         } else {
-            signals = this.signalHandler.findbySecondAndSource(this.systemName, currentTime);
+            signals = this.signalHandler.findbySecondAndSource(this.systemName, loopEvent.getTime());
         }
         if (!signals.isEmpty()){
             System.out.println("signal");
         }
-        this.portfolioHandler.updatePortfolioValue(currentTime);
+        this.portfolioHandler.updatePortfolioValue(loopEvent);
 
-        this.portfolioHandler.stopOrderHandle(currentTime);
-        this.portfolioHandler.processExits(currentTime, signals);
-        this.portfolioHandler.onSignal(signals, currentTime);
+        this.portfolioHandler.stopOrderHandle(loopEvent);
+        this.portfolioHandler.processExits(loopEvent, signals);
+        this.portfolioHandler.onSignal(loopEvent, signals);
 
         List<OrderDto> orders = this.orderDao.getOrderByStatus(OrderStatus.CREATED);
         orders = this.createPositionIdentifier(orders);
@@ -202,8 +201,8 @@ public class TradingSession {
 
         this.portfolioHandler.onOrder(orders);
         this.portfolioHandler.processReconciliation();
-        this.portfolioHandler.createStopOrder(currentTime);
-        this.historyHandler.process(currentTime);
+        this.portfolioHandler.createStopOrder(loopEvent);
+        this.historyHandler.process(loopEvent);
     }
 
     public void setSignalHandler(SignalHandler signalHandler) {

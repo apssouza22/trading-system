@@ -1,13 +1,12 @@
 package com.apssouza.mytrade.trading.forex.portfolio;
 
+import com.apssouza.mytrade.feed.price.PriceDto;
 import com.apssouza.mytrade.feed.price.PriceHandler;
 import com.apssouza.mytrade.trading.misc.loop.LoopEvent;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.logging.Logger;
 
 public class Portfolio {
@@ -26,7 +25,8 @@ public class Portfolio {
     public void updatePortfolioValue(LoopEvent event) {
         for (Map.Entry<String, Position> entry : this.positions.entrySet()) {
             Position ps = entry.getValue();
-            ps.updatePositionPrice(event.getPrice().get(ps.getSymbol()).getClose());
+            PriceDto priceDto = event.getPrice().get(ps.getSymbol());
+            ps.updatePositionPrice(priceDto.getClose());
         }
     }
 
@@ -63,7 +63,7 @@ public class Portfolio {
         Position ps = this.positions.get(identfier);
         ps.closePosition(null);
         this.positions.remove(identfier);
-        log.info(String.format("Position closed - %s %s  ", ps.getIdentifier(), ps.getQuantity());
+        log.info(String.format("Position closed - %s %s  ", ps.getIdentifier(), ps.getQuantity()));
         return true;
 
     }

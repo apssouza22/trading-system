@@ -5,6 +5,7 @@ import com.apssouza.mytrade.feed.signal.SignalDao;
 import com.apssouza.mytrade.feed.signal.SignalDto;
 import com.apssouza.mytrade.trading.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.forex.portfolio.Portfolio;
+import com.apssouza.mytrade.trading.misc.loop.LoopEvent;
 
 import java.time.LocalDateTime;
 import java.util.LinkedList;
@@ -29,7 +30,7 @@ public class HistoryBookHandler {
 
     }
 
-    public void process(LocalDateTime currentTime) {
+    public void process(LoopEvent event) {
 
     }
 }
