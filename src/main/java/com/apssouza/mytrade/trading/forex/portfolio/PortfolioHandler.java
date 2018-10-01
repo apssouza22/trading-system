@@ -143,8 +143,13 @@ public class PortfolioHandler {
         this.createOrderFromClosedPosition(exited_positions, event);
     }
 
-    private void createOrderFromClosedPosition(List<Position> exited_positions, LoopEvent event) {
-
+    private void createOrderFromClosedPosition(List<Position> positions, LoopEvent event) {
+        for (Position position : positions) {
+            if (position.getStatus() == PositionStatus.CLOSED) {
+                OrderDto order = this.orderHandler.createOrderFromClosedPosition(position, event.getTime());
+                this.orderHandler.persist(order);
+            }
+        }
     }
 
     public void onSignal(LoopEvent event, List<SignalDto> signals) {
