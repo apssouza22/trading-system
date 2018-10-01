@@ -5,7 +5,6 @@ import com.apssouza.mytrade.feed.price.PriceHandler;
 import com.apssouza.mytrade.trading.misc.loop.LoopEvent;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -31,6 +30,13 @@ public class Portfolio {
         }
     }
 
+    public BigDecimal getBalance() {
+        return balance;
+    }
+
+    public Map<String, Position> getPositions() {
+        return positions;
+    }
 
     public void addNewPosition(Position ps) {
         this.positions.put(ps.getIdentifier(), ps);

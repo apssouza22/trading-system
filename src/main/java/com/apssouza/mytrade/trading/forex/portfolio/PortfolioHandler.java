@@ -139,6 +139,11 @@ public class PortfolioHandler {
     }
 
     public void processExits(LoopEvent event, List<SignalDto> signals) {
+        List<Position> exited_positions = this.positionExitHandler.process(event, signals);
+        this.createOrderFromClosedPosition(exited_positions, event);
+    }
+
+    private void createOrderFromClosedPosition(List<Position> exited_positions, LoopEvent event) {
 
     }
 

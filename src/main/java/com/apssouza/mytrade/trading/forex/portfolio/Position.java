@@ -153,4 +153,8 @@ public class Position {
     public StopOrderDto getPlacedStopLoss() {
         return placedStopLoss;
     }
+
+    public PositionType getPositionType() {
+        return positionType;
+    }
 }
