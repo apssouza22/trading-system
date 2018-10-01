@@ -37,7 +37,7 @@ public class OrderHandler {
         return new OrderDto(
                 position.getSymbol(),
                 action, position.getQuantity(),
-                TransactionState.EXIT,
+                OrderOrigin.STOP_ORDER,
                 time,
                 position.getIdentifier(),
                 OrderStatus.CREATED
@@ -49,7 +49,7 @@ public class OrderHandler {
     }
 
 
-    public void updateOrdeStatus(Integer id, OrderStatus status){
+    public void updateOrderStatus(Integer id, OrderStatus status){
         orderDao.updateStatus(id, status);
     }
 }

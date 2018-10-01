@@ -9,7 +9,7 @@ public class OrderDto {
     private final String symbol;
     private final OrderAction action;
     private final int quantity;
-    private final TransactionState state;
+    private final OrderOrigin origin;
     private final LocalDateTime time;
     private final String identifier;
     private final OrderStatus status;
@@ -19,7 +19,7 @@ public class OrderDto {
             String symbol,
             OrderAction action,
             int quantity,
-            TransactionState state,
+            OrderOrigin origin,
             LocalDateTime time,
             String identifier,
             OrderStatus status
@@ -28,7 +28,7 @@ public class OrderDto {
         this.symbol = symbol;
         this.action = action;
         this.quantity = quantity;
-        this.state = state;
+        this.origin = origin;
         this.time = time;
         this.identifier = identifier;
         this.status = status;
@@ -38,7 +38,7 @@ public class OrderDto {
             Integer id,
             OrderDto order
     ) {
-        this(order.getSymbol(), order.getAction(), order.getQuantity(), order.getState(), order.getTime(), order.getIdentifier(), order.getStatus());
+        this(order.getSymbol(), order.getAction(), order.getQuantity(), order.getOrigin(), order.getTime(), order.getIdentifier(), order.getStatus());
         this.id = id;
     }
 
@@ -47,11 +47,11 @@ public class OrderDto {
     }
 
     public OrderDto(OrderStatus status, OrderDto order) {
-        this(order.getSymbol(), order.getAction(), order.getQuantity(), order.getState(), order.getTime(), order.getIdentifier(), status);
+        this(order.getSymbol(), order.getAction(), order.getQuantity(), order.getOrigin(), order.getTime(), order.getIdentifier(), status);
         this.id = order.getId();
     }
 
-    private Integer getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -67,8 +67,8 @@ public class OrderDto {
         return quantity;
     }
 
-    public TransactionState getState() {
-        return state;
+    public OrderOrigin getOrigin() {
+        return origin;
     }
 
     public LocalDateTime getTime() {

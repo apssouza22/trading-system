@@ -48,4 +48,8 @@ public class HistoryBookHandler {
     public void addOrderFilled(FilledOrderDto filledOrderDto){
 
     }
+
+    public void addOrder(OrderDto order) {
+
+    }
 }

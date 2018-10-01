@@ -25,7 +25,6 @@ import com.apssouza.mytrade.trading.forex.risk.PositionSizerFixed;
 import com.apssouza.mytrade.trading.misc.helper.TradingHelper;
 import com.apssouza.mytrade.trading.misc.helper.config.Properties;
 import com.apssouza.mytrade.trading.misc.helper.time.DateRangeHelper;
-import com.apssouza.mytrade.trading.misc.helper.time.DateTimeHelper;
 import com.apssouza.mytrade.trading.misc.helper.time.DayHelper;
 import com.apssouza.mytrade.trading.misc.loop.*;
 
@@ -226,7 +225,13 @@ public class TradingSession {
         List<OrderDto> list = new LinkedList<>();
         for (OrderDto order : orders) {
             list.add(new OrderDto(
-                    MultiPositionHandler.getIdentifierFromOrder(order)
+                    order.getSymbol(),
+                    order.getAction(),
+                    order.getQuantity(),
+                    order.getOrigin(),
+                    order.getTime(),
+                    MultiPositionHandler.getIdentifierFromOrder(order),
+                    OrderStatus.CREATED
             ));
         }
         return list;

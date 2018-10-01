@@ -1,7 +1,9 @@
 package com.apssouza.mytrade.trading.forex.execution;
 
 import com.apssouza.mytrade.feed.price.PriceHandler;
+import com.apssouza.mytrade.trading.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.forex.order.StopOrderDto;
+import com.apssouza.mytrade.trading.forex.portfolio.FilledOrderDto;
 
 import java.time.LocalDateTime;
 import java.util.LinkedList;
@@ -45,5 +47,10 @@ public class SimulatedExecutionHandler implements ExecutionHandler {
     @Override
     public List<StopOrderDto> getLimitOrders() {
         return this.limitOrders;
+    }
+
+    @Override
+    public FilledOrderDto executeOrder(OrderDto order) {
+        return null;
     }
 }
