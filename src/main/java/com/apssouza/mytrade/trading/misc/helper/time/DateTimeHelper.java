@@ -1,8 +1,6 @@
 package com.apssouza.mytrade.trading.misc.helper.time;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
@@ -10,6 +8,9 @@ import java.time.temporal.ChronoUnit;
  * Date time helper
  */
 public class DateTimeHelper {
+    public static final ZoneId DEFAULT_ZONEID = ZoneId.systemDefault();
+    public static final ZoneId ZONEID_UTC = ZoneId.of("UTC");
+    public static final ZoneOffset ZONEOFFSET_UTC = ZoneOffset.UTC;
 
     public static Interval calculate(LocalDateTime start, LocalDateTime end) {
         // count between dates
