@@ -201,7 +201,16 @@ public class PortfolioHandler {
     }
 
     public void onSignal(LoopEvent event, List<SignalDto> signals) {
+        if (signals.isEmpty()) {
+            log.info("No signals");
+            return;
+        }
 
+        log.info("Processing " + signals.size() + " new signals...");
+        List<OrderDto> orders = this.orderHandler.createOrderFromSignal(signals, event.getTime());
+        for (OrderDto order : orders) {
+            this.orderHandler.persist(order);
+        }
 
     }
 

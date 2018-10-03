@@ -22,6 +22,7 @@ import com.apssouza.mytrade.trading.forex.portfolio.StopOrderHandler;
 import com.apssouza.mytrade.trading.forex.risk.PositionExitHandler;
 import com.apssouza.mytrade.trading.forex.risk.PositionSizer;
 import com.apssouza.mytrade.trading.forex.risk.PositionSizerFixed;
+import com.apssouza.mytrade.trading.forex.risk.RiskManagementHandler;
 import com.apssouza.mytrade.trading.misc.helper.TradingHelper;
 import com.apssouza.mytrade.trading.misc.helper.config.Properties;
 import com.apssouza.mytrade.trading.misc.helper.time.DateRangeHelper;
@@ -63,6 +64,7 @@ public class TradingSession {
     private EventLoop eventLoop;
     private PortfolioHandler portfolioHandler;
     private boolean processedEndDay;
+    private RiskManagementHandler riskManagementHandler;
 
     public TradingSession(
             BigDecimal equity,
@@ -115,6 +117,7 @@ public class TradingSession {
         this.signalHandler = new SignalHandler(this.signalDao);
         this.reconciliationHandler = new ReconciliationHandler(this.portfolio, this.executionHandler);
         this.historyHandler = new HistoryBookHandler(this.portfolio, this.priceHandler);
+        this.riskManagementHandler = new RiskManagementHandler(this.portfolio,new PositionSizerFixed());
 
         this.portfolioHandler = new PortfolioHandler(
                 this.equity,
@@ -196,16 +199,13 @@ public class TradingSession {
 
         List<OrderDto> orders = this.orderDao.getOrderByStatus(OrderStatus.CREATED);
         orders = this.createPositionIdentifier(orders);
+        this.riskManagementHandler.checkOrders(orders);
         this.historyHandler.addSignal(signals, orders);
 
         this.portfolioHandler.onOrder(orders);
         this.portfolioHandler.processReconciliation();
         this.portfolioHandler.createStopOrder(loopEvent);
         this.historyHandler.process(loopEvent);
-    }
-
-    public void setSignalHandler(SignalHandler signalHandler) {
-        this.signalHandler = signalHandler;
     }
 
     private void processStartDay(LocalDateTime currentTime) {
@@ -217,7 +217,7 @@ public class TradingSession {
         this.runSession();
     }
 
-    private boolean isEndDay(LocalDateTime currentTime) {
+    private boolean isEndOfDay(LocalDateTime currentTime) {
         return currentTime.getHour() > 22;
     }
 
