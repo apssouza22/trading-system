@@ -182,6 +182,7 @@ public class TradingSession {
         if (this.sessionType == SessionType.BACK_TEST) {
             this.executionHandler.setCurrentTime(loopEvent.getTime());
         }
+        this.executionHandler.setPriceMap(loopEvent.getPrice());
         List<SignalDto> signals;
         if (this.sessionType == SessionType.LIVE) {
             signals = this.signalHandler.getRealtimeSignal(this.systemName);
@@ -206,6 +207,8 @@ public class TradingSession {
         this.portfolioHandler.processReconciliation();
         this.portfolioHandler.createStopOrder(loopEvent);
         this.historyHandler.process(loopEvent);
+
+        System.out.println(this.portfolio.getPositions().size());
     }
 
     private void processStartDay(LocalDateTime currentTime) {
@@ -225,13 +228,8 @@ public class TradingSession {
         List<OrderDto> list = new LinkedList<>();
         for (OrderDto order : orders) {
             list.add(new OrderDto(
-                    order.getSymbol(),
-                    order.getAction(),
-                    order.getQuantity(),
-                    order.getOrigin(),
-                    order.getTime(),
                     MultiPositionHandler.getIdentifierFromOrder(order),
-                    OrderStatus.CREATED
+                    order
             ));
         }
         return list;

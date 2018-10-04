@@ -75,7 +75,7 @@ public class MultiPositionHandler {
                     Math.abs(currencyPositions.get(entry.getKey())),
                     null,
                     "",
-                    null, null
+                    null
             ));
         }
 

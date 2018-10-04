@@ -1,11 +1,12 @@
 package com.apssouza.mytrade.trading.forex.execution;
 
+import com.apssouza.mytrade.feed.price.PriceDto;
 import com.apssouza.mytrade.trading.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.forex.order.StopOrderDto;
 import com.apssouza.mytrade.trading.forex.portfolio.FilledOrderDto;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Map;
 
 public class InteractiveBrokerExecutionHandler implements ExecutionHandler {
 
@@ -25,12 +26,12 @@ public class InteractiveBrokerExecutionHandler implements ExecutionHandler {
     }
 
     @Override
-    public int cancelOpenLimitOrders() {
+    public Integer cancelOpenLimitOrders() {
         return 0;
     }
 
     @Override
-    public int cancelOpenStopOrders() {
+    public Integer cancelOpenStopOrders() {
         return 0;
     }
 
@@ -40,12 +41,12 @@ public class InteractiveBrokerExecutionHandler implements ExecutionHandler {
     }
 
     @Override
-    public List<StopOrderDto> getStopLossOrders() {
+    public Map<Integer, StopOrderDto> getStopLossOrders() {
         return null;
     }
 
     @Override
-    public List<StopOrderDto> getLimitOrders() {
+    public Map<Integer, StopOrderDto> getLimitOrders() {
         return null;
     }
 
@@ -53,4 +54,10 @@ public class InteractiveBrokerExecutionHandler implements ExecutionHandler {
     public FilledOrderDto executeOrder(OrderDto order) {
         return null;
     }
+
+    @Override
+    public void setPriceMap(Map<String, PriceDto> priceMap) {
+
+    }
+
 }

@@ -9,9 +9,72 @@ public class StopOrderDto {
     private OrderAction action;
     private BigDecimal price;
     private BigDecimal filledPrice;
-    private BigDecimal spread;
     private String symbol;
     private int qtd;
+    private final String identifier;
+
+    public StopOrderDto(
+            StopOrderType type,
+            Integer id,
+            StopOrderStatus status,
+            OrderAction action,
+            BigDecimal price,
+            BigDecimal filledPrice,
+            String symbol,
+            int qtd,
+            String identifier
+    ) {
+        this.type = type;
+        this.id = id;
+        this.status = status;
+        this.action = action;
+        this.price = price;
+        this.filledPrice = filledPrice;
+        this.symbol = symbol;
+        this.qtd = qtd;
+        this.identifier = identifier;
+    }
+
+    public StopOrderDto(StopOrderStatus status, StopOrderDto stop) {
+        this(
+                stop.getType(),
+                stop.getId(),
+                status,
+                stop.getAction(),
+                stop.getPrice(),
+                null,
+                stop.getSymbol(),
+                stop.getQuantity(),
+                stop.getIdentifier()
+        );
+    }
+
+    public StopOrderDto(StopOrderStatus status, BigDecimal filledPrice, StopOrderDto stop) {
+        this(
+                stop.getType(),
+                stop.getId(),
+                status,
+                stop.getAction(),
+                stop.getPrice(),
+                filledPrice,
+                stop.getSymbol(),
+                stop.getQuantity(),
+                stop.getIdentifier()
+        );
+
+    }
+
+    public BigDecimal getFilledPrice() {
+        return filledPrice;
+    }
+
+    public int getQtd() {
+        return qtd;
+    }
+
+    public String getIdentifier() {
+        return identifier;
+    }
 
     public StopOrderType getType() {
         return this.type;
@@ -31,11 +94,6 @@ public class StopOrderDto {
 
     public BigDecimal getPrice() {
         return this.price;
-    }
-
-
-    public BigDecimal getSpread() {
-        return this.spread;
     }
 
     public String getSymbol() {

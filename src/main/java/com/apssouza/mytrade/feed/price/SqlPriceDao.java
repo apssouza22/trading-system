@@ -41,7 +41,7 @@ public class SqlPriceDao implements PriceDao {
                 resultSet.getBigDecimal(4),
                 resultSet.getBigDecimal(5),
                 resultSet.getBigDecimal(6),
-                resultSet.getString(7)
+                resultSet.getString(8)
         );
     }
 

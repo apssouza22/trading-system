@@ -14,4 +14,6 @@ public class Properties {
     public static SessionType sessionType;
     public static LocalTime tradingStartTime;
     public static LocalTime tradingEndTime;
+    public static boolean trading_multi_position_enabled;
+    public static boolean trading_position_edit_enabled;
 }

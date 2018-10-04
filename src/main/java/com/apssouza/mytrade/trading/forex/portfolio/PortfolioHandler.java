@@ -14,10 +14,7 @@ import com.sun.tools.corba.se.idl.constExpr.Not;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Logger;
 
 public class PortfolioHandler {
@@ -138,31 +135,23 @@ public class PortfolioHandler {
             this.historyHandler.setState(TransactionState.EXIT, ps.getIdentifier());
             this.historyHandler.addPosition(ps);
 
-            BigDecimal priceWithSpread;
-            if (stopOrder.getAction() == OrderAction.SELL)
-                priceWithSpread = stopOrder.getPrice().subtract(stopOrder.getSpread());
-            else {
-                priceWithSpread = stopOrder.getPrice().add(stopOrder.getSpread());
-            }
-
             this.historyHandler.addOrderFilled(new FilledOrderDto(
                     time,
                     stopOrder.getSymbol(),
                     stopOrder.getAction(),
                     stopOrder.getQuantity(),
-                    priceWithSpread,
+                    stopOrder.getFilledPrice(),
                     ps.getIdentifier(),
-                    stopOrder.getId(),
-                    stopOrder.getSpread()
+                    stopOrder.getId()
             ));
         }
     }
 
     private List<StopOrderDto> getFilledStopOrders() {
         List<StopOrderDto> filledStopLoss = new ArrayList<>();
-        List<StopOrderDto> stopOrders = this.executionHandler.getStopLossOrders();
-        List<StopOrderDto> limitOrders = this.executionHandler.getLimitOrders();
-        stopOrders.addAll(limitOrders);
+        Map<Integer, StopOrderDto> stopOrders = this.executionHandler.getStopLossOrders();
+        Map<Integer, StopOrderDto> limitOrders = this.executionHandler.getLimitOrders();
+        stopOrders.putAll(limitOrders);
         if (stopOrders.isEmpty())
             return filledStopLoss;
 

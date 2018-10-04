@@ -13,7 +13,6 @@ public class FilledOrderDto {
     private final BigDecimal priceWithSpread;
     private final String identifier;
     private final Integer id;
-    private final BigDecimal spread;
 
     public FilledOrderDto(
             LocalDateTime time,
@@ -22,8 +21,7 @@ public class FilledOrderDto {
             int quantity,
             BigDecimal priceWithSpread,
             String identifier,
-            Integer id,
-            BigDecimal spread
+            Integer id
     ) {
 
 
@@ -34,6 +32,45 @@ public class FilledOrderDto {
         this.priceWithSpread = priceWithSpread;
         this.identifier = identifier;
         this.id = id;
-        this.spread = spread;
+    }
+
+    public FilledOrderDto(int quantity, FilledOrderDto filledOrderDto) {
+        this(
+                filledOrderDto.getTime(),
+                filledOrderDto.getSymbol(),
+                filledOrderDto.getAction(),
+                quantity,
+                filledOrderDto.getPriceWithSpread(),
+                filledOrderDto.getIdentifier(),
+                filledOrderDto.getId()
+        );
+    }
+
+    public LocalDateTime getTime() {
+        return time;
+    }
+
+    public String getSymbol() {
+        return symbol;
+    }
+
+    public OrderAction getAction() {
+        return action;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public BigDecimal getPriceWithSpread() {
+        return priceWithSpread;
+    }
+
+    public String getIdentifier() {
+        return identifier;
+    }
+
+    public Integer getId() {
+        return id;
     }
 }

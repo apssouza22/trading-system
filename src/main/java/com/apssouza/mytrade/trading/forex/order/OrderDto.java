@@ -1,7 +1,5 @@
 package com.apssouza.mytrade.trading.forex.order;
 
-import com.apssouza.mytrade.trading.forex.statistics.TransactionState;
-
 import java.time.LocalDateTime;
 
 public class OrderDto {
@@ -40,6 +38,19 @@ public class OrderDto {
     ) {
         this(order.getSymbol(), order.getAction(), order.getQuantity(), order.getOrigin(), order.getTime(), order.getIdentifier(), order.getStatus());
         this.id = id;
+    }
+
+    public OrderDto(String identifierFromOrder, OrderDto order) {
+        this(
+                order.getSymbol(),
+                order.getAction(),
+                order.getQuantity(),
+                order.getOrigin(),
+                order.getTime(),
+                identifierFromOrder,
+                order.getStatus()
+        );
+        this.id = order.getId();
     }
 
     public OrderStatus getStatus() {
