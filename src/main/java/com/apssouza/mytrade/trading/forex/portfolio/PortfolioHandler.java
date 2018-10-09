@@ -117,7 +117,7 @@ public class PortfolioHandler {
             this.historyHandler.addOrder(order);
             FilledOrderDto filledOrder = executionHandler.executeOrder(order);
             if(filledOrder != null) {
-                this.on_fill(filledOrder);
+                this.onFill(filledOrder);
                 this.historyHandler.addOrderFilled(filledOrder);
                 orderHandler.updateOrderStatus(order.getId(), OrderStatus.EXECUTED);
                 processedOrders.add(order.getSymbol());
@@ -230,7 +230,59 @@ public class PortfolioHandler {
 
     }
 
-    private void on_fill(FilledOrderDto filledOrder) {
+    private void onFill(FilledOrderDto filledOrder) {
+        filledOrder.getAction();
+        
+//        # If there is no position, create one
+        if (!this.portfolio.getPositions().containsKey(filledOrder.getIdentifier())) {
+            PositionType position_type = filledOrder.getAction().equals(OrderAction.BUY) ? PositionType.LONG : PositionType.SHORT;
 
+            Position ps1 = new Position(
+                    position_type,
+                    filledOrder.getSymbol(),
+                    filledOrder.getQuantity(),
+                    filledOrder.getPriceWithSpread(),
+                    filledOrder.getTime(),
+                    filledOrder.getIdentifier(),
+                    filledOrder,
+                    null,
+                    PositionStatus.FILLED
+            );
+            this.portfolio.addNewPosition(ps1);
+            this.historyHandler.setState(TransactionState.ENTRY, ps1.getIdentifier());
+            this.historyHandler.addPosition(ps1);
+        }else {
+            Position ps = this.portfolio.getPosition(filledOrder.getIdentifier());
+            if (!Properties.trading_position_edit_enabled) {
+                if (filledOrder.getQuantity() != ps.getQuantity()) {
+                    throw new RuntimeException("Not allow units to be added/removed");
+                }
+            }
+            if (filledOrder.getAction().equals(OrderAction.SELL) && ps.getPositionType().equals(PositionType.LONG)) {
+                if (filledOrder.getQuantity() == ps.getQuantity()) {
+                    this.portfolio.closePosition(filledOrder.getIdentifier());
+                    this.historyHandler.setState(TransactionState.EXIT, filledOrder.getIdentifier());
+                } else {
+                    this.portfolio.removePositionQtd(filledOrder.getIdentifier(), filledOrder.getQuantity());
+                    this.historyHandler.setState(TransactionState.REMOVE_QTD, filledOrder.getIdentifier());
+                }
+            } else if (filledOrder.getAction().equals(OrderAction.BUY) && ps.getPositionType().equals(PositionType.SHORT)) {
+                if (filledOrder.getQuantity() == ps.getQuantity()) {
+                    this.portfolio.closePosition(filledOrder.getIdentifier());
+                    this.historyHandler.setState(TransactionState.EXIT, filledOrder.getIdentifier());
+                } else {
+                    this.portfolio.removePositionQtd(filledOrder.getIdentifier(), filledOrder.getQuantity());
+                    this.historyHandler.setState(TransactionState.REMOVE_QTD, filledOrder.getIdentifier());
+                }
+            } else if (filledOrder.getAction().equals(OrderAction.BUY) && ps.getPositionType().equals(PositionType.LONG)){
+                this.portfolio.addPositionQtd(filledOrder.getIdentifier(), filledOrder.getQuantity(), filledOrder.getPriceWithSpread());
+                this.historyHandler.setState(TransactionState.ADD_QTD, filledOrder.getIdentifier());
+
+            }else if (filledOrder.getAction().equals(OrderAction.SELL) &&  ps.getPositionType().equals(PositionType.SHORT)){
+                this.portfolio.addPositionQtd(filledOrder.getIdentifier(), filledOrder.getQuantity(), filledOrder.getPriceWithSpread());
+                this.historyHandler.setState(TransactionState.ADD_QTD, filledOrder.getIdentifier());
+            }
+            this.historyHandler.addPosition(ps);
+        }
     }
 }
