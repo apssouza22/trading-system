@@ -9,9 +9,7 @@ import com.apssouza.mytrade.trading.forex.risk.PositionSizer;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Logger;
 
 public class OrderHandler {
@@ -80,4 +78,6 @@ public class OrderHandler {
         }
         return orders;
     }
+
+
 }

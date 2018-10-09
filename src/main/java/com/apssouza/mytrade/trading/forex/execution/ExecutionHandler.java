@@ -26,4 +26,8 @@ public interface ExecutionHandler {
     FilledOrderDto executeOrder(OrderDto order);
 
     void setPriceMap(Map<String, PriceDto> priceMap);
+
+    void deleteStopOrders();
+
+    StopOrderDto placeStopOrder(StopOrderDto stopLoss);
 }

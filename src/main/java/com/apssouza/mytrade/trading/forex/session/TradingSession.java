@@ -18,11 +18,7 @@ import com.apssouza.mytrade.trading.forex.order.OrderStatus;
 import com.apssouza.mytrade.trading.forex.portfolio.Portfolio;
 import com.apssouza.mytrade.trading.forex.portfolio.PortfolioHandler;
 import com.apssouza.mytrade.trading.forex.portfolio.ReconciliationHandler;
-import com.apssouza.mytrade.trading.forex.portfolio.StopOrderHandler;
-import com.apssouza.mytrade.trading.forex.risk.PositionExitHandler;
-import com.apssouza.mytrade.trading.forex.risk.PositionSizer;
-import com.apssouza.mytrade.trading.forex.risk.PositionSizerFixed;
-import com.apssouza.mytrade.trading.forex.risk.RiskManagementHandler;
+import com.apssouza.mytrade.trading.forex.risk.*;
 import com.apssouza.mytrade.trading.misc.helper.TradingHelper;
 import com.apssouza.mytrade.trading.misc.helper.config.Properties;
 import com.apssouza.mytrade.trading.misc.helper.time.DateRangeHelper;
@@ -57,7 +53,6 @@ public class TradingSession {
     private Portfolio portfolio;
     private PositionExitHandler positionExitHandler;
     private OrderHandler orderHandler;
-    private StopOrderHandler stopOrderHandler;
     private SignalHandler signalHandler;
     private ReconciliationHandler reconciliationHandler;
     private HistoryBookHandler historyHandler;
@@ -113,11 +108,14 @@ public class TradingSession {
         this.portfolio = new Portfolio(this.priceHandler, this.equity);
         this.positionExitHandler = new PositionExitHandler(this.portfolio, this.priceHandler);
         this.orderHandler = new OrderHandler(this.orderDao, this.positionSizer, this.equity, this.priceHandler, this.portfolio);
-        this.stopOrderHandler = new StopOrderHandler(this.portfolio, this.priceHandler);
         this.signalHandler = new SignalHandler(this.signalDao);
         this.reconciliationHandler = new ReconciliationHandler(this.portfolio, this.executionHandler);
         this.historyHandler = new HistoryBookHandler(this.portfolio, this.priceHandler);
-        this.riskManagementHandler = new RiskManagementHandler(this.portfolio,new PositionSizerFixed());
+        this.riskManagementHandler = new RiskManagementHandler(
+                this.portfolio,
+                new PositionSizerFixed(),
+                new StopOrderCreatorFixed(Properties.hard_stop_loss_distance)
+        );
 
         this.portfolioHandler = new PortfolioHandler(
                 this.equity,
@@ -126,10 +124,10 @@ public class TradingSession {
                 this.positionSizer,
                 this.positionExitHandler,
                 this.executionHandler,
-                this.stopOrderHandler,
                 this.portfolio,
                 this.reconciliationHandler,
-                this.historyHandler
+                this.historyHandler,
+                this.riskManagementHandler
         );
 
         if (this.sessionType == SessionType.LIVE) {

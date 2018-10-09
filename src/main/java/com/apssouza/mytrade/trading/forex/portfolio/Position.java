@@ -5,7 +5,9 @@ import com.apssouza.mytrade.trading.forex.order.StopOrderType;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.EnumMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class Position {
@@ -23,7 +25,7 @@ public class Position {
     private BigDecimal avgPrice;
     private int id = 0;
 
-    Set<StopOrderDto> stopOrders = new HashSet<>();
+    EnumMap<StopOrderType,StopOrderDto> stopOrders = new EnumMap<>(StopOrderType.class);
     private StopOrderDto placedStopLoss;
 
     public Position(
@@ -53,15 +55,25 @@ public class Position {
     }
 
 
-    public void setStopOrder(Set<StopOrderDto> stopOrders) {
-        this.stopOrders = stopOrders;
 
+    public Position(Position position, EnumMap<StopOrderType,StopOrderDto> stopOrders) {
+        this(
+                position.getPositionType(),
+                position.getSymbol(),
+                position.getQuantity(),
+                position.getInitPrice(),
+                position.getTimestamp(),
+                position.getIdentifier(),
+                position.getFilledOrder(),
+                position.getExitReason(),
+                position.getStatus()
+        );
+        this.stopOrders = stopOrders;
     }
 
     public StopOrderDto getTakeProfitOrder() {
-        for (StopOrderDto stopOrder : this.stopOrders) {
-            if (stopOrder.getType() == StopOrderType.TAKE_PROFIT)
-                return stopOrder;
+        if(this.stopOrders.containsKey(StopOrderType.TAKE_PROFIT)) {
+            return this.stopOrders.get(StopOrderType.TAKE_PROFIT);
         }
         return null;
     }
@@ -146,7 +158,7 @@ public class Position {
         return id;
     }
 
-    public Set<StopOrderDto> getStopOrders() {
+    public EnumMap<StopOrderType,StopOrderDto> getStopOrders() {
         return stopOrders;
     }
 

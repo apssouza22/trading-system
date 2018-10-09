@@ -6,11 +6,12 @@ import com.apssouza.mytrade.trading.forex.execution.ExecutionHandler;
 import com.apssouza.mytrade.trading.forex.order.*;
 import com.apssouza.mytrade.trading.forex.risk.PositionExitHandler;
 import com.apssouza.mytrade.trading.forex.risk.PositionSizer;
+import com.apssouza.mytrade.trading.forex.risk.RiskManagementHandler;
 import com.apssouza.mytrade.trading.forex.session.HistoryBookHandler;
 import com.apssouza.mytrade.trading.forex.session.MultiPositionHandler;
 import com.apssouza.mytrade.trading.forex.statistics.TransactionState;
+import com.apssouza.mytrade.trading.misc.helper.config.Properties;
 import com.apssouza.mytrade.trading.misc.loop.LoopEvent;
-import com.sun.tools.corba.se.idl.constExpr.Not;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -24,10 +25,10 @@ public class PortfolioHandler {
     private final PositionSizer positionSizer;
     private final PositionExitHandler positionExitHandler;
     private final ExecutionHandler executionHandler;
-    private final StopOrderHandler stopOrderHandler;
     private final Portfolio portfolio;
     private final ReconciliationHandler reconciliationHandler;
     private final HistoryBookHandler historyHandler;
+    private final RiskManagementHandler riskManagementHandler;
     private static Logger log = Logger.getLogger(PortfolioHandler.class.getName());
     private Map<Integer, StopOrderDto> currentStopOrders = new HashMap<>();
 
@@ -38,10 +39,10 @@ public class PortfolioHandler {
             PositionSizer positionSizer,
             PositionExitHandler positionExitHandler,
             ExecutionHandler executionHandler,
-            StopOrderHandler stopOrderHandler,
             Portfolio portfolio,
             ReconciliationHandler reconciliationHandler,
-            HistoryBookHandler historyHandler
+            HistoryBookHandler historyHandler,
+            RiskManagementHandler riskManagementHandler
     ) {
 
         this.equity = equity;
@@ -50,10 +51,10 @@ public class PortfolioHandler {
         this.positionSizer = positionSizer;
         this.positionExitHandler = positionExitHandler;
         this.executionHandler = executionHandler;
-        this.stopOrderHandler = stopOrderHandler;
         this.portfolio = portfolio;
         this.reconciliationHandler = reconciliationHandler;
         this.historyHandler = historyHandler;
+        this.riskManagementHandler = riskManagementHandler;
     }
 
     public void updatePortfolioValue(LoopEvent event) {
@@ -61,7 +62,33 @@ public class PortfolioHandler {
     }
 
     public void createStopOrder(LoopEvent event) {
+        if( portfolio.getPositions().isEmpty()){
+            return;
+        }
+        log.info("Creating stop loss...");
 
+        this.executionHandler.deleteStopOrders();
+
+        Map<Integer, StopOrderDto> stopOrders = new HashMap<>();
+        for( Map.Entry<String, Position> entry: this.portfolio.getPositions().entrySet()) {
+            Position position = entry.getValue();
+            EnumMap<StopOrderType, StopOrderDto> stops = this.riskManagementHandler.getStopOrders(position, event);
+            position = new Position(position, stops);
+            StopOrderDto stopLoss = stops.get(StopOrderType.STOP_LOSS);
+            log.info("Created stop loss - " + stopLoss);
+
+            StopOrderDto stopOrderLoss = this.executionHandler.placeStopOrder(stopLoss);
+            stopOrders.put(stopOrderLoss.getId(), stopOrderLoss);
+            MultiPositionHandler.mapStopOrderToPosition(stopOrderLoss, position);
+
+            if (Properties.take_profit_stop_enabled) {
+                StopOrderDto stopOrderProfit = this.executionHandler.placeStopOrder(stops.get(StopOrderType.TAKE_PROFIT));
+                log.info("Created take profit stop - " + stopOrderProfit);
+                stopOrders.put(stopOrderProfit.getId(), stopOrderProfit);
+                MultiPositionHandler.mapStopOrderToPosition(stopOrderProfit, position);
+            }
+        }
+        this.currentStopOrders = stopOrders;
     }
 
     public void processReconciliation() {
@@ -69,7 +96,7 @@ public class PortfolioHandler {
     }
 
     public void onOrder(List<OrderDto> orders) {
-        if (orders.isEmpty()) {
+        if(orders.isEmpty()) {
             log.info("No orders");
             return;
         }
@@ -78,18 +105,18 @@ public class PortfolioHandler {
         List<String> processedOrders = new ArrayList<>();
         List<String> exitedPositions = new ArrayList<>();
         for (OrderDto order : orders) {
-            if (order.getOrigin().equals(OrderOrigin.STOP_ORDER)) {
+            if(order.getOrigin().equals(OrderOrigin.STOP_ORDER)) {
                 exitedPositions.add(order.getSymbol());
             }
         }
 
         for (OrderDto order : orders) {
-            if (!this.canExecuteOrder(order, processedOrders, exitedPositions)) {
+            if(!this.canExecuteOrder(order, processedOrders, exitedPositions)) {
                 continue;
             }
             this.historyHandler.addOrder(order);
             FilledOrderDto filledOrder = executionHandler.executeOrder(order);
-            if (filledOrder != null) {
+            if(filledOrder != null) {
                 this.on_fill(filledOrder);
                 this.historyHandler.addOrderFilled(filledOrder);
                 orderHandler.updateOrderStatus(order.getId(), OrderStatus.EXECUTED);
@@ -107,13 +134,13 @@ public class PortfolioHandler {
          #     - many signals
          #     - order generated by exits and by the signals
          **/
-        if (order.getOrigin().equals(OrderOrigin.SIGNAL)) {
-            if (processedOrders.contains(order.getSymbol())) {
+        if(order.getOrigin().equals(OrderOrigin.SIGNAL)) {
+            if(processedOrders.contains(order.getSymbol())) {
                 return false;
             }
 
-//            Not process order coming from signal if exists a exit for the currency
-            if (exitedPositions.contains(order.getSymbol())) {
+//            Not process order coming from signal if( exists a exit for the currency
+            if(exitedPositions.contains(order.getSymbol())) {
                 return false;
             }
         }
@@ -152,12 +179,12 @@ public class PortfolioHandler {
         Map<Integer, StopOrderDto> stopOrders = this.executionHandler.getStopLossOrders();
         Map<Integer, StopOrderDto> limitOrders = this.executionHandler.getLimitOrders();
         stopOrders.putAll(limitOrders);
-        if (stopOrders.isEmpty())
+        if(stopOrders.isEmpty())
             return filledStopLoss;
 
         for (Map.Entry<Integer, StopOrderDto> entry : this.currentStopOrders.entrySet()) {
             StopOrderDto stopOrder = stopOrders.get(entry.getKey());
-            if (stopOrder.getStatus() == StopOrderStatus.FILLED) {
+            if(stopOrder.getStatus() == StopOrderStatus.FILLED) {
                 filledStopLoss.add(stopOrder);
             }
         }
@@ -166,7 +193,7 @@ public class PortfolioHandler {
     }
 
     private void cancelOpenStopOrders() {
-        if (!this.currentStopOrders.isEmpty()) {
+        if(!this.currentStopOrders.isEmpty()) {
             int count = this.executionHandler.cancelOpenStopOrders();
             log.info("Cancelled " + count + " stop loss");
 
@@ -182,7 +209,7 @@ public class PortfolioHandler {
 
     private void createOrderFromClosedPosition(List<Position> positions, LoopEvent event) {
         for (Position position : positions) {
-            if (position.getStatus() == PositionStatus.CLOSED) {
+            if(position.getStatus() == PositionStatus.CLOSED) {
                 OrderDto order = this.orderHandler.createOrderFromClosedPosition(position, event.getTime());
                 this.orderHandler.persist(order);
             }
@@ -190,7 +217,7 @@ public class PortfolioHandler {
     }
 
     public void onSignal(LoopEvent event, List<SignalDto> signals) {
-        if (signals.isEmpty()) {
+        if(signals.isEmpty()) {
             log.info("No signals");
             return;
         }

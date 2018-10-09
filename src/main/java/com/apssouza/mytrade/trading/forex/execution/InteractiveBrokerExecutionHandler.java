@@ -60,4 +60,14 @@ public class InteractiveBrokerExecutionHandler implements ExecutionHandler {
 
     }
 
+    @Override
+    public void deleteStopOrders() {
+
+    }
+
+    @Override
+    public StopOrderDto placeStopOrder(StopOrderDto stopLoss) {
+        return null;
+    }
+
 }
