@@ -58,21 +58,25 @@ public class RiskManagementHandler {
             return chooseStopOrders(stop_orders);
         }
 
+        stop_orders.putAll(getMovingStops(position, event));
+        return chooseStopOrders(stop_orders);
+    }
+
+    private EnumMap<StopOrderType, StopOrderDto>  getMovingStops(Position position, LoopEvent event) {
+        EnumMap<StopOrderType, StopOrderDto> stop_orders = new EnumMap(StopOrderType.class);
         if (Properties.entry_stop_loss_enabled) {
             Optional<StopOrderDto> entryStopOrder = this.stopOrderCreator.getEntryStopOrder(position, event);
-
             if (entryStopOrder.isPresent()) {
                 stop_orders.put(StopOrderType.ENTRY_STOP, entryStopOrder.get());
             }
         }
         if (Properties.trailing_stop_loss_enabled) {
             Optional<StopOrderDto> trailingStopOrder = this.stopOrderCreator.getTrailingStopOrder(position, event);
-
             if (trailingStopOrder.isPresent()) {
                 stop_orders.put(StopOrderType.TRAILLING_STOP, trailingStopOrder.get());
             }
         }
-        return chooseStopOrders(stop_orders);
+        return stop_orders;
     }
 
     private boolean hasStop() {
