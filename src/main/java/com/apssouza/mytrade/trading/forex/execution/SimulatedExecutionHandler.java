@@ -22,7 +22,7 @@ public class SimulatedExecutionHandler implements ExecutionHandler {
     private List<StopOrderDto> limitOrders = new LinkedList<>();
     private LocalDateTime current_time;
     private Map<String, PriceDto> priceMap = new ConcurrentHashMap<>();
-    ;
+    private final StopOrderPriceMonitor stopOrderPriceMonitor;
     private Map<Integer, StopOrderDto> allStopOrders = new ConcurrentHashMap<>();
     private Map<String, FilledOrderDto> positions = new ConcurrentHashMap<>();
     private static AtomicInteger stopOrderId = new AtomicInteger();
@@ -30,6 +30,7 @@ public class SimulatedExecutionHandler implements ExecutionHandler {
 
     public SimulatedExecutionHandler(PriceHandler priceHandler) {
         this.priceHandler = priceHandler;
+        stopOrderPriceMonitor = new StopOrderPriceMonitor(allStopOrders, priceMap);
     }
 
     public Map<String, FilledOrderDto> getPortfolio() {
@@ -156,56 +157,9 @@ public class SimulatedExecutionHandler implements ExecutionHandler {
 
     public void processStopOrderWithPrices() {
         List<String> filled_positions = new ArrayList<>();
-        for (Map.Entry<Integer, StopOrderDto> entry : this.allStopOrders.entrySet()) {
-            StopOrderDto stop_order = this.allStopOrders.get(entry.getKey());
-            if (filled_positions.contains(stop_order.getIdentifier())) {
-                continue;
-            }
-
-            if (stop_order.getStatus().equals(StopOrderStatus.SUBMITTED)) {
-                PriceDto df_current_price = priceMap.get(stop_order.getSymbol());
-
-
-                if (stop_order.getAction().equals(OrderAction.BUY)) {
-                    if (stop_order.getType().equals(StopOrderType.TAKE_PROFIT)) {
-                        if (df_current_price.getLow().compareTo(stop_order.getPrice()) <= 0) {
-                            StopOrderStatus status = StopOrderStatus.FILLED;
-                            stop_order = new StopOrderDto(status, df_current_price.getClose(), stop_order);
-                            this.allStopOrders.put(entry.getKey(), stop_order);
-                            this.changeLocalPosition(stop_order);
-                            filled_positions.add(stop_order.getIdentifier());
-                        } else {
-                            if (df_current_price.getHigh().compareTo(stop_order.getPrice()) >= 0) {
-                                StopOrderStatus status = StopOrderStatus.FILLED;
-                                stop_order = new StopOrderDto(status, df_current_price.getClose(), stop_order);
-                                this.allStopOrders.put(entry.getKey(), stop_order);
-                                this.changeLocalPosition(stop_order);
-                                filled_positions.add(stop_order.getIdentifier());
-                            }
-                        }
-                    }
-                }
-
-                if (stop_order.getAction().equals(OrderAction.SELL)) {
-                    if (stop_order.getType().equals(StopOrderType.TAKE_PROFIT)) {
-                        if (df_current_price.getHigh().compareTo(stop_order.getPrice()) >= 0) {
-                            StopOrderStatus status = StopOrderStatus.FILLED;
-                            stop_order = new StopOrderDto(status, df_current_price.getClose(), stop_order);
-                            this.allStopOrders.put(entry.getKey(), stop_order);
-                            this.changeLocalPosition(stop_order);
-                            filled_positions.add(stop_order.getIdentifier());
-                        } else {
-                            if (df_current_price.getLow().compareTo(stop_order.getPrice()) <= 0) {
-                                StopOrderStatus status = StopOrderStatus.FILLED;
-                                stop_order = new StopOrderDto(status, df_current_price.getClose(), stop_order);
-                                this.allStopOrders.put(entry.getKey(), stop_order);
-                                this.changeLocalPosition(stop_order);
-                                filled_positions.add(stop_order.getIdentifier());
-                            }
-                        }
-                    }
-                }
-            }
+        stopOrderPriceMonitor.getFilledOrders();
+        for (String identifier : filled_positions) {
+            changeLocalPosition(this.allStopOrders.get(identifier));
         }
     }
 

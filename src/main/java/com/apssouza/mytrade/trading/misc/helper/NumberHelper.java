@@ -1,0 +1,18 @@
+package com.apssouza.mytrade.trading.misc.helper;
+
+import com.apssouza.mytrade.trading.misc.helper.config.Properties;
+
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
+
+public class NumberHelper {
+
+    public static BigDecimal roundSymbolPrice(String symbol, BigDecimal price){
+        MathContext mc = new MathContext(
+                Properties.currency_pair_significant_digits_in_price.get(symbol),
+                RoundingMode.HALF_UP
+        );
+        return price.round(mc);
+    }
+}
