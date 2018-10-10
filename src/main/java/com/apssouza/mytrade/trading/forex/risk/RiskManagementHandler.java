@@ -51,14 +51,15 @@ public class RiskManagementHandler {
 
 
             EnumMap<StopOrderType, StopOrderDto> stopOrders = position.getStopOrders();
+            boolean changed_units = false;
             if (!stopOrders.isEmpty()) {
-                boolean changed_units = stopOrders.get(StopOrderType.HARD_STOP).getQuantity() != position.getQuantity();
+                changed_units = stopOrders.get(StopOrderType.HARD_STOP).getQuantity() != position.getQuantity();
+            }
 
-                if (stopOrders.isEmpty() || changed_units) {
-                    stop_orders.put(StopOrderType.HARD_STOP, this.stopOrderCreator.getHardStopLoss(position));
-                    stop_orders.put(StopOrderType.TAKE_PROFIT, this.stopOrderCreator.getProfitStopOrder(position));
-                }
-                return stop_orders;
+            if (stopOrders.isEmpty() || changed_units) {
+                stop_orders.put(StopOrderType.HARD_STOP, this.stopOrderCreator.getHardStopLoss(position));
+                stop_orders.put(StopOrderType.TAKE_PROFIT, this.stopOrderCreator.getProfitStopOrder(position));
+                return chooseStopOrders(stop_orders);
             }
 
             if (Properties.entry_stop_loss_enabled) {

@@ -30,27 +30,21 @@ public class StopOrderCreatorFixed implements StopOrderCreator {
         if (position.getPositionType() == PositionType.LONG) {
             action = OrderAction.SELL;
         }
+        MathContext mc = new MathContext(
+                Properties.currency_pair_significant_digits_in_price.get(position.getSymbol()),
+                RoundingMode.HALF_UP
+        );
         if (position.getPositionType().equals(PositionType.LONG)) {
-            BigDecimal bd = position.getInitPrice().subtract(BigDecimal.valueOf(hardStopDistance));
-            MathContext mc = new MathContext(
-                    Properties.currency_pair_significant_digits_in_price.get(position.getSymbol()),
-                    RoundingMode.HALF_UP
-            );
-            stopPrice = bd.round(mc);
+            stopPrice = position.getInitPrice().subtract(BigDecimal.valueOf(hardStopDistance));
         } else {
-            BigDecimal bd = position.getInitPrice().add(BigDecimal.valueOf(hardStopDistance));
-            MathContext mc = new MathContext(
-                    Properties.currency_pair_significant_digits_in_price.get(position.getSymbol()),
-                    RoundingMode.HALF_UP
-            );
-            stopPrice = bd.round(mc);
+            stopPrice = position.getInitPrice().add(BigDecimal.valueOf(hardStopDistance));
         }
         return new StopOrderDto(
                 StopOrderType.HARD_STOP,
                 null,
                 StopOrderStatus.CREATED,
                 action,
-                stopPrice,
+                stopPrice.round(mc),
                 null,
                 position.getSymbol(),
                 position.getQuantity(),

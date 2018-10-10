@@ -6,9 +6,7 @@ import com.apssouza.mytrade.trading.forex.order.StopOrderDto;
 import com.apssouza.mytrade.trading.forex.portfolio.FilledOrderDto;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.Map;
-import java.util.Set;
 
 public interface ExecutionHandler {
     void closeAllPositions();

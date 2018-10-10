@@ -63,11 +63,10 @@ public class PortfolioHandler {
 
     public void createStopOrder(LoopEvent event) {
         if( portfolio.getPositions().isEmpty()){
-            return;
+            log.info("Creating stop loss...");
         }
-        log.info("Creating stop loss...");
-
         this.executionHandler.deleteStopOrders();
+        MultiPositionHandler.deleteAllMaps();
 
         Map<Integer, StopOrderDto> stopOrders = new HashMap<>();
         for( Map.Entry<String, Position> entry: this.portfolio.getPositions().entrySet()) {

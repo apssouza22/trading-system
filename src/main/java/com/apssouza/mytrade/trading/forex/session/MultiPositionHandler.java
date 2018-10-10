@@ -26,6 +26,11 @@ public class MultiPositionHandler {
         return order.getSymbol() + '_' + order.getId() + '_' + order.getTime().toEpochSecond(DateTimeHelper.ZONEOFFSET_UTC);
     }
 
+    public static void deleteAllMaps() {
+        positionToStopOrderMap = new ConcurrentHashMap<>();
+    }
+
+
     public static Position getPositionByStopOrder(StopOrderDto stopOrder) {
         if (MultiPositionHandler.positionToStopOrderMap.containsKey(stopOrder.getId())) {
             Position ps = MultiPositionHandler.positionToStopOrderMap.get(stopOrder.getId());
