@@ -73,4 +73,26 @@ public class FilledOrderDto {
     public Integer getId() {
         return id;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (o == null || getClass() != o.getClass()) return false;
+
+        FilledOrderDto that = (FilledOrderDto) o;
+
+        return new org.apache.commons.lang3.builder.EqualsBuilder()
+                .append(identifier, that.identifier)
+                .append(id, that.id)
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new org.apache.commons.lang3.builder.HashCodeBuilder(17, 37)
+                .append(identifier)
+                .append(id)
+                .toHashCode();
+    }
 }

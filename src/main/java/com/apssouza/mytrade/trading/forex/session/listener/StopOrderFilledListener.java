@@ -7,7 +7,6 @@ import com.apssouza.mytrade.trading.forex.portfolio.Portfolio;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.forex.session.HistoryBookHandler;
 import com.apssouza.mytrade.trading.forex.session.MultiPositionHandler;
-import com.apssouza.mytrade.trading.forex.session.listener.EventListener;
 import com.apssouza.mytrade.trading.forex.statistics.TransactionState;
 
 import java.time.LocalDateTime;
