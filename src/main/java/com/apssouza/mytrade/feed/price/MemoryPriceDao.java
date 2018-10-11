@@ -53,17 +53,7 @@ public class MemoryPriceDao implements PriceDao {
     public List<PriceDto> getPriceInterval(LocalDateTime start, LocalDateTime end) {
         DateTimeColumn ts = this.priceTable.dateTimeColumn("timestamp");
         Table result = this.priceTable.where(ts.isOnOrAfter(start).and(ts.isOnOrBefore(end)));
-        List<PriceDto> list = new ArrayList<>();
-        for (Row row : result) {
-            list.add(new PriceDto(
-                    row.getDateTime("timestamp"),
-                    BigDecimal.valueOf(row.getDouble("open")),
-                    BigDecimal.valueOf(row.getDouble("close")),
-                    BigDecimal.valueOf(row.getDouble("high")),
-                    BigDecimal.valueOf(row.getDouble("low")),
-                    row.getString("symbol")
-            ));
-        }
+        List<PriceDto> list = getPriceDtos(result);
         return list;
     }
 
@@ -77,6 +67,11 @@ public class MemoryPriceDao implements PriceDao {
                 ts.isEqualTo(next.getDateTime("timestamp"))
         );
 
+        List<PriceDto> list = getPriceDtos(resultList);
+        return list;
+    }
+
+    private List<PriceDto> getPriceDtos(Table resultList) {
         List<PriceDto> list = new ArrayList<>();
         for (Row row : resultList) {
             list.add(new PriceDto(

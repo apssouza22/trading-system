@@ -33,15 +33,19 @@ public class FilledOrderProcessor {
 
     private void handleExistingPosition(FilledOrderDto filledOrder, Position ps) {
         if (filledOrder.getAction().equals(OrderAction.SELL) && ps.getPositionType().equals(PositionType.LONG)) {
-            handleOpositeDirection(filledOrder, ps);
+            handleOppositeDirection(filledOrder, ps);
             this.historyHandler.addPosition(ps);
             return;
         }
         if (filledOrder.getAction().equals(OrderAction.BUY) && ps.getPositionType().equals(PositionType.SHORT)) {
-            handleOpositeDirection(filledOrder, ps);
+            handleOppositeDirection(filledOrder, ps);
             this.historyHandler.addPosition(ps);
             return;
         }
+        handleSameDirection(filledOrder, ps);
+    }
+
+    private void handleSameDirection(FilledOrderDto filledOrder, Position ps) {
         if (filledOrder.getAction().equals(OrderAction.BUY) && ps.getPositionType().equals(PositionType.LONG)) {
             this.portfolio.addPositionQtd(filledOrder.getIdentifier(), filledOrder.getQuantity(), filledOrder.getPriceWithSpread());
             this.historyHandler.setState(TransactionState.ADD_QTD, filledOrder.getIdentifier());
@@ -51,10 +55,9 @@ public class FilledOrderProcessor {
             this.portfolio.addPositionQtd(filledOrder.getIdentifier(), filledOrder.getQuantity(), filledOrder.getPriceWithSpread());
             this.historyHandler.setState(TransactionState.ADD_QTD, filledOrder.getIdentifier());
         }
-
     }
 
-    private void handleOpositeDirection(FilledOrderDto filledOrder, Position ps) {
+    private void handleOppositeDirection(FilledOrderDto filledOrder, Position ps) {
         if (filledOrder.getQuantity() == ps.getQuantity()) {
             this.portfolio.closePosition(filledOrder.getIdentifier());
             this.historyHandler.setState(TransactionState.EXIT, filledOrder.getIdentifier());
