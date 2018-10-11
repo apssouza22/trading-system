@@ -5,17 +5,17 @@ import com.apssouza.mytrade.trading.forex.portfolio.*;
 import com.apssouza.mytrade.trading.forex.statistics.TransactionState;
 import com.apssouza.mytrade.trading.misc.helper.config.Properties;
 
-public class FilledOrderProcessor {
+public class FilledOrderListener implements EventListener {
 
     private final Portfolio portfolio;
     private final HistoryBookHandler historyHandler;
 
-    public FilledOrderProcessor(Portfolio portfolio, HistoryBookHandler historyHandler) {
+    public FilledOrderListener(Portfolio portfolio, HistoryBookHandler historyHandler) {
         this.portfolio = portfolio;
         this.historyHandler = historyHandler;
     }
 
-    public void onFill(FilledOrderDto filledOrder) {
+    public void process(FilledOrderDto filledOrder) {
 //        # If there is no position, create one
         if (!this.portfolio.getPositions().containsKey(filledOrder.getIdentifier())) {
             createNewPosition(filledOrder);

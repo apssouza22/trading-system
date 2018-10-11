@@ -48,23 +48,7 @@ public class MultiPositionHandler {
         Map<String, Integer> currencyPositions = new HashMap<>();
 
         for (Position ps : portfolio) {
-            if (currencyPositions.containsKey(ps.getSymbol())) {
-                Integer position_units = currencyPositions.get(ps.getSymbol());
-                if (ps.getPositionType().equals(PositionType.LONG)) {
-                    currencyPositions.put(ps.getSymbol(), position_units + ps.getQuantity());
-                }
-                if (ps.getPositionType().equals(PositionType.SHORT)) {
-                    currencyPositions.put(ps.getSymbol(), position_units - ps.getQuantity());
-                }
-            } else {
-                if (ps.getPositionType().equals(PositionType.LONG)) {
-                    currencyPositions.put(ps.getSymbol(), ps.getQuantity());
-                }
-
-                if (ps.getPositionType().equals(PositionType.SHORT)) {
-                    currencyPositions.put(ps.getSymbol(), -ps.getQuantity());
-                }
-            }
+            calculateQuantitiesBySymbol(currencyPositions, ps);
         }
         Map<String, FilledOrderDto> positionList = new HashMap<>();
         for (Map.Entry<String, Integer> entry : currencyPositions.entrySet()) {
@@ -85,5 +69,30 @@ public class MultiPositionHandler {
         }
 
         return positionList;
+    }
+
+    private static void calculateQuantitiesBySymbol(Map<String, Integer> currencyPositions, Position ps) {
+        if (currencyPositions.containsKey(ps.getSymbol())) {
+            processExistingSymbol(currencyPositions, ps);
+            return;
+        }
+        if (ps.getPositionType().equals(PositionType.LONG)) {
+            currencyPositions.put(ps.getSymbol(), ps.getQuantity());
+        }
+
+        if (ps.getPositionType().equals(PositionType.SHORT)) {
+            currencyPositions.put(ps.getSymbol(), -ps.getQuantity());
+        }
+
+    }
+
+    private static void processExistingSymbol(Map<String, Integer> currencyPositions, Position ps) {
+        Integer position_units = currencyPositions.get(ps.getSymbol());
+        if (ps.getPositionType().equals(PositionType.LONG)) {
+            currencyPositions.put(ps.getSymbol(), position_units + ps.getQuantity());
+        }
+        if (ps.getPositionType().equals(PositionType.SHORT)) {
+            currencyPositions.put(ps.getSymbol(), position_units - ps.getQuantity());
+        }
     }
 }
