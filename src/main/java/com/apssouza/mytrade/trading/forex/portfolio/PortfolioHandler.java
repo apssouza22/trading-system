@@ -22,9 +22,8 @@ import java.util.logging.Logger;
 
 public class PortfolioHandler {
     private final BigDecimal equity;
-    private final PriceHandler priceHandler;
+
     private final OrderHandler orderHandler;
-    private final PositionSizer positionSizer;
     private final PositionExitHandler positionExitHandler;
     private final ExecutionHandler executionHandler;
     private final Portfolio portfolio;
@@ -38,9 +37,7 @@ public class PortfolioHandler {
 
     public PortfolioHandler(
             BigDecimal equity,
-            PriceHandler priceHandler,
             OrderHandler orderHandler,
-            PositionSizer positionSizer,
             PositionExitHandler positionExitHandler,
             ExecutionHandler executionHandler,
             Portfolio portfolio,
@@ -50,9 +47,7 @@ public class PortfolioHandler {
     ) {
 
         this.equity = equity;
-        this.priceHandler = priceHandler;
         this.orderHandler = orderHandler;
-        this.positionSizer = positionSizer;
         this.positionExitHandler = positionExitHandler;
         this.executionHandler = executionHandler;
         this.portfolio = portfolio;

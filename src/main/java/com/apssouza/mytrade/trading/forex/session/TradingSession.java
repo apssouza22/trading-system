@@ -119,9 +119,7 @@ public class TradingSession {
 
         this.portfolioHandler = new PortfolioHandler(
                 this.equity,
-                this.priceHandler,
                 this.orderHandler,
-                this.positionSizer,
                 this.positionExitHandler,
                 this.executionHandler,
                 this.portfolio,
@@ -163,7 +161,7 @@ public class TradingSession {
                 continue;
             }
             if (!TradingHelper.isTradingTime(currentTime)) {
-                return;
+                continue;
             }
             if (lastDayProcessed.compareTo(currentTime.toLocalDate()) < 0 ) {
                 this.processStartDay(currentTime);
