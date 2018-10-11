@@ -1,7 +1,9 @@
-package com.apssouza.mytrade.trading.forex.session;
+package com.apssouza.mytrade.trading.forex.session.listener;
 
 import com.apssouza.mytrade.trading.forex.order.OrderAction;
 import com.apssouza.mytrade.trading.forex.portfolio.*;
+import com.apssouza.mytrade.trading.forex.session.HistoryBookHandler;
+import com.apssouza.mytrade.trading.forex.session.listener.EventListener;
 import com.apssouza.mytrade.trading.forex.statistics.TransactionState;
 import com.apssouza.mytrade.trading.misc.helper.config.Properties;
 

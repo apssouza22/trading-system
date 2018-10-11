@@ -1,4 +1,4 @@
-package com.apssouza.mytrade.trading.forex.session;
+package com.apssouza.mytrade.trading.forex.session.listener;
 
 import com.apssouza.mytrade.trading.forex.execution.ExecutionHandler;
 import com.apssouza.mytrade.trading.forex.order.OrderDto;
@@ -6,6 +6,7 @@ import com.apssouza.mytrade.trading.forex.order.OrderHandler;
 import com.apssouza.mytrade.trading.forex.order.OrderOrigin;
 import com.apssouza.mytrade.trading.forex.order.OrderStatus;
 import com.apssouza.mytrade.trading.forex.portfolio.FilledOrderDto;
+import com.apssouza.mytrade.trading.forex.session.HistoryBookHandler;
 
 import java.util.ArrayList;
 import java.util.List;
