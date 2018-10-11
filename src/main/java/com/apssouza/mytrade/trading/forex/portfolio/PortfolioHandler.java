@@ -1,16 +1,11 @@
 package com.apssouza.mytrade.trading.forex.portfolio;
 
-import com.apssouza.mytrade.feed.price.PriceHandler;
 import com.apssouza.mytrade.feed.signal.SignalDto;
 import com.apssouza.mytrade.trading.forex.execution.ExecutionHandler;
 import com.apssouza.mytrade.trading.forex.order.*;
 import com.apssouza.mytrade.trading.forex.risk.PositionExitHandler;
-import com.apssouza.mytrade.trading.forex.risk.PositionSizer;
 import com.apssouza.mytrade.trading.forex.risk.RiskManagementHandler;
-import com.apssouza.mytrade.trading.forex.session.FilledOrderListener;
-import com.apssouza.mytrade.trading.forex.session.HistoryBookHandler;
-import com.apssouza.mytrade.trading.forex.session.MultiPositionHandler;
-import com.apssouza.mytrade.trading.forex.session.OrderCreatedListener;
+import com.apssouza.mytrade.trading.forex.session.*;
 import com.apssouza.mytrade.trading.forex.statistics.TransactionState;
 import com.apssouza.mytrade.trading.misc.helper.config.Properties;
 import com.apssouza.mytrade.trading.misc.loop.LoopEvent;
@@ -33,6 +28,7 @@ public class PortfolioHandler {
     private static Logger log = Logger.getLogger(PortfolioHandler.class.getName());
     private final FilledOrderListener filledOrderListener;
     private final OrderCreatedListener orderCreatedListener;
+    private final StopOrderFilledListener stopOrderFilledListener;
     private Map<Integer, StopOrderDto> currentStopOrders = new HashMap<>();
 
     public PortfolioHandler(
@@ -55,7 +51,8 @@ public class PortfolioHandler {
         this.historyHandler = historyHandler;
         this.riskManagementHandler = riskManagementHandler;
         this.filledOrderListener = new FilledOrderListener(portfolio, historyHandler);
-        this.orderCreatedListener = new OrderCreatedListener(executionHandler,historyHandler, filledOrderListener,orderHandler);
+        this.orderCreatedListener = new OrderCreatedListener(executionHandler, historyHandler, filledOrderListener, orderHandler);
+        this.stopOrderFilledListener = new StopOrderFilledListener(portfolio, historyHandler);
     }
 
     public void updatePortfolioValue(LoopEvent event) {
@@ -72,7 +69,7 @@ public class PortfolioHandler {
         Map<Integer, StopOrderDto> stopOrders = new HashMap<>();
         for (Map.Entry<String, Position> entry : this.portfolio.getPositions().entrySet()) {
             Position position = entry.getValue();
-            EnumMap<StopOrderType, StopOrderDto> stops = this.riskManagementHandler.getStopOrders(position, event);
+            EnumMap<StopOrderType, StopOrderDto> stops = this.riskManagementHandler.createStopOrders(position, event);
             position = new Position(position, stops);
             StopOrderDto stopLoss = stops.get(StopOrderType.STOP_LOSS);
             log.info("Created stop loss - " + stopLoss);
@@ -103,26 +100,12 @@ public class PortfolioHandler {
         this.cancelOpenStopOrders();
         List<StopOrderDto> filledOrders = this.getFilledStopOrders();
         log.info("Total stop loss order filled " + filledOrders.size());
-        this.closePositionWithStopOrderFilled(filledOrders, event.getTime());
+        this.onStopOrderFilled(filledOrders, event.getTime());
     }
 
-    private void closePositionWithStopOrderFilled(List<StopOrderDto> filledOrders, LocalDateTime time) {
+    private void onStopOrderFilled(List<StopOrderDto> filledOrders, LocalDateTime time) {
         for (StopOrderDto stopOrder : filledOrders) {
-            Position ps = MultiPositionHandler.getPositionByStopOrder(stopOrder);
-            ps.closePosition(ExitReason.STOP_ORDER_FILLED);
-            this.portfolio.closePosition(ps.getIdentifier());
-            this.historyHandler.setState(TransactionState.EXIT, ps.getIdentifier());
-            this.historyHandler.addPosition(ps);
-
-            this.historyHandler.addOrderFilled(new FilledOrderDto(
-                    time,
-                    stopOrder.getSymbol(),
-                    stopOrder.getAction(),
-                    stopOrder.getQuantity(),
-                    stopOrder.getFilledPrice(),
-                    ps.getIdentifier(),
-                    stopOrder.getId()
-            ));
+            stopOrderFilledListener.process(stopOrder, time);
         }
     }
 

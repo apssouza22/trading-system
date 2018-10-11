@@ -40,7 +40,7 @@ public class RiskManagementHandler {
     }
 
 
-    public EnumMap<StopOrderType, StopOrderDto> getStopOrders(Position position, LoopEvent event) {
+    public EnumMap<StopOrderType, StopOrderDto> createStopOrders(Position position, LoopEvent event) {
         EnumMap<StopOrderType, StopOrderDto> stop_orders = new EnumMap<>(StopOrderType.class);
         if (!hasStop()) {
             return chooseStopOrders(stop_orders);
