@@ -13,4 +13,5 @@ before_script:
   - ./cc-test-reporter before-build
 
 after_script:
-  - ./cc-test-reporter after-build --coverage-input-type jacoco --exit-code $TRAVIS_TEST_RESULT
+  - JACOCO_SOURCE_PATH=src/main/java ./cc-test-reporter format-coverage target/jacoco-ut/jacoco.xml  --input-type jacoco
+  - ./cc-test-reporter upload-coverage
