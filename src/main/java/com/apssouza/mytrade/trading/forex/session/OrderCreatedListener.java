@@ -54,6 +54,7 @@ public class OrderCreatedListener implements EventListener {
             processNewOrder(processedOrders, order);
         }
     }
+
     private void processNewOrder(List<String> processedOrders, OrderDto order) {
         FilledOrderDto filledOrder = executionHandler.executeOrder(order);
         if (filledOrder != null) {
