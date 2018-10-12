@@ -64,10 +64,10 @@ public class MarketTimeHelper {
      * @return
      */
     public static boolean isEOD(LocalDateTime dateTime) {
-        if (dateTime.toLocalTime().isBefore(START_OF_DAY) || dateTime.toLocalTime().isAfter(END_OF_DAY)) {
-            return false;
+        if (dateTime.toLocalTime().isAfter(END_OF_DAY)) {
+            return true;
         }
-        return true;
+        return false;
     }
 
     /**

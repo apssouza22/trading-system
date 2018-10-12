@@ -73,7 +73,7 @@ public class PositionExitHandler {
             exit_direction = OrderAction.BUY;
         }
 
-        if (OrderAction.valueOf(signal.getAction()) == exit_direction) {
+        if (OrderAction.valueOf(signal.getAction().toUpperCase()) == exit_direction) {
             return true;
         }
         return false;
