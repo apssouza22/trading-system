@@ -114,7 +114,12 @@ public class TradingSession {
         this.riskManagementHandler = new RiskManagementHandler(
                 this.portfolio,
                 new PositionSizerFixed(),
-                new StopOrderCreatorFixed(Properties.hard_stop_loss_distance)
+                new StopOrderCreatorFixed(
+                        Properties.hard_stop_loss_distance,
+                        Properties.take_profit_distance_fixed,
+                        Properties.entry_stop_loss_distance_fixed,
+                        Properties.trailing_stop_loss_distance
+                )
         );
 
         this.portfolioHandler = new PortfolioHandler(
