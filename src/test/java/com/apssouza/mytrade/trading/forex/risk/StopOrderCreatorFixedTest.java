@@ -1,6 +1,7 @@
 package com.apssouza.mytrade.trading.forex.risk;
 
 import com.apssouza.mytrade.feed.price.PriceDto;
+import com.apssouza.mytrade.trading.builder.PositionBuilder;
 import com.apssouza.mytrade.trading.forex.order.*;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.forex.portfolio.PositionStatus;
@@ -32,35 +33,24 @@ public class StopOrderCreatorFixedTest extends TestCase {
 
     @Test
     public void getHardStopLossWhenLongPosition() {
-        Position position = new Position(
-                PositionType.LONG,
-                "AUDUSD",
-                1000,
-                BigDecimal.valueOf(1.0004),
-                LocalDateTime.now(), "AUDUSD",
-                null,
-                null,
-                PositionStatus.FILLED
-        );
+        PositionBuilder positionBuilder = new PositionBuilder();
+        positionBuilder.setType(PositionType.LONG);
+        Position position = positionBuilder.build();
+
         StopOrderDto hardStopLoss = obj.getHardStopLoss(position);
         assertEquals(StopOrderStatus.CREATED, hardStopLoss.getStatus());
         assertEquals(StopOrderType.HARD_STOP, hardStopLoss.getType());
         assertEquals(OrderAction.SELL, hardStopLoss.getAction());
-        assertEquals(BigDecimal.valueOf(0.9004), hardStopLoss.getPrice());
+        assertEquals(BigDecimal.valueOf(0.904), hardStopLoss.getPrice());
     }
 
     @Test
     public void getHardStopLossWhenShortPosition() {
-        Position position = new Position(
-                PositionType.SHORT,
-                "AUDUSD",
-                1000,
-                BigDecimal.valueOf(1.004),
-                LocalDateTime.now(), "AUDUSD",
-                null,
-                null,
-                PositionStatus.FILLED
-        );
+        PositionBuilder positionBuilder = new PositionBuilder();
+        positionBuilder.setType(PositionType.SHORT);
+        positionBuilder.setPrice(BigDecimal.valueOf(1.004));
+        Position position = positionBuilder.build();
+
         StopOrderDto hardStopLoss = obj.getHardStopLoss(position);
         assertEquals(StopOrderStatus.CREATED, hardStopLoss.getStatus());
         assertEquals(StopOrderType.HARD_STOP, hardStopLoss.getType());
@@ -70,16 +60,10 @@ public class StopOrderCreatorFixedTest extends TestCase {
 
     @Test
     public void getTakeProfitWhenShortPosition() {
-        Position position = new Position(
-                PositionType.SHORT,
-                "AUDUSD",
-                1000,
-                BigDecimal.valueOf(1.004),
-                LocalDateTime.now(), "AUDUSD",
-                null,
-                null,
-                PositionStatus.FILLED
-        );
+        PositionBuilder positionBuilder = new PositionBuilder();
+        positionBuilder.setType(PositionType.SHORT);
+        Position position = positionBuilder.build();
+
         StopOrderDto hardStopLoss = obj.getProfitStopOrder(position);
         assertEquals(StopOrderStatus.CREATED, hardStopLoss.getStatus());
         assertEquals(StopOrderType.TAKE_PROFIT, hardStopLoss.getType());
@@ -90,16 +74,11 @@ public class StopOrderCreatorFixedTest extends TestCase {
 
     @Test
     public void getTakeProfitWhenLongPosition() {
-        Position position = new Position(
-                PositionType.LONG,
-                "AUDUSD",
-                1000,
-                BigDecimal.valueOf(1.004),
-                LocalDateTime.now(), "AUDUSD",
-                null,
-                null,
-                PositionStatus.FILLED
-        );
+        PositionBuilder positionBuilder = new PositionBuilder();
+        positionBuilder.setType(PositionType.LONG);
+        positionBuilder.setPrice(BigDecimal.valueOf(1.004));
+        Position position = positionBuilder.build();
+
         StopOrderDto hardStopLoss = obj.getProfitStopOrder(position);
         assertEquals(StopOrderStatus.CREATED, hardStopLoss.getStatus());
         assertEquals(StopOrderType.TAKE_PROFIT, hardStopLoss.getType());
@@ -110,16 +89,11 @@ public class StopOrderCreatorFixedTest extends TestCase {
 
     @Test
     public void getEntryStopLossWhenLongPosition() {
-        Position position = new Position(
-                PositionType.LONG,
-                "AUDUSD",
-                1000,
-                BigDecimal.valueOf(1.004),
-                LocalDateTime.now(), "AUDUSD",
-                null,
-                null,
-                PositionStatus.FILLED
-        );
+        PositionBuilder positionBuilder = new PositionBuilder();
+        positionBuilder.setType(PositionType.LONG);
+        positionBuilder.setPrice(BigDecimal.valueOf(1.004));
+        Position position = positionBuilder.build();
+
         HashMap<String, PriceDto> priceMap = new HashMap<>();
         LocalDateTime now = LocalDateTime.now();
         BigDecimal close = BigDecimal.valueOf(1.305);

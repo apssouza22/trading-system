@@ -3,13 +3,10 @@ package com.apssouza.mytrade.trading.builder;
 import com.apssouza.mytrade.feed.price.PriceHandler;
 import com.apssouza.mytrade.trading.forex.portfolio.Portfolio;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;
-import com.apssouza.mytrade.trading.forex.portfolio.PositionStatus;
 import com.apssouza.mytrade.trading.forex.portfolio.PositionType;
 import com.apssouza.mytrade.trading.forex.risk.PositionExitHandler;
 import org.mockito.Mockito;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,17 +16,9 @@ public class PositionExitBuilder {
 
 
     public PositionExitBuilder addPosition(PositionType type){
-        positionMap.put("AUDUSD", new Position(
-                type,
-                "AUDUSD",
-                1000,
-                BigDecimal.valueOf(1.004),
-                LocalDateTime.now(),
-                "AUDUSD",
-                null,
-                null,
-                PositionStatus.FILLED
-        ));
+        PositionBuilder positionBuilder = new PositionBuilder();
+        positionBuilder.setType(type);
+        positionMap.put("AUDUSD", positionBuilder.build());
         return this;
     }
 
