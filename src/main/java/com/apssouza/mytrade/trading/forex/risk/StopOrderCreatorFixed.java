@@ -37,11 +37,7 @@ public class StopOrderCreatorFixed implements StopOrderCreator {
     public StopOrderDto getHardStopLoss(Position position) {
         BigDecimal stopPrice;
         OrderAction action = TradingHelper.getExitOrderActionFromPosition(position);
-        if (position.getPositionType() == PositionType.LONG) {
-            stopPrice = position.getInitPrice().subtract(hardStopDistance);
-        } else {
-            stopPrice = position.getInitPrice().add(hardStopDistance);
-        }
+        stopPrice = calculatePriceBasedPositionType(position);
         return new StopOrderDto(
                 StopOrderType.HARD_STOP,
                 null,
@@ -53,6 +49,16 @@ public class StopOrderCreatorFixed implements StopOrderCreator {
                 position.getQuantity(),
                 position.getIdentifier()
         );
+    }
+
+    private BigDecimal calculatePriceBasedPositionType(Position position) {
+        BigDecimal stopPrice;
+        if (position.getPositionType() == PositionType.LONG) {
+            stopPrice = position.getInitPrice().subtract(hardStopDistance);
+        } else {
+            stopPrice = position.getInitPrice().add(hardStopDistance);
+        }
+        return stopPrice;
     }
 
     @Override
@@ -151,7 +157,8 @@ public class StopOrderCreatorFixed implements StopOrderCreator {
     private BigDecimal getLongTraillingStopPrice(Position position, BigDecimal last_close, BigDecimal traillingStopDistance) {
         BigDecimal stopPrice = null;
         //           if price is high enough to warrant creating trailing stop loss:
-        if (last_close.compareTo(position.getInitPrice().add(traillingStopDistance)) > 0) {
+        BigDecimal tsPrice = position.getInitPrice().add(traillingStopDistance);
+        if (last_close.compareTo(tsPrice) > 0) {
             return stopPrice;
         }
         if (!position.getPlacedStopLoss().getType().equals(StopOrderType.TRAILLING_STOP)) {
@@ -166,8 +173,8 @@ public class StopOrderCreatorFixed implements StopOrderCreator {
 
     private BigDecimal getShortTrallingStopPrice(Position position, BigDecimal last_close, BigDecimal traillingStopDistance) {
         BigDecimal stopPrice = null;
-        //           if price is low enough to warrant creating trailing stop loss:
-        if (last_close.compareTo(position.getInitPrice().subtract(traillingStopDistance)) >= 0) {
+        BigDecimal tsPrice = position.getInitPrice().subtract(traillingStopDistance);
+        if (last_close.compareTo(tsPrice) < 0) {
             return stopPrice;
         }
         if (!position.getPlacedStopLoss().getType().equals(StopOrderType.TRAILLING_STOP)) {
