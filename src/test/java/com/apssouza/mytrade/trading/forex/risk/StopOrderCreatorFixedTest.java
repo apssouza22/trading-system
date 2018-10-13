@@ -6,6 +6,8 @@ import com.apssouza.mytrade.trading.forex.order.*;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.forex.portfolio.PositionStatus;
 import com.apssouza.mytrade.trading.forex.portfolio.PositionType;
+import com.apssouza.mytrade.trading.forex.risk.stoporder.PriceDistanceObject;
+import com.apssouza.mytrade.trading.forex.risk.stoporder.fixed.StopOrderCreatorFixed;
 import com.apssouza.mytrade.trading.misc.loop.LoopEvent;
 import junit.framework.TestCase;
 import org.junit.Before;
@@ -18,8 +20,6 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Optional;
 
-import static org.junit.Assert.*;
-
 @RunWith(MockitoJUnitRunner.class)
 public class StopOrderCreatorFixedTest extends TestCase {
 
@@ -27,7 +27,7 @@ public class StopOrderCreatorFixedTest extends TestCase {
 
     @Before
     public void setUp() throws Exception {
-        this.obj = new StopOrderCreatorFixed(.1, .2, .2, .2);
+        this.obj = new StopOrderCreatorFixed(new PriceDistanceObject( .1, .2, .2, .2));
 
     }
 

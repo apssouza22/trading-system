@@ -121,4 +121,20 @@ public class PositionExitHandlerTest extends TestCase {
         assertEquals(ExitReason.END_OF_DAY, exit_list.get(0).getExitReason());
     }
 
+
+    @Test
+    public void processWithNoSignal() {
+        loopEventBuilder.createPriceMap(BigDecimal.valueOf(1.003));
+        loopEventBuilder.setTime(LocalDateTime.of(2018,1,1,1,1));
+        LoopEvent loopEvent = loopEventBuilder.build();
+
+        exitBuilder.addPosition(PositionType.SHORT);
+        PositionExitHandler handler = exitBuilder.build();
+
+        List<SignalDto> signals = signalBuilder.buildList();
+
+        List<Position> exit_list = handler.process(loopEvent, signals);
+        assertEquals(0, exit_list.size());
+    }
+
 }

@@ -5,6 +5,7 @@ import com.apssouza.mytrade.trading.forex.order.StopOrderDto;
 import com.apssouza.mytrade.trading.forex.order.StopOrderType;
 import com.apssouza.mytrade.trading.forex.portfolio.Portfolio;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;
+import com.apssouza.mytrade.trading.forex.risk.stoporder.StopOrderCreator;
 import com.apssouza.mytrade.trading.misc.helper.config.Properties;
 import com.apssouza.mytrade.trading.misc.loop.LoopEvent;
 
@@ -41,6 +42,8 @@ public class RiskManagementHandler {
 
 
     public EnumMap<StopOrderType, StopOrderDto> createStopOrders(Position position, LoopEvent event) {
+        stopOrderCreator.createContext(position.getPositionType());
+
         EnumMap<StopOrderType, StopOrderDto> stop_orders = new EnumMap<>(StopOrderType.class);
         if (!hasStop()) {
             return chooseStopOrders(stop_orders);

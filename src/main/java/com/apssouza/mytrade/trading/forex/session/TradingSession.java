@@ -19,6 +19,8 @@ import com.apssouza.mytrade.trading.forex.portfolio.Portfolio;
 import com.apssouza.mytrade.trading.forex.portfolio.PortfolioHandler;
 import com.apssouza.mytrade.trading.forex.portfolio.ReconciliationHandler;
 import com.apssouza.mytrade.trading.forex.risk.*;
+import com.apssouza.mytrade.trading.forex.risk.stoporder.PriceDistanceObject;
+import com.apssouza.mytrade.trading.forex.risk.stoporder.fixed.StopOrderCreatorFixed;
 import com.apssouza.mytrade.trading.misc.helper.TradingHelper;
 import com.apssouza.mytrade.trading.misc.helper.config.Properties;
 import com.apssouza.mytrade.trading.misc.helper.time.DateRangeHelper;
@@ -114,12 +116,12 @@ public class TradingSession {
         this.riskManagementHandler = new RiskManagementHandler(
                 this.portfolio,
                 new PositionSizerFixed(),
-                new StopOrderCreatorFixed(
+                new StopOrderCreatorFixed(new PriceDistanceObject(
                         Properties.hard_stop_loss_distance,
                         Properties.take_profit_distance_fixed,
                         Properties.entry_stop_loss_distance_fixed,
                         Properties.trailing_stop_loss_distance
-                )
+                ))
         );
 
         this.portfolioHandler = new PortfolioHandler(
@@ -168,7 +170,7 @@ public class TradingSession {
             if (!TradingHelper.isTradingTime(currentTime)) {
                 continue;
             }
-            if (lastDayProcessed.compareTo(currentTime.toLocalDate()) < 0 ) {
+            if (lastDayProcessed.compareTo(currentTime.toLocalDate()) < 0) {
                 this.processStartDay(currentTime);
             }
 
@@ -190,7 +192,7 @@ public class TradingSession {
         } else {
             signals = this.signalHandler.findbySecondAndSource(this.systemName, loopEvent.getTime());
         }
-        if (!signals.isEmpty()){
+        if (!signals.isEmpty()) {
             System.out.println("signal");
         }
         this.portfolioHandler.updatePortfolioValue(loopEvent);

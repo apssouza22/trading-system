@@ -75,11 +75,6 @@ public class Portfolio {
 
     }
 
-    public void updatePortfolio(BigDecimal price) {
-        for (Map.Entry<String, Position> entry : this.positions.entrySet()) {
-            entry.getValue().updatePositionPrice(price);
-        }
-    }
 
     public Position getPosition(String identifier) {
         if (!this.positions.containsKey(identifier)) {
