@@ -78,10 +78,6 @@ public class Position {
         return null;
     }
 
-    public void setPlacedStopLoss(StopOrderDto stopLoss) {
-        this.placedStopLoss = stopLoss;
-    }
-
 
     public void updatePositionPrice(BigDecimal price) {
         this.currentPrice = price;
@@ -163,7 +159,9 @@ public class Position {
     }
 
     public StopOrderDto getPlacedStopLoss() {
-        return placedStopLoss;
+        if (stopOrders.containsKey(StopOrderType.STOP_LOSS))
+            return stopOrders.get(StopOrderType.STOP_LOSS);
+        return null;
     }
 
     public PositionType getPositionType() {

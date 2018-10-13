@@ -46,7 +46,7 @@ public class RiskManagementHandler {
 
         EnumMap<StopOrderType, StopOrderDto> stop_orders = new EnumMap<>(StopOrderType.class);
         if (!hasStop()) {
-            return chooseStopOrders(stop_orders);
+            return new EnumMap(StopOrderType.class);
         }
 
         EnumMap<StopOrderType, StopOrderDto> stopOrders = position.getStopOrders();
@@ -58,7 +58,6 @@ public class RiskManagementHandler {
         if (stopOrders.isEmpty() || changed_units) {
             stop_orders.put(StopOrderType.HARD_STOP, this.stopOrderCreator.getHardStopLoss(position));
             stop_orders.put(StopOrderType.TAKE_PROFIT, this.stopOrderCreator.getProfitStopOrder(position));
-            return chooseStopOrders(stop_orders);
         }
 
         stop_orders.putAll(getMovingStops(position, event));
@@ -89,7 +88,7 @@ public class RiskManagementHandler {
                 Properties.take_profit_stop_enabled;
     }
 
-    public EnumMap<StopOrderType, StopOrderDto> chooseStopOrders(EnumMap<StopOrderType, StopOrderDto> stop_losses) {
+    private EnumMap<StopOrderType, StopOrderDto> chooseStopOrders(EnumMap<StopOrderType, StopOrderDto> stop_losses) {
         EnumMap<StopOrderType, StopOrderDto> stop_orders = new EnumMap<>(StopOrderType.class);
 
         if (Properties.take_profit_stop_enabled) {

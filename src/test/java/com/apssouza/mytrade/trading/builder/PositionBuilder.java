@@ -1,9 +1,13 @@
 package com.apssouza.mytrade.trading.builder;
 
+import com.apssouza.mytrade.trading.forex.order.StopOrderDto;
+import com.apssouza.mytrade.trading.forex.order.StopOrderType;
 import com.apssouza.mytrade.trading.forex.portfolio.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.EnumMap;
+import java.util.List;
 
 public class PositionBuilder {
 
@@ -16,8 +20,9 @@ public class PositionBuilder {
     ExitReason exitReason = null;
     FilledOrderDto filledOrder = null;
     PositionStatus positionStatus = PositionStatus.FILLED;
+    private EnumMap<StopOrderType, StopOrderDto> stopOrders = new EnumMap(StopOrderType.class);
 
-    public void setType(PositionType type){
+    public void setType(PositionType type) {
         this.type = type;
     }
 
@@ -55,7 +60,7 @@ public class PositionBuilder {
 
     public Position build() {
 
-        return new Position(
+        Position position = new Position(
                 type,
                 symbol,
                 qtd,
@@ -66,7 +71,15 @@ public class PositionBuilder {
                 exitReason,
                 PositionStatus.FILLED
         );
+
+        if (stopOrders.isEmpty()) {
+            return position;
+        }
+        return new Position(position, stopOrders);
     }
 
 
+    public void addStopOrder(StopOrderDto stopOrder) {
+        this.stopOrders.put(stopOrder.getType(), stopOrder);
+    }
 }
