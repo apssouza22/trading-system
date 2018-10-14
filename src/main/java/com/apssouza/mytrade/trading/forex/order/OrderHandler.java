@@ -66,8 +66,8 @@ public class OrderHandler {
             String action = signal.getAction();
             OrderDto order = new OrderDto(
                     signal.getSymbol(),
-                    OrderAction.valueOf(action),
-                    0,
+                    OrderAction.valueOf(action.toUpperCase()),
+                    positionSizer.getQuantity(),
                     OrderOrigin.SIGNAL,
                     time,
                     "",
