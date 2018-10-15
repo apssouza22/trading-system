@@ -11,8 +11,13 @@ import java.math.BigDecimal;
 
 public class OrderHandlerBuilder {
 
+    MemoryOrderDao memoryOrderDao = Mockito.mock(MemoryOrderDao.class);
+
+    public void setMemoryOrderDao(MemoryOrderDao memoryOrderDao){
+        this.memoryOrderDao = memoryOrderDao;
+    }
+
     public OrderHandler build(){
-        MemoryOrderDao memoryOrderDao = new MemoryOrderDao();
         PositionSizerFixed positionSizerFixed = new PositionSizerFixed();
         PriceHandler priceHandler = Mockito.mock(PriceHandler.class);
         Portfolio portfolio = Mockito.mock(Portfolio.class);

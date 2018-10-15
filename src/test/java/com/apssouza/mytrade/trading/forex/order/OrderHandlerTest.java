@@ -10,6 +10,7 @@ import com.apssouza.mytrade.trading.forex.portfolio.PositionType;
 import junit.framework.TestCase;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.time.LocalDateTime;
@@ -66,5 +67,26 @@ public class OrderHandlerTest extends TestCase {
         OrderDto orderFromClosedPosition = orderHandler.createOrderFromClosedPosition(position, LocalDateTime.MIN);
         assertEquals(OrderOrigin.STOP_ORDER, orderFromClosedPosition.getOrigin());
         assertEquals(OrderAction.SELL, orderFromClosedPosition.getAction());
+    }
+
+    @Test
+    public void persist(){
+        MemoryOrderDao memoryOrderDao = Mockito.mock(MemoryOrderDao.class);
+        OrderHandlerBuilder orderHandlerBuilder = new OrderHandlerBuilder();
+        orderHandlerBuilder.setMemoryOrderDao(memoryOrderDao);
+        OrderHandler orderHandler = orderHandlerBuilder.build();
+        orderHandler.persist(Mockito.mock(OrderDto.class));
+        Mockito.verify(memoryOrderDao).persist(Mockito.any());
+    }
+
+
+    @Test
+    public void updateStatus(){
+        MemoryOrderDao memoryOrderDao = Mockito.mock(MemoryOrderDao.class);
+        OrderHandlerBuilder orderHandlerBuilder = new OrderHandlerBuilder();
+        orderHandlerBuilder.setMemoryOrderDao(memoryOrderDao);
+        OrderHandler orderHandler = orderHandlerBuilder.build();
+        orderHandler.updateOrderStatus(1, OrderStatus.CREATED);
+        Mockito.verify(memoryOrderDao).updateStatus(Mockito.anyInt(), Mockito.any());
     }
 }
