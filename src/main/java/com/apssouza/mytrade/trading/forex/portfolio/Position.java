@@ -1,9 +1,11 @@
 package com.apssouza.mytrade.trading.forex.portfolio;
 
+import com.apssouza.mytrade.trading.forex.common.Symbol;
 import com.apssouza.mytrade.trading.forex.order.StopOrderDto;
 import com.apssouza.mytrade.trading.forex.order.StopOrderType;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.EnumMap;
 import java.util.HashSet;
@@ -25,7 +27,7 @@ public class Position {
     private BigDecimal avgPrice;
     private int id = 0;
 
-    EnumMap<StopOrderType,StopOrderDto> stopOrders = new EnumMap<>(StopOrderType.class);
+    EnumMap<StopOrderType, StopOrderDto> stopOrders = new EnumMap<>(StopOrderType.class);
     private StopOrderDto placedStopLoss;
 
     public Position(
@@ -55,8 +57,7 @@ public class Position {
     }
 
 
-
-    public Position(Position position, EnumMap<StopOrderType,StopOrderDto> stopOrders) {
+    public Position(Position position, EnumMap<StopOrderType, StopOrderDto> stopOrders) {
         this(
                 position.getPositionType(),
                 position.getSymbol(),
@@ -72,7 +73,7 @@ public class Position {
     }
 
     public StopOrderDto getTakeProfitOrder() {
-        if(this.stopOrders.containsKey(StopOrderType.TAKE_PROFIT)) {
+        if (this.stopOrders.containsKey(StopOrderType.TAKE_PROFIT)) {
             return this.stopOrders.get(StopOrderType.TAKE_PROFIT);
         }
         return null;
@@ -86,12 +87,12 @@ public class Position {
     public void addQuantity(int qtd, BigDecimal price) {
         int newQuantity = this.quantity + qtd;
         BigDecimal newCost = this.currentPrice
-                .multiply(BigDecimal.valueOf(qtd))
-                .add(BigDecimal.valueOf(this.quantity));
+                .multiply(BigDecimal.valueOf(qtd));
+
         BigDecimal oldCost = this.avgPrice.multiply(BigDecimal.valueOf(this.quantity));
         BigDecimal newTotalCost = oldCost.add(newCost);
-
-        this.avgPrice = newTotalCost.divide(BigDecimal.valueOf(newQuantity));
+        int pipScale = Symbol.valueOf(this.symbol).getPipScale();
+        this.avgPrice = newTotalCost.divide(BigDecimal.valueOf(newQuantity), pipScale, RoundingMode.HALF_UP);
         this.quantity = newQuantity;
         this.updatePositionPrice(price);
     }
@@ -106,8 +107,6 @@ public class Position {
         if (exit_reason != null) {
             this.exitReason = exit_reason;
         }
-
-
     }
 
     public String getSymbol() {
@@ -154,7 +153,7 @@ public class Position {
         return id;
     }
 
-    public EnumMap<StopOrderType,StopOrderDto> getStopOrders() {
+    public EnumMap<StopOrderType, StopOrderDto> getStopOrders() {
         return stopOrders;
     }
 

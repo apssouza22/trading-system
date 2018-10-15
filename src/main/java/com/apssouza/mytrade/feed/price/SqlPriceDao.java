@@ -10,8 +10,6 @@ import java.util.logging.Logger;
 
 public class SqlPriceDao implements PriceDao {
 
-    private static Logger log = Logger.getLogger(SqlPriceDao.class.getName());
-
     private final Connection connection;
 
     public SqlPriceDao(Connection connection) {

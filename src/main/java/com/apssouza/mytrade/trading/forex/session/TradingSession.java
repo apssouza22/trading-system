@@ -107,7 +107,7 @@ public class TradingSession {
         }
 
         this.positionSizer = new PositionSizerFixed();
-        this.portfolio = new Portfolio(this.priceHandler, this.equity);
+        this.portfolio = new Portfolio(this.equity);
         this.positionExitHandler = new PositionExitHandler(this.portfolio, this.priceHandler);
         this.orderHandler = new OrderHandler(this.orderDao, this.positionSizer, this.equity, this.priceHandler, this.portfolio);
         this.signalHandler = new SignalHandler(this.signalDao);

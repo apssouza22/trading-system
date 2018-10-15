@@ -1,7 +1,6 @@
 package com.apssouza.mytrade.trading.forex.portfolio;
 
 import com.apssouza.mytrade.feed.price.PriceDto;
-import com.apssouza.mytrade.feed.price.PriceHandler;
 import com.apssouza.mytrade.trading.misc.loop.LoopEvent;
 
 import java.math.BigDecimal;
@@ -10,16 +9,12 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 public class Portfolio {
-    private final PriceHandler priceHandler;
     private final BigDecimal equity;
-    private BigDecimal balance;
     private Map<String, Position> positions = new HashMap<>();
     private static Logger log = Logger.getLogger(Portfolio.class.getName());
 
-    public Portfolio(PriceHandler priceHandler, BigDecimal equity) {
-        this.priceHandler = priceHandler;
+    public Portfolio(BigDecimal equity) {
         this.equity = equity;
-        this.balance = equity;
     }
 
     public void updatePortfolioValue(LoopEvent event) {
@@ -28,10 +23,6 @@ public class Portfolio {
             PriceDto priceDto = event.getPrice().get(ps.getSymbol());
             ps.updatePositionPrice(priceDto.getClose());
         }
-    }
-
-    public BigDecimal getBalance() {
-        return balance;
     }
 
     public Map<String, Position> getPositions() {
@@ -63,16 +54,15 @@ public class Portfolio {
 
     }
 
-    public boolean closePosition(String identfier) {
-        if (!this.positions.containsKey(identfier)) {
+    public boolean closePosition(String identifier) {
+        if (!this.positions.containsKey(identifier)) {
             throw new RuntimeException("Position not found");
         }
-        Position ps = this.positions.get(identfier);
+        Position ps = this.positions.get(identifier);
         ps.closePosition(null);
-        this.positions.remove(identfier);
+        this.positions.remove(identifier);
         log.info(String.format("Position closed - %s %s  ", ps.getIdentifier(), ps.getQuantity()));
         return true;
-
     }
 
 
