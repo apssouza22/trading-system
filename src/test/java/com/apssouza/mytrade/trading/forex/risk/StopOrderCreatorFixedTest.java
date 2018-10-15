@@ -36,7 +36,7 @@ public class StopOrderCreatorFixedTest extends TestCase {
         PositionBuilder positionBuilder = new PositionBuilder();
         positionBuilder.setType(PositionType.LONG);
         Position position = positionBuilder.build();
-
+        obj.createContext(PositionType.LONG);
         StopOrderDto hardStopLoss = obj.getHardStopLoss(position);
         assertEquals(StopOrderStatus.CREATED, hardStopLoss.getStatus());
         assertEquals(StopOrderType.HARD_STOP, hardStopLoss.getType());
@@ -50,6 +50,7 @@ public class StopOrderCreatorFixedTest extends TestCase {
         positionBuilder.setType(PositionType.SHORT);
         positionBuilder.setPrice(BigDecimal.valueOf(1.004));
         Position position = positionBuilder.build();
+        obj.createContext(PositionType.SHORT);
 
         StopOrderDto hardStopLoss = obj.getHardStopLoss(position);
         assertEquals(StopOrderStatus.CREATED, hardStopLoss.getStatus());
@@ -63,6 +64,7 @@ public class StopOrderCreatorFixedTest extends TestCase {
         PositionBuilder positionBuilder = new PositionBuilder();
         positionBuilder.setType(PositionType.SHORT);
         Position position = positionBuilder.build();
+        obj.createContext(PositionType.SHORT);
 
         StopOrderDto hardStopLoss = obj.getProfitStopOrder(position);
         assertEquals(StopOrderStatus.CREATED, hardStopLoss.getStatus());
@@ -79,6 +81,8 @@ public class StopOrderCreatorFixedTest extends TestCase {
         positionBuilder.setPrice(BigDecimal.valueOf(1.004));
         Position position = positionBuilder.build();
 
+        obj.createContext(PositionType.LONG);
+
         StopOrderDto hardStopLoss = obj.getProfitStopOrder(position);
         assertEquals(StopOrderStatus.CREATED, hardStopLoss.getStatus());
         assertEquals(StopOrderType.TAKE_PROFIT, hardStopLoss.getType());
@@ -93,6 +97,8 @@ public class StopOrderCreatorFixedTest extends TestCase {
         positionBuilder.setType(PositionType.LONG);
         positionBuilder.setPrice(BigDecimal.valueOf(1.004));
         Position position = positionBuilder.build();
+
+        obj.createContext(PositionType.LONG);
 
         HashMap<String, PriceDto> priceMap = new HashMap<>();
         LocalDateTime now = LocalDateTime.now();
@@ -120,6 +126,7 @@ public class StopOrderCreatorFixedTest extends TestCase {
                 null,
                 PositionStatus.FILLED
         );
+        obj.createContext(PositionType.LONG);
         HashMap<String, PriceDto> priceMap = new HashMap<>();
         LocalDateTime now = LocalDateTime.now();
         BigDecimal close = BigDecimal.valueOf(1.105);
@@ -143,6 +150,7 @@ public class StopOrderCreatorFixedTest extends TestCase {
                 null,
                 PositionStatus.FILLED
         );
+        obj.createContext(PositionType.SHORT);
         HashMap<String, PriceDto> priceMap = new HashMap<>();
         LocalDateTime now = LocalDateTime.now();
         BigDecimal close = BigDecimal.valueOf(0.803);
@@ -169,6 +177,7 @@ public class StopOrderCreatorFixedTest extends TestCase {
                 null,
                 PositionStatus.FILLED
         );
+        obj.createContext(PositionType.SHORT);
         HashMap<String, PriceDto> priceMap = new HashMap<>();
         LocalDateTime now = LocalDateTime.now();
         BigDecimal close = BigDecimal.valueOf(1.105);
