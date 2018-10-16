@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 
-public class TradingSessionEventDriven extends TradingSessionLoopDriven {
+public class TradingSessionEventDriven extends AbstractTradingSession {
 
     private final BlockingQueue<LoopEvent> eventQueue;
 
@@ -25,11 +25,11 @@ public class TradingSessionEventDriven extends TradingSessionLoopDriven {
             String systemName,
             ExecutionType executionType
     ) {
-        super(equity, startDate, endDate, connection,sessionType, systemName,executionType);
+        super(equity, startDate, endDate, connection, sessionType, systemName, executionType);
         this.eventQueue = new LinkedBlockingDeque<>();
     }
 
-    private void runSession() {
+    protected void runSession() {
         if (this.sessionType == SessionType.BACK_TEST) {
             System.out.println(String.format("Running Backtest from %s to %s", this.startDate, this.endDate));
         } else {
@@ -65,10 +65,6 @@ public class TradingSessionEventDriven extends TradingSessionLoopDriven {
             this.eventLoop.sleep();
             lastDayProcessed = currentTime.toLocalDate();
         }
-    }
-
-    public void start() {
-        this.runSession();
     }
 
 }
