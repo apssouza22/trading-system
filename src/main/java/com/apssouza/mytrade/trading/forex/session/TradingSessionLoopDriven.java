@@ -37,31 +37,31 @@ import java.util.List;
 
 public class TradingSessionLoopDriven {
 
-    private final BigDecimal equity;
-    private final LocalDateTime startDate;
-    private final LocalDateTime endDate;
-    private final Connection connection;
-    private final SessionType sessionType;
-    private final String systemName;
-    private final ExecutionType executionType;
+    protected final BigDecimal equity;
+    protected final LocalDateTime startDate;
+    protected final LocalDateTime endDate;
+    protected final Connection connection;
+    protected final SessionType sessionType;
+    protected final String systemName;
+    protected final ExecutionType executionType;
 
-    private MemoryOrderDao orderDao;
-    private PriceDao priceSqlDao;
-    private SignalDao signalDao;
-    private MemoryPriceDao priceMemoryDao;
-    private PriceHandler priceHandler;
-    private ExecutionHandler executionHandler;
-    private PositionSizer positionSizer;
-    private Portfolio portfolio;
-    private PositionExitHandler positionExitHandler;
-    private OrderHandler orderHandler;
-    private SignalHandler signalHandler;
-    private ReconciliationHandler reconciliationHandler;
-    private HistoryBookHandler historyHandler;
-    private EventLoop eventLoop;
-    private PortfolioHandler portfolioHandler;
-    private boolean processedEndDay;
-    private RiskManagementHandler riskManagementHandler;
+    protected MemoryOrderDao orderDao;
+    protected PriceDao priceSqlDao;
+    protected SignalDao signalDao;
+    protected MemoryPriceDao priceMemoryDao;
+    protected PriceHandler priceHandler;
+    protected ExecutionHandler executionHandler;
+    protected PositionSizer positionSizer;
+    protected Portfolio portfolio;
+    protected PositionExitHandler positionExitHandler;
+    protected OrderHandler orderHandler;
+    protected SignalHandler signalHandler;
+    protected ReconciliationHandler reconciliationHandler;
+    protected HistoryBookHandler historyHandler;
+    protected EventLoop eventLoop;
+    protected PortfolioHandler portfolioHandler;
+    protected boolean processedEndDay;
+    protected RiskManagementHandler riskManagementHandler;
 
     public TradingSessionLoopDriven(
             BigDecimal equity,
@@ -180,7 +180,7 @@ public class TradingSessionLoopDriven {
         }
     }
 
-    private void processNext(LoopEvent loopEvent) {
+    public void processNext(LoopEvent loopEvent) {
 
         if (this.sessionType == SessionType.BACK_TEST) {
             this.executionHandler.setCurrentTime(loopEvent.getTime());
@@ -214,7 +214,7 @@ public class TradingSessionLoopDriven {
         System.out.println(this.portfolio.getPositions().size());
     }
 
-    private void processStartDay(LocalDateTime currentTime) {
+    protected void processStartDay(LocalDateTime currentTime) {
         if (Properties.sessionType == SessionType.BACK_TEST)
             this.priceMemoryDao.loadData(currentTime, currentTime.plusDays(1));
     }

@@ -2,6 +2,7 @@ package com.apssouza.mytrade;
 
 import com.apssouza.mytrade.trading.forex.session.ExecutionType;
 import com.apssouza.mytrade.trading.forex.session.SessionType;
+import com.apssouza.mytrade.trading.forex.session.TradingSessionEventDriven;
 import com.apssouza.mytrade.trading.forex.session.TradingSessionLoopDriven;
 import com.apssouza.mytrade.trading.misc.helper.config.Properties;
 
@@ -26,7 +27,7 @@ public class Application {
         Properties.tradingStartTime = LocalTime.MIN;
         Properties.tradingEndTime = LocalTime.MAX;
 
-        TradingSessionLoopDriven tradingSession = new TradingSessionLoopDriven(
+        TradingSessionEventDriven tradingSession = new TradingSessionEventDriven(
                 BigDecimal.valueOf(100000l),
                 Properties.tradingStartDay,
                 Properties.tradingEndDay,
