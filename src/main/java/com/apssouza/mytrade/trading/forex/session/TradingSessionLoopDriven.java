@@ -35,7 +35,7 @@ import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 
-public class TradingSession {
+public class TradingSessionLoopDriven {
 
     private final BigDecimal equity;
     private final LocalDateTime startDate;
@@ -63,7 +63,7 @@ public class TradingSession {
     private boolean processedEndDay;
     private RiskManagementHandler riskManagementHandler;
 
-    public TradingSession(
+    public TradingSessionLoopDriven(
             BigDecimal equity,
             LocalDateTime startDate,
             LocalDateTime endDate,

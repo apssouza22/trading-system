@@ -6,6 +6,7 @@ import com.apssouza.mytrade.trading.forex.risk.stoporder.PriceDistanceObject;
 import com.apssouza.mytrade.trading.misc.helper.NumberHelper;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 class ShortPositionStrategy implements CreatorStrategy {
 
@@ -31,11 +32,11 @@ class ShortPositionStrategy implements CreatorStrategy {
         return position.getInitPrice().add(distanceObject.getHardStopDistance());
     }
 
-    public BigDecimal getTrailingStopPrice(Position position, BigDecimal last_close) {
+    public Optional<BigDecimal> getTrailingStopPrice(Position position, BigDecimal last_close) {
         BigDecimal stopPrice = null;
         BigDecimal tsPrice = position.getInitPrice().subtract(distanceObject.getTraillingStopDistance());
         if (last_close.compareTo(tsPrice) < 0) {
-            return stopPrice;
+            return Optional.empty();
         }
         if (!position.getPlacedStopLoss().getType().equals(StopOrderType.TRAILLING_STOP)) {
             stopPrice = last_close.add(distanceObject.getTraillingStopDistance());
@@ -44,6 +45,6 @@ class ShortPositionStrategy implements CreatorStrategy {
             stopPrice = position.getPlacedStopLoss().getPrice().compareTo(stopPrice) < 0 ? position.getPlacedStopLoss().getPrice() : stopPrice;
         }
         stopPrice = NumberHelper.roundSymbolPrice(position.getSymbol(), stopPrice);
-        return stopPrice;
+        return Optional.of(stopPrice);
     }
 }

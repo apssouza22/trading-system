@@ -10,6 +10,7 @@ import com.apssouza.mytrade.trading.misc.helper.config.Properties;
 import com.apssouza.mytrade.trading.misc.loop.LoopEvent;
 
 import java.util.*;
+import java.util.function.Consumer;
 
 public class RiskManagementHandler {
 
@@ -66,17 +67,14 @@ public class RiskManagementHandler {
 
     private EnumMap<StopOrderType, StopOrderDto>  getMovingStops(Position position, LoopEvent event) {
         EnumMap<StopOrderType, StopOrderDto> stop_orders = new EnumMap(StopOrderType.class);
+        Consumer<StopOrderDto> consumer = (dto) -> stop_orders.put(dto.getType(), dto);
         if (Properties.entry_stop_loss_enabled) {
             Optional<StopOrderDto> entryStopOrder = this.stopOrderCreator.getEntryStopOrder(position, event);
-            if (entryStopOrder.isPresent()) {
-                stop_orders.put(StopOrderType.ENTRY_STOP, entryStopOrder.get());
-            }
+            entryStopOrder.ifPresent(consumer);
         }
         if (Properties.trailing_stop_loss_enabled) {
             Optional<StopOrderDto> trailingStopOrder = this.stopOrderCreator.getTrailingStopOrder(position, event);
-            if (trailingStopOrder.isPresent()) {
-                stop_orders.put(StopOrderType.TRAILLING_STOP, trailingStopOrder.get());
-            }
+            trailingStopOrder.ifPresent(consumer);
         }
         return stop_orders;
     }

@@ -6,6 +6,7 @@ import com.apssouza.mytrade.trading.forex.risk.stoporder.PriceDistanceObject;
 import com.apssouza.mytrade.trading.misc.helper.NumberHelper;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 class LongPositionStrategy implements CreatorStrategy {
     private final PriceDistanceObject distanceObject;
@@ -31,12 +32,15 @@ class LongPositionStrategy implements CreatorStrategy {
         return position.getInitPrice().add(distanceObject.getTakeProfitDistance());
     }
 
-    public BigDecimal getTrailingStopPrice(Position position, BigDecimal last_close) {
+    public Optional<BigDecimal> getTrailingStopPrice(Position position, BigDecimal last_close) {
         BigDecimal stopPrice = null;
         //           if price is high enough to warrant creating trailing stop loss:
         BigDecimal tsPrice = position.getInitPrice().add(distanceObject.getTraillingStopDistance());
         if (last_close.compareTo(tsPrice) > 0) {
-            return stopPrice;
+            return Optional.empty();
+        }
+        if (position.getPlacedStopLoss() == null){
+            return Optional.empty();
         }
         if (!position.getPlacedStopLoss().getType().equals(StopOrderType.TRAILLING_STOP)) {
             stopPrice = last_close.subtract(distanceObject.getTraillingStopDistance());
@@ -45,7 +49,7 @@ class LongPositionStrategy implements CreatorStrategy {
             stopPrice = position.getPlacedStopLoss().getPrice().compareTo(stopPrice) > 0 ? position.getPlacedStopLoss().getPrice() : stopPrice;
         }
         stopPrice = NumberHelper.roundSymbolPrice(position.getSymbol(), stopPrice);
-        return stopPrice;
+        return Optional.of(stopPrice);
     }
 
 }

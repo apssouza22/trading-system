@@ -41,9 +41,9 @@ public class CreatorContext {
 
     public Optional<StopOrderDto> getTrailingStopOrder(Position position, BigDecimal priceClose) {
         OrderAction action = TradingHelper.getExitOrderActionFromPosition(position);
-        BigDecimal stopPrice = strategy.getTrailingStopPrice(position, priceClose);
+        Optional<BigDecimal> stopPrice = strategy.getTrailingStopPrice(position, priceClose);
 
-        if (stopPrice == null) {
+        if (!stopPrice.isPresent()) {
             return Optional.empty();
         }
 
@@ -52,7 +52,7 @@ public class CreatorContext {
                 null,
                 StopOrderStatus.CREATED,
                 action,
-                stopPrice,
+                stopPrice.get(),
                 null,
                 position.getSymbol(),
                 position.getQuantity(),
