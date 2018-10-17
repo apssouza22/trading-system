@@ -149,39 +149,7 @@ public abstract class AbstractTradingSession {
         }
     }
 
-    public void processNext(LoopEvent loopEvent) {
 
-        if (this.sessionType == SessionType.BACK_TEST) {
-            this.executionHandler.setCurrentTime(loopEvent.getTime());
-        }
-        this.executionHandler.setPriceMap(loopEvent.getPrice());
-        List<SignalDto> signals;
-        if (this.sessionType == SessionType.LIVE) {
-            signals = this.signalHandler.getRealtimeSignal(this.systemName);
-        } else {
-            signals = this.signalHandler.findbySecondAndSource(this.systemName, loopEvent.getTime());
-        }
-        if (!signals.isEmpty()) {
-            System.out.println("signal");
-        }
-        this.portfolioHandler.updatePortfolioValue(loopEvent);
-
-        this.portfolioHandler.stopOrderHandle(loopEvent);
-        this.portfolioHandler.processExits(loopEvent, signals);
-        this.portfolioHandler.onSignal(loopEvent, signals);
-
-        List<OrderDto> orders = this.orderDao.getOrderByStatus(OrderStatus.CREATED);
-        orders = this.createPositionIdentifier(orders);
-        this.riskManagementHandler.checkOrders(orders);
-        this.historyHandler.addSignal(signals, orders);
-
-        this.portfolioHandler.onOrder(orders);
-        this.portfolioHandler.processReconciliation();
-        this.portfolioHandler.createStopOrder(loopEvent);
-        this.historyHandler.process(loopEvent);
-
-        System.out.println(this.portfolio.getPositions().size());
-    }
 
     protected void processStartDay(LocalDateTime currentTime) {
         if (Properties.sessionType == SessionType.BACK_TEST)
@@ -198,16 +166,7 @@ public abstract class AbstractTradingSession {
         return currentTime.getHour() > 22;
     }
 
-    private List<OrderDto> createPositionIdentifier(List<OrderDto> orders) {
-        List<OrderDto> list = new LinkedList<>();
-        for (OrderDto order : orders) {
-            list.add(new OrderDto(
-                    MultiPositionHandler.getIdentifierFromOrder(order),
-                    order
-            ));
-        }
-        return list;
-    }
+
 }
 
 

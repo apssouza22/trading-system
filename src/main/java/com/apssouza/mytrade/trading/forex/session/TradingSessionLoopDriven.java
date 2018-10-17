@@ -48,7 +48,7 @@ public class TradingSessionLoopDriven extends AbstractTradingSession {
                 this.processStartDay(currentTime);
             }
 
-            this.processNext(loopEvent);
+            //this.processNext(loopEvent);
             this.eventLoop.sleep();
             lastDayProcessed = currentTime.toLocalDate();
         }

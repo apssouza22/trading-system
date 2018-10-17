@@ -1,5 +1,6 @@
 package com.apssouza.mytrade.trading.forex.session;
 
+import com.apssouza.mytrade.feed.signal.SignalDto;
 import com.apssouza.mytrade.trading.forex.session.event.EventProcessor;
 import com.apssouza.mytrade.trading.misc.helper.TradingHelper;
 import com.apssouza.mytrade.trading.misc.helper.time.DayHelper;
@@ -9,6 +10,7 @@ import java.math.BigDecimal;
 import java.sql.Connection;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 
@@ -40,7 +42,15 @@ public class TradingSessionEventDriven extends AbstractTradingSession {
         LocalDate lastDayProcessed = this.startDate.toLocalDate().minusDays(1);
         this.priceMemoryDao.loadData(startDate, startDate.plusDays(30));
 
-        EventProcessor eventProcessor = new EventProcessor(eventQueue, this);
+        EventProcessor eventProcessor = new EventProcessor(
+                eventQueue,
+                orderDao,
+                executionHandler,
+                portfolio,
+                historyHandler,
+                portfolioHandler,
+                riskManagementHandler
+        );
         eventProcessor.start();
         while (this.eventLoop.hasNext()) {
             LoopEvent loopEvent = this.eventLoop.next();
@@ -57,6 +67,13 @@ public class TradingSessionEventDriven extends AbstractTradingSession {
                 this.processStartDay(currentTime);
             }
 
+            List<SignalDto> signals;
+            if (this.sessionType == SessionType.LIVE) {
+                signals = this.signalHandler.getRealtimeSignal(this.systemName);
+            } else {
+                signals = this.signalHandler.findbySecondAndSource(this.systemName, loopEvent.getTime());
+            }
+            loopEvent.setSignals(signals);
             try {
                 eventQueue.put(loopEvent);
             } catch (InterruptedException e) {
