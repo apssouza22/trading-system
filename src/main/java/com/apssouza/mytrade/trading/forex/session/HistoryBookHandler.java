@@ -1,16 +1,15 @@
 package com.apssouza.mytrade.trading.forex.session;
 
 import com.apssouza.mytrade.feed.price.PriceHandler;
-import com.apssouza.mytrade.feed.signal.SignalDao;
 import com.apssouza.mytrade.feed.signal.SignalDto;
 import com.apssouza.mytrade.trading.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.forex.portfolio.FilledOrderDto;
 import com.apssouza.mytrade.trading.forex.portfolio.Portfolio;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;
+import com.apssouza.mytrade.trading.forex.session.event.Event;
 import com.apssouza.mytrade.trading.forex.statistics.TransactionState;
-import com.apssouza.mytrade.trading.misc.loop.LoopEvent;
+import com.apssouza.mytrade.trading.forex.session.event.LoopEvent;
 
-import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -29,11 +28,11 @@ public class HistoryBookHandler {
         return this.transactions;
     }
 
-    public void addSignal(List<SignalDto> signals, List<OrderDto> orders) {
+    public void addSignal(List<SignalDto> signals) {
 
     }
 
-    public void process(LoopEvent event) {
+    public void process(Event event) {
 
     }
 

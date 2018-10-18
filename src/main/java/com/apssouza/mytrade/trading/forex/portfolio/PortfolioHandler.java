@@ -6,15 +6,16 @@ import com.apssouza.mytrade.trading.forex.order.*;
 import com.apssouza.mytrade.trading.forex.risk.PositionExitHandler;
 import com.apssouza.mytrade.trading.forex.risk.RiskManagementHandler;
 import com.apssouza.mytrade.trading.forex.session.*;
+import com.apssouza.mytrade.trading.forex.session.event.*;
 import com.apssouza.mytrade.trading.forex.session.listener.FilledOrderListener;
 import com.apssouza.mytrade.trading.forex.session.listener.OrderCreatedListener;
 import com.apssouza.mytrade.trading.forex.session.listener.StopOrderFilledListener;
 import com.apssouza.mytrade.trading.misc.helper.config.Properties;
-import com.apssouza.mytrade.trading.misc.loop.LoopEvent;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.concurrent.BlockingQueue;
 import java.util.logging.Logger;
 
 public class PortfolioHandler {
@@ -27,6 +28,7 @@ public class PortfolioHandler {
     private final ReconciliationHandler reconciliationHandler;
     private final HistoryBookHandler historyHandler;
     private final RiskManagementHandler riskManagementHandler;
+    private final BlockingQueue<Event> eventQueue;
     private static Logger log = Logger.getLogger(PortfolioHandler.class.getName());
     private final FilledOrderListener filledOrderListener;
     private final OrderCreatedListener orderCreatedListener;
@@ -41,7 +43,8 @@ public class PortfolioHandler {
             Portfolio portfolio,
             ReconciliationHandler reconciliationHandler,
             HistoryBookHandler historyHandler,
-            RiskManagementHandler riskManagementHandler
+            RiskManagementHandler riskManagementHandler,
+            BlockingQueue<Event> eventQueue
     ) {
 
         this.equity = equity;
@@ -52,16 +55,17 @@ public class PortfolioHandler {
         this.reconciliationHandler = reconciliationHandler;
         this.historyHandler = historyHandler;
         this.riskManagementHandler = riskManagementHandler;
+        this.eventQueue = eventQueue;
         this.filledOrderListener = new FilledOrderListener(portfolio, historyHandler);
         this.orderCreatedListener = new OrderCreatedListener(executionHandler, historyHandler, filledOrderListener, orderHandler);
         this.stopOrderFilledListener = new StopOrderFilledListener(portfolio, historyHandler);
     }
 
-    public void updatePortfolioValue(LoopEvent event) {
+    public void updatePortfolioValue(Event event) {
         this.portfolio.updatePortfolioValue(event);
     }
 
-    public void createStopOrder(LoopEvent event) {
+    public void createStopOrder(Event event) {
         if (portfolio.getPositions().isEmpty()) {
             log.info("Creating stop loss...");
         }
@@ -94,15 +98,20 @@ public class PortfolioHandler {
 
     }
 
-    public void onOrder(List<OrderDto> orders) {
+    public void onOrderCreated(OrderCreatedEvent event) {
+        this.orderHandler.persist(event.getOrder());
+    }
+
+    public void onOrderFound(OrderFoundEvent event){
+        List<OrderDto> orders = MultiPositionHandler.createPositionIdentifier(event.getOrders());
         orderCreatedListener.process(orders);
     }
 
-    public void stopOrderHandle(LoopEvent event) {
+    public void stopOrderHandle(Event event) {
         this.cancelOpenStopOrders();
         List<StopOrderDto> filledOrders = this.getFilledStopOrders();
         log.info("Total stop loss order filled " + filledOrders.size());
-        this.onStopOrderFilled(filledOrders, event.getTime());
+        this.onStopOrderFilled(filledOrders, event.getTimestamp());
     }
 
     private void onStopOrderFilled(List<StopOrderDto> filledOrders, LocalDateTime time) {
@@ -147,24 +156,28 @@ public class PortfolioHandler {
     private void createOrderFromClosedPosition(List<Position> positions, LoopEvent event) {
         for (Position position : positions) {
             if (position.getStatus() == PositionStatus.CLOSED) {
-                OrderDto order = this.orderHandler.createOrderFromClosedPosition(position, event.getTime());
+                OrderDto order = this.orderHandler.createOrderFromClosedPosition(position, event.getTimestamp());
                 this.orderHandler.persist(order);
             }
         }
     }
 
-    public void onSignal(LoopEvent event, List<SignalDto> signals) {
-        if (signals.isEmpty()) {
-            log.info("No signals");
-            return;
-        }
+    public void onSignal(SignalCreatedEvent event) {
+        log.info("Processing  new signal...");
+        if (riskManagementHandler.canCreateOrder(event)){
+            OrderDto order = this.orderHandler.createOrderFromSignal(event);
+            try {
+                this.eventQueue.put(new OrderCreatedEvent(
+                        EventType.ORDER_CREATED,
+                        event.getTimestamp(),
+                        event.getPrice(),
+                        order
+                ));
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
 
-        log.info("Processing " + signals.size() + " new signals...");
-        List<OrderDto> orders = this.orderHandler.createOrderFromSignal(signals, event.getTime());
-        for (OrderDto order : orders) {
-            this.orderHandler.persist(order);
         }
-
     }
 
     private void onFill(FilledOrderDto filledOrder) {

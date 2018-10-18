@@ -6,7 +6,8 @@ import com.apssouza.mytrade.trading.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.forex.portfolio.PositionType;
 import com.apssouza.mytrade.trading.forex.risk.stoporder.PriceDistanceObject;
 import com.apssouza.mytrade.trading.forex.risk.stoporder.StopOrderCreator;
-import com.apssouza.mytrade.trading.misc.loop.LoopEvent;
+import com.apssouza.mytrade.trading.forex.session.event.Event;
+import com.apssouza.mytrade.trading.forex.session.event.LoopEvent;
 
 import java.math.BigDecimal;
 import java.util.Map;
@@ -40,14 +41,14 @@ public class StopOrderCreatorFixed implements StopOrderCreator {
     }
 
     @Override
-    public Optional<StopOrderDto> getEntryStopOrder(Position position, LoopEvent event) {
+    public Optional<StopOrderDto> getEntryStopOrder(Position position, Event event) {
         Map<String, PriceDto> price = event.getPrice();
         BigDecimal priceClose = price.get(position.getSymbol()).getClose();
         return creatorContext.getEntryStopOrder(position, priceClose);
     }
 
     @Override
-    public Optional<StopOrderDto> getTrailingStopOrder(Position position, LoopEvent event) {
+    public Optional<StopOrderDto> getTrailingStopOrder(Position position, Event event) {
         Map<String, PriceDto> price = event.getPrice();
         BigDecimal priceClose = price.get(position.getSymbol()).getClose();
         return creatorContext.getTrailingStopOrder(position, priceClose);

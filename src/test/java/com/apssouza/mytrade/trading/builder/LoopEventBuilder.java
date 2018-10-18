@@ -1,7 +1,8 @@
 package com.apssouza.mytrade.trading.builder;
 
 import com.apssouza.mytrade.feed.price.PriceDto;
-import com.apssouza.mytrade.trading.misc.loop.LoopEvent;
+import com.apssouza.mytrade.trading.forex.session.event.EventType;
+import com.apssouza.mytrade.trading.forex.session.event.LoopEvent;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -28,6 +29,6 @@ public class LoopEventBuilder {
     public LoopEvent build() {
         if (time == null)
             time = LocalDateTime.MIN;
-        return new LoopEvent(time, priceMap);
+        return new LoopEvent(EventType.NEW_LOOP, time, priceMap);
     }
 }

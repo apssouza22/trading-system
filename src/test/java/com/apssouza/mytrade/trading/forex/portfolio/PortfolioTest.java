@@ -2,7 +2,7 @@ package com.apssouza.mytrade.trading.forex.portfolio;
 
 import com.apssouza.mytrade.trading.builder.LoopEventBuilder;
 import com.apssouza.mytrade.trading.builder.PositionBuilder;
-import com.apssouza.mytrade.trading.misc.loop.LoopEvent;
+import com.apssouza.mytrade.trading.forex.session.event.LoopEvent;
 import junit.framework.TestCase;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,8 +10,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import java.math.BigDecimal;
 import java.util.Map;
-
-import static org.junit.Assert.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PortfolioTest extends TestCase {

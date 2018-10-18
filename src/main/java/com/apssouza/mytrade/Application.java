@@ -3,7 +3,6 @@ package com.apssouza.mytrade;
 import com.apssouza.mytrade.trading.forex.session.ExecutionType;
 import com.apssouza.mytrade.trading.forex.session.SessionType;
 import com.apssouza.mytrade.trading.forex.session.TradingSessionEventDriven;
-import com.apssouza.mytrade.trading.forex.session.TradingSessionLoopDriven;
 import com.apssouza.mytrade.trading.misc.helper.config.Properties;
 
 import java.math.BigDecimal;

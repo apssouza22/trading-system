@@ -1,10 +1,11 @@
 package com.apssouza.mytrade.trading.forex.session;
 
 import com.apssouza.mytrade.feed.signal.SignalDto;
-import com.apssouza.mytrade.trading.forex.session.event.EventProcessor;
+import com.apssouza.mytrade.trading.forex.order.OrderDto;
+import com.apssouza.mytrade.trading.forex.order.OrderStatus;
+import com.apssouza.mytrade.trading.forex.session.event.*;
 import com.apssouza.mytrade.trading.misc.helper.TradingHelper;
 import com.apssouza.mytrade.trading.misc.helper.time.DayHelper;
-import com.apssouza.mytrade.trading.misc.loop.*;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -16,8 +17,6 @@ import java.util.concurrent.LinkedBlockingDeque;
 
 public class TradingSessionEventDriven extends AbstractTradingSession {
 
-    private final BlockingQueue<LoopEvent> eventQueue;
-
     public TradingSessionEventDriven(
             BigDecimal equity,
             LocalDateTime startDate,
@@ -28,10 +27,9 @@ public class TradingSessionEventDriven extends AbstractTradingSession {
             ExecutionType executionType
     ) {
         super(equity, startDate, endDate, connection, sessionType, systemName, executionType);
-        this.eventQueue = new LinkedBlockingDeque<>();
     }
 
-    protected void runSession() {
+    protected void runSession() throws InterruptedException {
         if (this.sessionType == SessionType.BACK_TEST) {
             System.out.println(String.format("Running Backtest from %s to %s", this.startDate, this.endDate));
         } else {
@@ -54,7 +52,7 @@ public class TradingSessionEventDriven extends AbstractTradingSession {
         eventProcessor.start();
         while (this.eventLoop.hasNext()) {
             LoopEvent loopEvent = this.eventLoop.next();
-            LocalDateTime currentTime = loopEvent.getTime();
+            LocalDateTime currentTime = loopEvent.getTimestamp();
             System.out.println(currentTime);
 
             if (DayHelper.isWeekend(currentTime.toLocalDate())) {
@@ -71,14 +69,26 @@ public class TradingSessionEventDriven extends AbstractTradingSession {
             if (this.sessionType == SessionType.LIVE) {
                 signals = this.signalHandler.getRealtimeSignal(this.systemName);
             } else {
-                signals = this.signalHandler.findbySecondAndSource(this.systemName, loopEvent.getTime());
+                signals = this.signalHandler.findbySecondAndSource(this.systemName, loopEvent.getTimestamp());
             }
-            loopEvent.setSignals(signals);
-            try {
-                eventQueue.put(loopEvent);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            this.historyHandler.addSignal(signals);
+            this.executionHandler.setPriceMap(loopEvent.getPrice());
+            this.portfolioHandler.updatePortfolioValue(loopEvent);
+            this.portfolioHandler.stopOrderHandle(loopEvent);
+            this.portfolioHandler.processExits(loopEvent, signals);
+
+            eventQueue.put(loopEvent);
+
+            for (SignalDto signal : signals) {
+                eventQueue.put(new SignalCreatedEvent(
+                        EventType.SIGNAL_CREATED, currentTime, loopEvent.getPrice(), signal
+                ));
             }
+
+
+            List<OrderDto> orders = this.orderDao.getOrderByStatus(OrderStatus.CREATED);
+
+
             this.eventLoop.sleep();
             lastDayProcessed = currentTime.toLocalDate();
         }

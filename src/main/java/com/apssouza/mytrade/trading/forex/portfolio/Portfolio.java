@@ -1,7 +1,7 @@
 package com.apssouza.mytrade.trading.forex.portfolio;
 
 import com.apssouza.mytrade.feed.price.PriceDto;
-import com.apssouza.mytrade.trading.misc.loop.LoopEvent;
+import com.apssouza.mytrade.trading.forex.session.event.Event;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -17,7 +17,7 @@ public class Portfolio {
         this.equity = equity;
     }
 
-    public void updatePortfolioValue(LoopEvent event) {
+    public void updatePortfolioValue(Event event) {
         for (Map.Entry<String, Position> entry : this.positions.entrySet()) {
             Position ps = entry.getValue();
             PriceDto priceDto = event.getPrice().get(ps.getSymbol());

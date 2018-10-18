@@ -12,6 +12,7 @@ import com.apssouza.mytrade.trading.misc.helper.time.MarketTimeHelper;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -94,5 +95,16 @@ public class MultiPositionHandler {
         if (ps.getPositionType().equals(PositionType.SHORT)) {
             currencyPositions.put(ps.getSymbol(), position_units - ps.getQuantity());
         }
+    }
+
+    public static List<OrderDto> createPositionIdentifier(List<OrderDto> orders) {
+        List<OrderDto> list = new LinkedList<>();
+        for (OrderDto order : orders) {
+            list.add(new OrderDto(
+                    getIdentifierFromOrder(order),
+                    order
+            ));
+        }
+        return list;
     }
 }

@@ -6,8 +6,10 @@ import com.apssouza.mytrade.trading.forex.order.StopOrderType;
 import com.apssouza.mytrade.trading.forex.portfolio.Portfolio;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.forex.risk.stoporder.StopOrderCreator;
+import com.apssouza.mytrade.trading.forex.session.event.Event;
+import com.apssouza.mytrade.trading.forex.session.event.SignalCreatedEvent;
 import com.apssouza.mytrade.trading.misc.helper.config.Properties;
-import com.apssouza.mytrade.trading.misc.loop.LoopEvent;
+import com.apssouza.mytrade.trading.forex.session.event.LoopEvent;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -24,11 +26,6 @@ public class RiskManagementHandler {
         this.stopOrderCreator = stopOrderCreator;
     }
 
-    public List<OrderDto> checkOrders(List<OrderDto> orders) {
-        return Collections.emptyList();
-    }
-
-
     private boolean canOpenPosition() {
         return true;
     }
@@ -42,7 +39,7 @@ public class RiskManagementHandler {
     }
 
 
-    public EnumMap<StopOrderType, StopOrderDto> createStopOrders(Position position, LoopEvent event) {
+    public EnumMap<StopOrderType, StopOrderDto> createStopOrders(Position position, Event event) {
         stopOrderCreator.createContext(position.getPositionType());
 
         EnumMap<StopOrderType, StopOrderDto> stop_orders = new EnumMap<>(StopOrderType.class);
@@ -65,7 +62,7 @@ public class RiskManagementHandler {
         return chooseStopOrders(stop_orders);
     }
 
-    private EnumMap<StopOrderType, StopOrderDto>  getMovingStops(Position position, LoopEvent event) {
+    private EnumMap<StopOrderType, StopOrderDto>  getMovingStops(Position position, Event event) {
         EnumMap<StopOrderType, StopOrderDto> stop_orders = new EnumMap(StopOrderType.class);
         Consumer<StopOrderDto> consumer = (dto) -> stop_orders.put(dto.getType(), dto);
         if (Properties.entry_stop_loss_enabled) {
@@ -107,5 +104,9 @@ public class RiskManagementHandler {
         }
         stop_orders.put(StopOrderType.STOP_LOSS, stopOrderDto);
         return stop_orders;
+    }
+
+    public boolean canCreateOrder(SignalCreatedEvent event) {
+        return true;
     }
 }

@@ -24,6 +24,7 @@ import com.apssouza.mytrade.trading.forex.risk.PositionSizerFixed;
 import com.apssouza.mytrade.trading.forex.risk.RiskManagementHandler;
 import com.apssouza.mytrade.trading.forex.risk.stoporder.PriceDistanceObject;
 import com.apssouza.mytrade.trading.forex.risk.stoporder.fixed.StopOrderCreatorFixed;
+import com.apssouza.mytrade.trading.forex.session.event.Event;
 import com.apssouza.mytrade.trading.misc.helper.config.Properties;
 import com.apssouza.mytrade.trading.misc.helper.time.DateRangeHelper;
 import com.apssouza.mytrade.trading.misc.loop.*;
@@ -34,6 +35,8 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingDeque;
 
 public abstract class AbstractTradingSession {
 
@@ -62,6 +65,7 @@ public abstract class AbstractTradingSession {
     protected PortfolioHandler portfolioHandler;
     protected boolean processedEndDay;
     protected RiskManagementHandler riskManagementHandler;
+    protected final BlockingQueue<Event> eventQueue;
 
     public AbstractTradingSession(
             BigDecimal equity,
@@ -80,6 +84,7 @@ public abstract class AbstractTradingSession {
         this.sessionType = sessionType;
         this.systemName = systemName;
         this.executionType = executionType;
+        this.eventQueue = new LinkedBlockingDeque<>();
         this.configSession();
     }
 
@@ -132,7 +137,8 @@ public abstract class AbstractTradingSession {
                 this.portfolio,
                 this.reconciliationHandler,
                 this.historyHandler,
-                this.riskManagementHandler
+                this.riskManagementHandler,
+                eventQueue
         );
 
         if (this.sessionType == SessionType.LIVE) {
@@ -150,17 +156,20 @@ public abstract class AbstractTradingSession {
     }
 
 
-
     protected void processStartDay(LocalDateTime currentTime) {
         if (Properties.sessionType == SessionType.BACK_TEST)
             this.priceMemoryDao.loadData(currentTime, currentTime.plusDays(1));
     }
 
     public void start() {
-        this.runSession();
+        try {
+            this.runSession();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    protected abstract void runSession();
+    protected abstract void runSession() throws InterruptedException;
 
     private boolean isEndOfDay(LocalDateTime currentTime) {
         return currentTime.getHour() > 22;

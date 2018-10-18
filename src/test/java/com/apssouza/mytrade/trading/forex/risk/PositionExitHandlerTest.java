@@ -1,29 +1,20 @@
 package com.apssouza.mytrade.trading.forex.risk;
 
-import com.apssouza.mytrade.feed.price.PriceDto;
-import com.apssouza.mytrade.feed.price.PriceHandler;
 import com.apssouza.mytrade.feed.signal.SignalDto;
 import com.apssouza.mytrade.trading.builder.LoopEventBuilder;
 import com.apssouza.mytrade.trading.builder.PositionExitBuilder;
 import com.apssouza.mytrade.trading.builder.SignalBuilder;
 import com.apssouza.mytrade.trading.forex.portfolio.*;
-import com.apssouza.mytrade.trading.misc.loop.LoopEvent;
+import com.apssouza.mytrade.trading.forex.session.event.LoopEvent;
 import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import static org.junit.Assert.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PositionExitHandlerTest extends TestCase {

@@ -1,6 +1,6 @@
 package com.apssouza.mytrade.trading.misc.loop;
 
-import java.time.LocalDateTime;
+import com.apssouza.mytrade.trading.forex.session.event.LoopEvent;
 
 public abstract class AbstractEventLoop implements EventLoop {
 
