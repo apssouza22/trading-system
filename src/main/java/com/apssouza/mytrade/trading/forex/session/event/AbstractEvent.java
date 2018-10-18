@@ -1,7 +1,6 @@
 package com.apssouza.mytrade.trading.forex.session.event;
 
 import com.apssouza.mytrade.feed.price.PriceDto;
-import com.apssouza.mytrade.trading.forex.common.Symbol;
 
 import java.time.LocalDateTime;
 import java.util.Map;

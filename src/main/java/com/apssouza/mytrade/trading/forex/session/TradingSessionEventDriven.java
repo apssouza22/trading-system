@@ -85,9 +85,11 @@ public class TradingSessionEventDriven extends AbstractTradingSession {
                 ));
             }
 
-
             List<OrderDto> orders = this.orderDao.getOrderByStatus(OrderStatus.CREATED);
-
+            List<OrderDto> orderList = MultiPositionHandler.createPositionIdentifier(orders);
+            eventQueue.put(new OrderFoundEvent(
+                    EventType.ORDER_FOUND, currentTime, loopEvent.getPrice(), orderList
+            ));
 
             this.eventLoop.sleep();
             lastDayProcessed = currentTime.toLocalDate();

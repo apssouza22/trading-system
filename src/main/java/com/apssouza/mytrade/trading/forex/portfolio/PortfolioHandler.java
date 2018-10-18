@@ -57,7 +57,7 @@ public class PortfolioHandler {
         this.riskManagementHandler = riskManagementHandler;
         this.eventQueue = eventQueue;
         this.filledOrderListener = new FilledOrderListener(portfolio, historyHandler);
-        this.orderCreatedListener = new OrderCreatedListener(executionHandler, historyHandler, filledOrderListener, orderHandler);
+        this.orderCreatedListener = new OrderCreatedListener(executionHandler, historyHandler, filledOrderListener, orderHandler, eventQueue);
         this.stopOrderFilledListener = new StopOrderFilledListener(portfolio, historyHandler);
     }
 
@@ -102,9 +102,12 @@ public class PortfolioHandler {
         this.orderHandler.persist(event.getOrder());
     }
 
-    public void onOrderFound(OrderFoundEvent event){
-        List<OrderDto> orders = MultiPositionHandler.createPositionIdentifier(event.getOrders());
-        orderCreatedListener.process(orders);
+    public void onOrderFound(OrderFoundEvent event) {
+        try {
+            orderCreatedListener.process(event);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void stopOrderHandle(Event event) {
@@ -164,7 +167,7 @@ public class PortfolioHandler {
 
     public void onSignal(SignalCreatedEvent event) {
         log.info("Processing  new signal...");
-        if (riskManagementHandler.canCreateOrder(event)){
+        if (riskManagementHandler.canCreateOrder(event)) {
             OrderDto order = this.orderHandler.createOrderFromSignal(event);
             try {
                 this.eventQueue.put(new OrderCreatedEvent(
@@ -180,7 +183,8 @@ public class PortfolioHandler {
         }
     }
 
-    private void onFill(FilledOrderDto filledOrder) {
-        filledOrderListener.process(filledOrder);
+    public void onOrderFilled(OrderFilledEvent event) {
+        filledOrderListener.process(event.getFilledOrder());
+        this.historyHandler.addOrderFilled(event.getFilledOrder());
     }
 }

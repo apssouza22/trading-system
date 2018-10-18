@@ -18,7 +18,6 @@ public class FilledOrderListener implements EventListener {
     }
 
     public void process(FilledOrderDto filledOrder) {
-//        # If there is no position, create one
         if (!this.portfolio.getPositions().containsKey(filledOrder.getIdentifier())) {
             createNewPosition(filledOrder);
             return;

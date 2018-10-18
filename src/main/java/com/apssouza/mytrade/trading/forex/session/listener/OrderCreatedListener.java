@@ -7,9 +7,14 @@ import com.apssouza.mytrade.trading.forex.order.OrderOrigin;
 import com.apssouza.mytrade.trading.forex.order.OrderStatus;
 import com.apssouza.mytrade.trading.forex.portfolio.FilledOrderDto;
 import com.apssouza.mytrade.trading.forex.session.HistoryBookHandler;
+import com.apssouza.mytrade.trading.forex.session.event.Event;
+import com.apssouza.mytrade.trading.forex.session.event.EventType;
+import com.apssouza.mytrade.trading.forex.session.event.OrderFilledEvent;
+import com.apssouza.mytrade.trading.forex.session.event.OrderFoundEvent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.BlockingQueue;
 import java.util.logging.Logger;
 
 public class OrderCreatedListener implements EventListener {
@@ -19,20 +24,25 @@ public class OrderCreatedListener implements EventListener {
     private final HistoryBookHandler historyHandler;
     private final FilledOrderListener filledOrderListener;
     private final OrderHandler orderHandler;
+    private final BlockingQueue<Event> eventQueue;
 
     public OrderCreatedListener(
             ExecutionHandler executionHandler,
             HistoryBookHandler historyHandler,
             FilledOrderListener filledOrderListener,
-            OrderHandler orderHandler
+            OrderHandler orderHandler,
+            BlockingQueue<Event> eventQueue
     ) {
+
         this.executionHandler = executionHandler;
         this.historyHandler = historyHandler;
         this.filledOrderListener = filledOrderListener;
         this.orderHandler = orderHandler;
+        this.eventQueue = eventQueue;
     }
 
-    public void process(List<OrderDto> orders){
+    public void process(OrderFoundEvent event) throws InterruptedException {
+        List<OrderDto> orders =  event.getOrders();
         if (orders.isEmpty()) {
             log.info("No orders");
             return;
@@ -52,15 +62,19 @@ public class OrderCreatedListener implements EventListener {
                 continue;
             }
             this.historyHandler.addOrder(order);
-            processNewOrder(processedOrders, order);
+            processNewOrder(processedOrders, order, event);
         }
     }
 
-    private void processNewOrder(List<String> processedOrders, OrderDto order) {
+    private void processNewOrder(List<String> processedOrders, OrderDto order, OrderFoundEvent event) throws InterruptedException {
         FilledOrderDto filledOrder = executionHandler.executeOrder(order);
         if (filledOrder != null) {
-            filledOrderListener.process(filledOrder);
-            this.historyHandler.addOrderFilled(filledOrder);
+            this.eventQueue.put(new OrderFilledEvent(
+                    EventType.ORDER_FILLED,
+                    filledOrder.getTime(),
+                    event.getPrice(),
+                    filledOrder
+            ));
             orderHandler.updateOrderStatus(order.getId(), OrderStatus.EXECUTED);
             processedOrders.add(order.getSymbol());
         } else {

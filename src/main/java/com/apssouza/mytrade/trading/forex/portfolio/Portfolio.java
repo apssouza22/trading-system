@@ -4,13 +4,13 @@ import com.apssouza.mytrade.feed.price.PriceDto;
 import com.apssouza.mytrade.trading.forex.session.event.Event;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
 public class Portfolio {
     private final BigDecimal equity;
-    private Map<String, Position> positions = new HashMap<>();
+    private Map<String, Position> positions = new ConcurrentHashMap<>();
     private static Logger log = Logger.getLogger(Portfolio.class.getName());
 
     public Portfolio(BigDecimal equity) {

@@ -72,6 +72,12 @@ public class EventProcessor extends Thread {
             case ORDER_FOUND:
                 OrderFoundEvent orderFoundEvent = (OrderFoundEvent) event;
                 this.portfolioHandler.onOrderFound(orderFoundEvent);
+                break;
+
+            case ORDER_FILLED:
+                OrderFilledEvent orderfilledEvent = (OrderFilledEvent) event;
+                this.portfolioHandler.onOrderFilled(orderfilledEvent);
+                break;
         }
 
 
