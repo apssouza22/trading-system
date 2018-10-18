@@ -3,11 +3,15 @@ package com.apssouza.mytrade.trading.forex.session.listener;
 import com.apssouza.mytrade.trading.forex.order.OrderAction;
 import com.apssouza.mytrade.trading.forex.portfolio.*;
 import com.apssouza.mytrade.trading.forex.session.HistoryBookHandler;
-import com.apssouza.mytrade.trading.forex.session.listener.EventListener;
+import com.apssouza.mytrade.trading.forex.session.event.Event;
+import com.apssouza.mytrade.trading.forex.session.event.OrderFilledEvent;
 import com.apssouza.mytrade.trading.forex.statistics.TransactionState;
 import com.apssouza.mytrade.trading.misc.helper.config.Properties;
 
-public class FilledOrderListener implements EventListener {
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
+public class FilledOrderListener implements PropertyChangeListener {
 
     private final Portfolio portfolio;
     private final HistoryBookHandler historyHandler;
@@ -17,7 +21,14 @@ public class FilledOrderListener implements EventListener {
         this.historyHandler = historyHandler;
     }
 
-    public void process(FilledOrderDto filledOrder) {
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        Event event = (Event) evt.getNewValue();
+        if (!(event instanceof OrderFilledEvent)) {
+            return;
+        }
+        OrderFilledEvent orderFilledEvent = (OrderFilledEvent) event;
+        FilledOrderDto filledOrder = orderFilledEvent.getFilledOrder();
         if (!this.portfolio.getPositions().containsKey(filledOrder.getIdentifier())) {
             createNewPosition(filledOrder);
             return;
@@ -86,4 +97,5 @@ public class FilledOrderListener implements EventListener {
         this.historyHandler.setState(TransactionState.ENTRY, ps1.getIdentifier());
         this.historyHandler.addPosition(ps1);
     }
+
 }

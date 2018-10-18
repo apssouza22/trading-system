@@ -12,37 +12,43 @@ import com.apssouza.mytrade.trading.forex.session.event.EventType;
 import com.apssouza.mytrade.trading.forex.session.event.OrderFilledEvent;
 import com.apssouza.mytrade.trading.forex.session.event.OrderFoundEvent;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.logging.Logger;
 
-public class OrderCreatedListener implements EventListener {
+public class OrderCreatedListener implements PropertyChangeListener {
 
     private static Logger log = Logger.getLogger(OrderCreatedListener.class.getSimpleName());
     private final ExecutionHandler executionHandler;
     private final HistoryBookHandler historyHandler;
-    private final FilledOrderListener filledOrderListener;
     private final OrderHandler orderHandler;
     private final BlockingQueue<Event> eventQueue;
 
     public OrderCreatedListener(
             ExecutionHandler executionHandler,
             HistoryBookHandler historyHandler,
-            FilledOrderListener filledOrderListener,
             OrderHandler orderHandler,
             BlockingQueue<Event> eventQueue
     ) {
 
         this.executionHandler = executionHandler;
         this.historyHandler = historyHandler;
-        this.filledOrderListener = filledOrderListener;
         this.orderHandler = orderHandler;
         this.eventQueue = eventQueue;
     }
 
-    public void process(OrderFoundEvent event) throws InterruptedException {
-        List<OrderDto> orders =  event.getOrders();
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        Event event = (Event) evt.getNewValue();
+        if (!(event instanceof OrderFoundEvent)) {
+            return;
+        }
+        OrderFoundEvent orderFoundEvent = (OrderFoundEvent) event;
+
+        List<OrderDto> orders = orderFoundEvent.getOrders();
         if (orders.isEmpty()) {
             log.info("No orders");
             return;
@@ -62,7 +68,11 @@ public class OrderCreatedListener implements EventListener {
                 continue;
             }
             this.historyHandler.addOrder(order);
-            processNewOrder(processedOrders, order, event);
+            try {
+                processNewOrder(processedOrders, order, orderFoundEvent);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
@@ -101,4 +111,5 @@ public class OrderCreatedListener implements EventListener {
         }
         return true;
     }
+
 }

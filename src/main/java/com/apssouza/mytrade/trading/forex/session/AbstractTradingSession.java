@@ -25,6 +25,10 @@ import com.apssouza.mytrade.trading.forex.risk.RiskManagementHandler;
 import com.apssouza.mytrade.trading.forex.risk.stoporder.PriceDistanceObject;
 import com.apssouza.mytrade.trading.forex.risk.stoporder.fixed.StopOrderCreatorFixed;
 import com.apssouza.mytrade.trading.forex.session.event.Event;
+import com.apssouza.mytrade.trading.forex.session.event.EventNotifier;
+import com.apssouza.mytrade.trading.forex.session.listener.FilledOrderListener;
+import com.apssouza.mytrade.trading.forex.session.listener.OrderCreatedListener;
+import com.apssouza.mytrade.trading.forex.session.listener.StopOrderFilledListener;
 import com.apssouza.mytrade.trading.misc.helper.config.Properties;
 import com.apssouza.mytrade.trading.misc.helper.time.DateRangeHelper;
 import com.apssouza.mytrade.trading.misc.loop.*;
@@ -33,6 +37,7 @@ import java.math.BigDecimal;
 import java.sql.Connection;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.EventListener;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
@@ -129,6 +134,8 @@ public abstract class AbstractTradingSession {
                 ))
         );
 
+        EventNotifier eventNotifier = getEventNotifier();
+
         this.portfolioHandler = new PortfolioHandler(
                 this.equity,
                 this.orderHandler,
@@ -138,7 +145,8 @@ public abstract class AbstractTradingSession {
                 this.reconciliationHandler,
                 this.historyHandler,
                 this.riskManagementHandler,
-                eventQueue
+                eventQueue,
+                eventNotifier
         );
 
         if (this.sessionType == SessionType.LIVE) {
@@ -153,6 +161,14 @@ public abstract class AbstractTradingSession {
             List<LocalDateTime> range = DateRangeHelper.getSecondsBetween(this.startDate, this.endDate);
             this.eventLoop = new RangeEventLoop(range, this.priceHandler);
         }
+    }
+
+    private EventNotifier getEventNotifier() {
+        EventNotifier eventNotifier = new EventNotifier();
+        eventNotifier.addPropertyChangeListener(new FilledOrderListener(portfolio, historyHandler));
+        eventNotifier.addPropertyChangeListener(new OrderCreatedListener(executionHandler, historyHandler,  orderHandler, eventQueue));
+//        eventNotifier.addPropertyChangeListener(new StopOrderFilledListener(portfolio, historyHandler));
+        return eventNotifier;
     }
 
 

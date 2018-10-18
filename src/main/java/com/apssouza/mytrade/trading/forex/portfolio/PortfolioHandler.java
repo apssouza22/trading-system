@@ -29,9 +29,8 @@ public class PortfolioHandler {
     private final HistoryBookHandler historyHandler;
     private final RiskManagementHandler riskManagementHandler;
     private final BlockingQueue<Event> eventQueue;
+    private final EventNotifier notifier;
     private static Logger log = Logger.getLogger(PortfolioHandler.class.getName());
-    private final FilledOrderListener filledOrderListener;
-    private final OrderCreatedListener orderCreatedListener;
     private final StopOrderFilledListener stopOrderFilledListener;
     private Map<Integer, StopOrderDto> currentStopOrders = new HashMap<>();
 
@@ -44,7 +43,8 @@ public class PortfolioHandler {
             ReconciliationHandler reconciliationHandler,
             HistoryBookHandler historyHandler,
             RiskManagementHandler riskManagementHandler,
-            BlockingQueue<Event> eventQueue
+            BlockingQueue<Event> eventQueue,
+            EventNotifier notifier
     ) {
 
         this.equity = equity;
@@ -56,8 +56,7 @@ public class PortfolioHandler {
         this.historyHandler = historyHandler;
         this.riskManagementHandler = riskManagementHandler;
         this.eventQueue = eventQueue;
-        this.filledOrderListener = new FilledOrderListener(portfolio, historyHandler);
-        this.orderCreatedListener = new OrderCreatedListener(executionHandler, historyHandler, filledOrderListener, orderHandler, eventQueue);
+        this.notifier = notifier;
         this.stopOrderFilledListener = new StopOrderFilledListener(portfolio, historyHandler);
     }
 
@@ -103,11 +102,7 @@ public class PortfolioHandler {
     }
 
     public void onOrderFound(OrderFoundEvent event) {
-        try {
-            orderCreatedListener.process(event);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+            notifier.notify(event);
     }
 
     public void stopOrderHandle(Event event) {
@@ -184,7 +179,7 @@ public class PortfolioHandler {
     }
 
     public void onOrderFilled(OrderFilledEvent event) {
-        filledOrderListener.process(event.getFilledOrder());
+        notifier.notify(event);
         this.historyHandler.addOrderFilled(event.getFilledOrder());
     }
 }
