@@ -19,15 +19,15 @@ import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.logging.Logger;
 
-public class OrderCreatedListener implements PropertyChangeListener {
+public class OrderFoundListener implements PropertyChangeListener {
 
-    private static Logger log = Logger.getLogger(OrderCreatedListener.class.getSimpleName());
+    private static Logger log = Logger.getLogger(OrderFoundListener.class.getSimpleName());
     private final ExecutionHandler executionHandler;
     private final HistoryBookHandler historyHandler;
     private final OrderHandler orderHandler;
     private final BlockingQueue<Event> eventQueue;
 
-    public OrderCreatedListener(
+    public OrderFoundListener(
             ExecutionHandler executionHandler,
             HistoryBookHandler historyHandler,
             OrderHandler orderHandler,

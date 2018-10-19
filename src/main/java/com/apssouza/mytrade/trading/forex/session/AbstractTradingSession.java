@@ -5,16 +5,13 @@ import com.apssouza.mytrade.feed.price.PriceDao;
 import com.apssouza.mytrade.feed.price.PriceHandler;
 import com.apssouza.mytrade.feed.price.SqlPriceDao;
 import com.apssouza.mytrade.feed.signal.SignalDao;
-import com.apssouza.mytrade.feed.signal.SignalDto;
 import com.apssouza.mytrade.feed.signal.SignalHandler;
 import com.apssouza.mytrade.feed.signal.SqlSignalDao;
 import com.apssouza.mytrade.trading.forex.execution.ExecutionHandler;
 import com.apssouza.mytrade.trading.forex.execution.InteractiveBrokerExecutionHandler;
 import com.apssouza.mytrade.trading.forex.execution.SimulatedExecutionHandler;
 import com.apssouza.mytrade.trading.forex.order.MemoryOrderDao;
-import com.apssouza.mytrade.trading.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.forex.order.OrderHandler;
-import com.apssouza.mytrade.trading.forex.order.OrderStatus;
 import com.apssouza.mytrade.trading.forex.portfolio.Portfolio;
 import com.apssouza.mytrade.trading.forex.portfolio.PortfolioHandler;
 import com.apssouza.mytrade.trading.forex.portfolio.ReconciliationHandler;
@@ -27,8 +24,7 @@ import com.apssouza.mytrade.trading.forex.risk.stoporder.fixed.StopOrderCreatorF
 import com.apssouza.mytrade.trading.forex.session.event.Event;
 import com.apssouza.mytrade.trading.forex.session.event.EventNotifier;
 import com.apssouza.mytrade.trading.forex.session.listener.FilledOrderListener;
-import com.apssouza.mytrade.trading.forex.session.listener.OrderCreatedListener;
-import com.apssouza.mytrade.trading.forex.session.listener.StopOrderFilledListener;
+import com.apssouza.mytrade.trading.forex.session.listener.OrderFoundListener;
 import com.apssouza.mytrade.trading.misc.helper.config.Properties;
 import com.apssouza.mytrade.trading.misc.helper.time.DateRangeHelper;
 import com.apssouza.mytrade.trading.misc.loop.*;
@@ -37,8 +33,6 @@ import java.math.BigDecimal;
 import java.sql.Connection;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.EventListener;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -166,7 +160,7 @@ public abstract class AbstractTradingSession {
     private EventNotifier getEventNotifier() {
         EventNotifier eventNotifier = new EventNotifier();
         eventNotifier.addPropertyChangeListener(new FilledOrderListener(portfolio, historyHandler));
-        eventNotifier.addPropertyChangeListener(new OrderCreatedListener(executionHandler, historyHandler,  orderHandler, eventQueue));
+        eventNotifier.addPropertyChangeListener(new OrderFoundListener(executionHandler, historyHandler,  orderHandler, eventQueue));
 //        eventNotifier.addPropertyChangeListener(new StopOrderFilledListener(portfolio, historyHandler));
         return eventNotifier;
     }

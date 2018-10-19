@@ -7,8 +7,6 @@ import com.apssouza.mytrade.trading.forex.risk.PositionExitHandler;
 import com.apssouza.mytrade.trading.forex.risk.RiskManagementHandler;
 import com.apssouza.mytrade.trading.forex.session.*;
 import com.apssouza.mytrade.trading.forex.session.event.*;
-import com.apssouza.mytrade.trading.forex.session.listener.FilledOrderListener;
-import com.apssouza.mytrade.trading.forex.session.listener.OrderCreatedListener;
 import com.apssouza.mytrade.trading.forex.session.listener.StopOrderFilledListener;
 import com.apssouza.mytrade.trading.misc.helper.config.Properties;
 
