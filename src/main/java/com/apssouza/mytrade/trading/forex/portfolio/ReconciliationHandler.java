@@ -11,4 +11,8 @@ public class ReconciliationHandler {
         this.portfolio = portfolio;
         this.executionHandler = executionHandler;
     }
+
+    public void process() {
+
+    }
 }

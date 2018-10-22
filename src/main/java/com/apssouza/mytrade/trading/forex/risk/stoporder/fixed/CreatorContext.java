@@ -1,6 +1,5 @@
 package com.apssouza.mytrade.trading.forex.risk.stoporder.fixed;
 
-import com.apssouza.mytrade.feed.price.PriceDto;
 import com.apssouza.mytrade.trading.forex.order.OrderAction;
 import com.apssouza.mytrade.trading.forex.order.StopOrderDto;
 import com.apssouza.mytrade.trading.forex.order.StopOrderStatus;
@@ -8,10 +7,8 @@ import com.apssouza.mytrade.trading.forex.order.StopOrderType;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.misc.helper.NumberHelper;
 import com.apssouza.mytrade.trading.misc.helper.TradingHelper;
-import com.apssouza.mytrade.trading.misc.loop.LoopEvent;
 
 import java.math.BigDecimal;
-import java.util.Map;
 import java.util.Optional;
 
 public class CreatorContext {

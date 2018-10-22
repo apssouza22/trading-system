@@ -7,6 +7,8 @@ import com.apssouza.mytrade.trading.builder.SignalBuilder;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.forex.portfolio.PositionStatus;
 import com.apssouza.mytrade.trading.forex.portfolio.PositionType;
+import com.apssouza.mytrade.trading.forex.session.event.EventType;
+import com.apssouza.mytrade.trading.forex.session.event.SignalCreatedEvent;
 import junit.framework.TestCase;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,6 +17,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -28,19 +31,10 @@ public class OrderHandlerTest extends TestCase {
         OrderHandler orderHandler = orderHandlerBuilder.build();
         SignalBuilder signalBuilder = new SignalBuilder();
         signalBuilder.addSignal(LocalDateTime.MIN, "Buy");
-        List<SignalDto> signalDtos = signalBuilder.buildList();
-        List<OrderDto> orderFromSignal = orderHandler.createOrderFromSignal(signalDtos, LocalDateTime.MIN);
-        assertEquals(1, orderFromSignal.size());
+        SignalCreatedEvent event = new SignalCreatedEvent(EventType.SIGNAL_CREATED, LocalDateTime.MIN, Collections.emptyMap(), signalBuilder.build());
+        OrderDto orderFromSignal = orderHandler.createOrderFromSignal(event);
+        assertEquals("BUY", orderFromSignal.getAction().name());
 
-    }
-
-    @Test
-    public void createOrderFromSignalWithEmptySignalList() {
-        OrderHandlerBuilder orderHandlerBuilder = new OrderHandlerBuilder();
-        OrderHandler orderHandler = orderHandlerBuilder.build();
-        List<SignalDto> signalDtos = new ArrayList<>();
-        List<OrderDto> orderFromSignal = orderHandler.createOrderFromSignal(signalDtos, LocalDateTime.MIN);
-        assertEquals(0, orderFromSignal.size());
     }
 
     @Test

@@ -1,6 +1,8 @@
 package com.apssouza.mytrade.trading.misc.loop;
 
 import com.apssouza.mytrade.feed.price.PriceHandler;
+import com.apssouza.mytrade.trading.forex.session.event.EventType;
+import com.apssouza.mytrade.trading.forex.session.event.LoopEvent;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -46,6 +48,6 @@ public class RangeEventLoop extends AbstractEventLoop {
         this.previous = this.current;
         this.current = this.current + 1;
         LocalDateTime time = this.range.get(this.current);
-        return new LoopEvent(time, this.priceHandler.getPriceSymbolMapped(time));
+        return new LoopEvent(EventType.LOOP_FOUND_NEXT,time, this.priceHandler.getPriceSymbolMapped(time));
     }
 }

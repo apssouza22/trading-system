@@ -1,6 +1,8 @@
 package com.apssouza.mytrade.trading.misc.loop;
 
 import com.apssouza.mytrade.feed.price.PriceHandler;
+import com.apssouza.mytrade.trading.forex.session.event.EventType;
+import com.apssouza.mytrade.trading.forex.session.event.LoopEvent;
 import com.apssouza.mytrade.trading.misc.helper.time.DateTimeHelper;
 import com.apssouza.mytrade.trading.misc.helper.time.Interval;
 
@@ -60,6 +62,6 @@ public class RealEventLoop extends AbstractEventLoop {
     public LoopEvent next() {
         this.previous = this.current;
         this.current = this.current_time_creator.getNow();
-        return new LoopEvent(this.current, this.priceHandler.getPriceSymbolMapped(this.current));
+        return new LoopEvent(EventType.LOOP_FOUND_NEXT,this.current, this.priceHandler.getPriceSymbolMapped(this.current));
     }
 }

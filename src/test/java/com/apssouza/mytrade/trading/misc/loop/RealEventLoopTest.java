@@ -67,8 +67,8 @@ public class RealEventLoopTest extends TestCase {
 
     @Test
     public void next() {
-        assertEquals(this.start, obj.next().getTime());
-        assertEquals(this.start.plusMinutes(1), obj.next().getTime());
-        assertEquals(this.start.plusMinutes(2), obj.next().getTime());
+        assertEquals(this.start, obj.next().getTimestamp());
+        assertEquals(this.start.plusMinutes(1), obj.next().getTimestamp());
+        assertEquals(this.start.plusMinutes(2), obj.next().getTimestamp());
     }
 }

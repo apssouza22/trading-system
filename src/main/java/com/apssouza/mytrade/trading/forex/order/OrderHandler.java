@@ -6,6 +6,8 @@ import com.apssouza.mytrade.trading.forex.portfolio.Portfolio;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.forex.portfolio.PositionType;
 import com.apssouza.mytrade.trading.forex.risk.PositionSizer;
+import com.apssouza.mytrade.trading.forex.session.event.Event;
+import com.apssouza.mytrade.trading.forex.session.event.SignalCreatedEvent;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -56,27 +58,22 @@ public class OrderHandler {
         orderDao.updateStatus(id, status);
     }
 
-    public List<OrderDto> createOrderFromSignal(List<SignalDto> signals, LocalDateTime time) {
-        if (signals.isEmpty()) {
-            return Collections.emptyList();
-        }
-        List<OrderDto> orders = new ArrayList<>();
+    public OrderDto createOrderFromSignal(SignalCreatedEvent event) {
+        LocalDateTime time = event.getTimestamp();
+        SignalDto signal = event.getSignal();
+        String action = signal.getAction();
 
-        for (SignalDto signal : signals) {
-            String action = signal.getAction();
-            OrderDto order = new OrderDto(
-                    signal.getSymbol(),
-                    OrderAction.valueOf(action.toUpperCase()),
-                    positionSizer.getQuantity(),
-                    OrderOrigin.SIGNAL,
-                    time,
-                    "",
-                    OrderStatus.CREATED
-            );
-            log.info("Created order: " + orders.toString());
-            orders.add(order);
-        }
-        return orders;
+        OrderDto order = new OrderDto(
+                signal.getSymbol(),
+                OrderAction.valueOf(action.toUpperCase()),
+                positionSizer.getQuantity(),
+                OrderOrigin.SIGNAL,
+                time,
+                "",
+                OrderStatus.CREATED
+        );
+        log.info("Created order: " + order.toString());
+        return order;
     }
 
 

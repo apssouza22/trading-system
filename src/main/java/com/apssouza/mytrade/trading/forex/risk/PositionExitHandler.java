@@ -8,7 +8,7 @@ import com.apssouza.mytrade.trading.forex.portfolio.Portfolio;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.forex.portfolio.PositionType;
 import com.apssouza.mytrade.trading.misc.helper.time.MarketTimeHelper;
-import com.apssouza.mytrade.trading.misc.loop.LoopEvent;
+import com.apssouza.mytrade.trading.forex.session.event.LoopEvent;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -32,7 +32,7 @@ public class PositionExitHandler {
         for (Map.Entry<String, Position> entry : this.portfolio.getPositions().entrySet()) {
             Position position = entry.getValue();
             ExitReason exit_reason = null;
-            if (this.isEndOfDay(event.getTime())) {
+            if (this.isEndOfDay(event.getTimestamp())) {
                 exit_reason = ExitReason.END_OF_DAY;
             }
             if (this.hasCounterSignal(position, signals)) {

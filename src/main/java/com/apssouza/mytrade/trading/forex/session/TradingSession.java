@@ -5,26 +5,30 @@ import com.apssouza.mytrade.feed.price.PriceDao;
 import com.apssouza.mytrade.feed.price.PriceHandler;
 import com.apssouza.mytrade.feed.price.SqlPriceDao;
 import com.apssouza.mytrade.feed.signal.SignalDao;
-import com.apssouza.mytrade.feed.signal.SignalDto;
 import com.apssouza.mytrade.feed.signal.SignalHandler;
 import com.apssouza.mytrade.feed.signal.SqlSignalDao;
 import com.apssouza.mytrade.trading.forex.execution.ExecutionHandler;
 import com.apssouza.mytrade.trading.forex.execution.InteractiveBrokerExecutionHandler;
 import com.apssouza.mytrade.trading.forex.execution.SimulatedExecutionHandler;
 import com.apssouza.mytrade.trading.forex.order.MemoryOrderDao;
-import com.apssouza.mytrade.trading.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.forex.order.OrderHandler;
-import com.apssouza.mytrade.trading.forex.order.OrderStatus;
 import com.apssouza.mytrade.trading.forex.portfolio.Portfolio;
 import com.apssouza.mytrade.trading.forex.portfolio.PortfolioHandler;
 import com.apssouza.mytrade.trading.forex.portfolio.ReconciliationHandler;
-import com.apssouza.mytrade.trading.forex.risk.*;
+import com.apssouza.mytrade.trading.forex.risk.PositionExitHandler;
+import com.apssouza.mytrade.trading.forex.risk.PositionSizer;
+import com.apssouza.mytrade.trading.forex.risk.PositionSizerFixed;
+import com.apssouza.mytrade.trading.forex.risk.RiskManagementHandler;
 import com.apssouza.mytrade.trading.forex.risk.stoporder.PriceDistanceObject;
 import com.apssouza.mytrade.trading.forex.risk.stoporder.fixed.StopOrderCreatorFixed;
+import com.apssouza.mytrade.trading.forex.session.event.Event;
+import com.apssouza.mytrade.trading.forex.session.event.EventNotifier;
+import com.apssouza.mytrade.trading.forex.session.event.EventProcessor;
+import com.apssouza.mytrade.trading.forex.session.event.LoopEvent;
+import com.apssouza.mytrade.trading.forex.session.listener.*;
 import com.apssouza.mytrade.trading.misc.helper.TradingHelper;
 import com.apssouza.mytrade.trading.misc.helper.config.Properties;
 import com.apssouza.mytrade.trading.misc.helper.time.DateRangeHelper;
-import com.apssouza.mytrade.trading.misc.helper.time.DayHelper;
 import com.apssouza.mytrade.trading.misc.loop.*;
 
 import java.math.BigDecimal;
@@ -32,38 +36,41 @@ import java.sql.Connection;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingDeque;
 
-public class TradingSessionLoopDriven {
+public class TradingSession {
 
-    private final BigDecimal equity;
-    private final LocalDateTime startDate;
-    private final LocalDateTime endDate;
-    private final Connection connection;
-    private final SessionType sessionType;
-    private final String systemName;
-    private final ExecutionType executionType;
+    protected final BigDecimal equity;
+    protected final LocalDateTime startDate;
+    protected final LocalDateTime endDate;
+    protected final Connection connection;
+    protected final SessionType sessionType;
+    protected final String systemName;
+    protected final ExecutionType executionType;
 
-    private MemoryOrderDao orderDao;
-    private PriceDao priceSqlDao;
-    private SignalDao signalDao;
-    private MemoryPriceDao priceMemoryDao;
-    private PriceHandler priceHandler;
-    private ExecutionHandler executionHandler;
-    private PositionSizer positionSizer;
-    private Portfolio portfolio;
-    private PositionExitHandler positionExitHandler;
-    private OrderHandler orderHandler;
-    private SignalHandler signalHandler;
-    private ReconciliationHandler reconciliationHandler;
-    private HistoryBookHandler historyHandler;
-    private EventLoop eventLoop;
-    private PortfolioHandler portfolioHandler;
-    private boolean processedEndDay;
-    private RiskManagementHandler riskManagementHandler;
+    protected MemoryOrderDao orderDao;
+    protected PriceDao priceSqlDao;
+    protected SignalDao signalDao;
+    protected MemoryPriceDao priceMemoryDao;
+    protected PriceHandler priceHandler;
+    protected ExecutionHandler executionHandler;
+    protected PositionSizer positionSizer;
+    protected Portfolio portfolio;
+    protected PositionExitHandler positionExitHandler;
+    protected OrderHandler orderHandler;
+    protected SignalHandler signalHandler;
+    protected ReconciliationHandler reconciliationHandler;
+    protected HistoryBookHandler historyHandler;
+    protected EventLoop eventLoop;
+    protected PortfolioHandler portfolioHandler;
+    protected boolean processedEndDay;
+    protected RiskManagementHandler riskManagementHandler;
+    protected final BlockingQueue<Event> eventQueue;
+    protected EventNotifier eventNotifier;
 
-    public TradingSessionLoopDriven(
+    public TradingSession(
             BigDecimal equity,
             LocalDateTime startDate,
             LocalDateTime endDate,
@@ -80,6 +87,7 @@ public class TradingSessionLoopDriven {
         this.sessionType = sessionType;
         this.systemName = systemName;
         this.executionType = executionType;
+        this.eventQueue = new LinkedBlockingDeque<>();
         this.configSession();
     }
 
@@ -124,6 +132,7 @@ public class TradingSessionLoopDriven {
                 ))
         );
 
+
         this.portfolioHandler = new PortfolioHandler(
                 this.equity,
                 this.orderHandler,
@@ -132,8 +141,11 @@ public class TradingSessionLoopDriven {
                 this.portfolio,
                 this.reconciliationHandler,
                 this.historyHandler,
-                this.riskManagementHandler
+                this.riskManagementHandler,
+                eventQueue
         );
+
+        this.eventNotifier = getEventNotifier();
 
         if (this.sessionType == SessionType.LIVE) {
             this.eventLoop = new RealEventLoop(
@@ -149,94 +161,80 @@ public class TradingSessionLoopDriven {
         }
     }
 
-    private void runSession() {
-        if (this.sessionType == SessionType.BACK_TEST) {
-            System.out.println(String.format("Running Backtest from %s to %s", this.startDate, this.endDate));
-        } else {
-            System.out.println(String.format("Running Real-time Session until %s", this.endDate));
-        }
-        this.executionHandler.closeAllPositions();
-        this.executionHandler.cancelOpenLimitOrders();
-        LocalDate lastDayProcessed = this.startDate.toLocalDate().minusDays(1);
-        this.priceMemoryDao.loadData(startDate, startDate.plusDays(30));
-        while (this.eventLoop.hasNext()) {
-            LoopEvent loopEvent = this.eventLoop.next();
-            LocalDateTime currentTime = loopEvent.getTime();
-            System.out.println(currentTime);
-
-            if (DayHelper.isWeekend(currentTime.toLocalDate())) {
-                continue;
-            }
-            if (!TradingHelper.isTradingTime(currentTime)) {
-                continue;
-            }
-            if (lastDayProcessed.compareTo(currentTime.toLocalDate()) < 0) {
-                this.processStartDay(currentTime);
-            }
-
-            this.processNext(loopEvent);
-            this.eventLoop.sleep();
-            lastDayProcessed = currentTime.toLocalDate();
-        }
+    private EventNotifier getEventNotifier() {
+        EventNotifier eventNotifier = new EventNotifier();
+        eventNotifier.addPropertyChangeListener(new FilledOrderListener(portfolio, historyHandler, eventQueue));
+        eventNotifier.addPropertyChangeListener(new OrderCreatedListener(orderHandler));
+        eventNotifier.addPropertyChangeListener(new OrderFoundListener(executionHandler, historyHandler, orderHandler, eventQueue));
+        eventNotifier.addPropertyChangeListener(new PortfolioChangedListener(reconciliationHandler));
+        eventNotifier.addPropertyChangeListener(new SignalCreatedListener(riskManagementHandler, orderHandler, eventQueue, historyHandler));
+        eventNotifier.addPropertyChangeListener(new StopOrderFilledListener(portfolio, historyHandler));
+        eventNotifier.addPropertyChangeListener(new LoopFoundNext(executionHandler, portfolioHandler, signalHandler, orderDao, eventQueue));
+        return eventNotifier;
     }
 
-    private void processNext(LoopEvent loopEvent) {
 
-        if (this.sessionType == SessionType.BACK_TEST) {
-            this.executionHandler.setCurrentTime(loopEvent.getTime());
-        }
-        this.executionHandler.setPriceMap(loopEvent.getPrice());
-        List<SignalDto> signals;
-        if (this.sessionType == SessionType.LIVE) {
-            signals = this.signalHandler.getRealtimeSignal(this.systemName);
-        } else {
-            signals = this.signalHandler.findbySecondAndSource(this.systemName, loopEvent.getTime());
-        }
-        if (!signals.isEmpty()) {
-            System.out.println("signal");
-        }
-        this.portfolioHandler.updatePortfolioValue(loopEvent);
-
-        this.portfolioHandler.stopOrderHandle(loopEvent);
-        this.portfolioHandler.processExits(loopEvent, signals);
-        this.portfolioHandler.onSignal(loopEvent, signals);
-
-        List<OrderDto> orders = this.orderDao.getOrderByStatus(OrderStatus.CREATED);
-        orders = this.createPositionIdentifier(orders);
-        this.riskManagementHandler.checkOrders(orders);
-        this.historyHandler.addSignal(signals, orders);
-
-        this.portfolioHandler.onOrder(orders);
-        this.portfolioHandler.processReconciliation();
-        this.portfolioHandler.createStopOrder(loopEvent);
-        this.historyHandler.process(loopEvent);
-
-        System.out.println(this.portfolio.getPositions().size());
-    }
-
-    private void processStartDay(LocalDateTime currentTime) {
+    protected void processStartDay(LocalDateTime currentTime) {
         if (Properties.sessionType == SessionType.BACK_TEST)
             this.priceMemoryDao.loadData(currentTime, currentTime.plusDays(1));
     }
 
     public void start() {
-        this.runSession();
+        try {
+            this.runSession();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    protected void runSession() throws InterruptedException {
+        printSessionStartMsg();
+        this.executionHandler.closeAllPositions();
+        this.executionHandler.cancelOpenLimitOrders();
+        this.priceMemoryDao.loadData(startDate, startDate.plusDays(30));
+        LocalDate lastDayProcessed = this.startDate.toLocalDate().minusDays(1);
+
+        startEventProcessor();
+        while (this.eventLoop.hasNext()) {
+            LoopEvent loopEvent = this.eventLoop.next();
+            LocalDateTime currentTime = loopEvent.getTimestamp();
+            System.out.println(currentTime);
+            if (!TradingHelper.isTradingTime(currentTime)){
+                continue;
+            }
+            if (lastDayProcessed.compareTo(currentTime.toLocalDate()) < 0) {
+                this.processStartDay(currentTime);
+                lastDayProcessed = currentTime.toLocalDate();
+            }
+            eventQueue.put(loopEvent);
+            this.eventLoop.sleep();
+        }
+    }
+
+    private void printSessionStartMsg() {
+        if (this.sessionType == SessionType.BACK_TEST) {
+            System.out.println(String.format("Running Backtest from %s to %s", this.startDate, this.endDate));
+        } else {
+            System.out.println(String.format("Running Real-time Session until %s", this.endDate));
+        }
+    }
+
+    private void startEventProcessor() {
+        EventProcessor eventProcessor = new EventProcessor(
+                eventQueue,
+                historyHandler,
+                portfolioHandler,
+                eventNotifier
+        );
+        eventProcessor.start();
     }
 
     private boolean isEndOfDay(LocalDateTime currentTime) {
         return currentTime.getHour() > 22;
     }
 
-    private List<OrderDto> createPositionIdentifier(List<OrderDto> orders) {
-        List<OrderDto> list = new LinkedList<>();
-        for (OrderDto order : orders) {
-            list.add(new OrderDto(
-                    MultiPositionHandler.getIdentifierFromOrder(order),
-                    order
-            ));
-        }
-        return list;
-    }
+
 }
+
 
 

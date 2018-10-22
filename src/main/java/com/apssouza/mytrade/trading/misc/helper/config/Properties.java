@@ -28,6 +28,7 @@ public class Properties {
     public static double trailing_stop_loss_distance;
     public static double take_profit_distance_fixed;
     public static double entry_stop_loss_distance_fixed;
+    public static String systemName = "signal_test";
 
     static {
         currency_pair_significant_digits_in_price = new HashMap<String, Integer>() {{
