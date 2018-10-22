@@ -62,6 +62,6 @@ public class RealEventLoop extends AbstractEventLoop {
     public LoopEvent next() {
         this.previous = this.current;
         this.current = this.current_time_creator.getNow();
-        return new LoopEvent(EventType.NEW_LOOP,this.current, this.priceHandler.getPriceSymbolMapped(this.current));
+        return new LoopEvent(EventType.LOOP_FOUND_NEXT,this.current, this.priceHandler.getPriceSymbolMapped(this.current));
     }
 }

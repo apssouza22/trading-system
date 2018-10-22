@@ -106,7 +106,7 @@ public class StopOrderCreatorFixedTest extends TestCase {
         BigDecimal close = BigDecimal.valueOf(1.305);
         PriceDto priceDto = new PriceDto(now, close, close, close, close, "AUDUSD");
         priceMap.put("AUDUSD", priceDto);
-        LoopEvent event = new LoopEvent(EventType.NEW_LOOP,now, priceMap);
+        LoopEvent event = new LoopEvent(EventType.LOOP_FOUND_NEXT,now, priceMap);
         Optional<StopOrderDto> optional = obj.getEntryStopOrder(position, event);
         StopOrderDto hardStopLoss = optional.get();
         assertEquals(StopOrderStatus.CREATED, hardStopLoss.getStatus());
@@ -133,7 +133,7 @@ public class StopOrderCreatorFixedTest extends TestCase {
         BigDecimal close = BigDecimal.valueOf(1.105);
         PriceDto priceDto = new PriceDto(now, close, close, close, close, "AUDUSD");
         priceMap.put("AUDUSD", priceDto);
-        LoopEvent event = new LoopEvent(EventType.NEW_LOOP,now, priceMap);
+        LoopEvent event = new LoopEvent(EventType.LOOP_FOUND_NEXT,now, priceMap);
         Optional<StopOrderDto> optional = obj.getEntryStopOrder(position, event);
         assertFalse(optional.isPresent());
     }
@@ -157,7 +157,7 @@ public class StopOrderCreatorFixedTest extends TestCase {
         BigDecimal close = BigDecimal.valueOf(0.803);
         PriceDto priceDto = new PriceDto(now, close, close, close, close, "AUDUSD");
         priceMap.put("AUDUSD", priceDto);
-        LoopEvent event = new LoopEvent(EventType.NEW_LOOP,now, priceMap);
+        LoopEvent event = new LoopEvent(EventType.LOOP_FOUND_NEXT,now, priceMap);
         Optional<StopOrderDto> optional = obj.getEntryStopOrder(position, event);
         StopOrderDto hardStopLoss = optional.get();
         assertEquals(StopOrderStatus.CREATED, hardStopLoss.getStatus());
@@ -184,7 +184,7 @@ public class StopOrderCreatorFixedTest extends TestCase {
         BigDecimal close = BigDecimal.valueOf(1.105);
         PriceDto priceDto = new PriceDto(now, close, close, close, close, "AUDUSD");
         priceMap.put("AUDUSD", priceDto);
-        LoopEvent event = new LoopEvent(EventType.NEW_LOOP,now, priceMap);
+        LoopEvent event = new LoopEvent(EventType.LOOP_FOUND_NEXT,now, priceMap);
         Optional<StopOrderDto> optional = obj.getEntryStopOrder(position, event);
         assertFalse(optional.isPresent());
     }

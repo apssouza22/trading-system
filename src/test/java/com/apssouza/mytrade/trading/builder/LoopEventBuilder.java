@@ -29,6 +29,6 @@ public class LoopEventBuilder {
     public LoopEvent build() {
         if (time == null)
             time = LocalDateTime.MIN;
-        return new LoopEvent(EventType.NEW_LOOP, time, priceMap);
+        return new LoopEvent(EventType.LOOP_FOUND_NEXT, time, priceMap);
     }
 }
