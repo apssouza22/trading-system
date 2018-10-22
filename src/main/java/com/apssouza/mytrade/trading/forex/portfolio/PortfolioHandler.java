@@ -7,11 +7,9 @@ import com.apssouza.mytrade.trading.forex.risk.PositionExitHandler;
 import com.apssouza.mytrade.trading.forex.risk.RiskManagementHandler;
 import com.apssouza.mytrade.trading.forex.session.*;
 import com.apssouza.mytrade.trading.forex.session.event.*;
-import com.apssouza.mytrade.trading.forex.session.listener.StopOrderFilledListener;
 import com.apssouza.mytrade.trading.misc.helper.config.Properties;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.logging.Logger;
@@ -27,9 +25,7 @@ public class PortfolioHandler {
     private final HistoryBookHandler historyHandler;
     private final RiskManagementHandler riskManagementHandler;
     private final BlockingQueue<Event> eventQueue;
-    private final EventNotifier notifier;
     private static Logger log = Logger.getLogger(PortfolioHandler.class.getName());
-    private final StopOrderFilledListener stopOrderFilledListener;
     private Map<Integer, StopOrderDto> currentStopOrders = new HashMap<>();
 
     public PortfolioHandler(
@@ -41,8 +37,7 @@ public class PortfolioHandler {
             ReconciliationHandler reconciliationHandler,
             HistoryBookHandler historyHandler,
             RiskManagementHandler riskManagementHandler,
-            BlockingQueue<Event> eventQueue,
-            EventNotifier notifier
+            BlockingQueue<Event> eventQueue
     ) {
 
         this.equity = equity;
@@ -54,8 +49,6 @@ public class PortfolioHandler {
         this.historyHandler = historyHandler;
         this.riskManagementHandler = riskManagementHandler;
         this.eventQueue = eventQueue;
-        this.notifier = notifier;
-        this.stopOrderFilledListener = new StopOrderFilledListener(portfolio, historyHandler);
     }
 
     public void updatePortfolioValue(Event event) {
@@ -91,28 +84,18 @@ public class PortfolioHandler {
         this.currentStopOrders = stopOrders;
     }
 
-    public void processReconciliation() {
-
-    }
-
-    public void onOrderCreated(OrderCreatedEvent event) {
-        this.orderHandler.persist(event.getOrder());
-    }
-
-    public void onOrderFound(OrderFoundEvent event) {
-            notifier.notify(event);
-    }
-
-    public void stopOrderHandle(Event event) {
+    public void stopOrderHandle(Event event) throws InterruptedException {
         this.cancelOpenStopOrders();
         List<StopOrderDto> filledOrders = this.getFilledStopOrders();
         log.info("Total stop loss order filled " + filledOrders.size());
-        this.onStopOrderFilled(filledOrders, event.getTimestamp());
-    }
 
-    private void onStopOrderFilled(List<StopOrderDto> filledOrders, LocalDateTime time) {
         for (StopOrderDto stopOrder : filledOrders) {
-            stopOrderFilledListener.process(stopOrder, time);
+            eventQueue.put(new StopOrderFilledEvent(
+                    EventType.STOP_ORDER_FILLED,
+                    event.getTimestamp(),
+                    event.getPrice(),
+                    stopOrder
+            ));
         }
     }
 
@@ -144,40 +127,23 @@ public class PortfolioHandler {
         }
     }
 
-    public void processExits(LoopEvent event, List<SignalDto> signals) {
+    public void processExits(LoopEvent event, List<SignalDto> signals) throws InterruptedException {
         List<Position> exitedPositionss = this.positionExitHandler.process(event, signals);
         this.createOrderFromClosedPosition(exitedPositionss, event);
     }
 
-    private void createOrderFromClosedPosition(List<Position> positions, LoopEvent event) {
+    private void createOrderFromClosedPosition(List<Position> positions, LoopEvent event) throws InterruptedException {
         for (Position position : positions) {
             if (position.getStatus() == PositionStatus.CLOSED) {
                 OrderDto order = this.orderHandler.createOrderFromClosedPosition(position, event.getTimestamp());
-                this.orderHandler.persist(order);
-            }
-        }
-    }
-
-    public void onSignal(SignalCreatedEvent event) {
-        log.info("Processing  new signal...");
-        if (riskManagementHandler.canCreateOrder(event)) {
-            OrderDto order = this.orderHandler.createOrderFromSignal(event);
-            try {
                 this.eventQueue.put(new OrderCreatedEvent(
                         EventType.ORDER_CREATED,
                         event.getTimestamp(),
                         event.getPrice(),
                         order
                 ));
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+                this.orderHandler.persist(order);
             }
-
         }
-    }
-
-    public void onOrderFilled(OrderFilledEvent event) {
-        notifier.notify(event);
-        this.historyHandler.addOrderFilled(event.getFilledOrder());
     }
 }

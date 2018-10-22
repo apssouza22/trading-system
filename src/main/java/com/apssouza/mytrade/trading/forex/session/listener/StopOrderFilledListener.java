@@ -7,11 +7,16 @@ import com.apssouza.mytrade.trading.forex.portfolio.Portfolio;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.forex.session.HistoryBookHandler;
 import com.apssouza.mytrade.trading.forex.session.MultiPositionHandler;
+import com.apssouza.mytrade.trading.forex.session.event.Event;
+import com.apssouza.mytrade.trading.forex.session.event.OrderFilledEvent;
+import com.apssouza.mytrade.trading.forex.session.event.StopOrderFilledEvent;
 import com.apssouza.mytrade.trading.forex.statistics.TransactionState;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.time.LocalDateTime;
 
-public class StopOrderFilledListener implements EventListener {
+public class StopOrderFilledListener implements PropertyChangeListener {
 
     private final Portfolio portfolio;
     private final HistoryBookHandler historyHandler;
@@ -21,7 +26,15 @@ public class StopOrderFilledListener implements EventListener {
         this.historyHandler = historyHandler;
     }
 
-    public void process(StopOrderDto stopOrder, LocalDateTime time){
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        Event event = (Event) evt.getNewValue();
+        if (!(event instanceof StopOrderFilledEvent)) {
+            return;
+        }
+        StopOrderFilledEvent orderFilledEvent = (StopOrderFilledEvent) event;
+        StopOrderDto stopOrder = orderFilledEvent.getStopOrder();
+        LocalDateTime time = orderFilledEvent.getTimestamp();
         Position ps = MultiPositionHandler.getPositionByStopOrder(stopOrder);
         ps.closePosition(ExitReason.STOP_ORDER_FILLED);
         this.portfolio.closePosition(ps.getIdentifier());

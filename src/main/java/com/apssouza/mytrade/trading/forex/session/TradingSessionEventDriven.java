@@ -42,12 +42,9 @@ public class TradingSessionEventDriven extends AbstractTradingSession {
 
         EventProcessor eventProcessor = new EventProcessor(
                 eventQueue,
-                orderDao,
-                executionHandler,
-                portfolio,
                 historyHandler,
                 portfolioHandler,
-                riskManagementHandler
+                eventNotifier
         );
         eventProcessor.start();
         while (this.eventLoop.hasNext()) {
