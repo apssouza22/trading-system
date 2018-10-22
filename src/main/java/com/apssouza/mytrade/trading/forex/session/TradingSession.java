@@ -23,7 +23,10 @@ import com.apssouza.mytrade.trading.forex.risk.stoporder.PriceDistanceObject;
 import com.apssouza.mytrade.trading.forex.risk.stoporder.fixed.StopOrderCreatorFixed;
 import com.apssouza.mytrade.trading.forex.session.event.Event;
 import com.apssouza.mytrade.trading.forex.session.event.EventNotifier;
+import com.apssouza.mytrade.trading.forex.session.event.EventProcessor;
+import com.apssouza.mytrade.trading.forex.session.event.LoopEvent;
 import com.apssouza.mytrade.trading.forex.session.listener.*;
+import com.apssouza.mytrade.trading.misc.helper.TradingHelper;
 import com.apssouza.mytrade.trading.misc.helper.config.Properties;
 import com.apssouza.mytrade.trading.misc.helper.time.DateRangeHelper;
 import com.apssouza.mytrade.trading.misc.loop.*;
@@ -31,12 +34,13 @@ import com.apssouza.mytrade.trading.misc.loop.*;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 
-public abstract class AbstractTradingSession {
+public class TradingSession {
 
     protected final BigDecimal equity;
     protected final LocalDateTime startDate;
@@ -66,7 +70,7 @@ public abstract class AbstractTradingSession {
     protected final BlockingQueue<Event> eventQueue;
     protected EventNotifier eventNotifier;
 
-    public AbstractTradingSession(
+    public TradingSession(
             BigDecimal equity,
             LocalDateTime startDate,
             LocalDateTime endDate,
@@ -183,7 +187,47 @@ public abstract class AbstractTradingSession {
         }
     }
 
-    protected abstract void runSession() throws InterruptedException;
+    protected void runSession() throws InterruptedException {
+        printSessionStartMsg();
+        this.executionHandler.closeAllPositions();
+        this.executionHandler.cancelOpenLimitOrders();
+        this.priceMemoryDao.loadData(startDate, startDate.plusDays(30));
+        LocalDate lastDayProcessed = this.startDate.toLocalDate().minusDays(1);
+
+        startEventProcessor();
+        while (this.eventLoop.hasNext()) {
+            LoopEvent loopEvent = this.eventLoop.next();
+            LocalDateTime currentTime = loopEvent.getTimestamp();
+            System.out.println(currentTime);
+            if (!TradingHelper.isTradingTime(currentTime)){
+                continue;
+            }
+            if (lastDayProcessed.compareTo(currentTime.toLocalDate()) < 0) {
+                this.processStartDay(currentTime);
+                lastDayProcessed = currentTime.toLocalDate();
+            }
+            eventQueue.put(loopEvent);
+            this.eventLoop.sleep();
+        }
+    }
+
+    private void printSessionStartMsg() {
+        if (this.sessionType == SessionType.BACK_TEST) {
+            System.out.println(String.format("Running Backtest from %s to %s", this.startDate, this.endDate));
+        } else {
+            System.out.println(String.format("Running Real-time Session until %s", this.endDate));
+        }
+    }
+
+    private void startEventProcessor() {
+        EventProcessor eventProcessor = new EventProcessor(
+                eventQueue,
+                historyHandler,
+                portfolioHandler,
+                eventNotifier
+        );
+        eventProcessor.start();
+    }
 
     private boolean isEndOfDay(LocalDateTime currentTime) {
         return currentTime.getHour() > 22;

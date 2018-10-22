@@ -2,7 +2,7 @@ package com.apssouza.mytrade;
 
 import com.apssouza.mytrade.trading.forex.session.ExecutionType;
 import com.apssouza.mytrade.trading.forex.session.SessionType;
-import com.apssouza.mytrade.trading.forex.session.TradingSessionEventDriven;
+import com.apssouza.mytrade.trading.forex.session.TradingSession;
 import com.apssouza.mytrade.trading.misc.helper.config.Properties;
 
 import java.math.BigDecimal;
@@ -25,8 +25,7 @@ public class Application {
         Properties.tradingEndDay = LocalDateTime.of(date.plusDays(30), LocalTime.MIN);
         Properties.tradingStartTime = LocalTime.MIN;
         Properties.tradingEndTime = LocalTime.MAX;
-
-        TradingSessionEventDriven tradingSession = new TradingSessionEventDriven(
+        TradingSession tradingSession = new TradingSession(
                 BigDecimal.valueOf(100000l),
                 Properties.tradingStartDay,
                 Properties.tradingEndDay,
@@ -67,7 +66,7 @@ public class Application {
         for (int i = 1; i < 20; i++) {
             st.executeUpdate("" +
                     "INSERT INTO price(TimeStamp,OpenPrice,HighPrice,LowPrice,ClosePrice,Volume,Symbol)" +
-                    "     VALUES('2018-09-"+i+" 00:00:00.000',0.73562,0.73563,0.73562,0.73562,0,'AUDUSD')"
+                    "     VALUES('2018-09-" + i + " 00:00:00.000',0.73562,0.73563,0.73562,0.73562,0,'AUDUSD')"
             );
         }
         for (int i = 1; i < 6; i = i + 2) {
