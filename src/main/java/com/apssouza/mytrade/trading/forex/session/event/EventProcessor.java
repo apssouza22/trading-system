@@ -32,20 +32,12 @@ public class EventProcessor extends Thread {
         for (; ; ) {
             try {
                 Event event = eventQueue.take();
-                process(event);
+                notifier.notify(event);
+                this.portfolioHandler.createStopOrder(event);
+                this.historyHandler.process(event);
             } catch (InterruptedException ex) {
-                ex.printStackTrace();
+                throw new RuntimeException(ex);
             }
         }
     }
-
-    private void process(Event event) {
-        notifier.notify(event);
-
-        this.portfolioHandler.createStopOrder(event);
-        this.historyHandler.process(event);
-
-    }
-
-
 }

@@ -28,7 +28,7 @@ public class HistoryBookHandler {
         return this.transactions;
     }
 
-    public void addSignal(List<SignalDto> signals) {
+    public void addSignal(SignalDto signal) {
 
     }
 

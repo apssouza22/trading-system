@@ -128,7 +128,6 @@ public abstract class AbstractTradingSession {
                 ))
         );
 
-        this.eventNotifier = getEventNotifier();
 
         this.portfolioHandler = new PortfolioHandler(
                 this.equity,
@@ -141,6 +140,8 @@ public abstract class AbstractTradingSession {
                 this.riskManagementHandler,
                 eventQueue
         );
+
+        this.eventNotifier = getEventNotifier();
 
         if (this.sessionType == SessionType.LIVE) {
             this.eventLoop = new RealEventLoop(
@@ -160,10 +161,11 @@ public abstract class AbstractTradingSession {
         EventNotifier eventNotifier = new EventNotifier();
         eventNotifier.addPropertyChangeListener(new FilledOrderListener(portfolio, historyHandler, eventQueue));
         eventNotifier.addPropertyChangeListener(new OrderCreatedListener(orderHandler));
-        eventNotifier.addPropertyChangeListener(new OrderFoundListener(executionHandler, historyHandler,  orderHandler, eventQueue));
+        eventNotifier.addPropertyChangeListener(new OrderFoundListener(executionHandler, historyHandler, orderHandler, eventQueue));
         eventNotifier.addPropertyChangeListener(new PortfolioChangedListener(reconciliationHandler));
-        eventNotifier.addPropertyChangeListener(new SignalCreatedListener(riskManagementHandler, orderHandler, eventQueue));
+        eventNotifier.addPropertyChangeListener(new SignalCreatedListener(riskManagementHandler, orderHandler, eventQueue, historyHandler));
         eventNotifier.addPropertyChangeListener(new StopOrderFilledListener(portfolio, historyHandler));
+        eventNotifier.addPropertyChangeListener(new LoopFoundNext(executionHandler, portfolioHandler, signalHandler, orderDao, eventQueue));
         return eventNotifier;
     }
 

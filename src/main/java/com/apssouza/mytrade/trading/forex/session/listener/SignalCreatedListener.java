@@ -3,6 +3,7 @@ package com.apssouza.mytrade.trading.forex.session.listener;
 import com.apssouza.mytrade.trading.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.forex.order.OrderHandler;
 import com.apssouza.mytrade.trading.forex.risk.RiskManagementHandler;
+import com.apssouza.mytrade.trading.forex.session.HistoryBookHandler;
 import com.apssouza.mytrade.trading.forex.session.event.Event;
 import com.apssouza.mytrade.trading.forex.session.event.EventType;
 import com.apssouza.mytrade.trading.forex.session.event.OrderCreatedEvent;
@@ -18,15 +19,17 @@ public class SignalCreatedListener implements PropertyChangeListener {
     private final RiskManagementHandler riskManagementHandler;
     private final OrderHandler orderHandler;
     private final BlockingQueue<Event> eventQueue;
+    private final HistoryBookHandler historyHandler;
 
     public SignalCreatedListener(
             RiskManagementHandler riskManagementHandler,
             OrderHandler orderHandler,
-            BlockingQueue<Event> eventQueue
-    ) {
+            BlockingQueue<Event> eventQueue,
+            HistoryBookHandler historyHandler) {
         this.riskManagementHandler = riskManagementHandler;
         this.orderHandler = orderHandler;
         this.eventQueue = eventQueue;
+        this.historyHandler = historyHandler;
     }
 
 
@@ -36,9 +39,9 @@ public class SignalCreatedListener implements PropertyChangeListener {
         if (!(e instanceof SignalCreatedEvent)) {
             return;
         }
-
         SignalCreatedEvent event = (SignalCreatedEvent) e;
         log.info("Processing  new signal...");
+        this.historyHandler.addSignal(event.getSignal());
         if (riskManagementHandler.canCreateOrder(event)) {
             OrderDto order = this.orderHandler.createOrderFromSignal(event);
             try {

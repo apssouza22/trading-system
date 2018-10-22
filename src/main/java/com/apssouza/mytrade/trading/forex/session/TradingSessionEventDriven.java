@@ -1,5 +1,6 @@
 package com.apssouza.mytrade.trading.forex.session;
 
+import com.apssouza.mytrade.feed.price.PriceDto;
 import com.apssouza.mytrade.feed.signal.SignalDto;
 import com.apssouza.mytrade.trading.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.forex.order.OrderStatus;
@@ -11,7 +12,9 @@ import java.math.BigDecimal;
 import java.sql.Connection;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 
@@ -47,49 +50,20 @@ public class TradingSessionEventDriven extends AbstractTradingSession {
                 eventNotifier
         );
         eventProcessor.start();
+        Map<String, PriceDto> lastPrice = Collections.emptyMap();
         while (this.eventLoop.hasNext()) {
             LoopEvent loopEvent = this.eventLoop.next();
             LocalDateTime currentTime = loopEvent.getTimestamp();
             System.out.println(currentTime);
-
-            if (DayHelper.isWeekend(currentTime.toLocalDate())) {
-                continue;
-            }
-            if (!TradingHelper.isTradingTime(currentTime)) {
+            if (!TradingHelper.isTradingTime(currentTime)){
                 continue;
             }
             if (lastDayProcessed.compareTo(currentTime.toLocalDate()) < 0) {
                 this.processStartDay(currentTime);
+                lastDayProcessed = currentTime.toLocalDate();
             }
-
-            List<SignalDto> signals;
-            if (this.sessionType == SessionType.LIVE) {
-                signals = this.signalHandler.getRealtimeSignal(this.systemName);
-            } else {
-                signals = this.signalHandler.findbySecondAndSource(this.systemName, loopEvent.getTimestamp());
-            }
-            this.historyHandler.addSignal(signals);
-            this.executionHandler.setPriceMap(loopEvent.getPrice());
-            this.portfolioHandler.updatePortfolioValue(loopEvent);
-            this.portfolioHandler.stopOrderHandle(loopEvent);
-            this.portfolioHandler.processExits(loopEvent, signals);
-
             eventQueue.put(loopEvent);
-
-            for (SignalDto signal : signals) {
-                eventQueue.put(new SignalCreatedEvent(
-                        EventType.SIGNAL_CREATED, currentTime, loopEvent.getPrice(), signal
-                ));
-            }
-
-            List<OrderDto> orders = this.orderDao.getOrderByStatus(OrderStatus.CREATED);
-            List<OrderDto> orderList = MultiPositionHandler.createPositionIdentifier(orders);
-            eventQueue.put(new OrderFoundEvent(
-                    EventType.ORDER_FOUND, currentTime, loopEvent.getPrice(), orderList
-            ));
-
             this.eventLoop.sleep();
-            lastDayProcessed = currentTime.toLocalDate();
         }
     }
 

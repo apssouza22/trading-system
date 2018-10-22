@@ -127,7 +127,7 @@ public class PortfolioHandler {
         }
     }
 
-    public void processExits(LoopEvent event, List<SignalDto> signals) throws InterruptedException {
+    public synchronized void processExits(LoopEvent event, List<SignalDto> signals) throws InterruptedException {
         List<Position> exitedPositionss = this.positionExitHandler.process(event, signals);
         this.createOrderFromClosedPosition(exitedPositionss, event);
     }
@@ -142,7 +142,6 @@ public class PortfolioHandler {
                         event.getPrice(),
                         order
                 ));
-                this.orderHandler.persist(order);
             }
         }
     }
