@@ -1,5 +1,5 @@
-# FXyou [![Build Status](https://travis-ci.org/apssouza22/trading-system.svg?branch=master)](https://travis-ci.org/apssouza22/trading-system) [![Code Climate](https://codeclimate.com/github/apssouza22/trading-system.png)](https://codeclimate.com/github/apssouza22/trading-system) [![Test Coverage](https://api.codeclimate.com/v1/badges/d999a5f1311bd806b345/test_coverage)](https://codeclimate.com/github/apssouza22/trading-system/test_coverage)
-is a freely available backtesting simulation and live trading engine written in Java.
+# FXyou   [![Build Status](https://travis-ci.org/apssouza22/trading-system.svg?branch=master)](https://travis-ci.org/apssouza22/trading-system) [![Code Climate](https://codeclimate.com/github/apssouza22/trading-system.png)](https://codeclimate.com/github/apssouza22/trading-system) [![Test Coverage](https://api.codeclimate.com/v1/badges/d999a5f1311bd806b345/test_coverage)](https://codeclimate.com/github/apssouza22/trading-system/test_coverage)
+Simple High frequency trading with backtesting simulation and live trading engine written in Java.
 
 It has been developed for both retail traders and institutional hedge funds to aid strategy development and deployment.
 
