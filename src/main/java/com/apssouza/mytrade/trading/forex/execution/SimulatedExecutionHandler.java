@@ -1,8 +1,10 @@
 package com.apssouza.mytrade.trading.forex.execution;
 
 import com.apssouza.mytrade.feed.price.PriceDto;
-import com.apssouza.mytrade.feed.price.PriceHandler;
-import com.apssouza.mytrade.trading.forex.order.*;
+import com.apssouza.mytrade.trading.forex.order.OrderAction;
+import com.apssouza.mytrade.trading.forex.order.OrderDto;
+import com.apssouza.mytrade.trading.forex.order.StopOrderDto;
+import com.apssouza.mytrade.trading.forex.order.StopOrderStatus;
 import com.apssouza.mytrade.trading.forex.portfolio.FilledOrderDto;
 import com.apssouza.mytrade.trading.forex.session.MultiPositionHandler;
 import com.apssouza.mytrade.trading.misc.helper.config.Properties;
@@ -17,9 +19,8 @@ import java.util.logging.Logger;
 public class SimulatedExecutionHandler implements ExecutionHandler {
 
     private static Logger log = Logger.getLogger(SimulatedExecutionHandler.class.getSimpleName());
-    private final PriceHandler priceHandler;
-    private List<StopOrderDto> stopLossOrders = new LinkedList<>();
-    private List<StopOrderDto> limitOrders = new LinkedList<>();
+    private Map<Integer, StopOrderDto> stopLossOrders = new LinkedHashMap<>();
+    private Map<Integer, StopOrderDto> limitOrders = new LinkedHashMap<>();
     private LocalDateTime current_time;
     private Map<String, PriceDto> priceMap = new ConcurrentHashMap<>();
     private final StopOrderPriceMonitor stopOrderPriceMonitor;
@@ -28,8 +29,7 @@ public class SimulatedExecutionHandler implements ExecutionHandler {
     private static AtomicInteger stopOrderId = new AtomicInteger();
 
 
-    public SimulatedExecutionHandler(PriceHandler priceHandler) {
-        this.priceHandler = priceHandler;
+    public SimulatedExecutionHandler() {
         stopOrderPriceMonitor = new StopOrderPriceMonitor(allStopOrders, priceMap);
     }
 
@@ -70,37 +70,49 @@ public class SimulatedExecutionHandler implements ExecutionHandler {
         log.info("Executing order " + filled_order.toString());
 
         if (this.positions.containsKey(order.getSymbol())) {
-            if (Properties.trading_multi_position_enabled || Properties.trading_position_edit_enabled) {
-                this.handleMultiPairPositionPortfolio(action, order.getSymbol(), quantity);
-            } else {
-                this.positions.remove(order.getSymbol());
-            }
+            handleExistingPosition(order, action, quantity);
         } else {
             this.positions.put(order.getSymbol(), filled_order);
         }
         return filled_order;
     }
 
-    public void handleMultiPairPositionPortfolio(OrderAction action, String currency_pair, Integer quantity) {
+    private void handleExistingPosition(OrderDto order, OrderAction action, int quantity) {
+        if (Properties.trading_multi_position_enabled || Properties.trading_position_edit_enabled) {
+            this.handleMultiPairPositionPortfolio(action, order.getSymbol(), quantity);
+        } else {
+            FilledOrderDto filledOrderDto = this.positions.get(order.getSymbol());
+            if (filledOrderDto.getAction().equals(order.getAction())) {
+                throw new RuntimeException("trading_position_edit_enabled is not enabled");
+            }
+            this.positions.remove(order.getSymbol());
+        }
+    }
+
+    private void handleMultiPairPositionPortfolio(OrderAction action, String currency_pair, Integer quantity) {
         FilledOrderDto filledOrderDto = this.positions.get(currency_pair);
-        if (action.equals(OrderAction.SELL) && filledOrderDto.equals(OrderAction.BUY)) {
+        if (action.equals(OrderAction.SELL) && filledOrderDto.getAction().equals(OrderAction.BUY)) {
             if (quantity == filledOrderDto.getQuantity()) {
                 this.positions.remove(currency_pair);
+                return;
             } else {
-                filledOrderDto = new FilledOrderDto(filledOrderDto.getQuantity() - quantity, filledOrderDto);
+                filledOrderDto = new FilledOrderDto(Math.abs(filledOrderDto.getQuantity() - quantity), filledOrderDto);
             }
 
-        } else if (action.equals(OrderAction.BUY) && filledOrderDto.getAction().equals(OrderAction.SELL)) {
-
+        }
+        if (action.equals(OrderAction.BUY) && filledOrderDto.getAction().equals(OrderAction.SELL)) {
             if (quantity == filledOrderDto.getQuantity()) {
-                this.positions.get(currency_pair);
+                this.positions.remove(currency_pair);
+                return;
             } else {
-                filledOrderDto = new FilledOrderDto(filledOrderDto.getQuantity() - quantity, filledOrderDto);
+                filledOrderDto = new FilledOrderDto(Math.abs(filledOrderDto.getQuantity() - quantity), filledOrderDto);
             }
 
-        } else if (action.equals(OrderAction.BUY) && filledOrderDto.getAction().equals(OrderAction.SELL)) {
+        }
+        if (action.equals(OrderAction.BUY) && filledOrderDto.getAction().equals(OrderAction.BUY)) {
             filledOrderDto = new FilledOrderDto(filledOrderDto.getQuantity() + quantity, filledOrderDto);
-        } else if (action.equals(OrderAction.SELL) && filledOrderDto.getAction().equals(OrderAction.BUY)) {
+        }
+        if (action.equals(OrderAction.SELL) && filledOrderDto.getAction().equals(OrderAction.SELL)) {
             filledOrderDto = new FilledOrderDto(filledOrderDto.getQuantity() + quantity, filledOrderDto);
         }
         this.positions.put(currency_pair, filledOrderDto);
@@ -112,7 +124,7 @@ public class SimulatedExecutionHandler implements ExecutionHandler {
     }
 
     public Map<Integer, StopOrderDto> getLimitOrders() {
-        return Collections.emptyMap();
+        return limitOrders;
     }
 
     public StopOrderDto placeStopOrder(StopOrderDto stop) {

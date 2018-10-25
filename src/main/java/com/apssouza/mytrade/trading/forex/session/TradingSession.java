@@ -160,7 +160,7 @@ public class TradingSession {
                     Properties.brokerClientId
             );
         }
-        return new SimulatedExecutionHandler(this.priceHandler);
+        return new SimulatedExecutionHandler();
 
     }
 
