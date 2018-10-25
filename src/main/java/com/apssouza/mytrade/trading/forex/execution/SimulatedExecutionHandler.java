@@ -156,10 +156,9 @@ public class SimulatedExecutionHandler implements ExecutionHandler {
     }
 
     public void processStopOrderWithPrices() {
-        List<String> filled_positions = new ArrayList<>();
-        stopOrderPriceMonitor.getFilledOrders();
-        for (String identifier : filled_positions) {
-            changeLocalPosition(this.allStopOrders.get(identifier));
+        Set<StopOrderDto> filled_positions = stopOrderPriceMonitor.getFilledOrders();
+        for (StopOrderDto stop : filled_positions) {
+            changeLocalPosition(stop);
         }
     }
 

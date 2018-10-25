@@ -6,9 +6,7 @@ import com.apssouza.mytrade.trading.forex.order.StopOrderDto;
 import com.apssouza.mytrade.trading.forex.order.StopOrderStatus;
 import com.apssouza.mytrade.trading.forex.order.StopOrderType;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class StopOrderPriceMonitor {
 
@@ -20,8 +18,8 @@ public class StopOrderPriceMonitor {
         this.priceMap = priceMap;
     }
 
-    public List<String> getFilledOrders() {
-        List<String> filled_positions = new ArrayList<>();
+    public Set<StopOrderDto> getFilledOrders() {
+        Set<StopOrderDto> filled_positions = new HashSet<>();
         for (Map.Entry<Integer, StopOrderDto> entry : this.allStopOrders.entrySet()) {
             StopOrderDto stopOrder = this.allStopOrders.get(entry.getKey());
             if (filled_positions.contains(stopOrder.getIdentifier())) {
@@ -38,7 +36,7 @@ public class StopOrderPriceMonitor {
         return filled_positions;
     }
 
-    private void filledOrderCheck(List<String> filledPositions, Map.Entry<Integer, StopOrderDto> entry, StopOrderDto stopOrder, PriceDto priceDto) {
+    private void filledOrderCheck(Set<StopOrderDto> filledPositions, Map.Entry<Integer, StopOrderDto> entry, StopOrderDto stopOrder, PriceDto priceDto) {
         if (stopOrder.getAction().equals(OrderAction.BUY)) {
             if(hasFilledBuyOrder(stopOrder, priceDto)){
                 updateStopOrderStatus(filledPositions, entry, stopOrder, priceDto);
@@ -52,10 +50,10 @@ public class StopOrderPriceMonitor {
         }
     }
 
-    private StopOrderDto updateStopOrderStatus(List<String> filledPositions, Map.Entry<Integer, StopOrderDto> entry, StopOrderDto stopOrder, PriceDto priceDto) {
+    private StopOrderDto updateStopOrderStatus(Set<StopOrderDto> filledPositions, Map.Entry<Integer, StopOrderDto> entry, StopOrderDto stopOrder, PriceDto priceDto) {
         stopOrder = new StopOrderDto(StopOrderStatus.FILLED, priceDto.getClose(), stopOrder);
         this.allStopOrders.put(entry.getKey(), stopOrder);
-        filledPositions.add(stopOrder.getIdentifier());
+        filledPositions.add(stopOrder);
         return stopOrder;
     }
 
