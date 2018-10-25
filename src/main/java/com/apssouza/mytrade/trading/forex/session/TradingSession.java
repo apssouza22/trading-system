@@ -39,6 +39,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
+import java.util.logging.Logger;
 
 public class TradingSession {
 
@@ -70,6 +71,8 @@ public class TradingSession {
     protected final BlockingQueue<Event> eventQueue;
     protected EventNotifier eventNotifier;
 
+    private static Logger log = Logger.getLogger(PortfolioHandler.class.getSimpleName());
+
     public TradingSession(
             BigDecimal equity,
             LocalDateTime startDate,
@@ -96,23 +99,8 @@ public class TradingSession {
         this.priceSqlDao = new SqlPriceDao(this.connection);
         this.signalDao = new SqlSignalDao(this.connection);
 
-        if (this.sessionType == SessionType.BACK_TEST) {
-            this.priceMemoryDao = new MemoryPriceDao(this.priceSqlDao);
-            this.priceHandler = new PriceHandler(this.priceMemoryDao);
-
-        } else {
-            this.priceHandler = new PriceHandler(this.priceSqlDao);
-        }
-
-        if (this.executionType == ExecutionType.BROKER) {
-            this.executionHandler = new InteractiveBrokerExecutionHandler(
-                    Properties.brokerHost,
-                    Properties.brokerPort,
-                    Properties.brokerClientId
-            );
-        } else {
-            this.executionHandler = new SimulatedExecutionHandler(this.priceHandler);
-        }
+        this.priceHandler = getPriceHandler();
+        this.executionHandler = getExecutionHandler();
 
         this.positionSizer = new PositionSizerFixed();
         this.portfolio = new Portfolio(this.equity);
@@ -146,26 +134,50 @@ public class TradingSession {
         );
 
         this.eventNotifier = getEventNotifier();
+        this.eventLoop = getEventLoop();
+    }
 
+    private EventLoop getEventLoop() {
         if (this.sessionType == SessionType.LIVE) {
-            this.eventLoop = new RealEventLoop(
+            return new RealEventLoop(
                     LocalDateTime.now(),
                     this.endDate,
                     Duration.ofSeconds(1),
                     new CurrentTimeCreator(),
                     this.priceHandler
             );
-        } else {
-            List<LocalDateTime> range = DateRangeHelper.getSecondsBetween(this.startDate, this.endDate);
-            this.eventLoop = new RangeEventLoop(range, this.priceHandler);
         }
+        List<LocalDateTime> range = DateRangeHelper.getSecondsBetween(this.startDate, this.endDate);
+        return new RangeEventLoop(range, this.priceHandler);
+
+    }
+
+    private ExecutionHandler getExecutionHandler() {
+        if (this.executionType == ExecutionType.BROKER) {
+            return new InteractiveBrokerExecutionHandler(
+                    Properties.brokerHost,
+                    Properties.brokerPort,
+                    Properties.brokerClientId
+            );
+        }
+        return new SimulatedExecutionHandler(this.priceHandler);
+
+    }
+
+    private PriceHandler getPriceHandler() {
+        if (this.sessionType == SessionType.BACK_TEST) {
+            this.priceMemoryDao = new MemoryPriceDao(this.priceSqlDao);
+            return new PriceHandler(this.priceMemoryDao);
+        }
+        return new PriceHandler(this.priceSqlDao);
+
     }
 
     private EventNotifier getEventNotifier() {
         EventNotifier eventNotifier = new EventNotifier();
         eventNotifier.addPropertyChangeListener(new FilledOrderListener(portfolio, historyHandler, eventQueue));
         eventNotifier.addPropertyChangeListener(new OrderCreatedListener(orderHandler));
-        eventNotifier.addPropertyChangeListener(new OrderFoundListener(executionHandler, historyHandler, orderHandler, eventQueue));
+        eventNotifier.addPropertyChangeListener(new OrderFoundListener(executionHandler, historyHandler, orderHandler, eventQueue, riskManagementHandler));
         eventNotifier.addPropertyChangeListener(new PortfolioChangedListener(reconciliationHandler));
         eventNotifier.addPropertyChangeListener(new SignalCreatedListener(riskManagementHandler, orderHandler, eventQueue, historyHandler));
         eventNotifier.addPropertyChangeListener(new StopOrderFilledListener(portfolio, historyHandler));
@@ -198,8 +210,8 @@ public class TradingSession {
         while (this.eventLoop.hasNext()) {
             LoopEvent loopEvent = this.eventLoop.next();
             LocalDateTime currentTime = loopEvent.getTimestamp();
-            System.out.println(currentTime);
-            if (!TradingHelper.isTradingTime(currentTime)){
+            log.info(currentTime.toString());
+            if (!TradingHelper.isTradingTime(currentTime)) {
                 continue;
             }
             if (lastDayProcessed.compareTo(currentTime.toLocalDate()) < 0) {

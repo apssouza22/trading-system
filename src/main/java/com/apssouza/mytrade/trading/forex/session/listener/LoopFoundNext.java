@@ -60,6 +60,7 @@ public class LoopFoundNext implements PropertyChangeListener {
 
     private void process(LoopEvent event) throws InterruptedException {
         LocalDateTime currentTime = event.getTimestamp();
+        this.executionHandler.setCurrentTime(currentTime);
         this.executionHandler.setPriceMap(event.getPrice());
         this.portfolioHandler.updatePortfolioValue(event);
         this.portfolioHandler.stopOrderHandle(event);
