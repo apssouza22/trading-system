@@ -74,6 +74,7 @@ public class SimulatedExecutionHandlerTest extends TestCase {
 
     @Test(expected = RuntimeException.class)
     public void executeOrderAddingUnitsWhenEditNotEnabled() {
+        Properties.trading_position_edit_enabled=false;
         OrderBuilder orderBuilder = new OrderBuilder();
         OrderDto order = orderBuilder.build();
         OrderDto order2 = orderBuilder.build();
