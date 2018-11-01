@@ -85,6 +85,7 @@ public class PortfolioHandler {
     }
 
     public void stopOrderHandle(Event event) throws InterruptedException {
+        this.executionHandler.processStopOrders();
         this.cancelOpenStopOrders();
         List<StopOrderDto> filledOrders = this.getFilledStopOrders();
         log.info("Total stop loss order filled " + filledOrders.size());
@@ -118,6 +119,7 @@ public class PortfolioHandler {
     }
 
     private void cancelOpenStopOrders() {
+
         if (!this.currentStopOrders.isEmpty()) {
             int count = this.executionHandler.cancelOpenStopOrders();
             log.info("Cancelled " + count + " stop loss");

@@ -28,4 +28,6 @@ public interface ExecutionHandler {
     void deleteStopOrders();
 
     StopOrderDto placeStopOrder(StopOrderDto stopLoss);
+
+    void processStopOrders();
 }

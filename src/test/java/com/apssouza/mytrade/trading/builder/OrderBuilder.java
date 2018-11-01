@@ -18,8 +18,9 @@ public class OrderBuilder {
     private LocalDateTime time = LocalDateTime.MIN;
     private OrderStatus status = OrderStatus.CREATED;
 
-    public void setSymbol(String symbol) {
+    public OrderBuilder setSymbol(String symbol) {
         this.symbol = symbol;
+        return this;
     }
 
     public OrderBuilder setIdentifier(String identifier) {

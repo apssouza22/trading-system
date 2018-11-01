@@ -70,4 +70,9 @@ public class InteractiveBrokerExecutionHandler implements ExecutionHandler {
         return null;
     }
 
+    @Override
+    public void processStopOrders() {
+
+    }
+
 }

@@ -28,12 +28,12 @@ public class StopOrderPriceMonitorTest extends TestCase {
     public void setUp() throws Exception {
         stopOrders = new HashMap<>();
         priceMap = new HashMap<>();
-        stopOrderPriceMonitor = new StopOrderPriceMonitor(stopOrders, priceMap);
+        stopOrderPriceMonitor = new StopOrderPriceMonitor(stopOrders);
     }
 
     @Test
     public void getFilledOrdersWithNoStopOrders() {
-        Set<StopOrderDto> filledOrders = stopOrderPriceMonitor.getFilledOrders();
+        Set<StopOrderDto> filledOrders = stopOrderPriceMonitor.getFilledOrders(priceMap);
         assertTrue(filledOrders.isEmpty());
     }
 
@@ -45,7 +45,7 @@ public class StopOrderPriceMonitorTest extends TestCase {
         stopOrders.put(1, stopOrderBuilder.build());
 
         priceMap.put("AUDUSD", new PriceDto(LocalDateTime.MIN, BigDecimal.TEN,BigDecimal.TEN, BigDecimal.TEN, BigDecimal.TEN,"AUDUSD"));
-        Set<StopOrderDto> filledOrders = stopOrderPriceMonitor.getFilledOrders();
+        Set<StopOrderDto> filledOrders = stopOrderPriceMonitor.getFilledOrders(priceMap);
         assertTrue(filledOrders.isEmpty());
     }
 
@@ -61,7 +61,7 @@ public class StopOrderPriceMonitorTest extends TestCase {
 
         priceMap.put("AUDUSD", new PriceDto(LocalDateTime.MIN, BigDecimal.TEN,BigDecimal.TEN, BigDecimal.TEN, BigDecimal.TEN,"AUDUSD"));
 
-        Set<StopOrderDto> filledOrders = stopOrderPriceMonitor.getFilledOrders();
+        Set<StopOrderDto> filledOrders = stopOrderPriceMonitor.getFilledOrders(priceMap);
         assertEquals(1, filledOrders.size());
     }
 
@@ -78,7 +78,7 @@ public class StopOrderPriceMonitorTest extends TestCase {
 
         priceMap.put("AUDUSD", new PriceDto(LocalDateTime.MIN, BigDecimal.TEN,BigDecimal.TEN, BigDecimal.TEN, BigDecimal.TEN,"AUDUSD"));
 
-        Set<StopOrderDto> filledOrders = stopOrderPriceMonitor.getFilledOrders();
+        Set<StopOrderDto> filledOrders = stopOrderPriceMonitor.getFilledOrders(priceMap);
         assertEquals(1, filledOrders.size());
         assertEquals(stopLoss.getType(),filledOrders.iterator().next().getType());
         assertEquals(StopOrderStatus.FILLED,filledOrders.iterator().next().getStatus());
@@ -98,7 +98,7 @@ public class StopOrderPriceMonitorTest extends TestCase {
 
         priceMap.put("AUDUSD", new PriceDto(LocalDateTime.MIN, BigDecimal.ZERO,BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO,"AUDUSD"));
 
-        Set<StopOrderDto> filledOrders = stopOrderPriceMonitor.getFilledOrders();
+        Set<StopOrderDto> filledOrders = stopOrderPriceMonitor.getFilledOrders(priceMap);
         assertEquals(1, filledOrders.size());
         assertEquals(StopOrderType.TAKE_PROFIT,filledOrders.iterator().next().getType());
         assertEquals(StopOrderStatus.FILLED,filledOrders.iterator().next().getStatus());
@@ -118,7 +118,7 @@ public class StopOrderPriceMonitorTest extends TestCase {
 
         priceMap.put("AUDUSD", new PriceDto(LocalDateTime.MIN, BigDecimal.TEN,BigDecimal.TEN, BigDecimal.TEN, BigDecimal.TEN,"AUDUSD"));
 
-        Set<StopOrderDto> filledOrders = stopOrderPriceMonitor.getFilledOrders();
+        Set<StopOrderDto> filledOrders = stopOrderPriceMonitor.getFilledOrders(priceMap);
         assertEquals(1, filledOrders.size());
         assertEquals(StopOrderType.TAKE_PROFIT,filledOrders.iterator().next().getType());
         assertEquals(StopOrderStatus.FILLED,filledOrders.iterator().next().getStatus());
@@ -139,7 +139,7 @@ public class StopOrderPriceMonitorTest extends TestCase {
 
         priceMap.put("AUDUSD", new PriceDto(LocalDateTime.MIN, BigDecimal.ZERO,BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO,"AUDUSD"));
 
-        Set<StopOrderDto> filledOrders = stopOrderPriceMonitor.getFilledOrders();
+        Set<StopOrderDto> filledOrders = stopOrderPriceMonitor.getFilledOrders(priceMap);
         assertEquals(1, filledOrders.size());
         assertEquals(StopOrderType.STOP_LOSS,filledOrders.iterator().next().getType());
         assertEquals(StopOrderStatus.FILLED,filledOrders.iterator().next().getStatus());

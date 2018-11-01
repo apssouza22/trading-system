@@ -30,7 +30,7 @@ public class SimulatedExecutionHandler implements ExecutionHandler {
 
 
     public SimulatedExecutionHandler() {
-        stopOrderPriceMonitor = new StopOrderPriceMonitor(allStopOrders, priceMap);
+        stopOrderPriceMonitor = new StopOrderPriceMonitor(allStopOrders);
     }
 
     public Map<String, FilledOrderDto> getPortfolio() {
@@ -119,7 +119,6 @@ public class SimulatedExecutionHandler implements ExecutionHandler {
     }
 
     public Map<Integer, StopOrderDto> getStopLossOrders() {
-        this.processStopOrderWithPrices();
         return this.allStopOrders;
     }
 
@@ -147,7 +146,7 @@ public class SimulatedExecutionHandler implements ExecutionHandler {
     }
 
     public Integer cancelOpenStopOrders() {
-        this.processStopOrderWithPrices();
+
         Integer count = 0;
         for (Map.Entry<Integer, StopOrderDto> entry : this.allStopOrders.entrySet()) {
             StopOrderDto stop_loss = this.allStopOrders.get(entry.getKey());
@@ -167,14 +166,17 @@ public class SimulatedExecutionHandler implements ExecutionHandler {
         this.allStopOrders = new ConcurrentHashMap<>();
     }
 
-    public void processStopOrderWithPrices() {
-        Set<StopOrderDto> filled_positions = stopOrderPriceMonitor.getFilledOrders();
+    /**
+     * Check if the stop orders has been filled. Change the position based in the result
+     */
+    public void processStopOrders() {
+        Set<StopOrderDto> filled_positions = stopOrderPriceMonitor.getFilledOrders(this.priceMap);
         for (StopOrderDto stop : filled_positions) {
             changeLocalPosition(stop);
         }
     }
 
-    public void changeLocalPosition(StopOrderDto stop_order) {
+    private void changeLocalPosition(StopOrderDto stop_order) {
         if (!this.positions.containsKey(stop_order.getSymbol())) {
             addNewPosition(stop_order);
             return;
@@ -207,6 +209,7 @@ public class SimulatedExecutionHandler implements ExecutionHandler {
 
     private FilledOrderDto handleSameDirection(StopOrderDto stop_order, FilledOrderDto filledOrderDto) {
         filledOrderDto = new FilledOrderDto(filledOrderDto.getQuantity() + stop_order.getQuantity(), filledOrderDto);
+        positions.put(filledOrderDto.getIdentifier(), filledOrderDto);
         return filledOrderDto;
     }
 
@@ -215,6 +218,7 @@ public class SimulatedExecutionHandler implements ExecutionHandler {
             this.positions.remove(stop_order.getSymbol());
         } else {
             filledOrderDto = new FilledOrderDto(filledOrderDto.getQuantity() - stop_order.getQuantity(), filledOrderDto);
+            this.positions.put(filledOrderDto.getIdentifier(), filledOrderDto);
         }
         return filledOrderDto;
     }

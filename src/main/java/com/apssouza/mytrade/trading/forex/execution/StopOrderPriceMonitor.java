@@ -11,14 +11,12 @@ import java.util.*;
 public class StopOrderPriceMonitor {
 
     private final Map<Integer, StopOrderDto> allStopOrders;
-    private final Map<String, PriceDto> priceMap;
 
-    public StopOrderPriceMonitor(Map<Integer, StopOrderDto> allStopOrders, Map<String, PriceDto> priceMap) {
+    public StopOrderPriceMonitor(Map<Integer, StopOrderDto> allStopOrders) {
         this.allStopOrders = allStopOrders;
-        this.priceMap = priceMap;
     }
 
-    public Set<StopOrderDto> getFilledOrders() {
+    public Set<StopOrderDto> getFilledOrders(Map<String, PriceDto> priceMap) {
         Set<StopOrderDto> filled_positions = new HashSet<>();
         for (Map.Entry<Integer, StopOrderDto> entry : this.allStopOrders.entrySet()) {
             StopOrderDto stopOrder = this.allStopOrders.get(entry.getKey());
