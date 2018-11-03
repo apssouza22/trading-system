@@ -10,7 +10,7 @@ import com.apssouza.mytrade.trading.forex.risk.stoporder.StopOrderCreator;
 import com.apssouza.mytrade.trading.forex.session.event.Event;
 import com.apssouza.mytrade.trading.forex.session.event.SignalCreatedEvent;
 import com.apssouza.mytrade.trading.misc.helper.config.Properties;
-import com.apssouza.mytrade.trading.forex.session.event.LoopEvent;
+import com.apssouza.mytrade.trading.forex.session.event.PriceChangedEvent;
 
 import java.util.*;
 import java.util.function.Consumer;

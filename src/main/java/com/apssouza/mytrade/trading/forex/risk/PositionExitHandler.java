@@ -9,7 +9,7 @@ import com.apssouza.mytrade.trading.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.forex.portfolio.PositionType;
 import com.apssouza.mytrade.trading.forex.session.event.PriceChangedEvent;
 import com.apssouza.mytrade.trading.misc.helper.time.MarketTimeHelper;
-import com.apssouza.mytrade.trading.forex.session.event.LoopEvent;
+import com.apssouza.mytrade.trading.forex.session.event.PriceChangedEvent;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

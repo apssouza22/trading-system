@@ -1,17 +1,13 @@
 package com.apssouza.mytrade.trading.forex.feed;
 
-import com.apssouza.mytrade.feed.price.PriceDto;
 import com.apssouza.mytrade.feed.price.PriceHandler;
 import com.apssouza.mytrade.trading.forex.session.event.Event;
 import com.apssouza.mytrade.trading.forex.session.event.EventType;
-import com.apssouza.mytrade.trading.forex.session.event.LoopEvent;
 import com.apssouza.mytrade.trading.forex.session.event.PriceChangedEvent;
 import com.apssouza.mytrade.trading.misc.helper.TradingHelper;
 import com.apssouza.mytrade.trading.misc.helper.time.DateTimeHelper;
-import com.apssouza.mytrade.trading.misc.helper.time.MarketTimeHelper;
 
 import java.time.LocalDateTime;
-import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.BlockingQueue;
@@ -34,7 +30,7 @@ public class RealTimeDbPriceStream implements PriceStream {
                     return;
                 }
                 PriceChangedEvent event = new PriceChangedEvent(
-                        EventType.LOOP_FOUND_NEXT,
+                        EventType.PRICE_CHANGED,
                         time,
                         priceHandler.getPriceSymbolMapped(time)
                 );

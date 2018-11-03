@@ -57,8 +57,9 @@ public class PortfolioHandler {
 
     public void createStopOrder(Event event) {
         if (portfolio.getPositions().isEmpty()) {
-            log.info("Creating stop loss...");
+            return;
         }
+        log.info("Creating stop loss...");
         this.executionHandler.deleteStopOrders();
         MultiPositionHandler.deleteAllMaps();
 

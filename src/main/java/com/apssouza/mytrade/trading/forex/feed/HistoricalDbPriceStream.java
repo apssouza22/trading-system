@@ -38,7 +38,7 @@ public class HistoricalDbPriceStream implements PriceStream{
                 lastDayProcessed = current.toLocalDate();
             }
             PriceChangedEvent event = new PriceChangedEvent(
-                    EventType.LOOP_FOUND_NEXT,
+                    EventType.PRICE_CHANGED,
                     current,
                     priceHandler.getPriceSymbolMapped(current)
             );

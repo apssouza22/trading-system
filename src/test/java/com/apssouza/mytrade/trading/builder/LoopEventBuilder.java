@@ -2,7 +2,6 @@ package com.apssouza.mytrade.trading.builder;
 
 import com.apssouza.mytrade.feed.price.PriceDto;
 import com.apssouza.mytrade.trading.forex.session.event.EventType;
-import com.apssouza.mytrade.trading.forex.session.event.LoopEvent;
 import com.apssouza.mytrade.trading.forex.session.event.PriceChangedEvent;
 
 import java.math.BigDecimal;
@@ -30,6 +29,6 @@ public class LoopEventBuilder {
     public PriceChangedEvent build() {
         if (time == null)
             time = LocalDateTime.MIN;
-        return new PriceChangedEvent(EventType.LOOP_FOUND_NEXT, time, priceMap);
+        return new PriceChangedEvent(EventType.PRICE_CHANGED, time, priceMap);
     }
 }
