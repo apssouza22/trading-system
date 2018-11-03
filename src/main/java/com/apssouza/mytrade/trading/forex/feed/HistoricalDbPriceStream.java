@@ -6,6 +6,7 @@ import com.apssouza.mytrade.trading.forex.session.SessionType;
 import com.apssouza.mytrade.trading.forex.session.event.Event;
 import com.apssouza.mytrade.trading.forex.session.event.EventType;
 import com.apssouza.mytrade.trading.forex.session.event.PriceChangedEvent;
+import com.apssouza.mytrade.trading.forex.session.event.SimulationFinishedEvent;
 import com.apssouza.mytrade.trading.misc.helper.TradingHelper;
 import com.apssouza.mytrade.trading.misc.helper.config.Properties;
 
@@ -43,14 +44,24 @@ public class HistoricalDbPriceStream implements PriceStream{
                     priceHandler.getPriceSymbolMapped(current)
             );
 
-            try {
-                eventQueue.put(event);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
+            addToQueue(event);
             current = current.plusSeconds(1L);
         }
+        SimulationFinishedEvent endEvent = new SimulationFinishedEvent(
+                EventType.PRICE_CHANGED,
+                current,
+                priceHandler.getPriceSymbolMapped(current)
+        );
+        addToQueue(endEvent);
 
+    }
+
+    private void addToQueue(Event event) {
+        try {
+            eventQueue.put(event);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     protected void processStartDay(LocalDateTime currentTime) {
