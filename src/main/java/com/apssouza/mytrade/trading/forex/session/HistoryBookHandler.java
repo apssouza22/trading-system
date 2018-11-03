@@ -8,7 +8,7 @@ import com.apssouza.mytrade.trading.forex.portfolio.Portfolio;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.forex.session.event.Event;
 import com.apssouza.mytrade.trading.forex.statistics.TransactionState;
-import com.apssouza.mytrade.trading.forex.session.event.LoopEvent;
+import com.apssouza.mytrade.trading.forex.session.event.PriceChangedEvent;
 
 import java.util.LinkedList;
 import java.util.List;

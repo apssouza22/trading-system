@@ -7,8 +7,9 @@ import com.apssouza.mytrade.trading.forex.portfolio.ExitReason;
 import com.apssouza.mytrade.trading.forex.portfolio.Portfolio;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.forex.portfolio.PositionType;
+import com.apssouza.mytrade.trading.forex.session.event.PriceChangedEvent;
 import com.apssouza.mytrade.trading.misc.helper.time.MarketTimeHelper;
-import com.apssouza.mytrade.trading.forex.session.event.LoopEvent;
+import com.apssouza.mytrade.trading.forex.session.event.PriceChangedEvent;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public class PositionExitHandler {
         this.priceHandler = priceHandler;
     }
 
-    public List<Position> process(LoopEvent event, List<SignalDto> signals) {
+    public List<Position> process(PriceChangedEvent event, List<SignalDto> signals) {
         log.info("Processing exits...");
         List<Position> exitedPositions = new ArrayList<>();
         for (Map.Entry<String, Position> entry : this.portfolio.getPositions().entrySet()) {

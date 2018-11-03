@@ -6,6 +6,7 @@ import com.apssouza.mytrade.trading.builder.PositionExitBuilder;
 import com.apssouza.mytrade.trading.builder.SignalBuilder;
 import com.apssouza.mytrade.trading.forex.portfolio.*;
 import com.apssouza.mytrade.trading.forex.session.event.LoopEvent;
+import com.apssouza.mytrade.trading.forex.session.event.PriceChangedEvent;
 import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,7 +36,7 @@ public class PositionExitHandlerTest extends TestCase {
     public void processWithOnePositionExitedWithCounterSignalSell() {
 
         loopEventBuilder.createPriceMap(BigDecimal.valueOf(1.003));
-        LoopEvent loopEvent = loopEventBuilder.build();
+        PriceChangedEvent loopEvent = loopEventBuilder.build();
 
         exitBuilder.addPosition(PositionType.LONG);
         PositionExitHandler handler = exitBuilder.build();
@@ -50,7 +51,7 @@ public class PositionExitHandlerTest extends TestCase {
     @Test
     public void processWithOnePositionExitedWithCounterSignalBuy() {
         loopEventBuilder.createPriceMap(BigDecimal.valueOf(1.003));
-        LoopEvent loopEvent = loopEventBuilder.build();
+        PriceChangedEvent loopEvent = loopEventBuilder.build();
 
         exitBuilder.addPosition(PositionType.SHORT);
         PositionExitHandler handler = exitBuilder.build();
@@ -66,7 +67,7 @@ public class PositionExitHandlerTest extends TestCase {
     @Test
     public void processWithNoPositionExitedWithCounterSignalBuy() {
         loopEventBuilder.createPriceMap(BigDecimal.valueOf(1.003));
-        LoopEvent loopEvent = loopEventBuilder.build();
+        PriceChangedEvent loopEvent = loopEventBuilder.build();
 
         exitBuilder.addPosition(PositionType.LONG);
         PositionExitHandler handler = exitBuilder.build();
@@ -83,7 +84,7 @@ public class PositionExitHandlerTest extends TestCase {
     @Test
     public void processWithNoPositionExitedWithCounterSignalSell() {
         loopEventBuilder.createPriceMap(BigDecimal.valueOf(1.003));
-        LoopEvent loopEvent = loopEventBuilder.build();
+        PriceChangedEvent loopEvent = loopEventBuilder.build();
 
         exitBuilder.addPosition(PositionType.SHORT);
         PositionExitHandler handler = exitBuilder.build();
@@ -100,7 +101,7 @@ public class PositionExitHandlerTest extends TestCase {
     public void processWithEndOfDay() {
         loopEventBuilder.createPriceMap(BigDecimal.valueOf(1.003));
         loopEventBuilder.setTime(LocalDateTime.of(2018,1,1,19,1));
-        LoopEvent loopEvent = loopEventBuilder.build();
+        PriceChangedEvent loopEvent = loopEventBuilder.build();
 
         exitBuilder.addPosition(PositionType.SHORT);
         PositionExitHandler handler = exitBuilder.build();
@@ -117,7 +118,7 @@ public class PositionExitHandlerTest extends TestCase {
     public void processWithNoSignal() {
         loopEventBuilder.createPriceMap(BigDecimal.valueOf(1.003));
         loopEventBuilder.setTime(LocalDateTime.of(2018,1,1,1,1));
-        LoopEvent loopEvent = loopEventBuilder.build();
+        PriceChangedEvent loopEvent = loopEventBuilder.build();
 
         exitBuilder.addPosition(PositionType.SHORT);
         PositionExitHandler handler = exitBuilder.build();

@@ -3,6 +3,7 @@ package com.apssouza.mytrade.trading.forex.portfolio;
 import com.apssouza.mytrade.trading.builder.LoopEventBuilder;
 import com.apssouza.mytrade.trading.builder.PositionBuilder;
 import com.apssouza.mytrade.trading.forex.session.event.LoopEvent;
+import com.apssouza.mytrade.trading.forex.session.event.PriceChangedEvent;
 import junit.framework.TestCase;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,7 +22,7 @@ public class PortfolioTest extends TestCase {
         Position ps = positionBuilder.build();
         LoopEventBuilder loopEventBuilder = new LoopEventBuilder();
         loopEventBuilder.createPriceMap(BigDecimal.valueOf(10));
-        LoopEvent loopEvent = loopEventBuilder.build();
+        PriceChangedEvent loopEvent = loopEventBuilder.build();
         portfolio.addNewPosition(ps);
         portfolio.updatePortfolioValue(loopEvent);
 
