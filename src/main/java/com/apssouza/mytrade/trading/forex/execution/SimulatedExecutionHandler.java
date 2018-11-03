@@ -19,10 +19,9 @@ import java.util.logging.Logger;
 public class SimulatedExecutionHandler implements ExecutionHandler {
 
     private static Logger log = Logger.getLogger(SimulatedExecutionHandler.class.getSimpleName());
-    private Map<Integer, StopOrderDto> stopLossOrders = new LinkedHashMap<>();
     private Map<Integer, StopOrderDto> limitOrders = new LinkedHashMap<>();
     private LocalDateTime current_time;
-    private Map<String, PriceDto> priceMap = new ConcurrentHashMap<>();
+    private Map<String, PriceDto> priceMap = new LinkedHashMap<>();
     private final StopOrderPriceMonitor stopOrderPriceMonitor;
     private Map<Integer, StopOrderDto> allStopOrders = new ConcurrentHashMap<>();
     private Map<String, FilledOrderDto> positions = new ConcurrentHashMap<>();

@@ -1,6 +1,5 @@
 package com.apssouza.mytrade.trading.forex.order;
 
-import com.apssouza.mytrade.feed.signal.SignalDto;
 import com.apssouza.mytrade.trading.builder.OrderHandlerBuilder;
 import com.apssouza.mytrade.trading.builder.PositionBuilder;
 import com.apssouza.mytrade.trading.builder.SignalBuilder;
@@ -16,9 +15,7 @@ import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 @RunWith(MockitoJUnitRunner.class)
 public class OrderHandlerTest extends TestCase {

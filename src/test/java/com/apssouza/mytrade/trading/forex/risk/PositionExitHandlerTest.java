@@ -5,7 +5,6 @@ import com.apssouza.mytrade.trading.builder.LoopEventBuilder;
 import com.apssouza.mytrade.trading.builder.PositionExitBuilder;
 import com.apssouza.mytrade.trading.builder.SignalBuilder;
 import com.apssouza.mytrade.trading.forex.portfolio.*;
-import com.apssouza.mytrade.trading.forex.session.event.LoopEvent;
 import com.apssouza.mytrade.trading.forex.session.event.PriceChangedEvent;
 import junit.framework.TestCase;
 import org.junit.Before;

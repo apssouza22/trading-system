@@ -1,24 +1,20 @@
 package com.apssouza.mytrade.trading.forex.risk;
 
-import com.apssouza.mytrade.trading.builder.*;
-import com.apssouza.mytrade.trading.forex.order.*;
-import com.apssouza.mytrade.trading.forex.portfolio.Portfolio;
+import com.apssouza.mytrade.trading.builder.LoopEventBuilder;
+import com.apssouza.mytrade.trading.builder.PositionBuilder;
+import com.apssouza.mytrade.trading.builder.RiskManagementBuilder;
+import com.apssouza.mytrade.trading.builder.StopOrderBuilder;
+import com.apssouza.mytrade.trading.forex.order.StopOrderDto;
+import com.apssouza.mytrade.trading.forex.order.StopOrderType;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;
-import com.apssouza.mytrade.trading.forex.risk.stoporder.fixed.StopOrderCreatorFixed;
 import com.apssouza.mytrade.trading.misc.helper.config.Properties;
-import com.apssouza.mytrade.trading.misc.loop.EventLoop;
-import com.oracle.jrockit.jfr.client.EventSettingsBuilder;
 import junit.framework.TestCase;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.EnumMap;
-import java.util.Optional;
 
 @RunWith(MockitoJUnitRunner.class)
 public class RiskManagementHandlerTest extends TestCase {

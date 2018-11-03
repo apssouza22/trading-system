@@ -14,9 +14,9 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.*;
-
-import static org.junit.Assert.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 @RunWith(MockitoJUnitRunner.class)
 public class StopOrderPriceMonitorTest extends TestCase {
