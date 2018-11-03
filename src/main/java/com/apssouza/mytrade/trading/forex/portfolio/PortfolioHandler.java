@@ -129,12 +129,12 @@ public class PortfolioHandler {
         }
     }
 
-    public synchronized void processExits(LoopEvent event, List<SignalDto> signals) throws InterruptedException {
+    public synchronized void processExits(PriceChangedEvent event, List<SignalDto> signals) throws InterruptedException {
         List<Position> exitedPositionss = this.positionExitHandler.process(event, signals);
         this.createOrderFromClosedPosition(exitedPositionss, event);
     }
 
-    private void createOrderFromClosedPosition(List<Position> positions, LoopEvent event) throws InterruptedException {
+    private void createOrderFromClosedPosition(List<Position> positions, PriceChangedEvent event) throws InterruptedException {
         for (Position position : positions) {
             if (position.getStatus() == PositionStatus.CLOSED) {
                 OrderDto order = this.orderHandler.createOrderFromClosedPosition(position, event.getTimestamp());

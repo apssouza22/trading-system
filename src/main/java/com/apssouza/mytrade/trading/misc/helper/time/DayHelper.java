@@ -54,7 +54,6 @@ public class DayHelper {
     public static boolean isSaturday(Date date) {
         Calendar c1 = Calendar.getInstance();
         c1.setTime(date);
-        System.out.println(Calendar.SATURDAY);
         return c1.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY;
     }
 

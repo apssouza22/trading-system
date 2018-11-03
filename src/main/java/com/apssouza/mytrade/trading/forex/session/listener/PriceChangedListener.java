@@ -1,6 +1,5 @@
 package com.apssouza.mytrade.trading.forex.session.listener;
 
-import com.apssouza.mytrade.feed.price.PriceDto;
 import com.apssouza.mytrade.feed.signal.SignalDto;
 import com.apssouza.mytrade.feed.signal.SignalHandler;
 import com.apssouza.mytrade.trading.forex.execution.ExecutionHandler;
@@ -11,17 +10,15 @@ import com.apssouza.mytrade.trading.forex.portfolio.PortfolioHandler;
 import com.apssouza.mytrade.trading.forex.session.MultiPositionHandler;
 import com.apssouza.mytrade.trading.forex.session.SessionType;
 import com.apssouza.mytrade.trading.forex.session.event.*;
-import com.apssouza.mytrade.trading.misc.helper.TradingHelper;
 import com.apssouza.mytrade.trading.misc.helper.config.Properties;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 
-public class LoopFoundNext implements PropertyChangeListener {
+public class PriceChangedListener implements PropertyChangeListener {
 
     private final ExecutionHandler executionHandler;
     private final PortfolioHandler portfolioHandler;
@@ -29,7 +26,7 @@ public class LoopFoundNext implements PropertyChangeListener {
     private final OrderDao orderDao;
     private final BlockingQueue<Event> eventQueue;
 
-    public LoopFoundNext(
+    public PriceChangedListener(
             ExecutionHandler executionHandler,
             PortfolioHandler portfolioHandler,
             SignalHandler signalHandler,
@@ -46,10 +43,10 @@ public class LoopFoundNext implements PropertyChangeListener {
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         Event e = (Event) evt.getNewValue();
-        if (!(e instanceof LoopEvent)) {
+        if (!(e instanceof PriceChangedEvent)) {
             return;
         }
-        LoopEvent event = (LoopEvent) e;
+        PriceChangedEvent event = (PriceChangedEvent) e;
 
         try {
             process(event);
@@ -58,7 +55,7 @@ public class LoopFoundNext implements PropertyChangeListener {
         }
     }
 
-    private void process(LoopEvent event) throws InterruptedException {
+    private void process(PriceChangedEvent event) throws InterruptedException {
         LocalDateTime currentTime = event.getTimestamp();
         this.executionHandler.setCurrentTime(currentTime);
         this.executionHandler.setPriceMap(event.getPrice());

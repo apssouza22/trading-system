@@ -10,6 +10,9 @@ import com.apssouza.mytrade.feed.signal.SqlSignalDao;
 import com.apssouza.mytrade.trading.forex.execution.ExecutionHandler;
 import com.apssouza.mytrade.trading.forex.execution.InteractiveBrokerExecutionHandler;
 import com.apssouza.mytrade.trading.forex.execution.SimulatedExecutionHandler;
+import com.apssouza.mytrade.trading.forex.feed.HistoricalDbPriceStream;
+import com.apssouza.mytrade.trading.forex.feed.PriceStream;
+import com.apssouza.mytrade.trading.forex.feed.RealTimeDbPriceStream;
 import com.apssouza.mytrade.trading.forex.order.MemoryOrderDao;
 import com.apssouza.mytrade.trading.forex.order.OrderHandler;
 import com.apssouza.mytrade.trading.forex.portfolio.Portfolio;
@@ -24,19 +27,12 @@ import com.apssouza.mytrade.trading.forex.risk.stoporder.fixed.StopOrderCreatorF
 import com.apssouza.mytrade.trading.forex.session.event.Event;
 import com.apssouza.mytrade.trading.forex.session.event.EventNotifier;
 import com.apssouza.mytrade.trading.forex.session.event.EventProcessor;
-import com.apssouza.mytrade.trading.forex.session.event.LoopEvent;
 import com.apssouza.mytrade.trading.forex.session.listener.*;
-import com.apssouza.mytrade.trading.misc.helper.TradingHelper;
 import com.apssouza.mytrade.trading.misc.helper.config.Properties;
-import com.apssouza.mytrade.trading.misc.helper.time.DateRangeHelper;
-import com.apssouza.mytrade.trading.misc.loop.*;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
-import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.logging.Logger;
@@ -64,7 +60,7 @@ public class TradingSession {
     protected SignalHandler signalHandler;
     protected ReconciliationHandler reconciliationHandler;
     protected HistoryBookHandler historyHandler;
-    protected EventLoop eventLoop;
+    protected PriceStream priceStream;
     protected PortfolioHandler portfolioHandler;
     protected boolean processedEndDay;
     protected RiskManagementHandler riskManagementHandler;
@@ -134,22 +130,17 @@ public class TradingSession {
         );
 
         this.eventNotifier = getEventNotifier();
-        this.eventLoop = getEventLoop();
+        this.priceStream = getPriceStream();
     }
 
-    private EventLoop getEventLoop() {
+    private PriceStream getPriceStream() {
         if (this.sessionType == SessionType.LIVE) {
-            return new RealEventLoop(
-                    LocalDateTime.now(),
-                    this.endDate,
-                    Duration.ofSeconds(1),
-                    new CurrentTimeCreator(),
+            return new RealTimeDbPriceStream(
+                    eventQueue,
                     this.priceHandler
             );
         }
-        List<LocalDateTime> range = DateRangeHelper.getSecondsBetween(this.startDate, this.endDate);
-        return new RangeEventLoop(range, this.priceHandler);
-
+        return new HistoricalDbPriceStream(eventQueue, priceHandler, priceMemoryDao);
     }
 
     private ExecutionHandler getExecutionHandler() {
@@ -181,15 +172,10 @@ public class TradingSession {
         eventNotifier.addPropertyChangeListener(new PortfolioChangedListener(reconciliationHandler));
         eventNotifier.addPropertyChangeListener(new SignalCreatedListener(riskManagementHandler, orderHandler, eventQueue, historyHandler));
         eventNotifier.addPropertyChangeListener(new StopOrderFilledListener(portfolio, historyHandler));
-        eventNotifier.addPropertyChangeListener(new LoopFoundNext(executionHandler, portfolioHandler, signalHandler, orderDao, eventQueue));
+        eventNotifier.addPropertyChangeListener(new PriceChangedListener(executionHandler, portfolioHandler, signalHandler, orderDao, eventQueue));
         return eventNotifier;
     }
 
-
-    protected void processStartDay(LocalDateTime currentTime) {
-        if (Properties.sessionType == SessionType.BACK_TEST)
-            this.priceMemoryDao.loadData(currentTime, currentTime.plusDays(1));
-    }
 
     public void start() {
         try {
@@ -203,24 +189,9 @@ public class TradingSession {
         printSessionStartMsg();
         this.executionHandler.closeAllPositions();
         this.executionHandler.cancelOpenLimitOrders();
-        this.priceMemoryDao.loadData(startDate, startDate.plusDays(30));
-        LocalDate lastDayProcessed = this.startDate.toLocalDate().minusDays(1);
-
+        this.priceMemoryDao.loadData(startDate, startDate.plusDays(1));
         startEventProcessor();
-        while (this.eventLoop.hasNext()) {
-            LoopEvent loopEvent = this.eventLoop.next();
-            LocalDateTime currentTime = loopEvent.getTimestamp();
-            log.info(currentTime.toString());
-            if (!TradingHelper.isTradingTime(currentTime)) {
-                continue;
-            }
-            if (lastDayProcessed.compareTo(currentTime.toLocalDate()) < 0) {
-                this.processStartDay(currentTime);
-                lastDayProcessed = currentTime.toLocalDate();
-            }
-            eventQueue.put(loopEvent);
-            this.eventLoop.sleep();
-        }
+        priceStream.start(startDate, endDate);
     }
 
     private void printSessionStartMsg() {
