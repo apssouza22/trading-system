@@ -62,6 +62,12 @@ public class PriceChangedListener implements PropertyChangeListener {
         this.portfolioHandler.updatePortfolioValue(event);
         this.portfolioHandler.stopOrderHandle(event);
 
+        List<SignalDto> signals = processSignals(event, currentTime);
+        portfolioHandler.processExits(event, signals);
+        processOrders(event, currentTime);
+    }
+
+    private List<SignalDto> processSignals(PriceChangedEvent event, LocalDateTime currentTime) throws InterruptedException {
         List<SignalDto> signals;
         if (Properties.sessionType == SessionType.LIVE) {
             signals = this.signalHandler.getRealtimeSignal(Properties.systemName);
@@ -77,10 +83,16 @@ public class PriceChangedListener implements PropertyChangeListener {
                     signal
             ));
         }
-        this.portfolioHandler.processExits(event, signals);
+        return signals;
+    }
 
+    private void processOrders(PriceChangedEvent event, LocalDateTime currentTime) throws InterruptedException {
         List<OrderDto> orders = this.orderDao.getOrderByStatus(OrderStatus.CREATED);
         List<OrderDto> orderList = MultiPositionHandler.createPositionIdentifier(orders);
+
+        if (orderList.isEmpty())
+            return;
+
         eventQueue.put(new OrderFoundEvent(
                 EventType.ORDER_FOUND,
                 currentTime,

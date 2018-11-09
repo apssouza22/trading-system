@@ -173,6 +173,7 @@ public class TradingSession {
         eventNotifier.addPropertyChangeListener(new SignalCreatedListener(riskManagementHandler, orderHandler, eventQueue, historyHandler));
         eventNotifier.addPropertyChangeListener(new StopOrderFilledListener(portfolio, historyHandler));
         eventNotifier.addPropertyChangeListener(new PriceChangedListener(executionHandler, portfolioHandler, signalHandler, orderDao, eventQueue));
+        eventNotifier.addPropertyChangeListener(new SessionFinishedListener(historyHandler));
         return eventNotifier;
     }
 
@@ -207,15 +208,11 @@ public class TradingSession {
                 eventQueue,
                 historyHandler,
                 portfolioHandler,
-                eventNotifier
+                eventNotifier,
+                endDate
         );
         eventProcessor.start();
     }
-
-    private boolean isEndOfDay(LocalDateTime currentTime) {
-        return currentTime.getHour() > 22;
-    }
-
 
 }
 

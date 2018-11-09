@@ -17,6 +17,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.BlockingQueue;
 import java.util.logging.Logger;
 
@@ -81,6 +82,10 @@ public class OrderFoundListener implements PropertyChangeListener {
     }
 
     private void processNewOrder(List<String> processedOrders, OrderDto order, OrderFoundEvent event) throws InterruptedException {
+        Optional<OrderDto> oOrder = orderHandler.getOrderById(order.getId());
+        if (!oOrder.isPresent() || oOrder.get().getStatus() != OrderStatus.CREATED){
+            return;
+        }
         FilledOrderDto filledOrder = executionHandler.executeOrder(order);
         if (filledOrder != null) {
             this.eventQueue.put(new OrderFilledEvent(

@@ -38,6 +38,9 @@ class ShortPositionStrategy implements CreatorStrategy {
         if (last_close.compareTo(tsPrice) < 0) {
             return Optional.empty();
         }
+        if (position.getPlacedStopLoss() == null){
+            return Optional.empty();
+        }
         if (!position.getPlacedStopLoss().getType().equals(StopOrderType.TRAILLING_STOP)) {
             stopPrice = last_close.add(distanceObject.getTraillingStopDistance());
         } else {

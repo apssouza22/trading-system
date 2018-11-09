@@ -6,7 +6,6 @@ import com.apssouza.mytrade.trading.forex.portfolio.Portfolio;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.forex.portfolio.PositionType;
 import com.apssouza.mytrade.trading.forex.risk.PositionSizer;
-import com.apssouza.mytrade.trading.forex.session.event.Event;
 import com.apssouza.mytrade.trading.forex.session.event.SignalCreatedEvent;
 
 import java.math.BigDecimal;
@@ -77,4 +76,7 @@ public class OrderHandler {
     }
 
 
+    public Optional<OrderDto> getOrderById(Integer id) {
+        return orderDao.getOrderById(id);
+    }
 }

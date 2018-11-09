@@ -1,9 +1,6 @@
 package com.apssouza.mytrade.trading.forex.order;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -36,9 +33,19 @@ public class MemoryOrderDao implements  OrderDao {
         List<OrderDto> orders = new ArrayList<>();
         for (Map.Entry<Integer, OrderDto> entry : MemoryOrderDao.ORDERS.entrySet()) {
             if (entry.getValue().getStatus().equals(status)) {
-                orders.add(entry.getValue());
+                orders.add(new OrderDto(
+                        entry.getValue().getId(),
+                        entry.getValue())
+                );
             }
         }
         return orders;
+    }
+
+    public Optional<OrderDto> getOrderById(Integer id){
+        if (MemoryOrderDao.ORDERS.containsKey(id)){
+            return Optional.of(MemoryOrderDao.ORDERS.get(id));
+        }
+        return Optional.empty();
     }
 }

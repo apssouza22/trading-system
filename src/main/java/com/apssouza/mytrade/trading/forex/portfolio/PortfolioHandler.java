@@ -86,6 +86,9 @@ public class PortfolioHandler {
     }
 
     public void stopOrderHandle(Event event) throws InterruptedException {
+        if (portfolio.getPositions().isEmpty()) {
+            return;
+        }
         this.executionHandler.processStopOrders();
         this.cancelOpenStopOrders();
         List<StopOrderDto> filledOrders = this.getFilledStopOrders();
@@ -131,6 +134,9 @@ public class PortfolioHandler {
     }
 
     public synchronized void processExits(PriceChangedEvent event, List<SignalDto> signals) throws InterruptedException {
+        if (portfolio.getPositions().isEmpty()) {
+            return;
+        }
         List<Position> exitedPositionss = this.positionExitHandler.process(event, signals);
         this.createOrderFromClosedPosition(exitedPositionss, event);
     }
