@@ -16,7 +16,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.concurrent.BlockingQueue;
 
 public class PriceChangedListener implements PropertyChangeListener {
 
@@ -24,20 +23,20 @@ public class PriceChangedListener implements PropertyChangeListener {
     private final PortfolioHandler portfolioHandler;
     private final SignalHandler signalHandler;
     private final OrderDao orderDao;
-    private final BlockingQueue<Event> eventQueue;
+    private final EventNotifier eventNotifier;
 
     public PriceChangedListener(
             ExecutionHandler executionHandler,
             PortfolioHandler portfolioHandler,
             SignalHandler signalHandler,
             OrderDao orderDao,
-            BlockingQueue<Event> eventQueue
+            EventNotifier eventNotifier
     ) {
         this.executionHandler = executionHandler;
         this.portfolioHandler = portfolioHandler;
         this.signalHandler = signalHandler;
         this.orderDao = orderDao;
-        this.eventQueue = eventQueue;
+        this.eventNotifier = eventNotifier;
     }
 
     @Override
@@ -74,9 +73,9 @@ public class PriceChangedListener implements PropertyChangeListener {
         } else {
             signals = this.signalHandler.findbySecondAndSource(Properties.systemName, event.getTimestamp());
         }
-
+        System.out.println(event.getTimestamp());
         for (SignalDto signal : signals) {
-            eventQueue.put(new SignalCreatedEvent(
+            eventNotifier.notify(new SignalCreatedEvent(
                     EventType.SIGNAL_CREATED,
                     currentTime,
                     event.getPrice(),
@@ -93,13 +92,13 @@ public class PriceChangedListener implements PropertyChangeListener {
         if (orderList.isEmpty())
             return;
 
-        eventQueue.put(new OrderFoundEvent(
+        eventNotifier.notify(new OrderFoundEvent(
                 EventType.ORDER_FOUND,
                 currentTime,
                 event.getPrice(),
                 orderList
         ));
 
-        orderList.stream().forEach( order -> orderDao.updateStatus(order.getId(), OrderStatus.PROCESSING));
+        orderList.stream().forEach(order -> orderDao.updateStatus(order.getId(), OrderStatus.PROCESSING));
     }
 }

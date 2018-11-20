@@ -15,12 +15,12 @@ public class FilledOrderListener implements PropertyChangeListener {
 
     private final Portfolio portfolio;
     private final HistoryBookHandler historyHandler;
-    private final BlockingQueue<Event> eventQueue;
+    private final EventNotifier eventNotifier;
 
-    public FilledOrderListener(Portfolio portfolio, HistoryBookHandler historyHandler, BlockingQueue<Event> eventQueue) {
+    public FilledOrderListener(Portfolio portfolio, HistoryBookHandler historyHandler, EventNotifier eventNotifier) {
         this.portfolio = portfolio;
         this.historyHandler = historyHandler;
-        this.eventQueue = eventQueue;
+        this.eventNotifier = eventNotifier;
     }
 
     @Override
@@ -50,16 +50,12 @@ public class FilledOrderListener implements PropertyChangeListener {
     }
 
     private void emitEvent(OrderFilledEvent orderFilledEvent, Position position) {
-        try {
-            eventQueue.put(new PositionChangedEvent(
+            eventNotifier.notify(new PositionChangedEvent(
                     EventType.PORTFOLIO_CHANGED,
                     orderFilledEvent.getTimestamp(),
                     orderFilledEvent.getPrice(),
                     position
             ));
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
     }
 
 

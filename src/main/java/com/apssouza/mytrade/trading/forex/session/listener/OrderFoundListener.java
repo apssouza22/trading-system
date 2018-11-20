@@ -8,17 +8,13 @@ import com.apssouza.mytrade.trading.forex.order.OrderStatus;
 import com.apssouza.mytrade.trading.forex.portfolio.FilledOrderDto;
 import com.apssouza.mytrade.trading.forex.risk.RiskManagementHandler;
 import com.apssouza.mytrade.trading.forex.session.HistoryBookHandler;
-import com.apssouza.mytrade.trading.forex.session.event.Event;
-import com.apssouza.mytrade.trading.forex.session.event.EventType;
-import com.apssouza.mytrade.trading.forex.session.event.OrderFilledEvent;
-import com.apssouza.mytrade.trading.forex.session.event.OrderFoundEvent;
+import com.apssouza.mytrade.trading.forex.session.event.*;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.BlockingQueue;
 import java.util.logging.Logger;
 
 public class OrderFoundListener implements PropertyChangeListener {
@@ -27,21 +23,21 @@ public class OrderFoundListener implements PropertyChangeListener {
     private final ExecutionHandler executionHandler;
     private final HistoryBookHandler historyHandler;
     private final OrderHandler orderHandler;
-    private final BlockingQueue<Event> eventQueue;
+    private final EventNotifier eventNotifier;
     private final RiskManagementHandler riskManagementHandler;
 
     public OrderFoundListener(
             ExecutionHandler executionHandler,
             HistoryBookHandler historyHandler,
             OrderHandler orderHandler,
-            BlockingQueue<Event> eventQueue,
+            EventNotifier eventNotifier,
             RiskManagementHandler riskManagementHandler
     ) {
 
         this.executionHandler = executionHandler;
         this.historyHandler = historyHandler;
         this.orderHandler = orderHandler;
-        this.eventQueue = eventQueue;
+        this.eventNotifier = eventNotifier;
         this.riskManagementHandler = riskManagementHandler;
     }
 
@@ -83,12 +79,12 @@ public class OrderFoundListener implements PropertyChangeListener {
 
     private void processNewOrder(List<String> processedOrders, OrderDto order, OrderFoundEvent event) throws InterruptedException {
         Optional<OrderDto> oOrder = orderHandler.getOrderById(order.getId());
-        if (!oOrder.isPresent() || oOrder.get().getStatus() != OrderStatus.PROCESSING){
+        if (!oOrder.isPresent() || oOrder.get().getStatus() != OrderStatus.CREATED){
             return;
         }
         FilledOrderDto filledOrder = executionHandler.executeOrder(order);
         if (filledOrder != null) {
-            this.eventQueue.put(new OrderFilledEvent(
+            eventNotifier.notify(new OrderFilledEvent(
                     EventType.ORDER_FILLED,
                     filledOrder.getTime(),
                     event.getPrice(),

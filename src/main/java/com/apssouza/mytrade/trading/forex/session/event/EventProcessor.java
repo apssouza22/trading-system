@@ -40,15 +40,13 @@ public class EventProcessor extends Thread {
                 if (event.getType() == EventType.PRICE_CHANGED)
                     this.portfolioHandler.createStopOrder(event);
 
-                if (event.getType() == EventType.SESSION_FINISHED){
-                    return;
-                }
                 if (endDate.equals(event.getTimestamp())) {
-                    eventQueue.put(new SessionFinishedEvent(
+                    notifier.notify(new SessionFinishedEvent(
                             EventType.SESSION_FINISHED,
                             endDate,
                             event.getPrice()
                     ));
+                    return;
                 }
             } catch (InterruptedException ex) {
                 throw new RuntimeException(ex);

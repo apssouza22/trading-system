@@ -116,7 +116,7 @@ public class TradingSession {
                 ))
         );
 
-
+        eventNotifier = new EventNotifier();
         this.portfolioHandler = new PortfolioHandler(
                 this.equity,
                 this.orderHandler,
@@ -126,10 +126,10 @@ public class TradingSession {
                 this.reconciliationHandler,
                 this.historyHandler,
                 this.riskManagementHandler,
-                eventQueue
+                eventNotifier
         );
+        this.eventNotifier = setListeners();
 
-        this.eventNotifier = getEventNotifier();
         this.priceStream = getPriceStream();
     }
 
@@ -164,29 +164,24 @@ public class TradingSession {
 
     }
 
-    private EventNotifier getEventNotifier() {
-        EventNotifier eventNotifier = new EventNotifier();
-        eventNotifier.addPropertyChangeListener(new FilledOrderListener(portfolio, historyHandler, eventQueue));
+    private EventNotifier setListeners() {
+        eventNotifier.addPropertyChangeListener(new FilledOrderListener(portfolio, historyHandler, eventNotifier));
         eventNotifier.addPropertyChangeListener(new OrderCreatedListener(orderHandler));
-        eventNotifier.addPropertyChangeListener(new OrderFoundListener(executionHandler, historyHandler, orderHandler, eventQueue, riskManagementHandler));
+        eventNotifier.addPropertyChangeListener(new OrderFoundListener(executionHandler, historyHandler, orderHandler, eventNotifier, riskManagementHandler));
         eventNotifier.addPropertyChangeListener(new PortfolioChangedListener(reconciliationHandler));
-        eventNotifier.addPropertyChangeListener(new SignalCreatedListener(riskManagementHandler, orderHandler, eventQueue, historyHandler));
+        eventNotifier.addPropertyChangeListener(new SignalCreatedListener(riskManagementHandler, orderHandler, eventNotifier, historyHandler));
         eventNotifier.addPropertyChangeListener(new StopOrderFilledListener(portfolio, historyHandler));
-        eventNotifier.addPropertyChangeListener(new PriceChangedListener(executionHandler, portfolioHandler, signalHandler, orderDao, eventQueue));
+        eventNotifier.addPropertyChangeListener(new PriceChangedListener(executionHandler, portfolioHandler, signalHandler, orderDao, eventNotifier));
         eventNotifier.addPropertyChangeListener(new SessionFinishedListener(historyHandler));
         return eventNotifier;
     }
 
 
     public void start() {
-        try {
-            this.runSession();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        this.runSession();
     }
 
-    protected void runSession() throws InterruptedException {
+    protected void runSession() {
         printSessionStartMsg();
         this.executionHandler.closeAllPositions();
         this.executionHandler.cancelOpenLimitOrders();

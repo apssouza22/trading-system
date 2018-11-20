@@ -24,7 +24,7 @@ public class PortfolioHandler {
     private final ReconciliationHandler reconciliationHandler;
     private final HistoryBookHandler historyHandler;
     private final RiskManagementHandler riskManagementHandler;
-    private final BlockingQueue<Event> eventQueue;
+    private final EventNotifier eventNotifier;
     private static Logger log = Logger.getLogger(PortfolioHandler.class.getName());
     private Map<Integer, StopOrderDto> currentStopOrders = new HashMap<>();
 
@@ -37,7 +37,7 @@ public class PortfolioHandler {
             ReconciliationHandler reconciliationHandler,
             HistoryBookHandler historyHandler,
             RiskManagementHandler riskManagementHandler,
-            BlockingQueue<Event> eventQueue
+            EventNotifier eventNotifier
     ) {
 
         this.equity = equity;
@@ -48,7 +48,7 @@ public class PortfolioHandler {
         this.reconciliationHandler = reconciliationHandler;
         this.historyHandler = historyHandler;
         this.riskManagementHandler = riskManagementHandler;
-        this.eventQueue = eventQueue;
+        this.eventNotifier = eventNotifier;
     }
 
     public void updatePortfolioValue(Event event) {
@@ -95,7 +95,7 @@ public class PortfolioHandler {
         log.info("Total stop loss order filled " + filledOrders.size());
 
         for (StopOrderDto stopOrder : filledOrders) {
-            eventQueue.put(new StopOrderFilledEvent(
+            eventNotifier.notify(new StopOrderFilledEvent(
                     EventType.STOP_ORDER_FILLED,
                     event.getTimestamp(),
                     event.getPrice(),
@@ -145,7 +145,7 @@ public class PortfolioHandler {
         for (Position position : positions) {
             if (position.getStatus() == PositionStatus.CLOSED) {
                 OrderDto order = this.orderHandler.createOrderFromClosedPosition(position, event.getTimestamp());
-                this.eventQueue.put(new OrderCreatedEvent(
+                eventNotifier.notify(new OrderCreatedEvent(
                         EventType.ORDER_CREATED,
                         event.getTimestamp(),
                         event.getPrice(),

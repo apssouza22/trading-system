@@ -4,10 +4,7 @@ import com.apssouza.mytrade.trading.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.forex.order.OrderHandler;
 import com.apssouza.mytrade.trading.forex.risk.RiskManagementHandler;
 import com.apssouza.mytrade.trading.forex.session.HistoryBookHandler;
-import com.apssouza.mytrade.trading.forex.session.event.Event;
-import com.apssouza.mytrade.trading.forex.session.event.EventType;
-import com.apssouza.mytrade.trading.forex.session.event.OrderCreatedEvent;
-import com.apssouza.mytrade.trading.forex.session.event.SignalCreatedEvent;
+import com.apssouza.mytrade.trading.forex.session.event.*;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -18,17 +15,17 @@ public class SignalCreatedListener implements PropertyChangeListener {
     private static Logger log = Logger.getLogger(SignalCreatedListener.class.getName());
     private final RiskManagementHandler riskManagementHandler;
     private final OrderHandler orderHandler;
-    private final BlockingQueue<Event> eventQueue;
+    private final EventNotifier eventNotifier;
     private final HistoryBookHandler historyHandler;
 
     public SignalCreatedListener(
             RiskManagementHandler riskManagementHandler,
             OrderHandler orderHandler,
-            BlockingQueue<Event> eventQueue,
+            EventNotifier eventNotifier,
             HistoryBookHandler historyHandler) {
         this.riskManagementHandler = riskManagementHandler;
         this.orderHandler = orderHandler;
-        this.eventQueue = eventQueue;
+        this.eventNotifier = eventNotifier;
         this.historyHandler = historyHandler;
     }
 
@@ -44,16 +41,12 @@ public class SignalCreatedListener implements PropertyChangeListener {
         this.historyHandler.addSignal(event.getSignal());
         if (riskManagementHandler.canCreateOrder(event)) {
             OrderDto order = this.orderHandler.createOrderFromSignal(event);
-            try {
-                this.eventQueue.put(new OrderCreatedEvent(
-                        EventType.ORDER_CREATED,
-                        event.getTimestamp(),
-                        event.getPrice(),
-                        order
-                ));
-            } catch (InterruptedException ev) {
-                throw new RuntimeException(ev);
-            }
+            eventNotifier.notify(new OrderCreatedEvent(
+                    EventType.ORDER_CREATED,
+                    event.getTimestamp(),
+                    event.getPrice(),
+                    order
+            ));
         }
     }
 }
