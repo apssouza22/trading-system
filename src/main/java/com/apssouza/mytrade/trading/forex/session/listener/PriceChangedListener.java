@@ -99,5 +99,7 @@ public class PriceChangedListener implements PropertyChangeListener {
                 event.getPrice(),
                 orderList
         ));
+
+        orderList.stream().forEach( order -> orderDao.updateStatus(order.getId(), OrderStatus.PROCESSING));
     }
 }

@@ -24,10 +24,10 @@ public class Properties {
     public static boolean trailing_stop_loss_enabled = true;
     public static boolean take_profit_stop_enabled = true;
     public static Map<String, Integer> currency_pair_significant_digits_in_price;
-    public static double hard_stop_loss_distance;
-    public static double trailing_stop_loss_distance;
-    public static double take_profit_distance_fixed;
-    public static double entry_stop_loss_distance_fixed;
+    public static double hard_stop_loss_distance = 1;
+    public static double trailing_stop_loss_distance =  1;
+    public static double take_profit_distance_fixed = 1;
+    public static double entry_stop_loss_distance_fixed =  1;
     public static String systemName = "signal_test";
 
     static {

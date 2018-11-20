@@ -63,7 +63,7 @@ public class OrderFoundListener implements PropertyChangeListener {
         List<String> processedOrders = new ArrayList<>();
         List<String> exitedPositions = new ArrayList<>();
         for (OrderDto order : orders) {
-            if (order.getOrigin() == OrderOrigin.STOP_ORDER) {
+            if (order.getOrigin() == OrderOrigin.EXITS) {
                 exitedPositions.add(order.getSymbol());
             }
         }
@@ -83,7 +83,7 @@ public class OrderFoundListener implements PropertyChangeListener {
 
     private void processNewOrder(List<String> processedOrders, OrderDto order, OrderFoundEvent event) throws InterruptedException {
         Optional<OrderDto> oOrder = orderHandler.getOrderById(order.getId());
-        if (!oOrder.isPresent() || oOrder.get().getStatus() != OrderStatus.CREATED){
+        if (!oOrder.isPresent() || oOrder.get().getStatus() != OrderStatus.PROCESSING){
             return;
         }
         FilledOrderDto filledOrder = executionHandler.executeOrder(order);

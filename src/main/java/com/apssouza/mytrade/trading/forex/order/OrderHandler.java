@@ -41,7 +41,7 @@ public class OrderHandler {
         return new OrderDto(
                 position.getSymbol(),
                 action, position.getQuantity(),
-                OrderOrigin.STOP_ORDER,
+                OrderOrigin.EXITS,
                 time,
                 position.getIdentifier(),
                 OrderStatus.CREATED

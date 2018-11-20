@@ -33,7 +33,7 @@ class ShortPositionStrategy implements CreatorStrategy {
     }
 
     public Optional<BigDecimal> getTrailingStopPrice(Position position, BigDecimal last_close) {
-        BigDecimal stopPrice = null;
+        BigDecimal stopPrice;
         BigDecimal tsPrice = position.getInitPrice().subtract(distanceObject.getTraillingStopDistance());
         if (last_close.compareTo(tsPrice) < 0) {
             return Optional.empty();

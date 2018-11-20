@@ -37,8 +37,9 @@ public class EventProcessor extends Thread {
             try {
                 Event event = eventQueue.take();
                 notifier.notify(event);
-                this.portfolioHandler.createStopOrder(event);
-                this.historyHandler.process(event);
+                if (event.getType() == EventType.PRICE_CHANGED)
+                    this.portfolioHandler.createStopOrder(event);
+
                 if (event.getType() == EventType.SESSION_FINISHED){
                     return;
                 }
