@@ -166,4 +166,14 @@ public class Position {
     public PositionType getPositionType() {
         return positionType;
     }
+
+    @Override
+    public String toString() {
+        return "Position{" +
+                "positionType=" + positionType +
+                ", symbol='" + symbol + '\'' +
+                ", quantity=" + quantity +
+                ", initPrice=" + initPrice +
+                '}';
+    }
 }

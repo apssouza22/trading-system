@@ -73,4 +73,9 @@ public class Portfolio {
         return this.positions.get(identifier);
     }
 
+    public void printPortfolio() {
+        for (Map.Entry<String, Position> entry : positions.entrySet()){
+            System.out.println(entry.getValue());
+        }
+    }
 }

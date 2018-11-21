@@ -154,4 +154,8 @@ public class PortfolioHandler {
             }
         }
     }
+
+    public Portfolio getPortfolio(){
+        return portfolio;
+    }
 }

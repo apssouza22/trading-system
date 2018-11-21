@@ -108,6 +108,15 @@ public class RiskManagementHandler {
     }
 
     public boolean canCreateOrder(SignalCreatedEvent event) {
+        Map<String, Position> positions = portfolio.getPositions();
+        if (Properties.trading_position_edit_enabled || Properties.trading_multi_position_enabled){
+            return true;
+        }
+        for (Map.Entry<String, Position> entry : positions.entrySet()){
+            if (entry.getValue().getSymbol().equals(event.getSignal().getSymbol().toUpperCase())){
+                return false;
+            }
+        }
         return true;
     }
 

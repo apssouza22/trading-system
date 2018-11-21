@@ -48,7 +48,7 @@ public class HistoricalDbPriceStream implements PriceStream{
             current = current.plusSeconds(1L);
         }
         SessionFinishedEvent endEvent = new SessionFinishedEvent(
-                EventType.PRICE_CHANGED,
+                EventType.SESSION_FINISHED,
                 current,
                 priceHandler.getPriceSymbolMapped(current)
         );
