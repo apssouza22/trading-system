@@ -5,6 +5,7 @@ It has been developed for both retail traders and institutional hedge funds to a
 
 ## Features
 * Based on Java 8: For botting on any operating system - Windows, macOS and Linux
+* Event driven architecture
 * Persistence: Persistence is achieved through the H2
 * Backtesting: Run a simulation of your buy/sell strategy.
 * Stop order/ Limit order management

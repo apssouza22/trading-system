@@ -42,15 +42,13 @@ public class TradingSession {
     protected final BigDecimal equity;
     protected final LocalDateTime startDate;
     protected final LocalDateTime endDate;
-    protected final Connection connection;
     protected final SessionType sessionType;
     protected final String systemName;
     protected final ExecutionType executionType;
 
     protected MemoryOrderDao orderDao;
-    protected PriceDao priceSqlDao;
     protected SignalDao signalDao;
-    protected MemoryPriceDao priceMemoryDao;
+    private final PriceDao priceDao;
     protected PriceHandler priceHandler;
     protected ExecutionHandler executionHandler;
     protected PositionSizer positionSizer;
@@ -73,16 +71,17 @@ public class TradingSession {
             BigDecimal equity,
             LocalDateTime startDate,
             LocalDateTime endDate,
-            Connection connection,
+            SignalDao signalDao,
+            PriceDao priceDao,
             SessionType sessionType,
             String systemName,
             ExecutionType executionType
     ) {
-
         this.equity = equity;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.connection = connection;
+        this.signalDao = signalDao;
+        this.priceDao = priceDao;
         this.sessionType = sessionType;
         this.systemName = systemName;
         this.executionType = executionType;
@@ -92,10 +91,7 @@ public class TradingSession {
 
     private void configSession() {
         this.orderDao = new MemoryOrderDao();
-        this.priceSqlDao = new SqlPriceDao(this.connection);
-        this.signalDao = new SqlSignalDao(this.connection);
-
-        this.priceHandler = getPriceHandler();
+        this.priceHandler = new PriceHandler(this.priceDao);
         this.executionHandler = getExecutionHandler();
 
         this.positionSizer = new PositionSizerFixed();
@@ -140,7 +136,7 @@ public class TradingSession {
                     this.priceHandler
             );
         }
-        return new HistoricalDbPriceStream(eventQueue, priceHandler, priceMemoryDao);
+        return new HistoricalDbPriceStream(eventQueue, priceHandler, priceDao);
     }
 
     private ExecutionHandler getExecutionHandler() {
@@ -155,14 +151,6 @@ public class TradingSession {
 
     }
 
-    private PriceHandler getPriceHandler() {
-        if (this.sessionType == SessionType.BACK_TEST) {
-            this.priceMemoryDao = new MemoryPriceDao(this.priceSqlDao);
-            return new PriceHandler(this.priceMemoryDao);
-        }
-        return new PriceHandler(this.priceSqlDao);
-
-    }
 
     private EventNotifier setListeners() {
         eventNotifier.addPropertyChangeListener(new FilledOrderListener(portfolio, historyHandler, eventNotifier));
@@ -185,7 +173,7 @@ public class TradingSession {
         printSessionStartMsg();
         this.executionHandler.closeAllPositions();
         this.executionHandler.cancelOpenLimitOrders();
-        this.priceMemoryDao.loadData(startDate, startDate.plusDays(1));
+        this.priceDao.loadData(startDate, startDate.plusDays(1));
         startEventProcessor();
         priceStream.start(startDate, endDate);
     }

@@ -45,6 +45,11 @@ public class SqlSignalDao implements SignalDao {
     }
 
     @Override
+    public List<SignalDto> getSignals(LocalDateTime start, LocalDateTime end, String signal_test) {
+        return null;
+    }
+
+    @Override
     public List<SignalDto> getBySecondAndSource(String sourceName, LocalDateTime currentTime) {
         String query = String.format("select * from signal where source_name = '%s' and created_at = '%s'",
                 sourceName,

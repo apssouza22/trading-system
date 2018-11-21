@@ -1,6 +1,7 @@
 package com.apssouza.mytrade.trading.forex.feed;
 
 import com.apssouza.mytrade.feed.price.MemoryPriceDao;
+import com.apssouza.mytrade.feed.price.PriceDao;
 import com.apssouza.mytrade.feed.price.PriceHandler;
 import com.apssouza.mytrade.trading.forex.session.SessionType;
 import com.apssouza.mytrade.trading.forex.session.event.Event;
@@ -18,9 +19,9 @@ public class HistoricalDbPriceStream implements PriceStream{
 
     private final BlockingQueue<Event> eventQueue;
     private final PriceHandler priceHandler;
-    private final MemoryPriceDao priceMemoryDao;
+    private final PriceDao priceMemoryDao;
 
-    public HistoricalDbPriceStream(BlockingQueue<Event> eventQueue, PriceHandler priceHandler, MemoryPriceDao priceMemoryDao) {
+    public HistoricalDbPriceStream(BlockingQueue<Event> eventQueue, PriceHandler priceHandler, PriceDao priceMemoryDao) {
         this.eventQueue = eventQueue;
         this.priceHandler = priceHandler;
         this.priceMemoryDao = priceMemoryDao;
@@ -30,7 +31,6 @@ public class HistoricalDbPriceStream implements PriceStream{
         LocalDateTime current = start;
         LocalDate lastDayProcessed = start.toLocalDate().minusDays(1);
         while (current.compareTo(end) <= 0) {
-            current = current.plusSeconds(1L);
             if (!TradingHelper.isTradingTime(current)) {
                 continue;
             }
