@@ -13,7 +13,7 @@ public class CycleHistory {
 
     private final LocalDateTime time;
 
-    private Map<String, TransactionDto> identifierTransaction = new HashMap<>();
+    private Map<String, TransactionDto> transactions = new HashMap<>();
 
     public CycleHistory(LocalDateTime time) {
         this.time = time;
@@ -24,12 +24,12 @@ public class CycleHistory {
     }
 
     private TransactionDto getTransaction(String identifier) {
-        if (identifierTransaction.containsKey(identifier)) {
-            return identifierTransaction.get(identifier);
+        if (transactions.containsKey(identifier)) {
+            return transactions.get(identifier);
         }
-        TransactionDto transactionDto = new TransactionDto();
-        identifierTransaction.put(identifier, transactionDto);
-        return identifierTransaction.get(identifier);
+        TransactionDto transactionDto = new TransactionDto(this.time, identifier);
+        transactions.put(identifier, transactionDto);
+        return transactions.get(identifier);
 
     }
 
@@ -49,4 +49,7 @@ public class CycleHistory {
         return time;
     }
 
+    public Map<String, TransactionDto> getTransactions() {
+        return transactions;
+    }
 }

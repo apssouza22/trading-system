@@ -113,7 +113,7 @@ public class Position {
         return symbol;
     }
 
-    public int getQuantity() {
+    public Integer getQuantity() {
         return quantity;
     }
 

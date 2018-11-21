@@ -31,7 +31,7 @@ public class SessionFinishedListener implements PropertyChangeListener {
         }
 
         SessionFinishedEvent finishedEvent = (SessionFinishedEvent) event;
-        List<CycleHistory> transactions = historyHandler.getTransactions();
+        historyHandler.export("/Users/alex/projects/coalface/files/trading/java.csv");
         System.out.println("Finished session");
     }
 

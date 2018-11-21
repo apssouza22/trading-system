@@ -57,7 +57,7 @@ public class PortfolioTest extends TestCase {
         portfolio.addPositionQtd(ps.getIdentifier(), 100, BigDecimal.ONE);
         Map<String, Position> positions = portfolio.getPositions();
 
-        assertEquals(qtd + 100, positions.get(ps.getIdentifier()).getQuantity());
+        assertTrue( positions.get(ps.getIdentifier()).getQuantity() == qtd + 100);
         assertEquals(BigDecimal.valueOf(1.0040).setScale(4), positions.get(ps.getIdentifier()).getAvgPrice());
     }
 
@@ -83,7 +83,7 @@ public class PortfolioTest extends TestCase {
         portfolio.removePositionQtd(ps.getIdentifier(),qtd);
         Map<String, Position> positions = portfolio.getPositions();
 
-        assertEquals(0, positions.get(ps.getIdentifier()).getQuantity());
+        assertTrue(positions.get(ps.getIdentifier()).getQuantity()==0);
     }
 
     @Test
@@ -96,7 +96,7 @@ public class PortfolioTest extends TestCase {
         portfolio.removePositionQtd(ps.getIdentifier(), 50);
         Map<String, Position> positions = portfolio.getPositions();
 
-        assertEquals(950, positions.get(ps.getIdentifier()).getQuantity());
+        assertTrue( positions.get(ps.getIdentifier()).getQuantity() == 950);
     }
 
     @Test(expected = RuntimeException.class)
