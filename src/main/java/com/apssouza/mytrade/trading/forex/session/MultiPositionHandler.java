@@ -21,10 +21,10 @@ public class MultiPositionHandler {
     private static Map<Integer, Position> positionToStopOrderMap = new ConcurrentHashMap<>();
 
     public static String getIdentifierFromOrder(OrderDto order) {
-        if (order.getIdentifier() != null)
-            return order.getIdentifier();
+        if (order.getIdentifier() == null || order.getIdentifier().isEmpty())
+            return order.getSymbol() + '_' + order.getId() + '_' + order.getTime().toEpochSecond(DateTimeHelper.ZONEOFFSET_UTC);
 
-        return order.getSymbol() + '_' + order.getId() + '_' + order.getTime().toEpochSecond(DateTimeHelper.ZONEOFFSET_UTC);
+        return order.getIdentifier();
     }
 
     public static void deleteAllMaps() {

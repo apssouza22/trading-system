@@ -37,11 +37,16 @@ public class QueueConsumer extends Thread {
         for (; ; ) {
             try {
                 Event event = eventQueue.take();
+                historyHandler.startCycle(event.getTimestamp());
+
                 notifier.notify(event);
                 if (event.getType() == EventType.PRICE_CHANGED)
                     this.portfolioHandler.createStopOrder(event);
 
                 portfolioHandler.getPortfolio().printPortfolio();
+
+                historyHandler.endCycle();
+
                 if (event.getType() == EventType.SESSION_FINISHED){
                     return;
                 }

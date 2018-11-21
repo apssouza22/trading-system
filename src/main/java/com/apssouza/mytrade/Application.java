@@ -23,7 +23,7 @@ public class Application {
     public static void main(String[] args){
         LocalDate date = LocalDate.of(2018, 9, 10);
         Properties.tradingStartDay = LocalDateTime.of(date, LocalTime.MIN);
-        Properties.tradingEndDay = LocalDateTime.of(date.plusDays(30), LocalTime.MIN);
+        Properties.tradingEndDay = LocalDateTime.of(date.plusDays(2), LocalTime.MIN);
         Properties.tradingStartTime = LocalTime.MIN;
         Properties.tradingEndTime = LocalTime.MAX;
         DataGenerator dataGenerator = new DataGenerator();
