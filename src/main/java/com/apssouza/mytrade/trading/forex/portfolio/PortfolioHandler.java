@@ -11,7 +11,6 @@ import com.apssouza.mytrade.trading.misc.helper.config.Properties;
 
 import java.math.BigDecimal;
 import java.util.*;
-import java.util.concurrent.BlockingQueue;
 import java.util.logging.Logger;
 
 public class PortfolioHandler {

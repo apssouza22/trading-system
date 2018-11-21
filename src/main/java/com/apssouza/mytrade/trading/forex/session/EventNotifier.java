@@ -1,4 +1,6 @@
-package com.apssouza.mytrade.trading.forex.session.event;
+package com.apssouza.mytrade.trading.forex.session;
+
+import com.apssouza.mytrade.trading.forex.session.event.Event;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;

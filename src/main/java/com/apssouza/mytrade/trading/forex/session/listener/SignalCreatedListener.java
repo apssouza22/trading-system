@@ -3,12 +3,12 @@ package com.apssouza.mytrade.trading.forex.session.listener;
 import com.apssouza.mytrade.trading.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.forex.order.OrderHandler;
 import com.apssouza.mytrade.trading.forex.risk.RiskManagementHandler;
+import com.apssouza.mytrade.trading.forex.session.EventNotifier;
 import com.apssouza.mytrade.trading.forex.session.HistoryBookHandler;
 import com.apssouza.mytrade.trading.forex.session.event.*;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.concurrent.BlockingQueue;
 import java.util.logging.Logger;
 
 public class SignalCreatedListener implements PropertyChangeListener {

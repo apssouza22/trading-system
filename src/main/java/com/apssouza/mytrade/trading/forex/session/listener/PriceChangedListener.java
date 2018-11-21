@@ -7,6 +7,7 @@ import com.apssouza.mytrade.trading.forex.order.OrderDao;
 import com.apssouza.mytrade.trading.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.forex.order.OrderStatus;
 import com.apssouza.mytrade.trading.forex.portfolio.PortfolioHandler;
+import com.apssouza.mytrade.trading.forex.session.EventNotifier;
 import com.apssouza.mytrade.trading.forex.session.MultiPositionHandler;
 import com.apssouza.mytrade.trading.forex.session.SessionType;
 import com.apssouza.mytrade.trading.forex.session.event.*;

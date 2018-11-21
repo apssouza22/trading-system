@@ -1,12 +1,9 @@
 package com.apssouza.mytrade.trading.forex.session;
 
-import com.apssouza.mytrade.feed.price.MemoryPriceDao;
 import com.apssouza.mytrade.feed.price.PriceDao;
 import com.apssouza.mytrade.feed.price.PriceHandler;
-import com.apssouza.mytrade.feed.price.SqlPriceDao;
 import com.apssouza.mytrade.feed.signal.SignalDao;
 import com.apssouza.mytrade.feed.signal.SignalHandler;
-import com.apssouza.mytrade.feed.signal.SqlSignalDao;
 import com.apssouza.mytrade.trading.forex.execution.ExecutionHandler;
 import com.apssouza.mytrade.trading.forex.execution.InteractiveBrokerExecutionHandler;
 import com.apssouza.mytrade.trading.forex.execution.SimulatedExecutionHandler;
@@ -25,13 +22,10 @@ import com.apssouza.mytrade.trading.forex.risk.RiskManagementHandler;
 import com.apssouza.mytrade.trading.forex.risk.stoporder.PriceDistanceObject;
 import com.apssouza.mytrade.trading.forex.risk.stoporder.fixed.StopOrderCreatorFixed;
 import com.apssouza.mytrade.trading.forex.session.event.Event;
-import com.apssouza.mytrade.trading.forex.session.event.EventNotifier;
-import com.apssouza.mytrade.trading.forex.session.event.EventProcessor;
 import com.apssouza.mytrade.trading.forex.session.listener.*;
 import com.apssouza.mytrade.trading.misc.helper.config.Properties;
 
 import java.math.BigDecimal;
-import java.sql.Connection;
 import java.time.LocalDateTime;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -187,14 +181,14 @@ public class TradingSession {
     }
 
     private void startEventProcessor() {
-        EventProcessor eventProcessor = new EventProcessor(
+        QueueConsumer queueConsumer = new QueueConsumer(
                 eventQueue,
                 historyHandler,
                 portfolioHandler,
                 eventNotifier,
                 endDate
         );
-        eventProcessor.start();
+        queueConsumer.start();
     }
 
 }

@@ -32,6 +32,7 @@ public class HistoricalDbPriceStream implements PriceStream{
         LocalDate lastDayProcessed = start.toLocalDate().minusDays(1);
         while (current.compareTo(end) <= 0) {
             if (!TradingHelper.isTradingTime(current)) {
+                current = current.plusSeconds(1L);
                 continue;
             }
             if (lastDayProcessed.compareTo(current.toLocalDate()) < 0) {

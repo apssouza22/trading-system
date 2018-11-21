@@ -2,6 +2,7 @@ package com.apssouza.mytrade.trading.forex.session.listener;
 
 import com.apssouza.mytrade.trading.forex.order.OrderAction;
 import com.apssouza.mytrade.trading.forex.portfolio.*;
+import com.apssouza.mytrade.trading.forex.session.EventNotifier;
 import com.apssouza.mytrade.trading.forex.session.HistoryBookHandler;
 import com.apssouza.mytrade.trading.forex.session.event.*;
 import com.apssouza.mytrade.trading.forex.statistics.TransactionState;
@@ -9,7 +10,6 @@ import com.apssouza.mytrade.trading.misc.helper.config.Properties;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.concurrent.BlockingQueue;
 
 public class FilledOrderListener implements PropertyChangeListener {
 

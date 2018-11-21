@@ -1,12 +1,13 @@
-package com.apssouza.mytrade.trading.forex.session.event;
+package com.apssouza.mytrade.trading.forex.session;
 
 import com.apssouza.mytrade.trading.forex.portfolio.PortfolioHandler;
-import com.apssouza.mytrade.trading.forex.session.HistoryBookHandler;
+import com.apssouza.mytrade.trading.forex.session.event.Event;
+import com.apssouza.mytrade.trading.forex.session.event.EventType;
 
 import java.time.LocalDateTime;
 import java.util.concurrent.BlockingQueue;
 
-public class EventProcessor extends Thread {
+public class QueueConsumer extends Thread {
     private final BlockingQueue<Event> eventQueue;
     private final HistoryBookHandler historyHandler;
     private final PortfolioHandler portfolioHandler;
@@ -14,7 +15,7 @@ public class EventProcessor extends Thread {
     private final LocalDateTime endDate;
 
 
-    public EventProcessor(
+    public QueueConsumer(
             BlockingQueue<Event> eventQueue,
             HistoryBookHandler historyHandler,
             PortfolioHandler portfolioHandler,
@@ -40,6 +41,7 @@ public class EventProcessor extends Thread {
                 if (event.getType() == EventType.PRICE_CHANGED)
                     this.portfolioHandler.createStopOrder(event);
 
+                portfolioHandler.getPortfolio().printPortfolio();
                 if (event.getType() == EventType.SESSION_FINISHED){
                     return;
                 }
