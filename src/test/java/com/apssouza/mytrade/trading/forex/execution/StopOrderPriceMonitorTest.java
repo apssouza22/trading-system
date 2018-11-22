@@ -81,7 +81,6 @@ public class StopOrderPriceMonitorTest extends TestCase {
         Set<StopOrderDto> filledOrders = stopOrderPriceMonitor.getFilledOrders(priceMap, stopOrders);
         assertEquals(1, filledOrders.size());
         assertEquals(stopLoss.getType(), filledOrders.iterator().next().getType());
-        assertEquals(StopOrderStatus.FILLED, filledOrders.iterator().next().getStatus());
     }
 
 
@@ -101,7 +100,6 @@ public class StopOrderPriceMonitorTest extends TestCase {
         Set<StopOrderDto> filledOrders = stopOrderPriceMonitor.getFilledOrders(priceMap, stopOrders);
         assertEquals(1, filledOrders.size());
         assertEquals(StopOrderType.TAKE_PROFIT, filledOrders.iterator().next().getType());
-        assertEquals(StopOrderStatus.FILLED, filledOrders.iterator().next().getStatus());
     }
 
     @Test
@@ -121,7 +119,6 @@ public class StopOrderPriceMonitorTest extends TestCase {
         Set<StopOrderDto> filledOrders = stopOrderPriceMonitor.getFilledOrders(priceMap, stopOrders);
         assertEquals(1, filledOrders.size());
         assertEquals(StopOrderType.TAKE_PROFIT, filledOrders.iterator().next().getType());
-        assertEquals(StopOrderStatus.FILLED, filledOrders.iterator().next().getStatus());
     }
 
 
@@ -142,6 +139,5 @@ public class StopOrderPriceMonitorTest extends TestCase {
         Set<StopOrderDto> filledOrders = stopOrderPriceMonitor.getFilledOrders(priceMap, stopOrders);
         assertEquals(1, filledOrders.size());
         assertEquals(StopOrderType.STOP_LOSS, filledOrders.iterator().next().getType());
-        assertEquals(StopOrderStatus.FILLED, filledOrders.iterator().next().getStatus());
     }
 }
