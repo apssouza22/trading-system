@@ -43,7 +43,7 @@ public class OrderHandlerTest extends TestCase {
         positionBuilder.setType(PositionType.SHORT);
         Position position = positionBuilder.build();
         OrderDto orderFromClosedPosition = orderHandler.createOrderFromClosedPosition(position, LocalDateTime.MIN);
-        assertEquals(OrderOrigin.STOP_ORDER, orderFromClosedPosition.getOrigin());
+        assertEquals(OrderOrigin.EXITS, orderFromClosedPosition.getOrigin());
         assertEquals(OrderAction.BUY, orderFromClosedPosition.getAction());
     }
 
@@ -56,7 +56,7 @@ public class OrderHandlerTest extends TestCase {
         positionBuilder.setType(PositionType.LONG);
         Position position = positionBuilder.build();
         OrderDto orderFromClosedPosition = orderHandler.createOrderFromClosedPosition(position, LocalDateTime.MIN);
-        assertEquals(OrderOrigin.STOP_ORDER, orderFromClosedPosition.getOrigin());
+        assertEquals(OrderOrigin.EXITS, orderFromClosedPosition.getOrigin());
         assertEquals(OrderAction.SELL, orderFromClosedPosition.getAction());
     }
 

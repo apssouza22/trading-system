@@ -23,6 +23,8 @@ import com.apssouza.mytrade.trading.forex.risk.stoporder.PriceDistanceObject;
 import com.apssouza.mytrade.trading.forex.risk.stoporder.fixed.StopOrderCreatorFixed;
 import com.apssouza.mytrade.trading.forex.session.event.Event;
 import com.apssouza.mytrade.trading.forex.session.listener.*;
+import com.apssouza.mytrade.trading.forex.statistics.HistoryBookHandler;
+import com.apssouza.mytrade.trading.forex.statistics.TransactionsExporter;
 import com.apssouza.mytrade.trading.misc.helper.config.Properties;
 
 import java.math.BigDecimal;
@@ -94,7 +96,7 @@ public class TradingSession {
         this.orderHandler = new OrderHandler(this.orderDao, this.positionSizer, this.equity, this.priceHandler, this.portfolio);
         this.signalHandler = new SignalHandler(this.signalDao);
         this.reconciliationHandler = new ReconciliationHandler(this.portfolio, this.executionHandler);
-        this.historyHandler = new HistoryBookHandler();
+        this.historyHandler = new HistoryBookHandler(new TransactionsExporter());
         this.riskManagementHandler = new RiskManagementHandler(
                 this.portfolio,
                 new PositionSizerFixed(),

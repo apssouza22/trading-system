@@ -3,6 +3,7 @@ package com.apssouza.mytrade.trading.forex.session;
 import com.apssouza.mytrade.trading.forex.portfolio.PortfolioHandler;
 import com.apssouza.mytrade.trading.forex.session.event.Event;
 import com.apssouza.mytrade.trading.forex.session.event.EventType;
+import com.apssouza.mytrade.trading.forex.statistics.HistoryBookHandler;
 
 import java.time.LocalDateTime;
 import java.util.concurrent.BlockingQueue;
