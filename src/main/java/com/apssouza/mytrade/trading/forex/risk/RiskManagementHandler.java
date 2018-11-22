@@ -9,11 +9,9 @@ import com.apssouza.mytrade.trading.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.forex.risk.stoporder.StopOrderCreator;
 import com.apssouza.mytrade.trading.forex.session.event.Event;
 import com.apssouza.mytrade.trading.forex.session.event.SignalCreatedEvent;
-import com.apssouza.mytrade.trading.misc.helper.config.Properties;
-import com.apssouza.mytrade.trading.forex.session.event.PriceChangedEvent;
+import com.apssouza.mytrade.trading.misc.helper.config.TradingParams;
 import com.apssouza.mytrade.trading.misc.helper.time.MarketTimeHelper;
 
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -68,11 +66,11 @@ public class RiskManagementHandler {
     private EnumMap<StopOrderType, StopOrderDto>  getMovingStops(Position position, Event event) {
         EnumMap<StopOrderType, StopOrderDto> stop_orders = new EnumMap(StopOrderType.class);
         Consumer<StopOrderDto> consumer = (dto) -> stop_orders.put(dto.getType(), dto);
-        if (Properties.entry_stop_loss_enabled) {
+        if (TradingParams.entry_stop_loss_enabled) {
             Optional<StopOrderDto> entryStopOrder = this.stopOrderCreator.getEntryStopOrder(position, event);
             entryStopOrder.ifPresent(consumer);
         }
-        if (Properties.trailing_stop_loss_enabled) {
+        if (TradingParams.trailing_stop_loss_enabled) {
             Optional<StopOrderDto> trailingStopOrder = this.stopOrderCreator.getTrailingStopOrder(position, event);
             trailingStopOrder.ifPresent(consumer);
         }
@@ -80,16 +78,16 @@ public class RiskManagementHandler {
     }
 
     private boolean hasStop() {
-        return Properties.hard_stop_loss_enabled ||
-                Properties.entry_stop_loss_enabled ||
-                Properties.trailing_stop_loss_enabled ||
-                Properties.take_profit_stop_enabled;
+        return TradingParams.hard_stop_loss_enabled ||
+                TradingParams.entry_stop_loss_enabled ||
+                TradingParams.trailing_stop_loss_enabled ||
+                TradingParams.take_profit_stop_enabled;
     }
 
     private EnumMap<StopOrderType, StopOrderDto> chooseStopOrders(EnumMap<StopOrderType, StopOrderDto> stop_losses) {
         EnumMap<StopOrderType, StopOrderDto> stop_orders = new EnumMap<>(StopOrderType.class);
 
-        if (Properties.take_profit_stop_enabled) {
+        if (TradingParams.take_profit_stop_enabled) {
             stop_orders.put(StopOrderType.TAKE_PROFIT, stop_losses.get(StopOrderType.TAKE_PROFIT));
         }
 
@@ -111,7 +109,7 @@ public class RiskManagementHandler {
 
     public boolean canCreateOrder(SignalCreatedEvent event) {
         Map<String, Position> positions = portfolio.getPositions();
-        if (Properties.trading_position_edit_enabled || Properties.trading_multi_position_enabled){
+        if (TradingParams.trading_position_edit_enabled || TradingParams.trading_multi_position_enabled){
             return true;
         }
         for (Map.Entry<String, Position> entry : positions.entrySet()){

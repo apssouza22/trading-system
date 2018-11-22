@@ -7,7 +7,7 @@ import com.apssouza.mytrade.trading.builder.StopOrderBuilder;
 import com.apssouza.mytrade.trading.forex.order.StopOrderDto;
 import com.apssouza.mytrade.trading.forex.order.StopOrderType;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;
-import com.apssouza.mytrade.trading.misc.helper.config.Properties;
+import com.apssouza.mytrade.trading.misc.helper.config.TradingParams;
 import junit.framework.TestCase;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,10 +27,10 @@ public class RiskManagementHandlerTest extends TestCase {
 
     @Test
     public void createStopOrdersWithStopOrderDisable() {
-        Properties.hard_stop_loss_enabled = false;
-        Properties.entry_stop_loss_enabled = false;
-        Properties.trailing_stop_loss_enabled = false;
-        Properties.take_profit_stop_enabled = false;
+        TradingParams.hard_stop_loss_enabled = false;
+        TradingParams.entry_stop_loss_enabled = false;
+        TradingParams.trailing_stop_loss_enabled = false;
+        TradingParams.take_profit_stop_enabled = false;
 
         RiskManagementBuilder riskManagementBuilder = new RiskManagementBuilder();
         RiskManagementHandler risk = riskManagementBuilder.build();
@@ -46,10 +46,10 @@ public class RiskManagementHandlerTest extends TestCase {
 
     @Test
     public void createStopOrdersWithHardAndProfitStopOrderEnabled() {
-        Properties.hard_stop_loss_enabled = true;
-        Properties.entry_stop_loss_enabled = false;
-        Properties.trailing_stop_loss_enabled = false;
-        Properties.take_profit_stop_enabled = true;
+        TradingParams.hard_stop_loss_enabled = true;
+        TradingParams.entry_stop_loss_enabled = false;
+        TradingParams.trailing_stop_loss_enabled = false;
+        TradingParams.take_profit_stop_enabled = true;
 
         RiskManagementBuilder riskManagementBuilder = new RiskManagementBuilder();
         RiskManagementHandler risk = riskManagementBuilder.build();
@@ -67,10 +67,10 @@ public class RiskManagementHandlerTest extends TestCase {
 
     @Test
     public void createStopOrdersWithOnlyHardStopOrderEnabled() {
-        Properties.hard_stop_loss_enabled = true;
-        Properties.entry_stop_loss_enabled = false;
-        Properties.trailing_stop_loss_enabled = false;
-        Properties.take_profit_stop_enabled = false;
+        TradingParams.hard_stop_loss_enabled = true;
+        TradingParams.entry_stop_loss_enabled = false;
+        TradingParams.trailing_stop_loss_enabled = false;
+        TradingParams.take_profit_stop_enabled = false;
 
         RiskManagementBuilder riskManagementBuilder = new RiskManagementBuilder();
         RiskManagementHandler risk = riskManagementBuilder.build();
@@ -86,10 +86,10 @@ public class RiskManagementHandlerTest extends TestCase {
 
     @Test
     public void createStopOrdersWithAllStopOrderEnabled() {
-        Properties.hard_stop_loss_enabled = true;
-        Properties.entry_stop_loss_enabled = true;
-        Properties.trailing_stop_loss_enabled = true;
-        Properties.take_profit_stop_enabled = true;
+        TradingParams.hard_stop_loss_enabled = true;
+        TradingParams.entry_stop_loss_enabled = true;
+        TradingParams.trailing_stop_loss_enabled = true;
+        TradingParams.take_profit_stop_enabled = true;
 
         RiskManagementBuilder riskManagementBuilder = new RiskManagementBuilder();
         RiskManagementHandler risk = riskManagementBuilder.build();
@@ -108,10 +108,10 @@ public class RiskManagementHandlerTest extends TestCase {
 
     @Test
     public void createStopOrdersWithoutProfitStopOrderEnabled() {
-        Properties.hard_stop_loss_enabled = true;
-        Properties.entry_stop_loss_enabled = true;
-        Properties.trailing_stop_loss_enabled = true;
-        Properties.take_profit_stop_enabled = false;
+        TradingParams.hard_stop_loss_enabled = true;
+        TradingParams.entry_stop_loss_enabled = true;
+        TradingParams.trailing_stop_loss_enabled = true;
+        TradingParams.take_profit_stop_enabled = false;
 
         RiskManagementBuilder riskManagementBuilder = new RiskManagementBuilder();
         RiskManagementHandler risk = riskManagementBuilder.build();
@@ -129,10 +129,10 @@ public class RiskManagementHandlerTest extends TestCase {
 
     @Test
     public void createStopOrdersChoosingEntryStop() {
-        Properties.hard_stop_loss_enabled = true;
-        Properties.entry_stop_loss_enabled = true;
-        Properties.trailing_stop_loss_enabled = false;
-        Properties.take_profit_stop_enabled = false;
+        TradingParams.hard_stop_loss_enabled = true;
+        TradingParams.entry_stop_loss_enabled = true;
+        TradingParams.trailing_stop_loss_enabled = false;
+        TradingParams.take_profit_stop_enabled = false;
 
         RiskManagementBuilder riskManagementBuilder = new RiskManagementBuilder();
         RiskManagementHandler risk = riskManagementBuilder.build();
@@ -154,10 +154,10 @@ public class RiskManagementHandlerTest extends TestCase {
 
     @Test
     public void createStopOrdersChoosingTrailingStopRatherThenEntryStop() {
-        Properties.hard_stop_loss_enabled = true;
-        Properties.entry_stop_loss_enabled = true;
-        Properties.trailing_stop_loss_enabled = true;
-        Properties.take_profit_stop_enabled = false;
+        TradingParams.hard_stop_loss_enabled = true;
+        TradingParams.entry_stop_loss_enabled = true;
+        TradingParams.trailing_stop_loss_enabled = true;
+        TradingParams.take_profit_stop_enabled = false;
 
         RiskManagementBuilder riskManagementBuilder = new RiskManagementBuilder();
         RiskManagementHandler risk = riskManagementBuilder.build();

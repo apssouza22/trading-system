@@ -11,7 +11,7 @@ import com.apssouza.mytrade.trading.forex.session.EventNotifier;
 import com.apssouza.mytrade.trading.forex.session.MultiPositionHandler;
 import com.apssouza.mytrade.trading.forex.session.SessionType;
 import com.apssouza.mytrade.trading.forex.session.event.*;
-import com.apssouza.mytrade.trading.misc.helper.config.Properties;
+import com.apssouza.mytrade.trading.misc.helper.config.TradingParams;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -69,10 +69,10 @@ public class PriceChangedListener implements PropertyChangeListener {
 
     private List<SignalDto> processSignals(PriceChangedEvent event, LocalDateTime currentTime) throws InterruptedException {
         List<SignalDto> signals;
-        if (Properties.sessionType == SessionType.LIVE) {
-            signals = this.signalHandler.getRealtimeSignal(Properties.systemName);
+        if (TradingParams.sessionType == SessionType.LIVE) {
+            signals = this.signalHandler.getRealtimeSignal(TradingParams.systemName);
         } else {
-            signals = this.signalHandler.findbySecondAndSource(Properties.systemName, event.getTimestamp());
+            signals = this.signalHandler.findbySecondAndSource(TradingParams.systemName, event.getTimestamp());
         }
 
         for (SignalDto signal : signals) {

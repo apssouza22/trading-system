@@ -12,7 +12,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class StopOrderHandler {
+public class StopOrderExecutionHandler {
     private final Map<String, FilledOrderDto> positions;
     private final StopOrderPriceMonitor stopOrderPriceMonitor;
     private ConcurrentHashMap<Integer, StopOrderDto> allStopOrders = new ConcurrentHashMap<>();
@@ -20,7 +20,7 @@ public class StopOrderHandler {
     private static AtomicInteger stopOrderId = new AtomicInteger();
 
     public StopOrderDto placeStopOrder(StopOrderDto stop) {
-        int id = StopOrderHandler.stopOrderId.incrementAndGet();
+        int id = StopOrderExecutionHandler.stopOrderId.incrementAndGet();
 
         StopOrderStatus status = StopOrderStatus.SUBMITTED;
         StopOrderDto stopOrderDto = new StopOrderDto(
@@ -42,7 +42,7 @@ public class StopOrderHandler {
         return;
     }
 
-    public StopOrderHandler(Map<String, FilledOrderDto> positions) {
+    public StopOrderExecutionHandler(Map<String, FilledOrderDto> positions) {
         this.positions = positions;
         this.stopOrderPriceMonitor = new StopOrderPriceMonitor();
     }

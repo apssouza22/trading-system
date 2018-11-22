@@ -6,9 +6,7 @@ import com.apssouza.mytrade.trading.forex.order.StopOrderDto;
 import com.apssouza.mytrade.trading.forex.portfolio.FilledOrderDto;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.forex.portfolio.PositionType;
-import com.apssouza.mytrade.trading.misc.helper.config.Properties;
 import com.apssouza.mytrade.trading.misc.helper.time.DateTimeHelper;
-import com.apssouza.mytrade.trading.misc.helper.time.MarketTimeHelper;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;

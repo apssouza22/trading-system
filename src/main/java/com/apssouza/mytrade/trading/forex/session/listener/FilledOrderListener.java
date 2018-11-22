@@ -6,7 +6,7 @@ import com.apssouza.mytrade.trading.forex.session.EventNotifier;
 import com.apssouza.mytrade.trading.forex.statistics.HistoryBookHandler;
 import com.apssouza.mytrade.trading.forex.session.event.*;
 import com.apssouza.mytrade.trading.forex.statistics.TransactionState;
-import com.apssouza.mytrade.trading.misc.helper.config.Properties;
+import com.apssouza.mytrade.trading.misc.helper.config.TradingParams;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -40,7 +40,7 @@ public class FilledOrderListener implements PropertyChangeListener {
             return;
         }
         Position ps = this.portfolio.getPosition(filledOrder.getIdentifier());
-        if (!Properties.trading_position_edit_enabled) {
+        if (!TradingParams.trading_position_edit_enabled) {
             if (filledOrder.getQuantity() != ps.getQuantity()) {
                 throw new RuntimeException("Not allowed units to be added/removed");
             }

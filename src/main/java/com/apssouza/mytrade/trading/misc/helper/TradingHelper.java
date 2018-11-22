@@ -3,7 +3,7 @@ package com.apssouza.mytrade.trading.misc.helper;
 import com.apssouza.mytrade.trading.forex.order.OrderAction;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.forex.portfolio.PositionType;
-import com.apssouza.mytrade.trading.misc.helper.config.Properties;
+import com.apssouza.mytrade.trading.misc.helper.config.TradingParams;
 import com.apssouza.mytrade.trading.misc.helper.time.DayHelper;
 
 import java.time.LocalDateTime;
@@ -14,15 +14,15 @@ public class TradingHelper {
         if (DayHelper.isWeekend(currentTime.toLocalDate()))
             return false;
 
-        if (Properties.tradingStartTime.compareTo(currentTime.toLocalTime()) > 0)
+        if (TradingParams.tradingStartTime.compareTo(currentTime.toLocalTime()) > 0)
             return false;
-        if (Properties.tradingEndTime.compareTo(currentTime.toLocalTime()) < 0)
+        if (TradingParams.tradingEndTime.compareTo(currentTime.toLocalTime()) < 0)
             return false;
         return true;
     }
 
     public static boolean hasEndedTradingTime(LocalDateTime currentTime) {
-        if (Properties.tradingEndTime.compareTo(currentTime.toLocalTime()) >= 0)
+        if (TradingParams.tradingEndTime.compareTo(currentTime.toLocalTime()) >= 0)
             return false;
         return true;
     }

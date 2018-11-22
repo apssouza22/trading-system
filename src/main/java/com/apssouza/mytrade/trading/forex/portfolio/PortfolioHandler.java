@@ -8,7 +8,7 @@ import com.apssouza.mytrade.trading.forex.risk.RiskManagementHandler;
 import com.apssouza.mytrade.trading.forex.session.*;
 import com.apssouza.mytrade.trading.forex.session.event.*;
 import com.apssouza.mytrade.trading.forex.statistics.HistoryBookHandler;
-import com.apssouza.mytrade.trading.misc.helper.config.Properties;
+import com.apssouza.mytrade.trading.misc.helper.config.TradingParams;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -75,7 +75,7 @@ public class PortfolioHandler {
             stopOrders.put(stopOrderLoss.getId(), stopOrderLoss);
             MultiPositionHandler.mapStopOrderToPosition(stopOrderLoss, position);
 
-            if (Properties.take_profit_stop_enabled) {
+            if (TradingParams.take_profit_stop_enabled) {
                 StopOrderDto stopOrderProfit = this.executionHandler.placeStopOrder(stops.get(StopOrderType.TAKE_PROFIT));
                 log.info("Created take profit stop - " + stopOrderProfit);
                 stopOrders.put(stopOrderProfit.getId(), stopOrderProfit);

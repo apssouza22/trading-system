@@ -2,13 +2,16 @@ package com.apssouza.mytrade.trading.misc.helper.config;
 
 import com.apssouza.mytrade.trading.forex.session.SessionType;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
-public class Properties {
+public class TradingParams {
     public static String brokerHost;
     public static String brokerPort;
     public static String brokerClientId;

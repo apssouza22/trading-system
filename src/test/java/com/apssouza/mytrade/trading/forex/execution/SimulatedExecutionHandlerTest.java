@@ -5,7 +5,7 @@ import com.apssouza.mytrade.trading.builder.OrderBuilder;
 import com.apssouza.mytrade.trading.builder.StopOrderBuilder;
 import com.apssouza.mytrade.trading.forex.order.*;
 import com.apssouza.mytrade.trading.forex.portfolio.FilledOrderDto;
-import com.apssouza.mytrade.trading.misc.helper.config.Properties;
+import com.apssouza.mytrade.trading.misc.helper.config.TradingParams;
 import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;
@@ -72,7 +72,7 @@ public class SimulatedExecutionHandlerTest extends TestCase {
 
     @Test(expected = RuntimeException.class)
     public void executeOrderAddingUnitsWhenEditNotEnabled() {
-        Properties.trading_position_edit_enabled = false;
+        TradingParams.trading_position_edit_enabled = false;
         OrderBuilder orderBuilder = new OrderBuilder();
         OrderDto order = orderBuilder.build();
         OrderDto order2 = orderBuilder.build();
@@ -82,7 +82,7 @@ public class SimulatedExecutionHandlerTest extends TestCase {
 
     @Test
     public void executeOrderBuyAddingUnits() {
-        Properties.trading_position_edit_enabled = true;
+        TradingParams.trading_position_edit_enabled = true;
         OrderBuilder orderBuilder = new OrderBuilder();
         OrderDto order = orderBuilder.build();
         OrderDto order2 = orderBuilder.build();
@@ -100,7 +100,7 @@ public class SimulatedExecutionHandlerTest extends TestCase {
 
     @Test
     public void executeOrderSellAddingUnits() {
-        Properties.trading_position_edit_enabled = true;
+        TradingParams.trading_position_edit_enabled = true;
         OrderBuilder orderBuilder = new OrderBuilder();
         OrderDto order = orderBuilder.addOrder(LocalDateTime.MIN, OrderAction.SELL, OrderStatus.CREATED).build();
         OrderDto order2 = orderBuilder.build();
@@ -118,7 +118,7 @@ public class SimulatedExecutionHandlerTest extends TestCase {
 
     @Test
     public void executeOrderSellCounterAction() {
-        Properties.trading_position_edit_enabled = true;
+        TradingParams.trading_position_edit_enabled = true;
         OrderBuilder orderBuilder = new OrderBuilder();
         OrderDto orderBuy = orderBuilder.build();
         OrderDto orderSell = orderBuilder.setAction(OrderAction.SELL).build();
@@ -132,7 +132,7 @@ public class SimulatedExecutionHandlerTest extends TestCase {
 
     @Test
     public void executeOrderSellCounterActionDifferentQtd() {
-        Properties.trading_position_edit_enabled = true;
+        TradingParams.trading_position_edit_enabled = true;
         OrderBuilder orderBuilder = new OrderBuilder();
         OrderDto orderBuy = orderBuilder.build();
         OrderDto orderSell = orderBuilder.setAction(OrderAction.SELL).setQtd(100).build();
@@ -147,7 +147,7 @@ public class SimulatedExecutionHandlerTest extends TestCase {
 
     @Test
     public void executeOrderBuyCounterAction() {
-        Properties.trading_position_edit_enabled = true;
+        TradingParams.trading_position_edit_enabled = true;
         OrderBuilder orderBuilder = new OrderBuilder();
         OrderDto orderBuy = orderBuilder.build();
         OrderDto orderSell = orderBuilder.setAction(OrderAction.SELL).build();
@@ -160,7 +160,7 @@ public class SimulatedExecutionHandlerTest extends TestCase {
 
     @Test
     public void executeOrderBuyCounterActionDifferentQtd() {
-        Properties.trading_position_edit_enabled = true;
+        TradingParams.trading_position_edit_enabled = true;
         OrderBuilder orderBuilder = new OrderBuilder();
         OrderDto orderBuy = orderBuilder.build();
         OrderDto orderSell = orderBuilder.setAction(OrderAction.SELL).setQtd(100).build();

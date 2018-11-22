@@ -2,7 +2,7 @@ package com.apssouza.mytrade.trading.forex.session.listener;
 
 import com.apssouza.mytrade.trading.forex.statistics.HistoryBookHandler;
 import com.apssouza.mytrade.trading.forex.session.event.*;
-import com.apssouza.mytrade.trading.misc.helper.config.Properties;
+import com.apssouza.mytrade.trading.misc.helper.config.TradingParams;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -23,7 +23,7 @@ public class SessionFinishedListener implements PropertyChangeListener {
         }
 
         SessionFinishedEvent finishedEvent = (SessionFinishedEvent) event;
-        historyHandler.export(Properties.transaction_path);
+        historyHandler.export(TradingParams.transaction_path);
         System.out.println("Finished session");
     }
 

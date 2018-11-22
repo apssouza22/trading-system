@@ -25,7 +25,7 @@ import com.apssouza.mytrade.trading.forex.session.event.Event;
 import com.apssouza.mytrade.trading.forex.session.listener.*;
 import com.apssouza.mytrade.trading.forex.statistics.HistoryBookHandler;
 import com.apssouza.mytrade.trading.forex.statistics.TransactionsExporter;
-import com.apssouza.mytrade.trading.misc.helper.config.Properties;
+import com.apssouza.mytrade.trading.misc.helper.config.TradingParams;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -101,10 +101,10 @@ public class TradingSession {
                 this.portfolio,
                 new PositionSizerFixed(),
                 new StopOrderCreatorFixed(new PriceDistanceObject(
-                        Properties.hard_stop_loss_distance,
-                        Properties.take_profit_distance_fixed,
-                        Properties.entry_stop_loss_distance_fixed,
-                        Properties.trailing_stop_loss_distance
+                        TradingParams.hard_stop_loss_distance,
+                        TradingParams.take_profit_distance_fixed,
+                        TradingParams.entry_stop_loss_distance_fixed,
+                        TradingParams.trailing_stop_loss_distance
                 ))
         );
 
@@ -138,9 +138,9 @@ public class TradingSession {
     private ExecutionHandler getExecutionHandler() {
         if (this.executionType == ExecutionType.BROKER) {
             return new InteractiveBrokerExecutionHandler(
-                    Properties.brokerHost,
-                    Properties.brokerPort,
-                    Properties.brokerClientId
+                    TradingParams.brokerHost,
+                    TradingParams.brokerPort,
+                    TradingParams.brokerClientId
             );
         }
         return new SimulatedExecutionHandler();

@@ -1,12 +1,11 @@
 package com.apssouza.mytrade.trading.forex.feed;
 
-import com.apssouza.mytrade.feed.price.MemoryPriceDao;
 import com.apssouza.mytrade.feed.price.PriceDao;
 import com.apssouza.mytrade.feed.price.PriceHandler;
 import com.apssouza.mytrade.trading.forex.session.SessionType;
 import com.apssouza.mytrade.trading.forex.session.event.*;
 import com.apssouza.mytrade.trading.misc.helper.TradingHelper;
-import com.apssouza.mytrade.trading.misc.helper.config.Properties;
+import com.apssouza.mytrade.trading.misc.helper.config.TradingParams;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -73,7 +72,7 @@ public class HistoricalDbPriceStream implements PriceStream{
     }
 
     protected void processStartDay(LocalDateTime currentTime) {
-        if (Properties.sessionType == SessionType.BACK_TEST)
+        if (TradingParams.sessionType == SessionType.BACK_TEST)
             this.priceMemoryDao.loadData(currentTime, currentTime.plusDays(1));
     }
 }

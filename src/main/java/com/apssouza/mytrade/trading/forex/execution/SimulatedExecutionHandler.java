@@ -7,7 +7,7 @@ import com.apssouza.mytrade.trading.forex.order.StopOrderDto;
 import com.apssouza.mytrade.trading.forex.portfolio.FilledOrderDto;
 import com.apssouza.mytrade.trading.forex.session.MultiPositionHandler;
 import com.apssouza.mytrade.trading.misc.helper.NumberHelper;
-import com.apssouza.mytrade.trading.misc.helper.config.Properties;
+import com.apssouza.mytrade.trading.misc.helper.config.TradingParams;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -20,7 +20,7 @@ public class SimulatedExecutionHandler implements ExecutionHandler {
 
     private static Logger log = Logger.getLogger(SimulatedExecutionHandler.class.getSimpleName());
     private final MultiPositionPerCPairHandler multiPositionPerCPairHandler;
-    private final StopOrderHandler stopOrderHandler;
+    private final StopOrderExecutionHandler stopOrderHandler;
     private Map<Integer, StopOrderDto> limitOrders = new LinkedHashMap<>();
     private LocalDateTime currentTime;
     private Map<String, PriceDto> priceMap = new LinkedHashMap<>();
@@ -29,7 +29,7 @@ public class SimulatedExecutionHandler implements ExecutionHandler {
 
     public SimulatedExecutionHandler() {
         multiPositionPerCPairHandler = new MultiPositionPerCPairHandler(this.positions);
-        stopOrderHandler = new StopOrderHandler(positions);
+        stopOrderHandler = new StopOrderExecutionHandler(positions);
     }
 
     public Map<String, FilledOrderDto> getPortfolio() {
@@ -77,7 +77,7 @@ public class SimulatedExecutionHandler implements ExecutionHandler {
     }
 
     private void handleExistingPosition(OrderDto order, OrderAction action, int quantity) {
-        if (Properties.trading_multi_position_enabled || Properties.trading_position_edit_enabled) {
+        if (TradingParams.trading_multi_position_enabled || TradingParams.trading_position_edit_enabled) {
             this.multiPositionPerCPairHandler.handle(action, order.getSymbol(), quantity);
         } else {
             FilledOrderDto filledOrderDto = this.positions.get(order.getSymbol());

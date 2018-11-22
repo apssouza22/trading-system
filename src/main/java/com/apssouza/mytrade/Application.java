@@ -7,7 +7,7 @@ import com.apssouza.mytrade.feed.signal.SignalDao;
 import com.apssouza.mytrade.trading.forex.session.ExecutionType;
 import com.apssouza.mytrade.trading.forex.session.SessionType;
 import com.apssouza.mytrade.trading.forex.session.TradingSession;
-import com.apssouza.mytrade.trading.misc.helper.config.Properties;
+import com.apssouza.mytrade.trading.misc.helper.config.TradingParams;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -22,18 +22,18 @@ public class Application {
 
     public static void main(String[] args){
         LocalDate date = LocalDate.of(2018, 9, 10);
-        Properties.tradingStartDay = LocalDateTime.of(date, LocalTime.MIN);
-        Properties.tradingEndDay = LocalDateTime.of(date.plusDays(1), LocalTime.MIN);
-        Properties.tradingStartTime = LocalTime.of(8,0);
-        Properties.tradingEndTime = LocalTime.of(20,0);
+        TradingParams.tradingStartDay = LocalDateTime.of(date, LocalTime.MIN);
+        TradingParams.tradingEndDay = LocalDateTime.of(date.plusDays(1), LocalTime.MIN);
+        TradingParams.tradingStartTime = LocalTime.of(8,0);
+        TradingParams.tradingEndTime = LocalTime.of(20,0);
         DataGenerator dataGenerator = new DataGenerator();
         PriceDao priceMemoryDao = new MemoryPriceDao(dataGenerator);
         SignalDao signalMemoryDao = new MemorySignalDao(dataGenerator);
-        signalMemoryDao.loadData(Properties.tradingStartDay, Properties.tradingEndDay);
+        signalMemoryDao.loadData(TradingParams.tradingStartDay, TradingParams.tradingEndDay);
         TradingSession tradingSession = new TradingSession(
                 BigDecimal.valueOf(100000l),
-                Properties.tradingStartDay,
-                Properties.tradingEndDay,
+                TradingParams.tradingStartDay,
+                TradingParams.tradingEndDay,
                 signalMemoryDao,
                 priceMemoryDao,
                 SessionType.BACK_TEST,
