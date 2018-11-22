@@ -35,7 +35,7 @@ public class StopOrderFilledListener implements PropertyChangeListener {
         StopOrderDto stopOrder = orderFilledEvent.getStopOrder();
         LocalDateTime time = orderFilledEvent.getTimestamp();
         Position ps = MultiPositionHandler.getPositionByStopOrder(stopOrder);
-        ps.closePosition(ExitReason.STOP_ORDER_FILLED);
+        ps = ps.closePosition(ExitReason.STOP_ORDER_FILLED);
         this.portfolio.closePosition(ps.getIdentifier());
         this.historyHandler.setState(TransactionState.EXIT, ps.getIdentifier());
         this.historyHandler.addPosition(ps);

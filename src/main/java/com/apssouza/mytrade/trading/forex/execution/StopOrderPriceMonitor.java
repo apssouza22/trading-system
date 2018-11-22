@@ -9,18 +9,13 @@ import com.apssouza.mytrade.trading.forex.order.StopOrderType;
 import java.util.*;
 
 public class StopOrderPriceMonitor {
+    
 
-    private final Map<Integer, StopOrderDto> allStopOrders;
-
-    public StopOrderPriceMonitor(Map<Integer, StopOrderDto> allStopOrders) {
-        this.allStopOrders = allStopOrders;
-    }
-
-    public Set<StopOrderDto> getFilledOrders(Map<String, PriceDto> priceMap) {
-        Set<StopOrderDto> filled_positions = new HashSet<>();
-        for (Map.Entry<Integer, StopOrderDto> entry : this.allStopOrders.entrySet()) {
-            StopOrderDto stopOrder = this.allStopOrders.get(entry.getKey());
-            if (filled_positions.contains(stopOrder.getIdentifier())) {
+    public Set<StopOrderDto> getFilledOrders(Map<String, PriceDto> priceMap, Map<Integer, StopOrderDto> allStopOrders) {
+        Set<StopOrderDto> filledOrders = new HashSet<>();
+        for (Map.Entry<Integer, StopOrderDto> entry : allStopOrders.entrySet()) {
+            StopOrderDto stopOrder = allStopOrders.get(entry.getKey());
+            if (filledOrders.contains(stopOrder.getIdentifier())) {
                 continue;
             }
 
@@ -28,32 +23,29 @@ public class StopOrderPriceMonitor {
                 continue;
             }
             PriceDto df_current_price = priceMap.get(stopOrder.getSymbol());
-            filledOrderCheck(filled_positions, entry, stopOrder, df_current_price);
+            filledOrderCheck(filledOrders, stopOrder, df_current_price);
 
         }
-        return filled_positions;
+        return filledOrders;
     }
 
-    private void filledOrderCheck(Set<StopOrderDto> filledPositions, Map.Entry<Integer, StopOrderDto> entry, StopOrderDto stopOrder, PriceDto priceDto) {
+    private void filledOrderCheck(
+            Set<StopOrderDto> filledPositions,
+            StopOrderDto stopOrder, PriceDto priceDto
+    ) {
         if (stopOrder.getAction().equals(OrderAction.BUY)) {
             if(hasFilledBuyOrder(stopOrder, priceDto)){
-                updateStopOrderStatus(filledPositions, entry, stopOrder, priceDto);
+                filledPositions.add(stopOrder);
             }
         }
 
         if (stopOrder.getAction().equals(OrderAction.SELL)) {
             if(hasFilledSellOrder(stopOrder, priceDto)){
-                updateStopOrderStatus(filledPositions, entry, stopOrder, priceDto);
+                filledPositions.add(stopOrder);
             }
         }
     }
 
-    private StopOrderDto updateStopOrderStatus(Set<StopOrderDto> filledPositions, Map.Entry<Integer, StopOrderDto> entry, StopOrderDto stopOrder, PriceDto priceDto) {
-        stopOrder = new StopOrderDto(StopOrderStatus.FILLED, priceDto.getClose(), stopOrder);
-        this.allStopOrders.put(entry.getKey(), stopOrder);
-        filledPositions.add(stopOrder);
-        return stopOrder;
-    }
 
     private boolean hasFilledSellOrder(StopOrderDto stopOrder, PriceDto priceDto) {
         if (stopOrder.getType().equals(StopOrderType.TAKE_PROFIT)) {

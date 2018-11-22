@@ -16,7 +16,7 @@ public class StopOrderHandler {
     private final Map<String, FilledOrderDto> positions;
     private final StopOrderPriceMonitor stopOrderPriceMonitor;
     private ConcurrentHashMap<Integer, StopOrderDto> allStopOrders = new ConcurrentHashMap<>();
-    ;
+
     private static AtomicInteger stopOrderId = new AtomicInteger();
 
     public StopOrderDto placeStopOrder(StopOrderDto stop) {
@@ -44,7 +44,7 @@ public class StopOrderHandler {
 
     public StopOrderHandler(Map<String, FilledOrderDto> positions) {
         this.positions = positions;
-        this.stopOrderPriceMonitor = new StopOrderPriceMonitor(allStopOrders);
+        this.stopOrderPriceMonitor = new StopOrderPriceMonitor();
     }
 
     public void deleteStopOrders() {
@@ -67,10 +67,16 @@ public class StopOrderHandler {
      * Check if the stop orders has been filled. Change the position based in the result
      */
     public void processStopOrders(LocalDateTime currentTime, Map<String, PriceDto> priceMap) {
-        Set<StopOrderDto> filled_positions = stopOrderPriceMonitor.getFilledOrders(priceMap);
+        Set<StopOrderDto> filled_positions = stopOrderPriceMonitor.getFilledOrders(priceMap, allStopOrders);
         for (StopOrderDto stop : filled_positions) {
+            updateStopOrderStatus(stop, priceMap.get(stop.getSymbol()));
             changeLocalPosition(stop, currentTime);
         }
+    }
+
+    private void updateStopOrderStatus(StopOrderDto stopOrder, PriceDto priceDto) {
+        stopOrder = new StopOrderDto(StopOrderStatus.FILLED, priceDto.getClose(), stopOrder);
+        this.allStopOrders.put(stopOrder.getId(), stopOrder);
     }
 
     private void changeLocalPosition(StopOrderDto stop_order, LocalDateTime currentTime) {

@@ -12,15 +12,18 @@ import java.util.Map;
 public class TransactionsExporter {
 
     public void exportCsv(List<CycleHistory> transactions, String filepath) {
-        WriteFileHelper.write(filepath,"");
+        WriteFileHelper.write(filepath, getHeader() + "\n");
         for (CycleHistory item : transactions) {
             for (Map.Entry<String, TransactionDto> trans : item.getTransactions().entrySet()) {
                 List<String> line = Arrays.asList(
                         trans.getValue().getIdentifier(),
                         trans.getValue().getPosition() != null ? toString(trans.getValue().getPosition().getInitPrice()) : "",
+                        trans.getValue().getPosition() != null ? toString(trans.getValue().getPosition().getCurrentPrice()) : "",
                         trans.getValue().getPosition() != null ? toString(trans.getValue().getPosition().getQuantity()) : "",
                         trans.getValue().getPosition() != null ? toString(trans.getValue().getPosition().getInitPrice().multiply(BigDecimal.valueOf(trans.getValue().getPosition().getQuantity()))) : "",
-                        trans.getValue().getOrder() != null ? toString(trans.getValue().getOrder().getAction()) : "",
+                        trans.getValue().getPosition() != null ? toString(trans.getValue().getPosition().getCurrentPrice().multiply(BigDecimal.valueOf(trans.getValue().getPosition().getQuantity()))) : "",
+                        trans.getValue().getPosition() != null ? toString(trans.getValue().getPosition().getCurrentPrice().subtract(trans.getValue().getPosition().getInitPrice())) : "",
+                        trans.getValue().getFilledOrder() != null ? toString(trans.getValue().getFilledOrder().getAction()) : "",
                         trans.getValue().getPosition() != null ? toString(trans.getValue().getPosition().getTimestamp()) : "",
                         //trans.getValue().getPosition() != null ? trans.getValue().getPosition().getPlacedStopLoss().getPrice().toString(): "",
                         //trans.getValue().getPosition() != null ? trans.getValue().getPosition().getTakeProfitOrder().getPrice().toString(): "",
@@ -33,10 +36,29 @@ public class TransactionsExporter {
         }
     }
 
-    private String toString(Object ob){
-        if (ob != null){
+    private String toString(Object ob) {
+        if (ob != null) {
             return ob.toString();
         }
         return "";
     }
+
+    private List<String> getHeader() {
+        List<String> line = Arrays.asList(
+                "Identifier",
+                "Init price",
+                "End price",
+                "Quantidade",
+                "Init amount",
+                "End amount",
+                "Result",
+                "Action",
+                "Timestamp",
+                "Exit reason",
+                "State",
+                ""
+        );
+        return line;
+    }
 }
+

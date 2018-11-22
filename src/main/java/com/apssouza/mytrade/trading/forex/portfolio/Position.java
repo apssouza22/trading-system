@@ -3,6 +3,7 @@ package com.apssouza.mytrade.trading.forex.portfolio;
 import com.apssouza.mytrade.trading.forex.common.Symbol;
 import com.apssouza.mytrade.trading.forex.order.StopOrderDto;
 import com.apssouza.mytrade.trading.forex.order.StopOrderType;
+import com.apssouza.mytrade.trading.misc.helper.NumberHelper;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -79,9 +80,8 @@ public class Position {
         return null;
     }
 
-
     public void updatePositionPrice(BigDecimal price) {
-        this.currentPrice = price;
+        this.currentPrice = NumberHelper.roundSymbolPrice(symbol, price);
     }
 
     public void addQuantity(int qtd, BigDecimal price) {

@@ -74,7 +74,7 @@ public class Portfolio {
 
     public void printPortfolio() {
         for (Map.Entry<String, Position> entry : positions.entrySet()){
-            System.out.println(entry.getValue());
+            log.info(entry.getValue().toString());
         }
     }
 }
