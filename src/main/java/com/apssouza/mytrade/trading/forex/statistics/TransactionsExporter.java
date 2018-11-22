@@ -12,6 +12,7 @@ import java.util.Map;
 public class TransactionsExporter {
 
     public void exportCsv(List<CycleHistory> transactions, String filepath) {
+        WriteFileHelper.write(filepath,"");
         for (CycleHistory item : transactions) {
             for (Map.Entry<String, TransactionDto> trans : item.getTransactions().entrySet()) {
                 List<String> line = Arrays.asList(
@@ -23,9 +24,11 @@ public class TransactionsExporter {
                         trans.getValue().getPosition() != null ? trans.getValue().getPosition().getTimestamp().toString() : "",
                         //trans.getValue().getPosition() != null ? trans.getValue().getPosition().getPlacedStopLoss().getPrice().toString(): "",
                         //trans.getValue().getPosition() != null ? trans.getValue().getPosition().getTakeProfitOrder().getPrice().toString(): "",
-                        trans.getValue().getState() != null ? trans.getValue().getState().toString() : ""
+                        trans.getValue().getPosition() != null ? trans.getValue().getPosition().getExitReason().toString() : "",
+                        trans.getValue().getState() != null ? trans.getValue().getState().toString() : "",
+                        ""
                 );
-                WriteFileHelper.append(filepath, String.join(",", line));
+                WriteFileHelper.append(filepath, String.join(",", line) + "\n");
             }
         }
     }

@@ -10,20 +10,20 @@ import com.apssouza.mytrade.trading.forex.session.TradingSession;
 import com.apssouza.mytrade.trading.misc.helper.config.Properties;
 
 import java.math.BigDecimal;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.logging.Logger;
 
 public class Application {
 
-    private static Logger log = Logger.getLogger(Application.class.getName());
 
     public static void main(String[] args){
         LocalDate date = LocalDate.of(2018, 9, 10);
         Properties.tradingStartDay = LocalDateTime.of(date, LocalTime.MIN);
-        Properties.tradingEndDay = LocalDateTime.of(date.plusDays(2), LocalTime.MIN);
+        Properties.tradingEndDay = LocalDateTime.of(date.plusDays(1), LocalTime.MIN);
         Properties.tradingStartTime = LocalTime.MIN;
         Properties.tradingEndTime = LocalTime.MAX;
         DataGenerator dataGenerator = new DataGenerator();

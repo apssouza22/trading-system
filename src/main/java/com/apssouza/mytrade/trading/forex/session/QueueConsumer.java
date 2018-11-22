@@ -7,6 +7,7 @@ import com.apssouza.mytrade.trading.forex.statistics.HistoryBookHandler;
 
 import java.time.LocalDateTime;
 import java.util.concurrent.BlockingQueue;
+import java.util.logging.Logger;
 
 public class QueueConsumer extends Thread {
     private final BlockingQueue<Event> eventQueue;
@@ -15,6 +16,7 @@ public class QueueConsumer extends Thread {
     private final EventNotifier notifier;
     private final LocalDateTime endDate;
 
+    private static Logger log = Logger.getLogger(QueueConsumer.class.getSimpleName());
 
     public QueueConsumer(
             BlockingQueue<Event> eventQueue,
@@ -38,6 +40,7 @@ public class QueueConsumer extends Thread {
         for (; ; ) {
             try {
                 Event event = eventQueue.take();
+                log.info(event.getTimestamp() +" - "+ event.getPrice().get("AUDUSD").getClose());
                 historyHandler.startCycle(event.getTimestamp());
 
                 notifier.notify(event);

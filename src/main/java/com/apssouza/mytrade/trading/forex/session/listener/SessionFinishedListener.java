@@ -22,7 +22,7 @@ public class SessionFinishedListener implements PropertyChangeListener {
         }
 
         SessionFinishedEvent finishedEvent = (SessionFinishedEvent) event;
-        historyHandler.export("/Users/alex/projects/coalface/files/trading/java.csv");
+        historyHandler.export("/Users/alex/projects/coalface/files/java.csv");
         System.out.println("Finished session");
     }
 

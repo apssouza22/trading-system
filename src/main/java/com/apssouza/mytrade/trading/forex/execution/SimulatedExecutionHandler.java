@@ -6,6 +6,7 @@ import com.apssouza.mytrade.trading.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.forex.order.StopOrderDto;
 import com.apssouza.mytrade.trading.forex.portfolio.FilledOrderDto;
 import com.apssouza.mytrade.trading.forex.session.MultiPositionHandler;
+import com.apssouza.mytrade.trading.misc.helper.NumberHelper;
 import com.apssouza.mytrade.trading.misc.helper.config.Properties;
 
 import java.math.BigDecimal;
@@ -54,7 +55,7 @@ public class SimulatedExecutionHandler implements ExecutionHandler {
         int quantity = order.getQuantity();
 
         PriceDto fill_price = priceMap.get(currency_pair);
-        BigDecimal close_price = fill_price.getClose();
+        BigDecimal close_price = NumberHelper.roundSymbolPrice(currency_pair, fill_price.getClose());
 
         FilledOrderDto filled_order = new FilledOrderDto(
                 this.currentTime,

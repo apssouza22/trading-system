@@ -74,7 +74,7 @@ public class PriceChangedListener implements PropertyChangeListener {
         } else {
             signals = this.signalHandler.findbySecondAndSource(Properties.systemName, event.getTimestamp());
         }
-        System.out.println(event.getTimestamp());
+
         for (SignalDto signal : signals) {
             eventNotifier.notify(new SignalCreatedEvent(
                     EventType.SIGNAL_CREATED,

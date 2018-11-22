@@ -12,24 +12,12 @@
     <description>MyTrade is an open-source backtesting and live trading platform for use in the foreign exchange</description>
 
     <properties>
-        <tablesaw-core-version>0.25.2</tablesaw-core-version>
-        <tablesaw-jsplot-version>0.25.2</tablesaw-jsplot-version>
         <jacoco.version>0.7.5.201505241946</jacoco.version>
         <junit.version>4.12</junit.version>
         <h2.version>1.4.197</h2.version>
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>tech.tablesaw</groupId>
-            <artifactId>tablesaw-core</artifactId>
-            <version>${tablesaw-core-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>tech.tablesaw</groupId>
-            <artifactId>tablesaw-jsplot</artifactId>
-            <version>${tablesaw-jsplot-version}</version>
-        </dependency>
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
