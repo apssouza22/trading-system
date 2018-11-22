@@ -24,8 +24,8 @@ public class Application {
         LocalDate date = LocalDate.of(2018, 9, 10);
         Properties.tradingStartDay = LocalDateTime.of(date, LocalTime.MIN);
         Properties.tradingEndDay = LocalDateTime.of(date.plusDays(1), LocalTime.MIN);
-        Properties.tradingStartTime = LocalTime.MIN;
-        Properties.tradingEndTime = LocalTime.MAX;
+        Properties.tradingStartTime = LocalTime.of(8,0);
+        Properties.tradingEndTime = LocalTime.of(20,0);
         DataGenerator dataGenerator = new DataGenerator();
         PriceDao priceMemoryDao = new MemoryPriceDao(dataGenerator);
         SignalDao signalMemoryDao = new MemorySignalDao(dataGenerator);

@@ -25,14 +25,15 @@ public class Properties {
     public static boolean take_profit_stop_enabled = true;
     public static Map<String, Integer> currency_pair_significant_digits_in_price;
     public static double hard_stop_loss_distance = 1;
-    public static double trailing_stop_loss_distance =  1;
+    public static double trailing_stop_loss_distance = 1;
     public static double take_profit_distance_fixed = 1;
-    public static double entry_stop_loss_distance_fixed =  1;
+    public static double entry_stop_loss_distance_fixed = 1;
     public static String systemName = "signal_test";
+    public static String transaction_path = "/Users/alex/projects/coalface/files/java.csv";
 
     static {
         currency_pair_significant_digits_in_price = new HashMap<String, Integer>() {{
-                put("AUDUSD", 4);
-            }};
+            put("AUDUSD", 4);
+        }};
     }
 }

@@ -17,19 +17,26 @@ public class TransactionsExporter {
             for (Map.Entry<String, TransactionDto> trans : item.getTransactions().entrySet()) {
                 List<String> line = Arrays.asList(
                         trans.getValue().getIdentifier(),
-                        trans.getValue().getPosition() != null ? trans.getValue().getPosition().getInitPrice().toString() : "",
-                        trans.getValue().getPosition() != null ? trans.getValue().getPosition().getQuantity().toString() : "",
-                        trans.getValue().getPosition() != null ? trans.getValue().getPosition().getInitPrice().multiply(BigDecimal.valueOf(trans.getValue().getPosition().getQuantity())).toString() : "",
-                        trans.getValue().getOrder() != null ? trans.getValue().getOrder().getAction().toString() : "",
-                        trans.getValue().getPosition() != null ? trans.getValue().getPosition().getTimestamp().toString() : "",
+                        trans.getValue().getPosition() != null ? toString(trans.getValue().getPosition().getInitPrice()) : "",
+                        trans.getValue().getPosition() != null ? toString(trans.getValue().getPosition().getQuantity()) : "",
+                        trans.getValue().getPosition() != null ? toString(trans.getValue().getPosition().getInitPrice().multiply(BigDecimal.valueOf(trans.getValue().getPosition().getQuantity()))) : "",
+                        trans.getValue().getOrder() != null ? toString(trans.getValue().getOrder().getAction()) : "",
+                        trans.getValue().getPosition() != null ? toString(trans.getValue().getPosition().getTimestamp()) : "",
                         //trans.getValue().getPosition() != null ? trans.getValue().getPosition().getPlacedStopLoss().getPrice().toString(): "",
                         //trans.getValue().getPosition() != null ? trans.getValue().getPosition().getTakeProfitOrder().getPrice().toString(): "",
-                        trans.getValue().getPosition() != null ? trans.getValue().getPosition().getExitReason().toString() : "",
-                        trans.getValue().getState() != null ? trans.getValue().getState().toString() : "",
+                        trans.getValue().getPosition() != null ? toString(trans.getValue().getPosition().getExitReason()) : "",
+                        trans.getValue().getState() != null ? toString(trans.getValue().getState()) : "",
                         ""
                 );
                 WriteFileHelper.append(filepath, String.join(",", line) + "\n");
             }
         }
+    }
+
+    private String toString(Object ob){
+        if (ob != null){
+            return ob.toString();
+        }
+        return "";
     }
 }

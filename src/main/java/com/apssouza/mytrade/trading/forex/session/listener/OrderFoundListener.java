@@ -66,23 +66,16 @@ public class OrderFoundListener implements PropertyChangeListener {
         }
 
         for (OrderDto order : orders) {
-            if (!riskManagementHandler.canExecuteOrder(order, processedOrders, exitedPositions)) {
+            if (!riskManagementHandler.canExecuteOrder(event, order, processedOrders, exitedPositions)) {
+                orderHandler.updateOrderStatus(order.getId(), OrderStatus.CANCELLED);
                 continue;
             }
             this.historyHandler.addOrder(order);
-            try {
-                processNewOrder(processedOrders, order, orderFoundEvent);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
+            processNewOrder(processedOrders, order, orderFoundEvent);
         }
     }
 
-    private void processNewOrder(List<String> processedOrders, OrderDto order, OrderFoundEvent event) throws InterruptedException {
-        Optional<OrderDto> oOrder = orderHandler.getOrderById(order.getId());
-        if (!oOrder.isPresent() || oOrder.get().getStatus() != OrderStatus.CREATED){
-            return;
-        }
+    private void processNewOrder(List<String> processedOrders, OrderDto order, OrderFoundEvent event) {
         FilledOrderDto filledOrder = executionHandler.executeOrder(order);
         if (filledOrder != null) {
             eventNotifier.notify(new OrderFilledEvent(

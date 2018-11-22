@@ -59,7 +59,6 @@ public class Portfolio {
             throw new RuntimeException("Position not found");
         }
         Position ps = this.positions.get(identifier);
-        ps.closePosition(null);
         this.positions.remove(identifier);
         log.info(String.format("Position closed - %s %s  ", ps.getIdentifier(), ps.getQuantity()));
         return true;

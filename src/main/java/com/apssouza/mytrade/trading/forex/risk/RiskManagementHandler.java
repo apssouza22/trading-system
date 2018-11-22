@@ -11,7 +11,9 @@ import com.apssouza.mytrade.trading.forex.session.event.Event;
 import com.apssouza.mytrade.trading.forex.session.event.SignalCreatedEvent;
 import com.apssouza.mytrade.trading.misc.helper.config.Properties;
 import com.apssouza.mytrade.trading.forex.session.event.PriceChangedEvent;
+import com.apssouza.mytrade.trading.misc.helper.time.MarketTimeHelper;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -120,7 +122,10 @@ public class RiskManagementHandler {
         return true;
     }
 
-    public boolean canExecuteOrder(OrderDto order, List<String> processedOrders, List<String> exitedPositions) {
+    public boolean canExecuteOrder(Event event, OrderDto order, List<String> processedOrders, List<String> exitedPositions) {
+        if (!MarketTimeHelper.isMarketOpened(event.getTimestamp())){
+            return false;
+        }
         if (isDuplicatedOrder(order,processedOrders, exitedPositions)){
             return false;
         }

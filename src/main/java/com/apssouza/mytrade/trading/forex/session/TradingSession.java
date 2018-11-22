@@ -157,6 +157,7 @@ public class TradingSession {
         eventNotifier.addPropertyChangeListener(new StopOrderFilledListener(portfolio, historyHandler));
         eventNotifier.addPropertyChangeListener(new PriceChangedListener(executionHandler, portfolioHandler, signalHandler, orderDao, eventNotifier));
         eventNotifier.addPropertyChangeListener(new SessionFinishedListener(historyHandler));
+        eventNotifier.addPropertyChangeListener(new EndedTradingDayListener(portfolioHandler));
         return eventNotifier;
     }
 

@@ -21,6 +21,14 @@ public class TradingHelper {
         return true;
     }
 
+    public static boolean hasEndedTradingTime(LocalDateTime currentTime) {
+        if (Properties.tradingEndTime.compareTo(currentTime.toLocalTime()) >= 0)
+            return false;
+        return true;
+    }
+
+
+
     public static OrderAction getExitOrderActionFromPosition(Position position) {
         OrderAction action = OrderAction.BUY;
         if (position.getPositionType() == PositionType.LONG) {

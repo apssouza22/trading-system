@@ -102,11 +102,13 @@ public class Position {
         this.quantity -= dec_units;
     }
 
-    public void closePosition(ExitReason exit_reason) {
-        this.status = PositionStatus.CLOSED;
+    public Position closePosition(ExitReason exit_reason) {
+        Position position = new Position(this, stopOrders);
+        position.status = PositionStatus.CLOSED;
         if (exit_reason != null) {
-            this.exitReason = exit_reason;
+            position.exitReason = exit_reason;
         }
+        return position;
     }
 
     public String getSymbol() {

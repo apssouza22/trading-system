@@ -133,7 +133,7 @@ public class PortfolioHandler {
         }
     }
 
-    public synchronized void processExits(PriceChangedEvent event, List<SignalDto> signals) throws InterruptedException {
+    public synchronized void processExits(PriceChangedEvent event, List<SignalDto> signals){
         if (portfolio.getPositions().isEmpty()) {
             return;
         }
@@ -141,7 +141,7 @@ public class PortfolioHandler {
         this.createOrderFromClosedPosition(exitedPositionss, event);
     }
 
-    private void createOrderFromClosedPosition(List<Position> positions, PriceChangedEvent event) throws InterruptedException {
+    private void createOrderFromClosedPosition(List<Position> positions, Event event) {
         for (Position position : positions) {
             if (position.getStatus() == PositionStatus.CLOSED) {
                 OrderDto order = this.orderHandler.createOrderFromClosedPosition(position, event.getTimestamp());
@@ -153,6 +153,18 @@ public class PortfolioHandler {
                 ));
             }
         }
+    }
+
+    public List<Position> closeAllPositions(ExitReason reason, Event event){
+        List<Position> exitedPositions = new ArrayList<>();
+        for (Map.Entry<String, Position> entry : this.portfolio.getPositions().entrySet()) {
+            Position position = entry.getValue();
+            log.info("Exiting position for(" + position.getSymbol() + " Reason " + reason);
+            position = position.closePosition(reason);
+            exitedPositions.add(position);
+        }
+        this.createOrderFromClosedPosition(exitedPositions, event);
+        return exitedPositions;
     }
 
     public Portfolio getPortfolio(){

@@ -46,6 +46,7 @@ public class FilledOrderListener implements PropertyChangeListener {
             }
         }
         Position position = handleExistingPosition(filledOrder, ps);
+        this.historyHandler.addPosition(ps);
         emitEvent(orderFilledEvent, position);
     }
 
@@ -62,12 +63,10 @@ public class FilledOrderListener implements PropertyChangeListener {
     private Position handleExistingPosition(FilledOrderDto filledOrder, Position ps) {
         if (filledOrder.getAction().equals(OrderAction.SELL) && ps.getPositionType().equals(PositionType.LONG)) {
             handleOppositeDirection(filledOrder, ps);
-            this.historyHandler.addPosition(ps);
             return ps;
         }
         if (filledOrder.getAction().equals(OrderAction.BUY) && ps.getPositionType().equals(PositionType.SHORT)) {
             handleOppositeDirection(filledOrder, ps);
-            this.historyHandler.addPosition(ps);
             return ps;
         }
         handleSameDirection(filledOrder, ps);

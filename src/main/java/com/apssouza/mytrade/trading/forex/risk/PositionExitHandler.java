@@ -13,6 +13,7 @@ import com.apssouza.mytrade.trading.forex.session.event.PriceChangedEvent;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -20,7 +21,7 @@ import java.util.logging.Logger;
 public class PositionExitHandler {
     private final Portfolio portfolio;
     private final PriceHandler priceHandler;
-    private static Logger log = Logger.getLogger(PositionExitHandler.class.getName());
+    private static Logger log = Logger.getLogger(PositionExitHandler.class.getSimpleName());
 
     public PositionExitHandler(Portfolio portfolio, PriceHandler priceHandler) {
         this.portfolio = portfolio;
@@ -28,20 +29,22 @@ public class PositionExitHandler {
     }
 
     public List<Position> process(PriceChangedEvent event, List<SignalDto> signals) {
+        if (this.portfolio.getPositions().isEmpty()){
+            return Collections.emptyList();
+        }
         log.info("Processing exits...");
         List<Position> exitedPositions = new ArrayList<>();
         for (Map.Entry<String, Position> entry : this.portfolio.getPositions().entrySet()) {
             Position position = entry.getValue();
             ExitReason exit_reason = null;
-            if (this.isEndOfDay(event.getTimestamp())) {
-                exit_reason = ExitReason.END_OF_DAY;
-            }
+
             if (this.hasCounterSignal(position, signals)) {
                 exit_reason = ExitReason.COUNTER_SIGNAL;
             }
             if (exit_reason != null) {
                 log.info("Exiting position for(" + position.getSymbol() + " Reason " + exit_reason);
-                position.closePosition(exit_reason);
+                position = position.closePosition(exit_reason);
+                portfolio.getPositions().put(position.getIdentifier(), position);
                 exitedPositions.add(position);
             }
         }

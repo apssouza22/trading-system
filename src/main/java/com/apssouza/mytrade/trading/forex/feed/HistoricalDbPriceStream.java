@@ -4,10 +4,7 @@ import com.apssouza.mytrade.feed.price.MemoryPriceDao;
 import com.apssouza.mytrade.feed.price.PriceDao;
 import com.apssouza.mytrade.feed.price.PriceHandler;
 import com.apssouza.mytrade.trading.forex.session.SessionType;
-import com.apssouza.mytrade.trading.forex.session.event.Event;
-import com.apssouza.mytrade.trading.forex.session.event.EventType;
-import com.apssouza.mytrade.trading.forex.session.event.PriceChangedEvent;
-import com.apssouza.mytrade.trading.forex.session.event.SessionFinishedEvent;
+import com.apssouza.mytrade.trading.forex.session.event.*;
 import com.apssouza.mytrade.trading.misc.helper.TradingHelper;
 import com.apssouza.mytrade.trading.misc.helper.config.Properties;
 
@@ -30,11 +27,21 @@ public class HistoricalDbPriceStream implements PriceStream{
     public void start(LocalDateTime start, LocalDateTime end) {
         LocalDateTime current = start;
         LocalDate lastDayProcessed = start.toLocalDate().minusDays(1);
+        boolean trading = true;
         while (current.compareTo(end) <= 0) {
+            if (TradingHelper.hasEndedTradingTime(current) && trading){
+                addToQueue(new EndedTradingDayEvent(
+                        EventType.ENDED_TRADING_DAY,
+                        current,
+                        priceHandler.getPriceSymbolMapped(current)
+                ));
+                trading = false;
+            }
             if (!TradingHelper.isTradingTime(current)) {
                 current = current.plusSeconds(1L);
                 continue;
             }
+            trading = true;
             if (lastDayProcessed.compareTo(current.toLocalDate()) < 0) {
                 this.processStartDay(current);
                 lastDayProcessed = current.toLocalDate();
