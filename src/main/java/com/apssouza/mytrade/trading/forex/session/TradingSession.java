@@ -152,9 +152,9 @@ public class TradingSession {
         eventNotifier.addPropertyChangeListener(new FilledOrderListener(portfolio, historyHandler, eventNotifier));
         eventNotifier.addPropertyChangeListener(new OrderCreatedListener(orderHandler));
         eventNotifier.addPropertyChangeListener(new OrderFoundListener(executionHandler, historyHandler, orderHandler, eventNotifier, riskManagementHandler));
-        eventNotifier.addPropertyChangeListener(new PortfolioChangedListener(reconciliationHandler));
+        eventNotifier.addPropertyChangeListener(new PortfolioChangedListener(reconciliationHandler, portfolioHandler));
         eventNotifier.addPropertyChangeListener(new SignalCreatedListener(riskManagementHandler, orderHandler, eventNotifier, historyHandler));
-        eventNotifier.addPropertyChangeListener(new StopOrderFilledListener(portfolio, historyHandler));
+        eventNotifier.addPropertyChangeListener(new StopOrderFilledListener(portfolio, historyHandler, eventNotifier));
         eventNotifier.addPropertyChangeListener(new PriceChangedListener(executionHandler, portfolioHandler, signalHandler, orderDao, eventNotifier));
         eventNotifier.addPropertyChangeListener(new SessionFinishedListener(historyHandler));
         eventNotifier.addPropertyChangeListener(new EndedTradingDayListener(portfolioHandler));

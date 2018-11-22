@@ -75,4 +75,9 @@ public class InteractiveBrokerExecutionHandler implements ExecutionHandler {
 
     }
 
+    @Override
+    public Map<String, FilledOrderDto> getPositions() {
+        return null;
+    }
+
 }

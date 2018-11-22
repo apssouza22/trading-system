@@ -51,7 +51,7 @@ public class FilledOrderListener implements PropertyChangeListener {
     }
 
     private void emitEvent(OrderFilledEvent orderFilledEvent, Position position) {
-            eventNotifier.notify(new PositionChangedEvent(
+            eventNotifier.notify(new PortfolioChangedEvent(
                     EventType.PORTFOLIO_CHANGED,
                     orderFilledEvent.getTimestamp(),
                     orderFilledEvent.getPrice(),

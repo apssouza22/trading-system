@@ -5,10 +5,10 @@ import com.apssouza.mytrade.trading.forex.portfolio.ExitReason;
 import com.apssouza.mytrade.trading.forex.portfolio.FilledOrderDto;
 import com.apssouza.mytrade.trading.forex.portfolio.Portfolio;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;
+import com.apssouza.mytrade.trading.forex.session.EventNotifier;
+import com.apssouza.mytrade.trading.forex.session.event.*;
 import com.apssouza.mytrade.trading.forex.statistics.HistoryBookHandler;
 import com.apssouza.mytrade.trading.forex.session.MultiPositionHandler;
-import com.apssouza.mytrade.trading.forex.session.event.Event;
-import com.apssouza.mytrade.trading.forex.session.event.StopOrderFilledEvent;
 import com.apssouza.mytrade.trading.forex.statistics.TransactionState;
 
 import java.beans.PropertyChangeEvent;
@@ -19,10 +19,12 @@ public class StopOrderFilledListener implements PropertyChangeListener {
 
     private final Portfolio portfolio;
     private final HistoryBookHandler historyHandler;
+    private final EventNotifier eventNotifier;
 
-    public StopOrderFilledListener(Portfolio portfolio, HistoryBookHandler historyHandler) {
+    public StopOrderFilledListener(Portfolio portfolio, HistoryBookHandler historyHandler, EventNotifier eventNotifier) {
         this.portfolio = portfolio;
         this.historyHandler = historyHandler;
+        this.eventNotifier = eventNotifier;
     }
 
     @Override
@@ -48,6 +50,13 @@ public class StopOrderFilledListener implements PropertyChangeListener {
                 stopOrder.getFilledPrice(),
                 ps.getIdentifier(),
                 stopOrder.getId()
+        ));
+
+        eventNotifier.notify(new PortfolioChangedEvent(
+                EventType.PORTFOLIO_CHANGED,
+                event.getTimestamp(),
+                event.getPrice(),
+                ps
         ));
     }
 }

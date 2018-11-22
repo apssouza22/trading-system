@@ -1,17 +1,22 @@
 package com.apssouza.mytrade.trading.forex.session.listener;
 
+import com.apssouza.mytrade.trading.forex.portfolio.ExitReason;
+import com.apssouza.mytrade.trading.forex.portfolio.PortfolioHandler;
 import com.apssouza.mytrade.trading.forex.portfolio.ReconciliationHandler;
 import com.apssouza.mytrade.trading.forex.session.event.Event;
 import com.apssouza.mytrade.trading.forex.session.event.PortfolioChangedEvent;
+import com.apssouza.mytrade.trading.forex.session.exception.ReconciliationException;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 public class PortfolioChangedListener implements PropertyChangeListener {
     private final ReconciliationHandler reconciliationHandler;
+    private final PortfolioHandler portfolioHandler;
 
-    public PortfolioChangedListener(ReconciliationHandler reconciliationHandler) {
+    public PortfolioChangedListener(ReconciliationHandler reconciliationHandler, PortfolioHandler portfolioHandler) {
         this.reconciliationHandler = reconciliationHandler;
+        this.portfolioHandler = portfolioHandler;
     }
 
     @Override
@@ -21,7 +26,10 @@ public class PortfolioChangedListener implements PropertyChangeListener {
             return;
         }
 
-        PortfolioChangedEvent event = (PortfolioChangedEvent) e;
-        reconciliationHandler.process();
+        try {
+            reconciliationHandler.process(e);
+        } catch (ReconciliationException e1) {
+            portfolioHandler.closeAllPositions(ExitReason.RECONCILIATION_FAILED, e);
+        }
     }
 }
