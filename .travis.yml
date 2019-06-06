@@ -1,11 +1,14 @@
 language: java
 jdk: oraclejdk8
 sudo: false
-script: mvn test
+script:
+  - mvn test
+  - sonar-scanner
 
 env:
   global:
     - CC_TEST_REPORTER_ID=9cc8d6f658996ba4d94c148c02e551e3be69977dc930054b442cfcccc775ec3d
+    - SONAR_TOKEN=09a24bce4ec02d6fada6b9726cfd9431bb3839f7
 
 before_script:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
@@ -15,3 +18,9 @@ before_script:
 after_script:
   - JACOCO_SOURCE_PATH=src/main/java ./cc-test-reporter format-coverage target/jacoco-ut/jacoco.xml  --input-type jacoco
   - ./cc-test-reporter upload-coverage
+
+addons:
+  sonarcloud:
+    organization: "apssouza22-github"
+    token:
+      secure: "09a24bce4ec02d6fada6b9726cfd9431bb3839f7" # encrypted value of your token
