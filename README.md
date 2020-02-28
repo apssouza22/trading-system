@@ -13,3 +13,5 @@ It has been developed for both retail traders and institutional hedge funds to a
 * Multi position for currency pair
 * Daily summary of profit/loss: Provide a daily summary of your profit/loss.
 * Performance status report: Provide a performance status of your current trades.
+
+## That's all. Leave a star if it helped you!
