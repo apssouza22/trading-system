@@ -1,10 +1,8 @@
 package com.apssouza.mytrade.trading.forex.order;
 
-import lombok.Data;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-
 import java.time.LocalDateTime;
+
+import lombok.Data;
 
 @Data
 public class OrderDto {
