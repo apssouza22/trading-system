@@ -32,7 +32,7 @@ public class TradingParams {
     public static double take_profit_distance_fixed = 0.1;
     public static double entry_stop_loss_distance_fixed = 1;
     public static String systemName = "signal_test";
-    public static String transaction_path = "/Users/alex/projects/coalface/files/java.csv";
+    public static String transaction_path = "book-history.csv";
 
     static {
         currency_pair_significant_digits_in_price = new HashMap<String, Integer>() {{

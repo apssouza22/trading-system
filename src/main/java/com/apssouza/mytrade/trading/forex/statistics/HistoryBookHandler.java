@@ -5,6 +5,7 @@ import com.apssouza.mytrade.trading.forex.portfolio.FilledOrderDto;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.forex.session.CycleHistory;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +48,7 @@ public class HistoryBookHandler {
         this.cycle.addOrder(order);
     }
 
-    public void export(String filepath) {
+    public void export(String filepath) throws IOException {
         transactionsExporter.exportCsv(transactions, filepath);
     }
 

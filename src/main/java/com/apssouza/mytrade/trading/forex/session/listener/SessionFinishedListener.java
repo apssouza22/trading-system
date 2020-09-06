@@ -6,6 +6,7 @@ import com.apssouza.mytrade.trading.misc.helper.config.TradingParams;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
 
 public class SessionFinishedListener implements PropertyChangeListener {
 
@@ -23,7 +24,11 @@ public class SessionFinishedListener implements PropertyChangeListener {
         }
 
         SessionFinishedEvent finishedEvent = (SessionFinishedEvent) event;
-        historyHandler.export(TradingParams.transaction_path);
+        try {
+            historyHandler.export(TradingParams.transaction_path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         System.out.println("Finished session");
     }
 

@@ -4,14 +4,24 @@ import com.apssouza.mytrade.trading.forex.session.CycleHistory;
 import com.apssouza.mytrade.trading.forex.session.TransactionDto;
 import com.apssouza.mytrade.trading.misc.helper.file.WriteFileHelper;
 
+import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 public class TransactionsExporter {
 
-    public void exportCsv(List<CycleHistory> transactions, String filepath) {
+    public void exportCsv(List<CycleHistory> transactions, String filepath) throws IOException {
+        Path path = Paths.get(filepath);
+        if (!Files.exists(path)){
+            File file = new File(filepath);
+            file.createNewFile();
+        }
         WriteFileHelper.write(filepath, getHeader() + "\n");
         for (CycleHistory item : transactions) {
             for (Map.Entry<String, TransactionDto> trans : item.getTransactions().entrySet()) {

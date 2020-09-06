@@ -16,6 +16,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -118,7 +119,7 @@ public class HistoryBookHandlerTest extends TestCase {
     }
 
     @Test
-    public void export() {
-        historyBookHandler.export("");
+    public void export() throws IOException {
+        historyBookHandler.export("files/test.csv");
     }
 }
