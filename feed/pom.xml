@@ -4,6 +4,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
+  <parent>
+    <groupId>com.apssouza.mytrade</groupId>
+    <artifactId>trading-system-parent</artifactId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+
   <groupId>com.apssouza.mytrade</groupId>
   <artifactId>feed</artifactId>
   <version>1.0-SNAPSHOT</version>
@@ -17,23 +23,5 @@
     </dependency>
 
   </dependencies>
-  <build>
-    <plugins>
-      <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <release>14</release>
-          <compilerArgs>
-            <arg>--enable-preview</arg>
-          </compilerArgs>
-          <forceJavacCompilerUse>true</forceJavacCompilerUse>
-          <parameters>true</parameters>
-        </configuration>
-        <version>3.8.1</version>
-      </plugin>
-    </plugins>
-
-
-  </build>
 
 </project>
