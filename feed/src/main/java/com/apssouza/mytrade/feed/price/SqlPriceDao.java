@@ -1,12 +1,11 @@
 package com.apssouza.mytrade.feed.price;
 
-import com.apssouza.mytrade.trading.misc.helper.time.DateTimeConverter;
+import com.apssouza.mytrade.common.misc.helper.time.DateTimeConverter;
 
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 public class SqlPriceDao implements PriceDao {
 
