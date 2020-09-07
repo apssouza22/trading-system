@@ -14,4 +14,9 @@ It has been developed for both retail traders and institutional hedge funds to a
 * Daily summary of profit/loss: Provide a daily summary of your profit/loss.
 * Performance status report: Provide a performance status of your current trades.
 
+## How to run
+```
+mvn package && \
+java --enable-preview -jar forex/target/forex-1.0-SNAPSHOT-fat.jar 
+``` 
 ## That's all. Leave a star if it helped you!

@@ -29,6 +29,8 @@
     <jacoco.version>0.8.5</jacoco.version>
     <junit.version>4.12</junit.version>
     <h2.version>1.4.197</h2.version>
+    <mockito-core.version>3.5.10</mockito-core.version>
+    <mytrade.version>1.0-SNAPSHOT</mytrade.version>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -42,19 +44,19 @@
       <dependency>
         <groupId>org.mockito</groupId>
         <artifactId>mockito-core</artifactId>
-        <version>3.5.10</version>
+        <version>${mockito-core.version}</version>
         <scope>test</scope>
       </dependency>
       <dependency>
         <groupId>com.apssouza.mytrade</groupId>
         <artifactId>feed</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>${mytrade.version}</version>
         <scope>compile</scope>
       </dependency>
       <dependency>
         <groupId>com.apssouza.mytrade</groupId>
         <artifactId>common</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>${mytrade.version}</version>
         <scope>compile</scope>
       </dependency>
     </dependencies>
@@ -71,19 +73,20 @@
   <build>
     <plugins>
       <plugin>
-        <!-- Build an executable JAR -->
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jar-plugin</artifactId>
-        <version>3.1.0</version>
-        <configuration>
-          <archive>
-            <manifest>
-              <!--<addClasspath>true</addClasspath>-->
-              <!--<classpathPrefix>lib/</classpathPrefix>-->
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <version>2.1.6.RELEASE</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>repackage</goal>
+            </goals>
+            <configuration>
+              <classifier>fat</classifier>
               <mainClass>com.apssouza.mytrade.Application</mainClass>
-            </manifest>
-          </archive>
-        </configuration>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -130,7 +133,6 @@
             </goals>
             <configuration>
               <!-- Sets the path to the file which contains the execution data. -->
-
               <dataFile>target/jacoco.exec</dataFile>
               <!-- Sets the output directory for the code coverage report. -->
               <outputDirectory>target/jacoco-ut</outputDirectory>
