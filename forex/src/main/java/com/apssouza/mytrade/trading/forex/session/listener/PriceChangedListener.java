@@ -11,7 +11,7 @@ import com.apssouza.mytrade.trading.forex.session.EventNotifier;
 import com.apssouza.mytrade.trading.forex.session.MultiPositionHandler;
 import com.apssouza.mytrade.trading.forex.session.SessionType;
 import com.apssouza.mytrade.trading.forex.session.event.*;
-import com.apssouza.mytrade.trading.misc.helper.config.TradingParams;
+import com.apssouza.mytrade.trading.misc.helper.TradingParams;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;

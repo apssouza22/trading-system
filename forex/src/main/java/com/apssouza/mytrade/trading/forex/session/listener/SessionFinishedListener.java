@@ -2,7 +2,7 @@ package com.apssouza.mytrade.trading.forex.session.listener;
 
 import com.apssouza.mytrade.trading.forex.statistics.HistoryBookHandler;
 import com.apssouza.mytrade.trading.forex.session.event.*;
-import com.apssouza.mytrade.trading.misc.helper.config.TradingParams;
+import com.apssouza.mytrade.trading.misc.helper.TradingParams;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;

@@ -3,8 +3,7 @@ package com.apssouza.mytrade.trading.misc.helper;
 import com.apssouza.mytrade.trading.forex.order.OrderAction;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.forex.portfolio.PositionType;
-import com.apssouza.mytrade.trading.misc.helper.config.TradingParams;
-import com.apssouza.mytrade.trading.misc.helper.time.DayHelper;
+import com.apssouza.mytrade.common.misc.helper.time.DayHelper;
 
 import java.time.LocalDateTime;
 

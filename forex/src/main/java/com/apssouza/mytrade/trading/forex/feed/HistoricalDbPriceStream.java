@@ -5,7 +5,7 @@ import com.apssouza.mytrade.feed.price.PriceHandler;
 import com.apssouza.mytrade.trading.forex.session.SessionType;
 import com.apssouza.mytrade.trading.forex.session.event.*;
 import com.apssouza.mytrade.trading.misc.helper.TradingHelper;
-import com.apssouza.mytrade.trading.misc.helper.config.TradingParams;
+import com.apssouza.mytrade.trading.misc.helper.TradingParams;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

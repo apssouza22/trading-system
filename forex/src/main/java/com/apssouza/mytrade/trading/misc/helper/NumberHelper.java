@@ -1,7 +1,5 @@
 package com.apssouza.mytrade.trading.misc.helper;
 
-import com.apssouza.mytrade.trading.misc.helper.config.TradingParams;
-
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;

@@ -1,14 +1,13 @@
 package com.apssouza.mytrade.trading.forex.execution;
 
+import com.apssouza.mytrade.trading.misc.helper.NumberHelper;
 import com.apssouza.mytrade.feed.price.PriceDto;
 import com.apssouza.mytrade.trading.forex.order.OrderAction;
 import com.apssouza.mytrade.trading.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.forex.order.StopOrderDto;
 import com.apssouza.mytrade.trading.forex.portfolio.FilledOrderDto;
-import com.apssouza.mytrade.trading.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.forex.session.MultiPositionHandler;
-import com.apssouza.mytrade.trading.misc.helper.NumberHelper;
-import com.apssouza.mytrade.trading.misc.helper.config.TradingParams;
+import com.apssouza.mytrade.trading.misc.helper.TradingParams;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

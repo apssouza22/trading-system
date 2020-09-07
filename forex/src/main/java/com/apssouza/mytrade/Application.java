@@ -7,7 +7,7 @@ import com.apssouza.mytrade.feed.signal.SignalDao;
 import com.apssouza.mytrade.trading.forex.session.ExecutionType;
 import com.apssouza.mytrade.trading.forex.session.SessionType;
 import com.apssouza.mytrade.trading.forex.session.TradingSession;
-import com.apssouza.mytrade.trading.misc.helper.config.TradingParams;
+import com.apssouza.mytrade.trading.misc.helper.TradingParams;
 
 import java.math.BigDecimal;
 import java.sql.Connection;

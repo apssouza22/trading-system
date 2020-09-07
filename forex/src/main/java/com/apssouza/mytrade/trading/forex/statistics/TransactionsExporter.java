@@ -2,7 +2,7 @@ package com.apssouza.mytrade.trading.forex.statistics;
 
 import com.apssouza.mytrade.trading.forex.session.CycleHistory;
 import com.apssouza.mytrade.trading.forex.session.TransactionDto;
-import com.apssouza.mytrade.trading.misc.helper.file.WriteFileHelper;
+import com.apssouza.mytrade.common.misc.helper.file.WriteFileHelper;
 
 import java.io.File;
 import java.io.IOException;
