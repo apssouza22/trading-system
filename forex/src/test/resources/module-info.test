@@ -1,0 +1,13 @@
+//
+// Patch, i.e. configure, Java module system at test-runtime
+// https://sormuras.github.io/blog/2018-09-11-testing-in-the-modular-world.html
+//
+
+// Allow deep reflection for test discovery - repeat for each test library you need
+//"open module com.apssouza.mytrade"
+--add-opens
+  com.apssouza.mytrade=org.mockito
+
+// "requires org.mockito"
+--add-reads
+  com.apssouza.mytrade.forex=org.mockito
