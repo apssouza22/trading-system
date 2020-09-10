@@ -1,4 +1,4 @@
-package com.apssouza.mytrade.trading.forex.feed;
+package com.apssouza.mytrade.trading.forex.feed.price;
 
 import com.apssouza.mytrade.feed.price.PriceHandler;
 import com.apssouza.mytrade.trading.forex.session.event.Event;

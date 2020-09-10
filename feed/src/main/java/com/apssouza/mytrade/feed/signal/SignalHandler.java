@@ -10,11 +10,7 @@ public class SignalHandler {
         this.signalDao = signalDao;
     }
 
-    public List<SignalDto> getRealtimeSignal(String sourceName) {
-        return null;
-    }
-
-    public List<SignalDto> findbySecondAndSource(String sourceName, LocalDateTime currentTime) {
-        return this.signalDao.getBySecondAndSource(sourceName, currentTime);
+    public List<SignalDto> getSignal(String sourceName, LocalDateTime currentTime) {
+        return this.signalDao.getSignal(sourceName, currentTime);
     }
 }

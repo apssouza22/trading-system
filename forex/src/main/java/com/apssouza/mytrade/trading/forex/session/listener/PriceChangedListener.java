@@ -68,12 +68,7 @@ public class PriceChangedListener implements PropertyChangeListener {
     }
 
     private List<SignalDto> processSignals(PriceChangedEvent event, LocalDateTime currentTime) throws InterruptedException {
-        List<SignalDto> signals;
-        if (TradingParams.sessionType == SessionType.LIVE) {
-            signals = this.signalHandler.getRealtimeSignal(TradingParams.systemName);
-        } else {
-            signals = this.signalHandler.findbySecondAndSource(TradingParams.systemName, event.getTimestamp());
-        }
+        var signals = this.signalHandler.getSignal(TradingParams.systemName, event.getTimestamp());
 
         for (SignalDto signal : signals) {
             eventNotifier.notify(new SignalCreatedEvent(

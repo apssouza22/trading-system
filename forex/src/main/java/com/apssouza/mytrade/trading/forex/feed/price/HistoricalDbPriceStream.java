@@ -1,9 +1,10 @@
-package com.apssouza.mytrade.trading.forex.feed;
+package com.apssouza.mytrade.trading.forex.feed.price;
 
 import com.apssouza.mytrade.feed.price.PriceDao;
 import com.apssouza.mytrade.feed.price.PriceHandler;
 import com.apssouza.mytrade.trading.forex.session.SessionType;
 import com.apssouza.mytrade.trading.forex.session.event.*;
+import com.apssouza.mytrade.trading.misc.ForexException;
 import com.apssouza.mytrade.trading.misc.helper.TradingHelper;
 import com.apssouza.mytrade.trading.misc.helper.TradingParams;
 
@@ -67,7 +68,7 @@ public class HistoricalDbPriceStream implements PriceStream{
         try {
             eventQueue.put(event);
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            throw new ForexException(e);
         }
     }
 

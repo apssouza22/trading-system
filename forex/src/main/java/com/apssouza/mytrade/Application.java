@@ -22,22 +22,22 @@ public class Application {
 
     public static void main(String[] args){
         LocalDate date = LocalDate.of(2018, 9, 10);
-        TradingParams.tradingStartDay = LocalDateTime.of(date, LocalTime.MIN);
-        TradingParams.tradingEndDay = LocalDateTime.of(date.plusDays(1), LocalTime.MIN);
+        TradingParams.tradingStartDay = LocalDateTime.of(date.minusDays(20), LocalTime.MIN);
+        TradingParams.tradingEndDay = LocalDateTime.of(date.plusDays(6), LocalTime.MIN);
         TradingParams.tradingStartTime = LocalTime.of(8,0);
         TradingParams.tradingEndTime = LocalTime.of(20,0);
         DataGenerator dataGenerator = new DataGenerator();
         PriceDao priceMemoryDao = new MemoryPriceDao(dataGenerator);
-        SignalDao signalMemoryDao = new MemorySignalDao(dataGenerator);
-        signalMemoryDao.loadData(TradingParams.tradingStartDay, TradingParams.tradingEndDay);
+        String systemName = "signal_test";
+        SignalDao signalMemoryDao = new MemorySignalDao(TradingParams.tradingStartDay, TradingParams.tradingEndDay,systemName);
         TradingSession tradingSession = new TradingSession(
                 BigDecimal.valueOf(100000l),
                 TradingParams.tradingStartDay,
                 TradingParams.tradingEndDay,
                 signalMemoryDao,
                 priceMemoryDao,
-                SessionType.BACK_TEST,
-                "signal_test",
+                SessionType.LIVE,
+                systemName,
                 ExecutionType.SIMULATED
         );
         tradingSession.start();

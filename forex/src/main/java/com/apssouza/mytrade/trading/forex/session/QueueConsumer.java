@@ -4,6 +4,7 @@ import com.apssouza.mytrade.trading.forex.portfolio.PortfolioHandler;
 import com.apssouza.mytrade.trading.forex.session.event.Event;
 import com.apssouza.mytrade.trading.forex.session.event.EventType;
 import com.apssouza.mytrade.trading.forex.statistics.HistoryBookHandler;
+import com.apssouza.mytrade.trading.misc.ForexException;
 
 import java.time.LocalDateTime;
 import java.util.concurrent.BlockingQueue;
@@ -40,22 +41,29 @@ public class QueueConsumer extends Thread {
         for (; ; ) {
             try {
                 Event event = eventQueue.take();
-                log.info(event.getTimestamp() +" - "+ event.getPrice().get("AUDUSD").getClose());
+                var logMsg = String.format(
+                        "%s - %s - %s",
+                        event.getType().name(),
+                        event.getTimestamp(),
+                        event.getPrice().get("AUDUSD").getClose()
+                );
+                log.info(logMsg);
                 historyHandler.startCycle(event.getTimestamp());
 
                 notifier.notify(event);
-                if (event.getType() == EventType.PRICE_CHANGED)
+                if (event.getType() == EventType.PRICE_CHANGED) {
                     this.portfolioHandler.createStopOrder(event);
+                }
 
                 portfolioHandler.getPortfolio().printPortfolio();
 
                 historyHandler.endCycle();
 
-                if (event.getType() == EventType.SESSION_FINISHED){
+                if (event.getType() == EventType.SESSION_FINISHED) {
                     return;
                 }
             } catch (InterruptedException ex) {
-                throw new RuntimeException(ex);
+                throw new ForexException(ex);
             }
         }
     }

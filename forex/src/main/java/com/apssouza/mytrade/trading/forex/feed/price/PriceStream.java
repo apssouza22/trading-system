@@ -1,4 +1,4 @@
-package com.apssouza.mytrade.trading.forex.feed;
+package com.apssouza.mytrade.trading.forex.feed.price;
 
 import java.time.LocalDateTime;
 
