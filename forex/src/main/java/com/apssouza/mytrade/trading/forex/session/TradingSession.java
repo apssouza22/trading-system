@@ -44,14 +44,13 @@ public class TradingSession {
     protected final ExecutionType executionType;
 
     protected MemoryOrderDao orderDao;
-    private final PriceDao priceDao;
     protected final PriceFeed priceFeed;
+    protected final SignalFeed signalFeed;
     protected ExecutionHandler executionHandler;
     protected PositionSizer positionSizer;
     protected Portfolio portfolio;
     protected PositionExitHandler positionExitHandler;
     protected OrderHandler orderHandler;
-    protected SignalFeed signalFeed;
     protected ReconciliationHandler reconciliationHandler;
     protected HistoryBookHandler historyHandler;
     protected PriceStream priceStream;
@@ -68,7 +67,6 @@ public class TradingSession {
             LocalDateTime startDate,
             LocalDateTime endDate,
             SignalFeed signalFeed,
-            PriceDao priceDao,
             SessionType sessionType,
             String systemName,
             ExecutionType executionType,
@@ -77,7 +75,6 @@ public class TradingSession {
         this.equity = equity;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.priceDao = priceDao;
         this.sessionType = sessionType;
         this.systemName = systemName;
         this.executionType = executionType;
@@ -134,7 +131,7 @@ public class TradingSession {
                     this.priceFeed
             );
         }
-        return new HistoricalDbPriceStream(eventQueue, priceFeed, priceDao);
+        return new HistoricalDbPriceStream(eventQueue, priceFeed);
     }
 
     private ExecutionHandler getExecutionHandler() {

@@ -42,8 +42,7 @@ public class Application {
                 TradingParams.tradingStartDay,
                 TradingParams.tradingEndDay,
                 signalFeed,
-                priceMemoryDao,
-                SessionType.LIVE,
+                SessionType.BACK_TEST,
                 systemName,
                 ExecutionType.SIMULATED,
                 priceAdapter

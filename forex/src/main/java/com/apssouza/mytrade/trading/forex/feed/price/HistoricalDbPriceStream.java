@@ -1,11 +1,12 @@
 package com.apssouza.mytrade.trading.forex.feed.price;
 
-import com.apssouza.mytrade.feed.price.PriceDao;
-import com.apssouza.mytrade.trading.forex.session.SessionType;
-import com.apssouza.mytrade.trading.forex.session.event.*;
+import com.apssouza.mytrade.trading.forex.session.event.EndedTradingDayEvent;
+import com.apssouza.mytrade.trading.forex.session.event.Event;
+import com.apssouza.mytrade.trading.forex.session.event.EventType;
+import com.apssouza.mytrade.trading.forex.session.event.PriceChangedEvent;
+import com.apssouza.mytrade.trading.forex.session.event.SessionFinishedEvent;
 import com.apssouza.mytrade.trading.misc.ForexException;
 import com.apssouza.mytrade.trading.misc.helper.TradingHelper;
-import com.apssouza.mytrade.trading.misc.helper.TradingParams;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -14,13 +15,11 @@ import java.util.concurrent.BlockingQueue;
 public class HistoricalDbPriceStream implements PriceStream{
 
     private final BlockingQueue<Event> eventQueue;
-    private final PriceFeed priceHandler;
-    private final PriceDao priceMemoryDao;
+    private final PriceFeed priceFeed;
 
-    public HistoricalDbPriceStream(BlockingQueue<Event> eventQueue, PriceFeed priceHandler, PriceDao priceMemoryDao) {
+    public HistoricalDbPriceStream(BlockingQueue<Event> eventQueue, PriceFeed priceFeed) {
         this.eventQueue = eventQueue;
-        this.priceHandler = priceHandler;
-        this.priceMemoryDao = priceMemoryDao;
+        this.priceFeed = priceFeed;
     }
 
     public void start(LocalDateTime start, LocalDateTime end) {
@@ -32,7 +31,7 @@ public class HistoricalDbPriceStream implements PriceStream{
                 addToQueue(new EndedTradingDayEvent(
                         EventType.ENDED_TRADING_DAY,
                         current,
-                        priceHandler.getPriceSymbolMapped(current)
+                        priceFeed.getPriceSymbolMapped(current)
                 ));
                 trading = false;
             }
@@ -42,13 +41,12 @@ public class HistoricalDbPriceStream implements PriceStream{
             }
             trading = true;
             if (lastDayProcessed.compareTo(current.toLocalDate()) < 0) {
-                this.processStartDay(current);
                 lastDayProcessed = current.toLocalDate();
             }
             PriceChangedEvent event = new PriceChangedEvent(
                     EventType.PRICE_CHANGED,
                     current,
-                    priceHandler.getPriceSymbolMapped(current)
+                    priceFeed.getPriceSymbolMapped(current)
             );
 
             addToQueue(event);
@@ -57,7 +55,7 @@ public class HistoricalDbPriceStream implements PriceStream{
         SessionFinishedEvent endEvent = new SessionFinishedEvent(
                 EventType.SESSION_FINISHED,
                 current,
-                priceHandler.getPriceSymbolMapped(current)
+                priceFeed.getPriceSymbolMapped(current)
         );
         addToQueue(endEvent);
 
@@ -69,9 +67,5 @@ public class HistoricalDbPriceStream implements PriceStream{
         } catch (InterruptedException e) {
             throw new ForexException(e);
         }
-    }
-
-    protected void processStartDay(LocalDateTime currentTime) {
-
     }
 }
