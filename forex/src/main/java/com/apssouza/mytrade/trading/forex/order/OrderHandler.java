@@ -16,24 +16,15 @@ import java.util.logging.Logger;
 public class OrderHandler {
     private final MemoryOrderDao orderDao;
     private final PositionSizer positionSizer;
-    private final BigDecimal equity;
-    private final PriceFeed priceHandler;
-    private final Portfolio portfolio;
 
     private static Logger log = Logger.getLogger(OrderHandler.class.getName());
 
     public OrderHandler(
             MemoryOrderDao orderDao,
-            PositionSizer positionSizer,
-            BigDecimal equity,
-            PriceFeed priceHandler,
-            Portfolio portfolio
+            PositionSizer positionSizer
     ) {
         this.orderDao = orderDao;
         this.positionSizer = positionSizer;
-        this.equity = equity;
-        this.priceHandler = priceHandler;
-        this.portfolio = portfolio;
     }
 
     public OrderDto createOrderFromClosedPosition(Position position, LocalDateTime time) {

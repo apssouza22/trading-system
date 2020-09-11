@@ -89,7 +89,7 @@ public class TradingSession {
         this.positionSizer = new PositionSizerFixed();
         this.portfolio = new Portfolio(this.equity);
         this.positionExitHandler = new PositionExitHandler(this.portfolio, this.priceFeed);
-        this.orderHandler = new OrderHandler(this.orderDao, this.positionSizer, this.equity, this.priceFeed, this.portfolio);
+        this.orderHandler = new OrderHandler(this.orderDao, this.positionSizer);
 
         this.reconciliationHandler = new ReconciliationHandler(this.portfolio, this.executionHandler);
         this.historyHandler = new HistoryBookHandler(new TransactionsExporter());

@@ -20,14 +20,9 @@ public class OrderHandlerBuilder {
 
     public OrderHandler build(){
         PositionSizerFixed positionSizerFixed = new PositionSizerFixed();
-        PriceFeed priceHandler = Mockito.mock(PriceFeed.class);
-        Portfolio portfolio = Mockito.mock(Portfolio.class);
         OrderHandler orderHandler = new OrderHandler(
                 memoryOrderDao,
-                positionSizerFixed,
-                BigDecimal.valueOf(1000),
-                priceHandler,
-                portfolio
+                positionSizerFixed
         );
         return orderHandler;
     }
