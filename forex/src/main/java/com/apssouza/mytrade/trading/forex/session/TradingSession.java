@@ -172,7 +172,6 @@ public class TradingSession {
         printSessionStartMsg();
         this.executionHandler.closeAllPositions();
         this.executionHandler.cancelOpenLimitOrders();
-        this.priceDao.loadData(startDate, startDate.plusDays(1));
         startEventProcessor();
         priceStream.start(startDate, endDate);
     }

@@ -32,8 +32,7 @@ public class Application {
         TradingParams.tradingEndDay = LocalDateTime.of(date.plusDays(6), LocalTime.MIN);
         TradingParams.tradingStartTime = LocalTime.of(8,0);
         TradingParams.tradingEndTime = LocalTime.of(20,0);
-        DataGenerator dataGenerator = new DataGenerator();
-        PriceDao priceMemoryDao = new MemoryPriceDao(dataGenerator);
+        PriceDao priceMemoryDao = new MemoryPriceDao(TradingParams.tradingStartDay, TradingParams.tradingEndDay);
         String systemName = "signal_test";
         SignalDao signalMemoryDao = new MemorySignalDao(TradingParams.tradingStartDay, TradingParams.tradingEndDay,systemName);
         PriceFeed priceAdapter = new PriceFeedAdapter(new PriceHandler(priceMemoryDao));

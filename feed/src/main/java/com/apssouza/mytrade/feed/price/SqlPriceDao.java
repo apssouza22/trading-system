@@ -42,11 +42,6 @@ public class SqlPriceDao implements PriceDao {
         );
     }
 
-    @Override
-    public void loadData(LocalDateTime start, LocalDateTime end) {
-
-    }
-
     public List<PriceDto> getPriceInterval(LocalDateTime start, LocalDateTime end) {
         String query = String.format("select * from price where timestamp >= '%s' and timestamp <='%s'",
                 DateTimeConverter.getDatabaseFormat(start),

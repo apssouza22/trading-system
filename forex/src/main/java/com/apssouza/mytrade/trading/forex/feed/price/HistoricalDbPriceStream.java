@@ -72,7 +72,6 @@ public class HistoricalDbPriceStream implements PriceStream{
     }
 
     protected void processStartDay(LocalDateTime currentTime) {
-        if (TradingParams.sessionType == SessionType.BACK_TEST)
-            this.priceMemoryDao.loadData(currentTime, currentTime.plusDays(1));
+
     }
 }
