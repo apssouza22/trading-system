@@ -2,7 +2,7 @@ package com.apssouza.mytrade.trading.forex.session.listener;
 
 import com.apssouza.mytrade.feed.signal.SignalDto;
 import com.apssouza.mytrade.trading.forex.execution.ExecutionHandler;
-import com.apssouza.mytrade.trading.forex.feed.price.SignalFeed;
+import com.apssouza.mytrade.trading.forex.feed.signal.SignalFeed;
 import com.apssouza.mytrade.trading.forex.order.OrderDao;
 import com.apssouza.mytrade.trading.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.forex.order.OrderStatus;

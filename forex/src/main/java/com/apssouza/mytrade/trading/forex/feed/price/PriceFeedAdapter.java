@@ -1,4 +1,4 @@
-package com.apssouza.mytrade.trading.misc.adapter;
+package com.apssouza.mytrade.trading.forex.feed.price;
 
 import com.apssouza.mytrade.feed.price.PriceDto;
 import com.apssouza.mytrade.feed.price.PriceHandler;

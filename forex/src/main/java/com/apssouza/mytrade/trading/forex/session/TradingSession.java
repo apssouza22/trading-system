@@ -1,8 +1,5 @@
 package com.apssouza.mytrade.trading.forex.session;
 
-import com.apssouza.mytrade.feed.price.PriceDao;
-import com.apssouza.mytrade.feed.signal.SignalDao;
-import com.apssouza.mytrade.feed.signal.SignalHandler;
 import com.apssouza.mytrade.trading.forex.execution.ExecutionHandler;
 import com.apssouza.mytrade.trading.forex.execution.InteractiveBrokerExecutionHandler;
 import com.apssouza.mytrade.trading.forex.execution.SimulatedExecutionHandler;
@@ -10,7 +7,7 @@ import com.apssouza.mytrade.trading.forex.feed.price.HistoricalDbPriceStream;
 import com.apssouza.mytrade.trading.forex.feed.price.PriceFeed;
 import com.apssouza.mytrade.trading.forex.feed.price.PriceStream;
 import com.apssouza.mytrade.trading.forex.feed.price.RealTimeDbPriceStream;
-import com.apssouza.mytrade.trading.forex.feed.price.SignalFeed;
+import com.apssouza.mytrade.trading.forex.feed.signal.SignalFeed;
 import com.apssouza.mytrade.trading.forex.order.MemoryOrderDao;
 import com.apssouza.mytrade.trading.forex.order.OrderHandler;
 import com.apssouza.mytrade.trading.forex.portfolio.Portfolio;

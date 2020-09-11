@@ -1,8 +1,7 @@
-package com.apssouza.mytrade.trading.misc.adapter;
+package com.apssouza.mytrade.trading.forex.feed.signal;
 
 import com.apssouza.mytrade.feed.signal.SignalDto;
 import com.apssouza.mytrade.feed.signal.SignalHandler;
-import com.apssouza.mytrade.trading.forex.feed.price.SignalFeed;
 
 import java.time.LocalDateTime;
 import java.util.List;

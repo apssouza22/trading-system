@@ -7,12 +7,12 @@ import com.apssouza.mytrade.feed.signal.MemorySignalDao;
 import com.apssouza.mytrade.feed.signal.SignalDao;
 import com.apssouza.mytrade.feed.signal.SignalHandler;
 import com.apssouza.mytrade.trading.forex.feed.price.PriceFeed;
-import com.apssouza.mytrade.trading.forex.feed.price.SignalFeed;
+import com.apssouza.mytrade.trading.forex.feed.signal.SignalFeed;
 import com.apssouza.mytrade.trading.forex.session.ExecutionType;
 import com.apssouza.mytrade.trading.forex.session.SessionType;
 import com.apssouza.mytrade.trading.forex.session.TradingSession;
-import com.apssouza.mytrade.trading.misc.adapter.PriceFeedAdapter;
-import com.apssouza.mytrade.trading.misc.adapter.SignalFeedAdapter;
+import com.apssouza.mytrade.trading.forex.feed.price.PriceFeedAdapter;
+import com.apssouza.mytrade.trading.forex.feed.signal.SignalFeedAdapter;
 import com.apssouza.mytrade.trading.misc.helper.TradingParams;
 
 import java.math.BigDecimal;
