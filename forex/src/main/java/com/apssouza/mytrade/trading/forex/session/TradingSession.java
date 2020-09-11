@@ -1,15 +1,16 @@
 package com.apssouza.mytrade.trading.forex.session;
 
 import com.apssouza.mytrade.feed.price.PriceDao;
-import com.apssouza.mytrade.feed.price.PriceHandler;
 import com.apssouza.mytrade.feed.signal.SignalDao;
 import com.apssouza.mytrade.feed.signal.SignalHandler;
 import com.apssouza.mytrade.trading.forex.execution.ExecutionHandler;
 import com.apssouza.mytrade.trading.forex.execution.InteractiveBrokerExecutionHandler;
 import com.apssouza.mytrade.trading.forex.execution.SimulatedExecutionHandler;
 import com.apssouza.mytrade.trading.forex.feed.price.HistoricalDbPriceStream;
+import com.apssouza.mytrade.trading.forex.feed.price.PriceFeed;
 import com.apssouza.mytrade.trading.forex.feed.price.PriceStream;
 import com.apssouza.mytrade.trading.forex.feed.price.RealTimeDbPriceStream;
+import com.apssouza.mytrade.trading.forex.feed.price.SignalFeed;
 import com.apssouza.mytrade.trading.forex.order.MemoryOrderDao;
 import com.apssouza.mytrade.trading.forex.order.OrderHandler;
 import com.apssouza.mytrade.trading.forex.portfolio.Portfolio;
@@ -43,15 +44,14 @@ public class TradingSession {
     protected final ExecutionType executionType;
 
     protected MemoryOrderDao orderDao;
-    protected SignalDao signalDao;
     private final PriceDao priceDao;
-    protected PriceHandler priceHandler;
+    protected final PriceFeed priceFeed;
     protected ExecutionHandler executionHandler;
     protected PositionSizer positionSizer;
     protected Portfolio portfolio;
     protected PositionExitHandler positionExitHandler;
     protected OrderHandler orderHandler;
-    protected SignalHandler signalHandler;
+    protected SignalFeed signalFeed;
     protected ReconciliationHandler reconciliationHandler;
     protected HistoryBookHandler historyHandler;
     protected PriceStream priceStream;
@@ -67,34 +67,36 @@ public class TradingSession {
             BigDecimal equity,
             LocalDateTime startDate,
             LocalDateTime endDate,
-            SignalDao signalDao,
+            SignalFeed signalFeed,
             PriceDao priceDao,
             SessionType sessionType,
             String systemName,
-            ExecutionType executionType
+            ExecutionType executionType,
+            PriceFeed priceFeed
     ) {
         this.equity = equity;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.signalDao = signalDao;
         this.priceDao = priceDao;
         this.sessionType = sessionType;
         this.systemName = systemName;
         this.executionType = executionType;
         this.eventQueue = new LinkedBlockingDeque<>();
+        this.priceFeed = priceFeed;
+        this.signalFeed = signalFeed;
         this.configSession();
     }
 
     private void configSession() {
         this.orderDao = new MemoryOrderDao();
-        this.priceHandler = new PriceHandler(this.priceDao);
+
         this.executionHandler = getExecutionHandler();
 
         this.positionSizer = new PositionSizerFixed();
         this.portfolio = new Portfolio(this.equity);
-        this.positionExitHandler = new PositionExitHandler(this.portfolio, this.priceHandler);
-        this.orderHandler = new OrderHandler(this.orderDao, this.positionSizer, this.equity, this.priceHandler, this.portfolio);
-        this.signalHandler = new SignalHandler(this.signalDao);
+        this.positionExitHandler = new PositionExitHandler(this.portfolio, this.priceFeed);
+        this.orderHandler = new OrderHandler(this.orderDao, this.positionSizer, this.equity, this.priceFeed, this.portfolio);
+
         this.reconciliationHandler = new ReconciliationHandler(this.portfolio, this.executionHandler);
         this.historyHandler = new HistoryBookHandler(new TransactionsExporter());
         this.riskManagementHandler = new RiskManagementHandler(
@@ -129,10 +131,10 @@ public class TradingSession {
         if (this.sessionType == SessionType.LIVE) {
             return new RealTimeDbPriceStream(
                     eventQueue,
-                    this.priceHandler
+                    this.priceFeed
             );
         }
-        return new HistoricalDbPriceStream(eventQueue, priceHandler, priceDao);
+        return new HistoricalDbPriceStream(eventQueue, priceFeed, priceDao);
     }
 
     private ExecutionHandler getExecutionHandler() {
@@ -155,7 +157,7 @@ public class TradingSession {
         eventNotifier.addPropertyChangeListener(new PortfolioChangedListener(reconciliationHandler, portfolioHandler));
         eventNotifier.addPropertyChangeListener(new SignalCreatedListener(riskManagementHandler, orderHandler, eventNotifier, historyHandler));
         eventNotifier.addPropertyChangeListener(new StopOrderFilledListener(portfolio, historyHandler, eventNotifier));
-        eventNotifier.addPropertyChangeListener(new PriceChangedListener(executionHandler, portfolioHandler, signalHandler, orderDao, eventNotifier));
+        eventNotifier.addPropertyChangeListener(new PriceChangedListener(executionHandler, portfolioHandler, signalFeed, orderDao, eventNotifier));
         eventNotifier.addPropertyChangeListener(new SessionFinishedListener(historyHandler));
         eventNotifier.addPropertyChangeListener(new EndedTradingDayListener(portfolioHandler));
         return eventNotifier;

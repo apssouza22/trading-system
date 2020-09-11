@@ -1,7 +1,6 @@
 package com.apssouza.mytrade.trading.forex.feed.price;
 
 import com.apssouza.mytrade.feed.price.PriceDao;
-import com.apssouza.mytrade.feed.price.PriceHandler;
 import com.apssouza.mytrade.trading.forex.session.SessionType;
 import com.apssouza.mytrade.trading.forex.session.event.*;
 import com.apssouza.mytrade.trading.misc.ForexException;
@@ -15,10 +14,10 @@ import java.util.concurrent.BlockingQueue;
 public class HistoricalDbPriceStream implements PriceStream{
 
     private final BlockingQueue<Event> eventQueue;
-    private final PriceHandler priceHandler;
+    private final PriceFeed priceHandler;
     private final PriceDao priceMemoryDao;
 
-    public HistoricalDbPriceStream(BlockingQueue<Event> eventQueue, PriceHandler priceHandler, PriceDao priceMemoryDao) {
+    public HistoricalDbPriceStream(BlockingQueue<Event> eventQueue, PriceFeed priceHandler, PriceDao priceMemoryDao) {
         this.eventQueue = eventQueue;
         this.priceHandler = priceHandler;
         this.priceMemoryDao = priceMemoryDao;

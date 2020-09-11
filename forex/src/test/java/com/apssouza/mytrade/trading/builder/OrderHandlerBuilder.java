@@ -1,10 +1,11 @@
 package com.apssouza.mytrade.trading.builder;
 
-import com.apssouza.mytrade.feed.price.PriceHandler;
+import com.apssouza.mytrade.trading.forex.feed.price.PriceFeed;
 import com.apssouza.mytrade.trading.forex.order.MemoryOrderDao;
 import com.apssouza.mytrade.trading.forex.order.OrderHandler;
 import com.apssouza.mytrade.trading.forex.portfolio.Portfolio;
 import com.apssouza.mytrade.trading.forex.risk.PositionSizerFixed;
+
 import org.mockito.Mockito;
 
 import java.math.BigDecimal;
@@ -19,7 +20,7 @@ public class OrderHandlerBuilder {
 
     public OrderHandler build(){
         PositionSizerFixed positionSizerFixed = new PositionSizerFixed();
-        PriceHandler priceHandler = Mockito.mock(PriceHandler.class);
+        PriceFeed priceHandler = Mockito.mock(PriceFeed.class);
         Portfolio portfolio = Mockito.mock(Portfolio.class);
         OrderHandler orderHandler = new OrderHandler(
                 memoryOrderDao,

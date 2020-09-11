@@ -1,14 +1,13 @@
 package com.apssouza.mytrade.trading.forex.risk;
 
-import com.apssouza.mytrade.feed.price.PriceHandler;
+import com.apssouza.mytrade.common.misc.helper.time.MarketTimeHelper;
 import com.apssouza.mytrade.feed.signal.SignalDto;
+import com.apssouza.mytrade.trading.forex.feed.price.PriceFeed;
 import com.apssouza.mytrade.trading.forex.order.OrderAction;
 import com.apssouza.mytrade.trading.forex.portfolio.ExitReason;
 import com.apssouza.mytrade.trading.forex.portfolio.Portfolio;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.forex.portfolio.PositionType;
-import com.apssouza.mytrade.trading.forex.session.event.PriceChangedEvent;
-import com.apssouza.mytrade.common.misc.helper.time.MarketTimeHelper;
 import com.apssouza.mytrade.trading.forex.session.event.PriceChangedEvent;
 
 import java.time.LocalDateTime;
@@ -20,10 +19,10 @@ import java.util.logging.Logger;
 
 public class PositionExitHandler {
     private final Portfolio portfolio;
-    private final PriceHandler priceHandler;
+    private final PriceFeed priceHandler;
     private static Logger log = Logger.getLogger(PositionExitHandler.class.getSimpleName());
 
-    public PositionExitHandler(Portfolio portfolio, PriceHandler priceHandler) {
+    public PositionExitHandler(Portfolio portfolio, PriceFeed priceHandler) {
         this.portfolio = portfolio;
         this.priceHandler = priceHandler;
     }

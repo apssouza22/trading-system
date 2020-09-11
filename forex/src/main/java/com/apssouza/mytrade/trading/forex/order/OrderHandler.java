@@ -1,7 +1,7 @@
 package com.apssouza.mytrade.trading.forex.order;
 
-import com.apssouza.mytrade.feed.price.PriceHandler;
 import com.apssouza.mytrade.feed.signal.SignalDto;
+import com.apssouza.mytrade.trading.forex.feed.price.PriceFeed;
 import com.apssouza.mytrade.trading.forex.portfolio.Portfolio;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.forex.portfolio.PositionType;
@@ -10,14 +10,14 @@ import com.apssouza.mytrade.trading.forex.session.event.SignalCreatedEvent;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 public class OrderHandler {
     private final MemoryOrderDao orderDao;
     private final PositionSizer positionSizer;
     private final BigDecimal equity;
-    private final PriceHandler priceHandler;
+    private final PriceFeed priceHandler;
     private final Portfolio portfolio;
 
     private static Logger log = Logger.getLogger(OrderHandler.class.getName());
@@ -26,7 +26,7 @@ public class OrderHandler {
             MemoryOrderDao orderDao,
             PositionSizer positionSizer,
             BigDecimal equity,
-            PriceHandler priceHandler,
+            PriceFeed priceHandler,
             Portfolio portfolio
     ) {
         this.orderDao = orderDao;

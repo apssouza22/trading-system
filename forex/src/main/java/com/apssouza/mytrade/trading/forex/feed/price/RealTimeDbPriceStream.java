@@ -15,9 +15,9 @@ import java.util.concurrent.BlockingQueue;
 public class RealTimeDbPriceStream implements PriceStream {
 
     private final BlockingQueue<Event> eventQueue;
-    private final PriceHandler priceHandler;
+    private final PriceFeed priceHandler;
 
-    public RealTimeDbPriceStream(BlockingQueue<Event> eventQueue, PriceHandler priceHandler) {
+    public RealTimeDbPriceStream(BlockingQueue<Event> eventQueue, PriceFeed priceHandler) {
         this.eventQueue = eventQueue;
         this.priceHandler = priceHandler;
     }

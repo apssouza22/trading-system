@@ -1,15 +1,14 @@
 package com.apssouza.mytrade.trading.forex.session.listener;
 
 import com.apssouza.mytrade.feed.signal.SignalDto;
-import com.apssouza.mytrade.feed.signal.SignalHandler;
 import com.apssouza.mytrade.trading.forex.execution.ExecutionHandler;
+import com.apssouza.mytrade.trading.forex.feed.price.SignalFeed;
 import com.apssouza.mytrade.trading.forex.order.OrderDao;
 import com.apssouza.mytrade.trading.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.forex.order.OrderStatus;
 import com.apssouza.mytrade.trading.forex.portfolio.PortfolioHandler;
 import com.apssouza.mytrade.trading.forex.session.EventNotifier;
 import com.apssouza.mytrade.trading.forex.session.MultiPositionHandler;
-import com.apssouza.mytrade.trading.forex.session.SessionType;
 import com.apssouza.mytrade.trading.forex.session.event.*;
 import com.apssouza.mytrade.trading.misc.helper.TradingParams;
 
@@ -22,20 +21,20 @@ public class PriceChangedListener implements PropertyChangeListener {
 
     private final ExecutionHandler executionHandler;
     private final PortfolioHandler portfolioHandler;
-    private final SignalHandler signalHandler;
+    private final SignalFeed signalFeed;
     private final OrderDao orderDao;
     private final EventNotifier eventNotifier;
 
     public PriceChangedListener(
             ExecutionHandler executionHandler,
             PortfolioHandler portfolioHandler,
-            SignalHandler signalHandler,
+            SignalFeed signalFeed,
             OrderDao orderDao,
             EventNotifier eventNotifier
     ) {
         this.executionHandler = executionHandler;
         this.portfolioHandler = portfolioHandler;
-        this.signalHandler = signalHandler;
+        this.signalFeed = signalFeed;
         this.orderDao = orderDao;
         this.eventNotifier = eventNotifier;
     }
@@ -67,8 +66,8 @@ public class PriceChangedListener implements PropertyChangeListener {
         processOrders(event, currentTime);
     }
 
-    private List<SignalDto> processSignals(PriceChangedEvent event, LocalDateTime currentTime) throws InterruptedException {
-        var signals = this.signalHandler.getSignal(TradingParams.systemName, event.getTimestamp());
+    private List<SignalDto> processSignals(PriceChangedEvent event, LocalDateTime currentTime) {
+        var signals = this.signalFeed.getSignal(TradingParams.systemName, event.getTimestamp());
 
         for (SignalDto signal : signals) {
             eventNotifier.notify(new SignalCreatedEvent(
@@ -81,7 +80,7 @@ public class PriceChangedListener implements PropertyChangeListener {
         return signals;
     }
 
-    private void processOrders(PriceChangedEvent event, LocalDateTime currentTime) throws InterruptedException {
+    private void processOrders(PriceChangedEvent event, LocalDateTime currentTime) {
         List<OrderDto> orders = this.orderDao.getOrderByStatus(OrderStatus.CREATED);
         List<OrderDto> orderList = MultiPositionHandler.createPositionIdentifier(orders);
 

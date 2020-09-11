@@ -2,11 +2,17 @@ package com.apssouza.mytrade;
 
 import com.apssouza.mytrade.feed.price.MemoryPriceDao;
 import com.apssouza.mytrade.feed.price.PriceDao;
+import com.apssouza.mytrade.feed.price.PriceHandler;
 import com.apssouza.mytrade.feed.signal.MemorySignalDao;
 import com.apssouza.mytrade.feed.signal.SignalDao;
+import com.apssouza.mytrade.feed.signal.SignalHandler;
+import com.apssouza.mytrade.trading.forex.feed.price.PriceFeed;
+import com.apssouza.mytrade.trading.forex.feed.price.SignalFeed;
 import com.apssouza.mytrade.trading.forex.session.ExecutionType;
 import com.apssouza.mytrade.trading.forex.session.SessionType;
 import com.apssouza.mytrade.trading.forex.session.TradingSession;
+import com.apssouza.mytrade.trading.misc.adapter.PriceFeedAdapter;
+import com.apssouza.mytrade.trading.misc.adapter.SignalFeedAdapter;
 import com.apssouza.mytrade.trading.misc.helper.TradingParams;
 
 import java.math.BigDecimal;
@@ -30,15 +36,18 @@ public class Application {
         PriceDao priceMemoryDao = new MemoryPriceDao(dataGenerator);
         String systemName = "signal_test";
         SignalDao signalMemoryDao = new MemorySignalDao(TradingParams.tradingStartDay, TradingParams.tradingEndDay,systemName);
+        PriceFeed priceAdapter = new PriceFeedAdapter(new PriceHandler(priceMemoryDao));
+        SignalFeed signalFeed = new SignalFeedAdapter(new SignalHandler(signalMemoryDao));
         TradingSession tradingSession = new TradingSession(
                 BigDecimal.valueOf(100000l),
                 TradingParams.tradingStartDay,
                 TradingParams.tradingEndDay,
-                signalMemoryDao,
+                signalFeed,
                 priceMemoryDao,
                 SessionType.LIVE,
                 systemName,
-                ExecutionType.SIMULATED
+                ExecutionType.SIMULATED,
+                priceAdapter
         );
         tradingSession.start();
     }
