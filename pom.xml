@@ -16,6 +16,7 @@
     <module>common</module>
     <module>feed</module>
     <module>forex</module>
+    <module>runner</module>
   </modules>
 
   <properties>
@@ -46,6 +47,12 @@
         <artifactId>mockito-core</artifactId>
         <version>${mockito-core.version}</version>
         <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>com.apssouza.mytrade</groupId>
+        <artifactId>forex</artifactId>
+        <version>${mytrade.version}</version>
+        <scope>compile</scope>
       </dependency>
       <dependency>
         <groupId>com.apssouza.mytrade</groupId>
@@ -140,9 +147,9 @@
           </execution>
         </executions>
         <configuration>
-          <systemPropertyVariables>
-            <jacoco-agent.destfile>target/jacoco.exec</jacoco-agent.destfile>
-          </systemPropertyVariables>
+<!--          <systemPropertyVariables>-->
+<!--            <jacoco-agent.destfile>target/jacoco.exec</jacoco-agent.destfile>-->
+<!--          </systemPropertyVariables>-->
         </configuration>
       </plugin>
     </plugins>
