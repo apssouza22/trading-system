@@ -23,10 +23,21 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Configuration;
+
+
+@SpringBootApplication
+@Configuration
 public class Application {
 
 
     public static void main(String[] args){
+        SpringApplication springApplication = new SpringApplication(Application.class, Application.class);
+        ConfigurableApplicationContext context = springApplication.run(args);
+
         LocalDate date = LocalDate.of(2018, 9, 10);
         TradingParams.tradingStartDay = LocalDateTime.of(date.minusDays(20), LocalTime.MIN);
         TradingParams.tradingEndDay = LocalDateTime.of(date.plusDays(6), LocalTime.MIN);

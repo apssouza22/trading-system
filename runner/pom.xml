@@ -13,11 +13,34 @@
   <groupId>com.apssouza.mytrade</groupId>
   <artifactId>runner</artifactId>
   <version>1.0-SNAPSHOT</version>
+
+  <properties>
+    <start-class>com.apssouza.mytrade.runner.Application</start-class>
+  </properties>
+
   <dependencies>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-devtools</artifactId>
+      <scope>runtime</scope>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
     <dependency>
       <groupId>com.apssouza.mytrade</groupId>
       <artifactId>forex</artifactId>
     </dependency>
   </dependencies>
 
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
 </project>
