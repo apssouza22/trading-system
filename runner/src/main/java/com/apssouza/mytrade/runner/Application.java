@@ -58,7 +58,7 @@ public class Application {
                 ExecutionType.SIMULATED,
                 priceAdapter
         );
-//        tradingSession.start();
+        tradingSession.start();
     }
 
     private static Connection getConnection() throws ClassNotFoundException, SQLException {

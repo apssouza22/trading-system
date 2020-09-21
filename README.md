@@ -17,6 +17,13 @@ It has been developed for both retail traders and institutional hedge funds to a
 ## How to run
 ```
 mvn package && \
-java --enable-preview -jar forex/target/forex-1.0-SNAPSHOT-fat.jar 
+java --enable-preview -jar runner/target/runner-1.0-SNAPSHOT.jar
 ``` 
-## That's all. Leave a star if it helped you!
+
+### Using Docker
+
+```
+docker build . -t trading-engine
+docker run --rm -p 8080:8080 trading-engine
+```
+

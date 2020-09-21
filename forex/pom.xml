@@ -17,6 +17,10 @@
     <dependencies>
         <dependency>
             <groupId>com.apssouza.mytrade</groupId>
+            <artifactId>common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.apssouza.mytrade</groupId>
             <artifactId>feed</artifactId>
         </dependency>
         <dependency>

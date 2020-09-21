@@ -54,3 +54,4 @@ target
 *mvn*
 /data
 /notebooks
+/book-history.csv
