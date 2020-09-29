@@ -19,7 +19,9 @@ import com.apssouza.mytrade.trading.forex.risk.PositionSizerFixed;
 import com.apssouza.mytrade.trading.forex.risk.RiskManagementHandler;
 import com.apssouza.mytrade.trading.forex.risk.stoporder.PriceDistanceObject;
 import com.apssouza.mytrade.trading.forex.risk.stoporder.fixed.StopOrderCreatorFixed;
+import com.apssouza.mytrade.trading.forex.session.event.EndedTradingDayEvent;
 import com.apssouza.mytrade.trading.forex.session.event.Event;
+import com.apssouza.mytrade.trading.forex.session.event.EventType;
 import com.apssouza.mytrade.trading.forex.session.listener.*;
 import com.apssouza.mytrade.trading.forex.statistics.HistoryBookHandler;
 import com.apssouza.mytrade.trading.forex.statistics.TransactionsExporter;
@@ -160,6 +162,17 @@ public class TradingSession {
 
     public void start() {
         this.runSession();
+    }
+
+    public void shutdown() {
+        log.warning("Shutting down the application");
+        var current = LocalDateTime.now();
+        var event = new EndedTradingDayEvent(
+                EventType.ENDED_TRADING_DAY,
+                current,
+                priceFeed.getPriceSymbolMapped(current)
+        );
+        eventNotifier.notify(event);
     }
 
     protected void runSession() {
