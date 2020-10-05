@@ -2,31 +2,72 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+  <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>com.apssouza.mytrade</groupId>
-        <artifactId>trading-system-parent</artifactId>
-        <version>1.0-SNAPSHOT</version>
-    </parent>
-
+  <parent>
     <groupId>com.apssouza.mytrade</groupId>
-    <artifactId>forex</artifactId>
+    <artifactId>trading-system-parent</artifactId>
     <version>1.0-SNAPSHOT</version>
+  </parent>
 
-    <dependencies>
-        <dependency>
-            <groupId>com.apssouza.mytrade</groupId>
-            <artifactId>common</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.apssouza.mytrade</groupId>
-            <artifactId>feed</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-        </dependency>
-    </dependencies>
+  <groupId>com.apssouza.mytrade</groupId>
+  <artifactId>forex</artifactId>
+  <version>1.0-SNAPSHOT</version>
 
+  <dependencies>
+    <dependency>
+      <groupId>com.apssouza.mytrade</groupId>
+      <artifactId>common</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.apssouza.mytrade</groupId>
+      <artifactId>feed</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+    </dependency>
+  </dependencies>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+      </plugin>
+
+      <plugin>
+        <groupId>org.moditect</groupId>
+        <artifactId>moditect-maven-plugin</artifactId>
+        <version>1.0.0.RC1</version>
+        <executions>
+          <execution>
+            <id>create-runtime-image</id>
+            <phase>package</phase>
+            <goals>
+              <goal>create-runtime-image</goal>
+            </goals>
+            <configuration>
+              <modulePath>
+                <path>${project.build.directory}/classes</path>
+                <path>${project.basedir}/../feed/target/classes</path>
+                <path>${project.basedir}/../common/target/classes</path>
+              </modulePath>
+              <modules>
+                <module>com.apssouza.mytrade.forex</module>
+                <module>com.apssouza.mytrade.feed</module>
+                <module>com.apssouza.mytrade.common</module>
+              </modules>
+              <launcher>
+                <name>my-trade-engine</name>
+                <module>com.apssouza.mytrade.forex/com.apssouza.mytrade.trading.AppEngine</module>
+              </launcher>
+              <outputDirectory>
+                ${project.build.directory}/jlink-image
+              </outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
 </project>

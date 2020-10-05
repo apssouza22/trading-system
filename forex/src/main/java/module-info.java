@@ -8,4 +8,5 @@ open module com.apssouza.mytrade.forex {
     exports com.apssouza.mytrade.trading.forex.feed.price;
     exports com.apssouza.mytrade.trading.forex.feed.signal;
     exports com.apssouza.mytrade.trading.forex.session;
+    exports com.apssouza.mytrade.trading;
 }

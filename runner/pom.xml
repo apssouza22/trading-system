@@ -41,136 +41,62 @@
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
-<!--        <configuration>-->
-<!--          <layers>-->
-<!--            <enabled>true</enabled>-->
-<!--          </layers>-->
-<!--        </configuration>-->
+        <configuration>
+          <layers>
+            <enabled>true</enabled>
+          </layers>
+        </configuration>
       </plugin>
-<!--      <plugin>-->
-<!--        <groupId>${project.groupId}</groupId>-->
-<!--        <artifactId>moditect-maven-plugin</artifactId>-->
-<!--        <executions>-->
-<!--          <execution>-->
-<!--            <id>add-module-info-to-dependencies</id>-->
-<!--            <phase>package</phase>-->
-<!--            <configuration>-->
-<!--              <outputDirectory>${project.build.directory}/modules</outputDirectory>-->
-<!--              <modules>-->
-<!--                <module>-->
-<!--                  <artifact>-->
-<!--                    <groupId>org.jboss.logging</groupId>-->
-<!--                    <artifactId>jboss-logging</artifactId>-->
-<!--                  </artifact>-->
-<!--                  <moduleInfo>-->
-<!--                    <name>org.jboss.logging</name>-->
-<!--                    <requires>-->
-<!--                      static jboss.logmanager; static log4j*; static slf4j.api; *;-->
-<!--                    </requires>-->
-<!--                  </moduleInfo>-->
-<!--                </module>-->
-<!--                <module>-->
-<!--                  <artifact>-->
-<!--                    <groupId>org.jboss.logging</groupId>-->
-<!--                    <artifactId>jboss-logging-annotations</artifactId>-->
-<!--                  </artifact>-->
-<!--                  <moduleInfo>-->
-<!--                    <name>org.jboss.logging.annotations</name>-->
-<!--                  </moduleInfo>-->
-<!--                </module>-->
-<!--                <module>-->
-<!--                  <artifact>-->
-<!--                    <groupId>org.jboss.xnio</groupId>-->
-<!--                    <artifactId>xnio-api</artifactId>-->
-<!--                  </artifact>-->
-<!--                  <moduleInfo>-->
-<!--                    <name>org.jboss.xnio.api</name>-->
-<!--                    <addServiceUses>true</addServiceUses>-->
-<!--                    <exports>-->
-<!--                      org.xnio._private to org.jboss.logging; *;-->
-<!--                    </exports>-->
-<!--                  </moduleInfo>-->
-<!--                </module>-->
-<!--                <module>-->
-<!--                  <artifact>-->
-<!--                    <groupId>org.jboss.xnio</groupId>-->
-<!--                    <artifactId>xnio-nio</artifactId>-->
-<!--                  </artifact>-->
-<!--                  <moduleInfo>-->
-<!--                    <name>org.jboss.xnio.nio</name>-->
-<!--                    <requires>-->
-<!--                      static org.jboss.logging.annotations; org.jboss.logging; *;-->
-<!--                    </requires>-->
-<!--                  </moduleInfo>-->
-<!--                </module>-->
-<!--                <module>-->
-<!--                  <artifact>-->
-<!--                    <groupId>org.eclipse.jetty.alpn</groupId>-->
-<!--                    <artifactId>alpn-api</artifactId>-->
-<!--                  </artifact>-->
-<!--                  <moduleInfo>-->
-<!--                    <name>alpn.api</name>-->
-<!--                  </moduleInfo>-->
-<!--                </module>-->
-<!--                <module>-->
-<!--                  <artifact>-->
-<!--                    <groupId>io.undertow</groupId>-->
-<!--                    <artifactId>undertow-core</artifactId>-->
-<!--                  </artifact>-->
-<!--                  <moduleInfo>-->
-<!--                    <name>io.undertow.core</name>-->
-<!--                  </moduleInfo>-->
-<!--                </module>-->
-<!--              </modules>-->
-<!--              <module>-->
-<!--                <mainClass>com.example.HelloWorldServer</mainClass>-->
-<!--                <moduleInfo>-->
-<!--                  <name>com.example</name>-->
-<!--                  <exports>!*;</exports>-->
-<!--                </moduleInfo>-->
-<!--              </module>-->
-<!--            </configuration>-->
-<!--            <goals>-->
-<!--              <goal>add-module-info</goal>-->
-<!--            </goals>-->
-<!--          </execution>-->
-<!--        </executions>-->
-<!--      </plugin>-->
+
       <plugin>
         <groupId>org.moditect</groupId>
         <artifactId>moditect-maven-plugin</artifactId>
         <version>1.0.0.RC1</version>
         <executions>
           <execution>
-            <id>create-runtime-image</id>
-            <phase>package</phase>    <!-- comment 1 -->
+            <id>add-module-info</id>
+            <phase>package</phase> <!-- comment 1-->
             <goals>
-              <goal>create-runtime-image</goal>  <!-- comment 2 -->
+              <goal>add-module-info</goal> <!-- comment 2 -->
             </goals>
             <configuration>
-              <modulePath>            <!-- comment 3 -->
-                <path>
-                  ${project.build.directory}/${project.artifactId}-${project.version}.${project.packaging}
-                </path>
-                <path>
-                  /Users/alexsouza/projects/my/opensource/trading-system/extract/BOOT-INF/lib
-                </path>
-              </modulePath>
-              <modules>
-                <module>com.apssouza.mytrade.runner</module>
-                <module>com.apssouza.mytrade.forex</module>
-                <module>com.apssouza.mytrade.feed</module>
-                <module>com.apssouza.mytrade.common</module>
-              </modules>
-              <launcher>
-                <name>trade-system-runner</name>
-                <module>
-                  com.apssouza.mytrade.runner.Application
-                </module>
-              </launcher>
               <outputDirectory>
-                ${project.build.directory}/jlink-image
+                ${project.build.directory}/modules
               </outputDirectory>
+              <modules>
+                <module>
+                  <artifact>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-web</artifactId>
+                  </artifact>
+                  <moduleInfo> <!-- comment 4-->
+                    <name>spring.core</name>
+                    <name>logback.classic</name>
+                    <name>spring.boot.starter.logging</name>
+                    <name>spring.webmvc</name>
+                    <name>org.apache.tomcat.embed.core</name>
+                    <name>spring.boot.starter</name>
+                    <name>spring.boot.starter.tomcat</name>
+                    <name>spring.expression</name>
+                    <name>spring.aop</name>
+                    <name>spring.context</name>
+                    <name>spring.jcl</name>
+                    <name>spring.boot.starter.json</name>
+                    <name>spring.beans</name>
+                    <name>spring.boot</name>
+                    <name>spring.web</name>
+                    <name>jul.to.slf4j</name>
+                    <name>org.apache.logging.slf4j</name>
+                    <name>java.annotation</name>
+                    <name>org.slf4j</name>
+                  </moduleInfo>
+                </module>
+              </modules>
+              <overwriteExistingFiles>true</overwriteExistingFiles>
+              <jdepsExtraArgs>
+                <arg>--multi-release</arg>
+                <arg>14</arg>
+              </jdepsExtraArgs>
             </configuration>
           </execution>
         </executions>
