@@ -5,9 +5,9 @@ import com.apssouza.mytrade.trading.forex.portfolio.PortfolioHandler;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.forex.session.event.EndedTradingDayEvent;
 import com.apssouza.mytrade.trading.forex.session.event.Event;
+import com.apssouza.mytrade.trading.misc.observer.PropertyChangeEvent;
+import com.apssouza.mytrade.trading.misc.observer.PropertyChangeListener;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.List;
 import java.util.logging.Logger;
 

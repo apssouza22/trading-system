@@ -6,13 +6,16 @@ import com.apssouza.mytrade.trading.forex.portfolio.FilledOrderDto;
 import com.apssouza.mytrade.trading.forex.portfolio.Portfolio;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.forex.session.EventNotifier;
-import com.apssouza.mytrade.trading.forex.session.event.*;
-import com.apssouza.mytrade.trading.forex.statistics.HistoryBookHandler;
 import com.apssouza.mytrade.trading.forex.session.MultiPositionHandler;
+import com.apssouza.mytrade.trading.forex.session.event.Event;
+import com.apssouza.mytrade.trading.forex.session.event.EventType;
+import com.apssouza.mytrade.trading.forex.session.event.PortfolioChangedEvent;
+import com.apssouza.mytrade.trading.forex.session.event.StopOrderFilledEvent;
+import com.apssouza.mytrade.trading.forex.statistics.HistoryBookHandler;
 import com.apssouza.mytrade.trading.forex.statistics.TransactionState;
+import com.apssouza.mytrade.trading.misc.observer.PropertyChangeEvent;
+import com.apssouza.mytrade.trading.misc.observer.PropertyChangeListener;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.time.LocalDateTime;
 
 public class StopOrderFilledListener implements PropertyChangeListener {

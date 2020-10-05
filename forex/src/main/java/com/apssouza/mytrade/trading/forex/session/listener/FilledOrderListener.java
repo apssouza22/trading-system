@@ -7,9 +7,9 @@ import com.apssouza.mytrade.trading.forex.statistics.HistoryBookHandler;
 import com.apssouza.mytrade.trading.forex.session.event.*;
 import com.apssouza.mytrade.trading.forex.statistics.TransactionState;
 import com.apssouza.mytrade.trading.misc.helper.TradingParams;
+import com.apssouza.mytrade.trading.misc.observer.PropertyChangeEvent;
+import com.apssouza.mytrade.trading.misc.observer.PropertyChangeListener;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 
 public class FilledOrderListener implements PropertyChangeListener {
 

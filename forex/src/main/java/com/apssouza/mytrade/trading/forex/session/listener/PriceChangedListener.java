@@ -9,11 +9,15 @@ import com.apssouza.mytrade.trading.forex.order.OrderStatus;
 import com.apssouza.mytrade.trading.forex.portfolio.PortfolioHandler;
 import com.apssouza.mytrade.trading.forex.session.EventNotifier;
 import com.apssouza.mytrade.trading.forex.session.MultiPositionHandler;
-import com.apssouza.mytrade.trading.forex.session.event.*;
+import com.apssouza.mytrade.trading.forex.session.event.Event;
+import com.apssouza.mytrade.trading.forex.session.event.EventType;
+import com.apssouza.mytrade.trading.forex.session.event.OrderFoundEvent;
+import com.apssouza.mytrade.trading.forex.session.event.PriceChangedEvent;
+import com.apssouza.mytrade.trading.forex.session.event.SignalCreatedEvent;
 import com.apssouza.mytrade.trading.misc.helper.TradingParams;
+import com.apssouza.mytrade.trading.misc.observer.PropertyChangeEvent;
+import com.apssouza.mytrade.trading.misc.observer.PropertyChangeListener;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -42,11 +46,9 @@ public class PriceChangedListener implements PropertyChangeListener {
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         Event e = (Event) evt.getNewValue();
-        if (!(e instanceof PriceChangedEvent)) {
+        if (!(e instanceof PriceChangedEvent event)) {
             return;
         }
-        PriceChangedEvent event = (PriceChangedEvent) e;
-
         try {
             process(event);
         } catch (InterruptedException e1) {

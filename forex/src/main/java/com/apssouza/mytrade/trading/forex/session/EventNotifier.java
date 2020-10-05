@@ -2,8 +2,8 @@ package com.apssouza.mytrade.trading.forex.session;
 
 import com.apssouza.mytrade.trading.forex.session.event.Event;
 
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
+import com.apssouza.mytrade.trading.misc.observer.PropertyChangeListener;
+import com.apssouza.mytrade.trading.misc.observer.PropertyChangeSupport;
 
 public class EventNotifier {
     private Event event;

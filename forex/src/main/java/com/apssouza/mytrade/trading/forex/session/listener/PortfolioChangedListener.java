@@ -6,9 +6,8 @@ import com.apssouza.mytrade.trading.forex.portfolio.ReconciliationHandler;
 import com.apssouza.mytrade.trading.forex.session.event.Event;
 import com.apssouza.mytrade.trading.forex.session.event.PortfolioChangedEvent;
 import com.apssouza.mytrade.trading.forex.session.exception.ReconciliationException;
-
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
+import com.apssouza.mytrade.trading.misc.observer.PropertyChangeEvent;
+import com.apssouza.mytrade.trading.misc.observer.PropertyChangeListener;
 
 public class PortfolioChangedListener implements PropertyChangeListener {
     private final ReconciliationHandler reconciliationHandler;

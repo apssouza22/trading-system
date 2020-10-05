@@ -8,14 +8,16 @@ import com.apssouza.mytrade.trading.forex.order.OrderStatus;
 import com.apssouza.mytrade.trading.forex.portfolio.FilledOrderDto;
 import com.apssouza.mytrade.trading.forex.risk.RiskManagementHandler;
 import com.apssouza.mytrade.trading.forex.session.EventNotifier;
+import com.apssouza.mytrade.trading.forex.session.event.Event;
+import com.apssouza.mytrade.trading.forex.session.event.EventType;
+import com.apssouza.mytrade.trading.forex.session.event.OrderFilledEvent;
+import com.apssouza.mytrade.trading.forex.session.event.OrderFoundEvent;
 import com.apssouza.mytrade.trading.forex.statistics.HistoryBookHandler;
-import com.apssouza.mytrade.trading.forex.session.event.*;
+import com.apssouza.mytrade.trading.misc.observer.PropertyChangeEvent;
+import com.apssouza.mytrade.trading.misc.observer.PropertyChangeListener;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.logging.Logger;
 
 public class OrderFoundListener implements PropertyChangeListener {

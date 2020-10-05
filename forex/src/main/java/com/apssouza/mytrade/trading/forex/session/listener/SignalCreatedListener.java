@@ -4,11 +4,14 @@ import com.apssouza.mytrade.trading.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.forex.order.OrderHandler;
 import com.apssouza.mytrade.trading.forex.risk.RiskManagementHandler;
 import com.apssouza.mytrade.trading.forex.session.EventNotifier;
+import com.apssouza.mytrade.trading.forex.session.event.Event;
+import com.apssouza.mytrade.trading.forex.session.event.EventType;
+import com.apssouza.mytrade.trading.forex.session.event.OrderCreatedEvent;
+import com.apssouza.mytrade.trading.forex.session.event.SignalCreatedEvent;
 import com.apssouza.mytrade.trading.forex.statistics.HistoryBookHandler;
-import com.apssouza.mytrade.trading.forex.session.event.*;
+import com.apssouza.mytrade.trading.misc.observer.PropertyChangeEvent;
+import com.apssouza.mytrade.trading.misc.observer.PropertyChangeListener;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.logging.Logger;
 
 public class SignalCreatedListener implements PropertyChangeListener {
