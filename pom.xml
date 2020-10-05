@@ -24,7 +24,6 @@
     <module>feed</module>
     <module>forex</module>
     <module>runner</module>
-    <module>mod-link</module>
   </modules>
 
   <properties>
