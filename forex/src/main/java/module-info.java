@@ -1,4 +1,4 @@
-open module com.apssouza.mytrade.forex {
+open module com.apssouza.mytrade.trading.forex {
     requires java.logging;
     requires java.sql;
     // transitive is to say that modules that depend on forex also depend on feed
