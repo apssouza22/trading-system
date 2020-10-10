@@ -41,65 +41,11 @@
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
-        <configuration>
-          <layers>
-            <enabled>true</enabled>
-          </layers>
-        </configuration>
-      </plugin>
-
-      <plugin>
-        <groupId>org.moditect</groupId>
-        <artifactId>moditect-maven-plugin</artifactId>
-        <version>1.0.0.RC1</version>
-        <executions>
-          <execution>
-            <id>add-module-info</id>
-            <phase>package</phase> <!-- comment 1-->
-            <goals>
-              <goal>add-module-info</goal> <!-- comment 2 -->
-            </goals>
-            <configuration>
-              <outputDirectory>
-                ${project.build.directory}/modules
-              </outputDirectory>
-              <modules>
-                <module>
-                  <artifact>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-web</artifactId>
-                  </artifact>
-                  <moduleInfo> <!-- comment 4-->
-                    <name>spring.core</name>
-                    <name>logback.classic</name>
-                    <name>spring.boot.starter.logging</name>
-                    <name>spring.webmvc</name>
-                    <name>org.apache.tomcat.embed.core</name>
-                    <name>spring.boot.starter</name>
-                    <name>spring.boot.starter.tomcat</name>
-                    <name>spring.expression</name>
-                    <name>spring.aop</name>
-                    <name>spring.context</name>
-                    <name>spring.jcl</name>
-                    <name>spring.boot.starter.json</name>
-                    <name>spring.beans</name>
-                    <name>spring.boot</name>
-                    <name>spring.web</name>
-                    <name>jul.to.slf4j</name>
-                    <name>org.apache.logging.slf4j</name>
-                    <name>java.annotation</name>
-                    <name>org.slf4j</name>
-                  </moduleInfo>
-                </module>
-              </modules>
-              <overwriteExistingFiles>true</overwriteExistingFiles>
-              <jdepsExtraArgs>
-                <arg>--multi-release</arg>
-                <arg>14</arg>
-              </jdepsExtraArgs>
-            </configuration>
-          </execution>
-        </executions>
+<!--        <configuration>-->
+<!--          <layers>-->
+<!--            <enabled>true</enabled>-->
+<!--          </layers>-->
+<!--        </configuration>-->
       </plugin>
     </plugins>
   </build>
