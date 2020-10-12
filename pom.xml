@@ -13,7 +13,7 @@
 
     <properties>
         <jacoco.version>0.7.5.201505241946</jacoco.version>
-        <junit.version>4.12</junit.version>
+        <junit.version>4.13.1</junit.version>
         <h2.version>1.4.197</h2.version>
     </properties>
 
