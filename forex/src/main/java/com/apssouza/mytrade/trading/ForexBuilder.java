@@ -3,8 +3,6 @@ package com.apssouza.mytrade.trading;
 import com.apssouza.mytrade.feed.FeedModule;
 import com.apssouza.mytrade.trading.forex.feed.price.PriceFeedAdapter;
 import com.apssouza.mytrade.trading.forex.feed.signal.SignalFeedAdapter;
-import com.apssouza.mytrade.trading.forex.session.ExecutionType;
-import com.apssouza.mytrade.trading.forex.session.SessionType;
 import com.apssouza.mytrade.trading.forex.session.TradingSession;
 
 import java.math.BigDecimal;

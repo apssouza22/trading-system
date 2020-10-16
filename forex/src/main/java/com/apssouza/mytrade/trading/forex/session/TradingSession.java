@@ -1,5 +1,7 @@
 package com.apssouza.mytrade.trading.forex.session;
 
+import com.apssouza.mytrade.trading.ExecutionType;
+import com.apssouza.mytrade.trading.SessionType;
 import com.apssouza.mytrade.trading.forex.execution.ExecutionHandler;
 import com.apssouza.mytrade.trading.forex.execution.InteractiveBrokerExecutionHandler;
 import com.apssouza.mytrade.trading.forex.execution.SimulatedExecutionHandler;

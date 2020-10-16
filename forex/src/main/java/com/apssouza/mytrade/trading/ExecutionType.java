@@ -1,4 +1,4 @@
-package com.apssouza.mytrade.trading.forex.session;
+package com.apssouza.mytrade.trading;
 
 public enum ExecutionType {
     BROKER, SIMULATED

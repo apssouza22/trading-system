@@ -1,8 +1,7 @@
 package com.apssouza.mytrade.trading;
 
 import com.apssouza.mytrade.feed.FeedBuilder;
-import com.apssouza.mytrade.trading.forex.session.ExecutionType;
-import com.apssouza.mytrade.trading.forex.session.SessionType;
+import com.apssouza.mytrade.trading.forex.session.TradingSession;
 import com.apssouza.mytrade.trading.misc.ForexException;
 
 import java.math.BigDecimal;
@@ -16,6 +15,7 @@ import static java.time.LocalDate.of;
 
 public class ForexEngine {
 
+    private TradingSession tradingSession;
 
     public static void main(String[] args) {
         var date = of(2018, 9, 10);
@@ -29,18 +29,24 @@ public class ForexEngine {
                 SessionType.BACK_TEST,
                 ExecutionType.SIMULATED
         );
-        setUpEngine(dto);
+        var engine = new ForexEngine();
+        engine.setUp(dto);
+        engine.start();
     }
 
-    public static void setUpEngine(final ForexDto dto) {
+    public void start() {
+        tradingSession.start();
+    }
+
+    public void setUp(final ForexDto dto) {
         var feed = new FeedBuilder()
                 .withStartTime(dto.startDay())
                 .withEndTime(dto.endDay())
                 .withSignalName(dto.systemName())
-//                .withConnection(getConnection())
+                //                .withConnection(getConnection())
                 .build();
 
-        var tradingSession = new ForexBuilder()
+        this.tradingSession = new ForexBuilder()
                 .withSystemName(dto.systemName())
                 .withStartTime(dto.startDay())
                 .withEndTime(dto.endDay())
@@ -49,7 +55,6 @@ public class ForexEngine {
                 .withExecutionType(dto.executionType())
                 .withFeed(feed)
                 .build();
-        tradingSession.start();
     }
 
     private static Connection getConnection() throws ForexException {

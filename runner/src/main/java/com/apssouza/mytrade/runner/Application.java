@@ -2,9 +2,8 @@ package com.apssouza.mytrade.runner;
 
 import com.apssouza.mytrade.trading.ForexDto;
 import com.apssouza.mytrade.trading.ForexEngine;
-import com.apssouza.mytrade.trading.forex.session.ExecutionType;
-import com.apssouza.mytrade.trading.forex.session.SessionType;
-import com.apssouza.mytrade.trading.misc.helper.TradingParams;
+import com.apssouza.mytrade.trading.ExecutionType;
+import com.apssouza.mytrade.trading.SessionType;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -26,17 +25,18 @@ public class Application {
         springApplication.run(args);
 
         var date = LocalDate.of(2018, 9, 10);
-
-        var systemName = "signal_test";
         var dto = new ForexDto(
-                systemName,
+                "signal_test",
                 LocalDateTime.of(date.minusDays(20), LocalTime.MIN),
                 LocalDateTime.of(date.plusDays(6), LocalTime.MIN),
                 BigDecimal.valueOf(100000l),
                 SessionType.BACK_TEST,
                 ExecutionType.SIMULATED
         );
-        ForexEngine.setUpEngine(dto);
+
+        var engine = new ForexEngine();
+        engine.setUp(dto);
+        engine.start();
     }
 
 }
