@@ -1,8 +1,5 @@
 package com.apssouza.mytrade.trading.misc.helper;
 
-import com.apssouza.mytrade.trading.forex.session.SessionType;
-
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,11 +8,8 @@ public class TradingParams {
     public static String brokerHost;
     public static String brokerPort;
     public static String brokerClientId;
-    public static LocalDateTime tradingStartDay;
-    public static LocalDateTime tradingEndDay;
-    public static SessionType sessionType;
-    public static LocalTime tradingStartTime;
-    public static LocalTime tradingEndTime;
+    public static LocalTime tradingStartTime = LocalTime.of(8, 0);
+    public static LocalTime tradingEndTime = LocalTime.of(20, 0);
     public static boolean trading_multi_position_enabled = false;
     public static boolean trading_position_edit_enabled = false;
     public static boolean hard_stop_loss_enabled = true;
@@ -31,7 +25,7 @@ public class TradingParams {
     public static String transaction_path = "book-history.csv";
 
     static {
-        currency_pair_significant_digits_in_price = new HashMap<String, Integer>() {{
+        currency_pair_significant_digits_in_price = new HashMap<>() {{
             put("AUDUSD", 4);
         }};
     }

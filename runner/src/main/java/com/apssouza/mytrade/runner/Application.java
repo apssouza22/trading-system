@@ -1,16 +1,16 @@
 package com.apssouza.mytrade.runner;
 
-import com.apssouza.mytrade.trading.AppEngine;
-import com.apssouza.mytrade.trading.forex.session.TradingSession;
+import com.apssouza.mytrade.trading.ForexDto;
+import com.apssouza.mytrade.trading.ForexEngine;
+import com.apssouza.mytrade.trading.forex.session.ExecutionType;
+import com.apssouza.mytrade.trading.forex.session.SessionType;
 import com.apssouza.mytrade.trading.misc.helper.TradingParams;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Configuration;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -25,23 +25,18 @@ public class Application {
         var springApplication = new SpringApplication(Application.class, Application.class);
         springApplication.run(args);
 
-        var date = LocalDate.of(2018, 10, 10);
-        TradingParams.tradingStartDay = LocalDateTime.of(date.minusDays(20), LocalTime.MIN);
-        TradingParams.tradingEndDay = LocalDateTime.of(date.plusDays(6), LocalTime.MIN);
-        TradingParams.tradingStartTime = LocalTime.of(8, 0);
-        TradingParams.tradingEndTime = LocalTime.of(20, 0);
-        AppEngine.setUpEngine();
-    }
+        var date = LocalDate.of(2018, 9, 10);
 
-    private static Connection getConnection() throws ClassNotFoundException, SQLException {
-        Class.forName("org.h2.Driver"); // (1)
-        String url = "jdbc:h2:mem:";
-        Connection con = DriverManager.getConnection(url);
-        return con;
-    }
-
-    private static void registerShutDownListener(final TradingSession tradingSession) {
-        Runtime.getRuntime().addShutdownHook(new Thread(tradingSession::shutdown));
+        var systemName = "signal_test";
+        var dto = new ForexDto(
+                systemName,
+                LocalDateTime.of(date.minusDays(20), LocalTime.MIN),
+                LocalDateTime.of(date.plusDays(6), LocalTime.MIN),
+                BigDecimal.valueOf(100000l),
+                SessionType.BACK_TEST,
+                ExecutionType.SIMULATED
+        );
+        ForexEngine.setUpEngine(dto);
     }
 
 }
