@@ -55,7 +55,7 @@ public class SimulatedExecutionHandler implements ExecutionHandler {
         int quantity = order.getQuantity();
 
         PriceDto fill_price = priceMap.get(currency_pair);
-        BigDecimal close_price = NumberHelper.roundSymbolPrice(currency_pair, fill_price.getClose());
+        BigDecimal close_price = NumberHelper.roundSymbolPrice(currency_pair, fill_price.close());
 
         FilledOrderDto filled_order = new FilledOrderDto(
                 this.currentTime,

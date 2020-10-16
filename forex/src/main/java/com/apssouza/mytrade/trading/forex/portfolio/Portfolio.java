@@ -21,7 +21,7 @@ public class Portfolio {
         for (Map.Entry<String, Position> entry : this.positions.entrySet()) {
             Position ps = entry.getValue();
             PriceDto priceDto = event.getPrice().get(ps.getSymbol());
-            ps.updatePositionPrice(priceDto.getClose());
+            ps.updatePositionPrice(priceDto.close());
         }
     }
 

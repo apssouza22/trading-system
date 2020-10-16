@@ -49,12 +49,12 @@ public class StopOrderPriceMonitor {
 
     private boolean hasFilledSellOrder(StopOrderDto stopOrder, PriceDto priceDto) {
         if (stopOrder.getType().equals(StopOrderType.TAKE_PROFIT)) {
-            if (priceDto.getHigh().compareTo(stopOrder.getPrice()) >= 0) {
+            if (priceDto.high().compareTo(stopOrder.getPrice()) >= 0) {
                return true;
             }
         }
         if (stopOrder.getType().equals(StopOrderType.STOP_LOSS)) {
-            if (priceDto.getLow().compareTo(stopOrder.getPrice()) <= 0) {
+            if (priceDto.high().compareTo(stopOrder.getPrice()) <= 0) {
                 return true;
             }
         }
@@ -63,12 +63,12 @@ public class StopOrderPriceMonitor {
 
     private boolean hasFilledBuyOrder( StopOrderDto stopOrder, PriceDto priceDto) {
         if (stopOrder.getType().equals(StopOrderType.TAKE_PROFIT)) {
-            if (priceDto.getLow().compareTo(stopOrder.getPrice()) <= 0) {
+            if (priceDto.low().compareTo(stopOrder.getPrice()) <= 0) {
                 return true;
             }
         }
         if (stopOrder.getType().equals(StopOrderType.STOP_LOSS)) {
-            if (priceDto.getHigh().compareTo(stopOrder.getPrice()) >= 0) {
+            if (priceDto.high().compareTo(stopOrder.getPrice()) >= 0) {
                 return true;
             }
         }

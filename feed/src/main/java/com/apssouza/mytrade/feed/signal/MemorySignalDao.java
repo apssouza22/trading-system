@@ -47,7 +47,7 @@ public class MemorySignalDao implements SignalDao {
     @Override
     public List<SignalDto> getSignal(String systemName, LocalDateTime currentTime) {
         return signals.stream()
-                .filter(signal -> signal.getSourceName().equals(systemName) && signal.getCreatedAt().equals(currentTime))
+                .filter(signal -> signal.sourceName().equals(systemName) && signal.createdAt().equals(currentTime))
                 .collect(Collectors.toList());
     }
 

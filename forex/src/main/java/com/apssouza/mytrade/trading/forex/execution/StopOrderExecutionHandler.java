@@ -75,7 +75,7 @@ public class StopOrderExecutionHandler {
     }
 
     private void updateStopOrderStatus(StopOrderDto stopOrder, PriceDto priceDto) {
-        stopOrder = new StopOrderDto(StopOrderStatus.FILLED, priceDto.getClose(), stopOrder);
+        stopOrder = new StopOrderDto(StopOrderStatus.FILLED, priceDto.close(), stopOrder);
         this.allStopOrders.put(stopOrder.getId(), stopOrder);
     }
 

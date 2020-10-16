@@ -113,7 +113,7 @@ public class RiskManagementHandler {
             return true;
         }
         for (Map.Entry<String, Position> entry : positions.entrySet()){
-            if (entry.getValue().getSymbol().equals(event.getSignal().getSymbol().toUpperCase())){
+            if (entry.getValue().getSymbol().equals(event.getSignal().symbol().toUpperCase())){
                 return false;
             }
         }

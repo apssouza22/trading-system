@@ -45,7 +45,7 @@ public class QueueConsumer extends Thread {
                         "%s - %s - %s",
                         event.getType().name(),
                         event.getTimestamp(),
-                        event.getPrice().get("AUDUSD").getClose()
+                        event.getPrice().get("AUDUSD").close()
                 );
                 log.info(logMsg);
                 historyHandler.startCycle(event.getTimestamp());

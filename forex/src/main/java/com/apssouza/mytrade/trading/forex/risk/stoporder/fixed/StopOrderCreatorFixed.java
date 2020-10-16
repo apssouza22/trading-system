@@ -42,14 +42,14 @@ public class StopOrderCreatorFixed implements StopOrderCreator {
     @Override
     public Optional<StopOrderDto> getEntryStopOrder(Position position, Event event) {
         Map<String, PriceDto> price = event.getPrice();
-        BigDecimal priceClose = price.get(position.getSymbol()).getClose();
+        BigDecimal priceClose = price.get(position.getSymbol()).close();
         return creatorContext.getEntryStopOrder(position, priceClose);
     }
 
     @Override
     public Optional<StopOrderDto> getTrailingStopOrder(Position position, Event event) {
         Map<String, PriceDto> price = event.getPrice();
-        BigDecimal priceClose = price.get(position.getSymbol()).getClose();
+        BigDecimal priceClose = price.get(position.getSymbol()).close();
         return creatorContext.getTrailingStopOrder(position, priceClose);
     }
 

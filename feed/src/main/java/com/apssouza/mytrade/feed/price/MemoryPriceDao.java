@@ -17,25 +17,25 @@ public class MemoryPriceDao implements PriceDao {
 
     public MemoryPriceDao(LocalDateTime start, LocalDateTime end) {
         this.prices = getPrices(start, end);
-        prices.sort(Comparator.comparing(PriceDto::getTimestamp));
+        prices.sort(Comparator.comparing(PriceDto::timestamp));
     }
 
     @Override
     public List<PriceDto> getPriceInterval(LocalDateTime start, LocalDateTime end) {
         return prices.parallelStream()
-                .filter( i -> i.getTimestamp().compareTo(start) >= 0 && i.getTimestamp().compareTo(end) <= 0 )
+                .filter( i -> i.timestamp().compareTo(start) >= 0 && i.timestamp().compareTo(end) <= 0 )
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<PriceDto> getClosestPrice(LocalDateTime time) {
         Optional<PriceDto> first = prices.stream()
-                .sorted(Comparator.comparing(PriceDto::getTimestamp).reversed())
-                .filter(i -> i.getTimestamp().compareTo(time) <= 0)
+                .sorted(Comparator.comparing(PriceDto::timestamp).reversed())
+                .filter(i -> i.timestamp().compareTo(time) <= 0)
                 .findFirst();
 
         return prices.stream()
-                .filter(i -> i.getTimestamp().equals(first.get().getTimestamp()))
+                .filter(i -> i.timestamp().equals(first.get().timestamp()))
                 .collect(Collectors.toList());
     }
 

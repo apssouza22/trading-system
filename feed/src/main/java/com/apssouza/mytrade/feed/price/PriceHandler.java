@@ -22,7 +22,7 @@ public class PriceHandler {
         List<PriceDto> prices = this.getClosestPrice(time);
         Map<String, PriceDto> priceDtoMap = new HashMap<>();
         for (PriceDto price : prices) {
-            priceDtoMap.put(price.getSymbol(), price);
+            priceDtoMap.put(price.symbol(), price);
         }
         return priceDtoMap;
     }

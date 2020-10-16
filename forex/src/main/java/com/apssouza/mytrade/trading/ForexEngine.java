@@ -37,7 +37,7 @@ public class ForexEngine {
                 .withStartTime(dto.startDay())
                 .withEndTime(dto.endDay())
                 .withSignalName(dto.systemName())
-                .withConnection(getConnection())
+//                .withConnection(getConnection())
                 .build();
 
         var tradingSession = new ForexBuilder()

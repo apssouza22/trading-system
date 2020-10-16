@@ -56,7 +56,7 @@ public class PositionExitHandler {
 
     private SignalDto getSignalBySymbol(String symbol, List<SignalDto> signals) {
         for (SignalDto signal : signals) {
-            if (signal.getSymbol().equals(symbol)) {
+            if (signal.symbol().equals(symbol)) {
                 return signal;
             }
         }
@@ -76,7 +76,7 @@ public class PositionExitHandler {
             exit_direction = OrderAction.BUY;
         }
 
-        if (OrderAction.valueOf(signal.getAction().toUpperCase()) == exit_direction) {
+        if (OrderAction.valueOf(signal.action().toUpperCase()) == exit_direction) {
             return true;
         }
         return false;

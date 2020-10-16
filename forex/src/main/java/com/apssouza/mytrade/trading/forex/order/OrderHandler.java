@@ -48,10 +48,10 @@ public class OrderHandler {
     public OrderDto createOrderFromSignal(SignalCreatedEvent event) {
         LocalDateTime time = event.getTimestamp();
         SignalDto signal = event.getSignal();
-        String action = signal.getAction();
+        String action = signal.action();
 
         OrderDto order = new OrderDto(
-                signal.getSymbol(),
+                signal.symbol(),
                 OrderAction.valueOf(action.toUpperCase()),
                 positionSizer.getQuantity(),
                 OrderOrigin.SIGNAL,
