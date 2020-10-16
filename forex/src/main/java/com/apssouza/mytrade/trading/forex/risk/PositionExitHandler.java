@@ -1,7 +1,7 @@
 package com.apssouza.mytrade.trading.forex.risk;
 
 import com.apssouza.mytrade.common.misc.helper.time.MarketTimeHelper;
-import com.apssouza.mytrade.feed.signal.SignalDto;
+import com.apssouza.mytrade.feed.SignalDto;
 import com.apssouza.mytrade.trading.forex.feed.price.PriceFeed;
 import com.apssouza.mytrade.trading.forex.order.OrderAction;
 import com.apssouza.mytrade.trading.forex.portfolio.ExitReason;

@@ -1,13 +1,12 @@
 package com.apssouza.mytrade.trading.forex.risk.stoporder.fixed;
 
-import com.apssouza.mytrade.feed.price.PriceDto;
+import com.apssouza.mytrade.feed.PriceDto;
 import com.apssouza.mytrade.trading.forex.order.StopOrderDto;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.forex.portfolio.PositionType;
 import com.apssouza.mytrade.trading.forex.risk.stoporder.PriceDistanceObject;
 import com.apssouza.mytrade.trading.forex.risk.stoporder.StopOrderCreator;
 import com.apssouza.mytrade.trading.forex.session.event.Event;
-import com.apssouza.mytrade.trading.forex.session.event.PriceChangedEvent;
 
 import java.math.BigDecimal;
 import java.util.Map;

@@ -23,7 +23,7 @@ java --enable-preview -jar runner/target/runner-1.0-SNAPSHOT.jar
 ### Using Docker
 
 ```
-docker build . -t trading-engine
+docker build . -t trading-engine-temp
 docker run --rm -p 8080:8080 trading-engine
 ```
 

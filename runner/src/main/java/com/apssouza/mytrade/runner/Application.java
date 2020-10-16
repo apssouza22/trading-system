@@ -23,9 +23,9 @@ public class Application {
 
     public static void main(String[] args) {
         var springApplication = new SpringApplication(Application.class, Application.class);
-        var context = springApplication.run(args);
+        springApplication.run(args);
 
-        var date = LocalDate.of(2018, 9, 10);
+        var date = LocalDate.of(2018, 10, 10);
         TradingParams.tradingStartDay = LocalDateTime.of(date.minusDays(20), LocalTime.MIN);
         TradingParams.tradingEndDay = LocalDateTime.of(date.plusDays(6), LocalTime.MIN);
         TradingParams.tradingStartTime = LocalTime.of(8, 0);

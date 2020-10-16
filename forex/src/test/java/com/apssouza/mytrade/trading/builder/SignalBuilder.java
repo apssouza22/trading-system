@@ -1,6 +1,6 @@
 package com.apssouza.mytrade.trading.builder;
 
-import com.apssouza.mytrade.feed.signal.SignalDto;
+import com.apssouza.mytrade.feed.SignalDto;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

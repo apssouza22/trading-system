@@ -1,9 +1,6 @@
 package com.apssouza.mytrade.trading;
 
-import com.apssouza.mytrade.feed.price.MemoryPriceDao;
-import com.apssouza.mytrade.feed.price.PriceHandler;
-import com.apssouza.mytrade.feed.signal.MemorySignalDao;
-import com.apssouza.mytrade.feed.signal.SignalHandler;
+import com.apssouza.mytrade.feed.FeedBuilder;
 import com.apssouza.mytrade.trading.forex.feed.price.PriceFeedAdapter;
 import com.apssouza.mytrade.trading.forex.feed.signal.SignalFeedAdapter;
 import com.apssouza.mytrade.trading.forex.session.ExecutionType;
@@ -33,12 +30,16 @@ public class AppEngine {
     }
 
     public static void setUpEngine() {
-        var priceMemoryDao = new MemoryPriceDao(TradingParams.tradingStartDay, TradingParams.tradingEndDay);
         var systemName = "signal_test";
-        var signalMemoryDao =
-                new MemorySignalDao(TradingParams.tradingStartDay, TradingParams.tradingEndDay, systemName);
-        var priceAdapter = new PriceFeedAdapter(new PriceHandler(priceMemoryDao));
-        var signalFeed = new SignalFeedAdapter(new SignalHandler(signalMemoryDao));
+        var feed = new FeedBuilder()
+                .withStartTime(TradingParams.tradingStartDay)
+                .withEndTime(TradingParams.tradingEndDay)
+                .withSignalName(systemName)
+                .build();
+
+        var priceAdapter = new PriceFeedAdapter(feed);
+        var signalFeed = new SignalFeedAdapter(feed);
+
         var tradingSession = new TradingSession(
                 BigDecimal.valueOf(100000l),
                 TradingParams.tradingStartDay,

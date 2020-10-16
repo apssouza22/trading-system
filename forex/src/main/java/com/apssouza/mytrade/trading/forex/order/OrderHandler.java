@@ -1,14 +1,11 @@
 package com.apssouza.mytrade.trading.forex.order;
 
-import com.apssouza.mytrade.feed.signal.SignalDto;
-import com.apssouza.mytrade.trading.forex.feed.price.PriceFeed;
-import com.apssouza.mytrade.trading.forex.portfolio.Portfolio;
+import com.apssouza.mytrade.feed.SignalDto;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.forex.portfolio.PositionType;
 import com.apssouza.mytrade.trading.forex.risk.PositionSizer;
 import com.apssouza.mytrade.trading.forex.session.event.SignalCreatedEvent;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.logging.Logger;

@@ -1,5 +1,7 @@
 package com.apssouza.mytrade.feed.price;
 
+import com.apssouza.mytrade.feed.PriceDto;
+
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;

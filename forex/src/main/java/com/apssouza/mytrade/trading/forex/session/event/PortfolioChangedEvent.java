@@ -1,6 +1,6 @@
 package com.apssouza.mytrade.trading.forex.session.event;
 
-import com.apssouza.mytrade.feed.price.PriceDto;
+import com.apssouza.mytrade.feed.PriceDto;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;
 
 import java.time.LocalDateTime;

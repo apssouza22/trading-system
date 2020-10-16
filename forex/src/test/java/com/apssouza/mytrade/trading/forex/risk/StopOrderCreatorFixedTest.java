@@ -1,6 +1,6 @@
 package com.apssouza.mytrade.trading.forex.risk;
 
-import com.apssouza.mytrade.feed.price.PriceDto;
+import com.apssouza.mytrade.feed.PriceDto;
 import com.apssouza.mytrade.trading.builder.PositionBuilder;
 import com.apssouza.mytrade.trading.forex.order.*;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;

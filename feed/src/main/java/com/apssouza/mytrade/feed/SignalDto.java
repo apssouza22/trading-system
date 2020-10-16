@@ -1,4 +1,4 @@
-package com.apssouza.mytrade.feed.signal;
+package com.apssouza.mytrade.feed;
 
 import java.time.LocalDateTime;
 

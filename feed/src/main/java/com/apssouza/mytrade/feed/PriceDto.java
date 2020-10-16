@@ -1,4 +1,4 @@
-package com.apssouza.mytrade.feed.price;
+package com.apssouza.mytrade.feed;
 
 import java.math.BigDecimal;
 import java.sql.Date;
