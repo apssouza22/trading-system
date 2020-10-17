@@ -35,7 +35,7 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
     <jacoco.version>0.8.5</jacoco.version>
-    <junit.version>4.12</junit.version>
+    <junit.version>4.13.1</junit.version>
     <h2.version>1.4.197</h2.version>
     <mockito-core.version>3.5.10</mockito-core.version>
     <mytrade.version>1.0-SNAPSHOT</mytrade.version>
@@ -112,44 +112,44 @@
           <argLine>--enable-preview</argLine>
         </configuration>
       </plugin>
-<!--      <plugin>-->
-<!--        <groupId>org.jacoco</groupId>-->
-<!--        <artifactId>jacoco-maven-plugin</artifactId>-->
-<!--        <version>${jacoco.version}</version>-->
-<!--        <executions>-->
-<!--          <execution>-->
-<!--            <id>prepare-agent</id>-->
-<!--            <goals>-->
-<!--              <goal>prepare-agent</goal>-->
-<!--            </goals>-->
-<!--          </execution>-->
-<!--          <execution>-->
-<!--            <id>report</id>-->
-<!--            <phase>prepare-package</phase>-->
-<!--            <goals>-->
-<!--              <goal>report</goal>-->
-<!--            </goals>-->
-<!--          </execution>-->
-<!--          <execution>-->
-<!--            <id>post-unit-test</id>-->
-<!--            <phase>test</phase>-->
-<!--            <goals>-->
-<!--              <goal>report</goal>-->
-<!--            </goals>-->
-<!--            <configuration>-->
-<!--              &lt;!&ndash; Sets the path to the file which contains the execution data. &ndash;&gt;-->
-<!--              <dataFile>target/jacoco.exec</dataFile>-->
-<!--              &lt;!&ndash; Sets the output directory for the code coverage report. &ndash;&gt;-->
-<!--              <outputDirectory>target/jacoco-ut</outputDirectory>-->
-<!--            </configuration>-->
-<!--          </execution>-->
-<!--        </executions>-->
-<!--        <configuration>-->
-<!--          &lt;!&ndash;          <systemPropertyVariables>&ndash;&gt;-->
-<!--          &lt;!&ndash;            <jacoco-agent.destfile>target/jacoco.exec</jacoco-agent.destfile>&ndash;&gt;-->
-<!--          &lt;!&ndash;          </systemPropertyVariables>&ndash;&gt;-->
-<!--        </configuration>-->
-<!--      </plugin>-->
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>${jacoco.version}</version>
+        <executions>
+          <execution>
+            <id>prepare-agent</id>
+            <goals>
+              <goal>prepare-agent</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>report</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>report</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>post-unit-test</id>
+            <phase>test</phase>
+            <goals>
+              <goal>report</goal>
+            </goals>
+            <configuration>
+              <!-- Sets the path to the file which contains the execution data. -->
+              <dataFile>target/jacoco.exec</dataFile>
+              <!-- Sets the output directory for the code coverage report. -->
+              <outputDirectory>target/jacoco-ut</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+        <configuration>
+          <systemPropertyVariables>
+            <jacoco-agent.destfile>target/jacoco.exec</jacoco-agent.destfile>
+          </systemPropertyVariables>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
 </project>
