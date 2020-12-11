@@ -1,4 +1,4 @@
-package com.apssouza.mytrade.feed;
+package com.apssouza.mytrade.feed.api;
 
 import com.apssouza.mytrade.feed.price.MemoryPriceDao;
 import com.apssouza.mytrade.feed.price.PriceHandler;

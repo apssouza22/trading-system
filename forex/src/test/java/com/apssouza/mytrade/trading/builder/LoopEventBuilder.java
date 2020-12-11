@@ -1,6 +1,6 @@
 package com.apssouza.mytrade.trading.builder;
 
-import com.apssouza.mytrade.feed.PriceDto;
+import com.apssouza.mytrade.feed.api.PriceDto;
 import com.apssouza.mytrade.trading.forex.session.event.EventType;
 import com.apssouza.mytrade.trading.forex.session.event.PriceChangedEvent;
 

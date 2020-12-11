@@ -1,6 +1,6 @@
-package com.apssouza.mytrade.trading;
+package com.apssouza.mytrade.trading.api;
 
-import com.apssouza.mytrade.feed.FeedModule;
+import com.apssouza.mytrade.feed.api.FeedModule;
 import com.apssouza.mytrade.trading.forex.feed.price.PriceFeedAdapter;
 import com.apssouza.mytrade.trading.forex.feed.signal.SignalFeedAdapter;
 import com.apssouza.mytrade.trading.forex.session.TradingSession;
@@ -71,7 +71,9 @@ public class ForexBuilder {
     }
 
     private static void registerShutDownListener(final TradingSession tradingSession) {
-        Runtime.getRuntime().addShutdownHook(new Thread(tradingSession::shutdown));
+        Thread shutdown = new Thread(tradingSession::shutdown);
+        shutdown.setDaemon(true);
+        Runtime.getRuntime().addShutdownHook(shutdown);
     }
 
     private ExecutionType getSafeExecutionType() {

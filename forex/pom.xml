@@ -27,6 +27,10 @@
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
     </dependency>
+    <dependency>
+      <groupId>com.apssouza.mytrade</groupId>
+      <artifactId>feed</artifactId>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
@@ -54,7 +58,7 @@
 <!--              </modules>-->
 <!--              <launcher>-->
 <!--                <name>my-trade-engine</name>-->
-<!--                <module>com.apssouza.mytrade.trading.forex/com.apssouza.mytrade.trading.ForexEngine</module>-->
+<!--                <module>com.apssouza.mytrade.trading.forex/com.apssouza.mytrade.trading.api.ForexEngine</module>-->
 <!--              </launcher>-->
 <!--              <outputDirectory>-->
 <!--                ${project.build.directory}/jlink-image-->

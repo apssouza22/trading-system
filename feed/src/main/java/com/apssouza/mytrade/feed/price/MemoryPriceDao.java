@@ -1,6 +1,6 @@
 package com.apssouza.mytrade.feed.price;
 
-import com.apssouza.mytrade.feed.PriceDto;
+import com.apssouza.mytrade.feed.api.PriceDto;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

@@ -1,6 +1,6 @@
 package com.apssouza.mytrade.trading.forex.session.listener;
 
-import com.apssouza.mytrade.feed.SignalDto;
+import com.apssouza.mytrade.feed.api.SignalDto;
 import com.apssouza.mytrade.trading.forex.execution.ExecutionHandler;
 import com.apssouza.mytrade.trading.forex.feed.signal.SignalFeed;
 import com.apssouza.mytrade.trading.forex.order.OrderDao;

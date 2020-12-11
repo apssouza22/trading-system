@@ -1,4 +1,4 @@
-package com.apssouza.mytrade.trading;
+package com.apssouza.mytrade.trading.api;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

@@ -1,6 +1,6 @@
 package com.apssouza.mytrade.trading.forex.order;
 
-import com.apssouza.mytrade.feed.SignalDto;
+import com.apssouza.mytrade.feed.api.SignalDto;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.forex.portfolio.PositionType;
 import com.apssouza.mytrade.trading.forex.risk.PositionSizer;

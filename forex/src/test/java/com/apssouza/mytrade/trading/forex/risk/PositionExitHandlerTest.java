@@ -1,6 +1,6 @@
 package com.apssouza.mytrade.trading.forex.risk;
 
-import com.apssouza.mytrade.feed.SignalDto;
+import com.apssouza.mytrade.feed.api.SignalDto;
 import com.apssouza.mytrade.trading.builder.LoopEventBuilder;
 import com.apssouza.mytrade.trading.builder.PositionExitBuilder;
 import com.apssouza.mytrade.trading.builder.SignalBuilder;

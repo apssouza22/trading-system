@@ -1,9 +1,9 @@
 package com.apssouza.mytrade.runner;
 
-import com.apssouza.mytrade.trading.ForexDto;
-import com.apssouza.mytrade.trading.ForexEngine;
-import com.apssouza.mytrade.trading.ExecutionType;
-import com.apssouza.mytrade.trading.SessionType;
+import com.apssouza.mytrade.trading.api.ForexDto;
+import com.apssouza.mytrade.trading.api.ForexEngine;
+import com.apssouza.mytrade.trading.api.ExecutionType;
+import com.apssouza.mytrade.trading.api.SessionType;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

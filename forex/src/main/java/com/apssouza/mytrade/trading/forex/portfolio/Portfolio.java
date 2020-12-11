@@ -1,6 +1,6 @@
 package com.apssouza.mytrade.trading.forex.portfolio;
 
-import com.apssouza.mytrade.feed.PriceDto;
+import com.apssouza.mytrade.feed.api.PriceDto;
 import com.apssouza.mytrade.trading.forex.session.event.Event;
 
 import java.math.BigDecimal;

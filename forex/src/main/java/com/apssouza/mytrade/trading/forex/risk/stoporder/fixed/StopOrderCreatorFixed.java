@@ -1,6 +1,6 @@
 package com.apssouza.mytrade.trading.forex.risk.stoporder.fixed;
 
-import com.apssouza.mytrade.feed.PriceDto;
+import com.apssouza.mytrade.feed.api.PriceDto;
 import com.apssouza.mytrade.trading.forex.order.StopOrderDto;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.forex.portfolio.PositionType;

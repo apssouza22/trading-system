@@ -1,6 +1,6 @@
-package com.apssouza.mytrade.trading;
+package com.apssouza.mytrade.trading.api;
 
-import com.apssouza.mytrade.feed.FeedBuilder;
+import com.apssouza.mytrade.feed.api.FeedBuilder;
 import com.apssouza.mytrade.trading.forex.session.TradingSession;
 import com.apssouza.mytrade.trading.misc.ForexException;
 

@@ -1,7 +1,7 @@
 package com.apssouza.mytrade.feed.signal;
 
 import com.apssouza.mytrade.common.misc.helper.time.DateTimeConverter;
-import com.apssouza.mytrade.feed.SignalDto;
+import com.apssouza.mytrade.feed.api.SignalDto;
 
 import java.sql.*;
 import java.time.LocalDateTime;
