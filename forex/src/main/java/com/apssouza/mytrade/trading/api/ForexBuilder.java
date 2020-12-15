@@ -1,8 +1,8 @@
 package com.apssouza.mytrade.trading.api;
 
 import com.apssouza.mytrade.feed.api.FeedModule;
-import com.apssouza.mytrade.trading.forex.feed.price.PriceFeedAdapter;
-import com.apssouza.mytrade.trading.forex.feed.signal.SignalFeedAdapter;
+import com.apssouza.mytrade.trading.adapters.PriceFeedAdapter;
+import com.apssouza.mytrade.trading.adapters.SignalFeedAdapter;
 import com.apssouza.mytrade.trading.forex.session.TradingSession;
 
 import java.math.BigDecimal;

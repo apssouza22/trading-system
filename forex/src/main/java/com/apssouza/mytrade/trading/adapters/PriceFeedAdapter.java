@@ -1,7 +1,8 @@
-package com.apssouza.mytrade.trading.forex.feed.price;
+package com.apssouza.mytrade.trading.adapters;
 
 import com.apssouza.mytrade.feed.api.FeedModule;
 import com.apssouza.mytrade.feed.api.PriceDto;
+import com.apssouza.mytrade.trading.forex.feed.price.PriceFeed;
 
 import java.time.LocalDateTime;
 import java.util.Map;
