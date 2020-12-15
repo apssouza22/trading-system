@@ -1,6 +1,5 @@
 package com.apssouza.mytrade.trading.forex.order;
 
-import com.apssouza.mytrade.trading.builder.OrderHandlerBuilder;
 import com.apssouza.mytrade.trading.builder.PositionBuilder;
 import com.apssouza.mytrade.trading.builder.SignalBuilder;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;
@@ -8,7 +7,7 @@ import com.apssouza.mytrade.trading.forex.portfolio.PositionStatus;
 import com.apssouza.mytrade.trading.forex.portfolio.PositionType;
 import com.apssouza.mytrade.trading.forex.session.event.EventType;
 import com.apssouza.mytrade.trading.forex.session.event.SignalCreatedEvent;
-import junit.framework.TestCase;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -16,6 +15,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
+
+import junit.framework.TestCase;
 
 @RunWith(MockitoJUnitRunner.class)
 public class OrderHandlerTest extends TestCase {

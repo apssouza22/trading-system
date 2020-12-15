@@ -1,10 +1,8 @@
 package com.apssouza.mytrade.trading.forex.order;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-public interface OrderDao {
+interface OrderDao {
 
     OrderDto persist(OrderDto order);
 

@@ -1,7 +1,5 @@
-package com.apssouza.mytrade.trading.builder;
+package com.apssouza.mytrade.trading.forex.order;
 
-import com.apssouza.mytrade.trading.forex.order.MemoryOrderDao;
-import com.apssouza.mytrade.trading.forex.order.OrderHandler;
 import com.apssouza.mytrade.trading.forex.risk.PositionSizerFixed;
 
 import org.mockito.Mockito;

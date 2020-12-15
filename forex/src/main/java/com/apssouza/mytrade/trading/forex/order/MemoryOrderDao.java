@@ -4,7 +4,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class MemoryOrderDao implements  OrderDao {
+class MemoryOrderDao implements  OrderDao {
     private static Map<Integer, OrderDto> ORDERS = new ConcurrentHashMap<>();
     private static AtomicInteger orderId = new AtomicInteger();
 

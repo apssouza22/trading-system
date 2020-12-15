@@ -3,8 +3,8 @@ package com.apssouza.mytrade.trading.forex.session.listener;
 import com.apssouza.mytrade.feed.api.SignalDto;
 import com.apssouza.mytrade.trading.forex.execution.OrderExecution;
 import com.apssouza.mytrade.trading.forex.feed.SignalFeed;
-import com.apssouza.mytrade.trading.forex.order.OrderDao;
 import com.apssouza.mytrade.trading.forex.order.OrderDto;
+import com.apssouza.mytrade.trading.forex.order.OrderHandler;
 import com.apssouza.mytrade.trading.forex.order.OrderStatus;
 import com.apssouza.mytrade.trading.forex.portfolio.PortfolioHandler;
 import com.apssouza.mytrade.trading.forex.session.EventNotifier;
@@ -26,20 +26,20 @@ public class PriceChangedListener implements PropertyChangeListener {
     private final OrderExecution executionHandler;
     private final PortfolioHandler portfolioHandler;
     private final SignalFeed signalFeed;
-    private final OrderDao orderDao;
+    private final OrderHandler orderHandler;
     private final EventNotifier eventNotifier;
 
     public PriceChangedListener(
             OrderExecution executionHandler,
             PortfolioHandler portfolioHandler,
             SignalFeed signalFeed,
-            OrderDao orderDao,
+            OrderHandler orderHandler,
             EventNotifier eventNotifier
     ) {
         this.executionHandler = executionHandler;
         this.portfolioHandler = portfolioHandler;
         this.signalFeed = signalFeed;
-        this.orderDao = orderDao;
+        this.orderHandler = orderHandler;
         this.eventNotifier = eventNotifier;
     }
 
@@ -83,7 +83,7 @@ public class PriceChangedListener implements PropertyChangeListener {
     }
 
     private void processOrders(PriceChangedEvent event, LocalDateTime currentTime) {
-        List<OrderDto> orders = this.orderDao.getOrderByStatus(OrderStatus.CREATED);
+        List<OrderDto> orders = this.orderHandler.getOrderByStatus(OrderStatus.CREATED);
         List<OrderDto> orderList = MultiPositionHandler.createPositionIdentifier(orders);
 
         if (orderList.isEmpty())

@@ -7,6 +7,9 @@ import com.apssouza.mytrade.trading.forex.risk.PositionSizer;
 import com.apssouza.mytrade.trading.forex.session.event.SignalCreatedEvent;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.logging.Logger;
 
@@ -63,8 +66,8 @@ public class OrderHandler {
         return order;
     }
 
-
-    public Optional<OrderDto> getOrderById(Integer id) {
-        return orderDao.getOrderById(id);
+    public List<OrderDto> getOrderByStatus(OrderStatus status) {
+        return orderDao.getOrderByStatus(status);
     }
+
 }

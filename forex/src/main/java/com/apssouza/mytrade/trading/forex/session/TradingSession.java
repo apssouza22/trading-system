@@ -9,8 +9,8 @@ import com.apssouza.mytrade.trading.forex.feed.SignalFeed;
 import com.apssouza.mytrade.trading.forex.feed.pricestream.HistoricalPriceStream;
 import com.apssouza.mytrade.trading.forex.feed.pricestream.PriceStream;
 import com.apssouza.mytrade.trading.forex.feed.pricestream.RealtimePriceStream;
-import com.apssouza.mytrade.trading.forex.order.MemoryOrderDao;
 import com.apssouza.mytrade.trading.forex.order.OrderHandler;
+import com.apssouza.mytrade.trading.forex.order.OrderHandlerFactory;
 import com.apssouza.mytrade.trading.forex.portfolio.Portfolio;
 import com.apssouza.mytrade.trading.forex.portfolio.PortfolioHandler;
 import com.apssouza.mytrade.trading.forex.portfolio.ReconciliationHandler;
@@ -51,7 +51,6 @@ public class TradingSession {
     protected final String systemName;
     protected final ExecutionType executionType;
 
-    protected MemoryOrderDao orderDao;
     protected final PriceFeed priceFeed;
     protected final SignalFeed signalFeed;
     protected OrderExecution executionHandler;
@@ -93,14 +92,11 @@ public class TradingSession {
     }
 
     private void configSession() {
-        this.orderDao = new MemoryOrderDao();
-
         this.executionHandler = OrderExecutionFactory.factory(this.executionType);
-
         this.positionSizer = new PositionSizerFixed();
         this.portfolio = new Portfolio(this.equity);
         this.positionExitHandler = new PositionExitHandler(this.portfolio, this.priceFeed);
-        this.orderHandler = new OrderHandler(this.orderDao, this.positionSizer);
+        this.orderHandler = OrderHandlerFactory.factory(this.positionSizer);
 
         this.reconciliationHandler = new ReconciliationHandler(this.portfolio, this.executionHandler);
         this.historyHandler = new HistoryBookHandler(new TransactionsExporter());
@@ -149,7 +145,7 @@ public class TradingSession {
         eventNotifier.addPropertyChangeListener(new PortfolioChangedListener(reconciliationHandler, portfolioHandler));
         eventNotifier.addPropertyChangeListener(new SignalCreatedListener(riskManagementHandler, orderHandler, eventNotifier, historyHandler));
         eventNotifier.addPropertyChangeListener(new StopOrderFilledListener(portfolio, historyHandler, eventNotifier));
-        eventNotifier.addPropertyChangeListener(new PriceChangedListener(executionHandler, portfolioHandler, signalFeed, orderDao, eventNotifier));
+        eventNotifier.addPropertyChangeListener(new PriceChangedListener(executionHandler, portfolioHandler, signalFeed, orderHandler, eventNotifier));
         eventNotifier.addPropertyChangeListener(new SessionFinishedListener(historyHandler));
         eventNotifier.addPropertyChangeListener(new EndedTradingDayListener(portfolioHandler));
         return eventNotifier;
