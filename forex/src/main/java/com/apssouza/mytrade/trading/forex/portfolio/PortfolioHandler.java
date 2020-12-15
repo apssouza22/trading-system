@@ -1,7 +1,7 @@
 package com.apssouza.mytrade.trading.forex.portfolio;
 
 import com.apssouza.mytrade.feed.api.SignalDto;
-import com.apssouza.mytrade.trading.forex.execution.ExecutionHandler;
+import com.apssouza.mytrade.trading.forex.execution.OrderExecution;
 import com.apssouza.mytrade.trading.forex.order.*;
 import com.apssouza.mytrade.trading.forex.risk.PositionExitHandler;
 import com.apssouza.mytrade.trading.forex.risk.RiskManagementHandler;
@@ -19,7 +19,7 @@ public class PortfolioHandler {
 
     private final OrderHandler orderHandler;
     private final PositionExitHandler positionExitHandler;
-    private final ExecutionHandler executionHandler;
+    private final OrderExecution executionHandler;
     private final Portfolio portfolio;
     private final ReconciliationHandler reconciliationHandler;
     private final HistoryBookHandler historyHandler;
@@ -32,7 +32,7 @@ public class PortfolioHandler {
             BigDecimal equity,
             OrderHandler orderHandler,
             PositionExitHandler positionExitHandler,
-            ExecutionHandler executionHandler,
+            OrderExecution executionHandler,
             Portfolio portfolio,
             ReconciliationHandler reconciliationHandler,
             HistoryBookHandler historyHandler,

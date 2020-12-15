@@ -1,6 +1,6 @@
 package com.apssouza.mytrade.trading.forex.portfolio;
 
-import com.apssouza.mytrade.trading.forex.execution.ExecutionHandler;
+import com.apssouza.mytrade.trading.forex.execution.OrderExecution;
 import com.apssouza.mytrade.trading.forex.order.OrderAction;
 import com.apssouza.mytrade.trading.forex.session.event.Event;
 import com.apssouza.mytrade.trading.forex.session.exception.ReconciliationException;
@@ -9,9 +9,9 @@ import java.util.Map;
 
 public class ReconciliationHandler {
     private final Portfolio portfolio;
-    private final ExecutionHandler executionHandler;
+    private final OrderExecution executionHandler;
 
-    public ReconciliationHandler(Portfolio portfolio, ExecutionHandler executionHandler) {
+    public ReconciliationHandler(Portfolio portfolio, OrderExecution executionHandler) {
         this.portfolio = portfolio;
         this.executionHandler = executionHandler;
     }

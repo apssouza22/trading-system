@@ -1,7 +1,7 @@
 package com.apssouza.mytrade.trading.forex.session.listener;
 
 import com.apssouza.mytrade.feed.api.SignalDto;
-import com.apssouza.mytrade.trading.forex.execution.ExecutionHandler;
+import com.apssouza.mytrade.trading.forex.execution.OrderExecution;
 import com.apssouza.mytrade.trading.forex.feed.SignalFeed;
 import com.apssouza.mytrade.trading.forex.order.OrderDao;
 import com.apssouza.mytrade.trading.forex.order.OrderDto;
@@ -23,14 +23,14 @@ import java.util.List;
 
 public class PriceChangedListener implements PropertyChangeListener {
 
-    private final ExecutionHandler executionHandler;
+    private final OrderExecution executionHandler;
     private final PortfolioHandler portfolioHandler;
     private final SignalFeed signalFeed;
     private final OrderDao orderDao;
     private final EventNotifier eventNotifier;
 
     public PriceChangedListener(
-            ExecutionHandler executionHandler,
+            OrderExecution executionHandler,
             PortfolioHandler portfolioHandler,
             SignalFeed signalFeed,
             OrderDao orderDao,

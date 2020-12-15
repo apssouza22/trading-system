@@ -1,6 +1,6 @@
 package com.apssouza.mytrade.trading.forex.session.listener;
 
-import com.apssouza.mytrade.trading.forex.execution.ExecutionHandler;
+import com.apssouza.mytrade.trading.forex.execution.OrderExecution;
 import com.apssouza.mytrade.trading.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.forex.order.OrderHandler;
 import com.apssouza.mytrade.trading.forex.order.OrderOrigin;
@@ -23,14 +23,14 @@ import java.util.logging.Logger;
 public class OrderFoundListener implements PropertyChangeListener {
 
     private static Logger log = Logger.getLogger(OrderFoundListener.class.getSimpleName());
-    private final ExecutionHandler executionHandler;
+    private final OrderExecution executionHandler;
     private final HistoryBookHandler historyHandler;
     private final OrderHandler orderHandler;
     private final EventNotifier eventNotifier;
     private final RiskManagementHandler riskManagementHandler;
 
     public OrderFoundListener(
-            ExecutionHandler executionHandler,
+            OrderExecution executionHandler,
             HistoryBookHandler historyHandler,
             OrderHandler orderHandler,
             EventNotifier eventNotifier,

@@ -21,13 +21,13 @@ import static com.apssouza.mytrade.trading.forex.order.StopOrderType.STOP_LOSS;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SimulatedExecutionHandlerTest extends TestCase {
-    SimulatedExecutionHandler simulatedExecutionHandler;
+    SimulatedOrderExecution simulatedExecutionHandler;
     private PriceDto price;
     private HashMap<String, PriceDto> priceDtoMap = new HashMap<>();
 
     @Before
     public void setUp() throws Exception {
-        simulatedExecutionHandler = new SimulatedExecutionHandler();
+        simulatedExecutionHandler = new SimulatedOrderExecution();
         this.price = new PriceDto(LocalDateTime.MIN, BigDecimal.TEN, BigDecimal.TEN, BigDecimal.TEN, BigDecimal.TEN, "AUDUSD");
         this.priceDtoMap.put("AUDUSD", price);
         this.priceDtoMap.put("EURUSD", price);

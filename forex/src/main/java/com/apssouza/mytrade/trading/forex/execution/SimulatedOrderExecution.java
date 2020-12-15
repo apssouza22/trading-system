@@ -16,9 +16,9 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
-public class SimulatedExecutionHandler implements ExecutionHandler {
+class SimulatedOrderExecution implements OrderExecution {
 
-    private static Logger log = Logger.getLogger(SimulatedExecutionHandler.class.getSimpleName());
+    private static Logger log = Logger.getLogger(SimulatedOrderExecution.class.getSimpleName());
     private final MultiPositionPerCPairHandler multiPositionPerCPairHandler;
     private final StopOrderExecutionHandler stopOrderHandler;
     private Map<Integer, StopOrderDto> limitOrders = new LinkedHashMap<>();
@@ -27,7 +27,7 @@ public class SimulatedExecutionHandler implements ExecutionHandler {
     private Map<String, FilledOrderDto> positions = new ConcurrentHashMap<>();
 
 
-    public SimulatedExecutionHandler() {
+    public SimulatedOrderExecution() {
         multiPositionPerCPairHandler = new MultiPositionPerCPairHandler(this.positions);
         stopOrderHandler = new StopOrderExecutionHandler(positions);
     }

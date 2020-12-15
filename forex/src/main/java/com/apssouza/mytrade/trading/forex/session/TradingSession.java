@@ -2,14 +2,13 @@ package com.apssouza.mytrade.trading.forex.session;
 
 import com.apssouza.mytrade.trading.api.ExecutionType;
 import com.apssouza.mytrade.trading.api.SessionType;
-import com.apssouza.mytrade.trading.forex.execution.ExecutionHandler;
-import com.apssouza.mytrade.trading.forex.execution.InteractiveBrokerExecutionHandler;
-import com.apssouza.mytrade.trading.forex.execution.SimulatedExecutionHandler;
-import com.apssouza.mytrade.trading.forex.feed.pricestream.HistoricalPriceStream;
+import com.apssouza.mytrade.trading.forex.execution.OrderExecution;
+import com.apssouza.mytrade.trading.forex.execution.OrderExecutionFactory;
 import com.apssouza.mytrade.trading.forex.feed.PriceFeed;
+import com.apssouza.mytrade.trading.forex.feed.SignalFeed;
+import com.apssouza.mytrade.trading.forex.feed.pricestream.HistoricalPriceStream;
 import com.apssouza.mytrade.trading.forex.feed.pricestream.PriceStream;
 import com.apssouza.mytrade.trading.forex.feed.pricestream.RealtimePriceStream;
-import com.apssouza.mytrade.trading.forex.feed.SignalFeed;
 import com.apssouza.mytrade.trading.forex.order.MemoryOrderDao;
 import com.apssouza.mytrade.trading.forex.order.OrderHandler;
 import com.apssouza.mytrade.trading.forex.portfolio.Portfolio;
@@ -24,7 +23,15 @@ import com.apssouza.mytrade.trading.forex.risk.stoporder.fixed.StopOrderCreatorF
 import com.apssouza.mytrade.trading.forex.session.event.EndedTradingDayEvent;
 import com.apssouza.mytrade.trading.forex.session.event.Event;
 import com.apssouza.mytrade.trading.forex.session.event.EventType;
-import com.apssouza.mytrade.trading.forex.session.listener.*;
+import com.apssouza.mytrade.trading.forex.session.listener.EndedTradingDayListener;
+import com.apssouza.mytrade.trading.forex.session.listener.FilledOrderListener;
+import com.apssouza.mytrade.trading.forex.session.listener.OrderCreatedListener;
+import com.apssouza.mytrade.trading.forex.session.listener.OrderFoundListener;
+import com.apssouza.mytrade.trading.forex.session.listener.PortfolioChangedListener;
+import com.apssouza.mytrade.trading.forex.session.listener.PriceChangedListener;
+import com.apssouza.mytrade.trading.forex.session.listener.SessionFinishedListener;
+import com.apssouza.mytrade.trading.forex.session.listener.SignalCreatedListener;
+import com.apssouza.mytrade.trading.forex.session.listener.StopOrderFilledListener;
 import com.apssouza.mytrade.trading.forex.statistics.HistoryBookHandler;
 import com.apssouza.mytrade.trading.forex.statistics.TransactionsExporter;
 import com.apssouza.mytrade.trading.misc.helper.TradingParams;
@@ -47,7 +54,7 @@ public class TradingSession {
     protected MemoryOrderDao orderDao;
     protected final PriceFeed priceFeed;
     protected final SignalFeed signalFeed;
-    protected ExecutionHandler executionHandler;
+    protected OrderExecution executionHandler;
     protected PositionSizer positionSizer;
     protected Portfolio portfolio;
     protected PositionExitHandler positionExitHandler;
@@ -88,7 +95,7 @@ public class TradingSession {
     private void configSession() {
         this.orderDao = new MemoryOrderDao();
 
-        this.executionHandler = getExecutionHandler();
+        this.executionHandler = OrderExecutionFactory.factory(this.executionType);
 
         this.positionSizer = new PositionSizerFixed();
         this.portfolio = new Portfolio(this.equity);
@@ -134,19 +141,6 @@ public class TradingSession {
         }
         return new HistoricalPriceStream(eventQueue, priceFeed);
     }
-
-    private ExecutionHandler getExecutionHandler() {
-        if (this.executionType == ExecutionType.BROKER) {
-            return new InteractiveBrokerExecutionHandler(
-                    TradingParams.brokerHost,
-                    TradingParams.brokerPort,
-                    TradingParams.brokerClientId
-            );
-        }
-        return new SimulatedExecutionHandler();
-
-    }
-
 
     private EventNotifier setListeners() {
         eventNotifier.addPropertyChangeListener(new FilledOrderListener(portfolio, historyHandler, eventNotifier));

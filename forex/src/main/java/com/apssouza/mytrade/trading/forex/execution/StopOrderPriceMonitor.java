@@ -8,7 +8,7 @@ import com.apssouza.mytrade.trading.forex.order.StopOrderType;
 
 import java.util.*;
 
-public class StopOrderPriceMonitor {
+class StopOrderPriceMonitor {
     
 
     public Set<StopOrderDto> getFilledOrders(Map<String, PriceDto> priceMap, Map<Integer, StopOrderDto> allStopOrders) {

@@ -5,7 +5,7 @@ import com.apssouza.mytrade.trading.forex.portfolio.FilledOrderDto;
 
 import java.util.Map;
 
-public class MultiPositionPerCPairHandler {
+class MultiPositionPerCPairHandler {
     private final Map<String, FilledOrderDto> positions;
 
     public MultiPositionPerCPairHandler(Map<String, FilledOrderDto> positions) {

@@ -8,7 +8,7 @@ import com.apssouza.mytrade.trading.forex.portfolio.FilledOrderDto;
 import java.time.LocalDateTime;
 import java.util.Map;
 
-public interface ExecutionHandler {
+public interface OrderExecution {
     void closeAllPositions();
 
     Integer cancelOpenLimitOrders();

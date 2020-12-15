@@ -12,7 +12,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class StopOrderExecutionHandler {
+class StopOrderExecutionHandler {
     private final Map<String, FilledOrderDto> positions;
     private final StopOrderPriceMonitor stopOrderPriceMonitor;
     private ConcurrentHashMap<Integer, StopOrderDto> allStopOrders = new ConcurrentHashMap<>();
