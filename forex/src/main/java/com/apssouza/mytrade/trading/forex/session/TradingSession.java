@@ -18,8 +18,8 @@ import com.apssouza.mytrade.trading.forex.risk.PositionExitHandler;
 import com.apssouza.mytrade.trading.forex.risk.PositionSizer;
 import com.apssouza.mytrade.trading.forex.risk.PositionSizerFixed;
 import com.apssouza.mytrade.trading.forex.risk.RiskManagementHandler;
-import com.apssouza.mytrade.trading.forex.risk.stoporder.PriceDistanceObject;
-import com.apssouza.mytrade.trading.forex.risk.stoporder.fixed.StopOrderCreatorFixed;
+import com.apssouza.mytrade.trading.forex.risk.stoporder.StopOrderDto;
+import com.apssouza.mytrade.trading.forex.risk.stoporder.StopOrderFactory;
 import com.apssouza.mytrade.trading.forex.session.event.EndedTradingDayEvent;
 import com.apssouza.mytrade.trading.forex.session.event.Event;
 import com.apssouza.mytrade.trading.forex.session.event.EventType;
@@ -102,13 +102,14 @@ public class TradingSession {
         this.historyHandler = new HistoryBookHandler(new TransactionsExporter());
         this.riskManagementHandler = new RiskManagementHandler(
                 this.portfolio,
-                new PositionSizerFixed(),
-                new StopOrderCreatorFixed(new PriceDistanceObject(
+                positionSizer,
+                StopOrderFactory.factory(new StopOrderDto(
                         TradingParams.hard_stop_loss_distance,
                         TradingParams.take_profit_distance_fixed,
                         TradingParams.entry_stop_loss_distance_fixed,
                         TradingParams.trailing_stop_loss_distance
                 ))
+
         );
 
         eventNotifier = new EventNotifier();
@@ -141,11 +142,15 @@ public class TradingSession {
     private EventNotifier setListeners() {
         eventNotifier.addPropertyChangeListener(new FilledOrderListener(portfolio, historyHandler, eventNotifier));
         eventNotifier.addPropertyChangeListener(new OrderCreatedListener(orderHandler));
-        eventNotifier.addPropertyChangeListener(new OrderFoundListener(executionHandler, historyHandler, orderHandler, eventNotifier, riskManagementHandler));
+        eventNotifier.addPropertyChangeListener(
+                new OrderFoundListener(executionHandler, historyHandler, orderHandler, eventNotifier,
+                        riskManagementHandler));
         eventNotifier.addPropertyChangeListener(new PortfolioChangedListener(reconciliationHandler, portfolioHandler));
-        eventNotifier.addPropertyChangeListener(new SignalCreatedListener(riskManagementHandler, orderHandler, eventNotifier, historyHandler));
+        eventNotifier.addPropertyChangeListener(
+                new SignalCreatedListener(riskManagementHandler, orderHandler, eventNotifier, historyHandler));
         eventNotifier.addPropertyChangeListener(new StopOrderFilledListener(portfolio, historyHandler, eventNotifier));
-        eventNotifier.addPropertyChangeListener(new PriceChangedListener(executionHandler, portfolioHandler, signalFeed, orderHandler, eventNotifier));
+        eventNotifier.addPropertyChangeListener(
+                new PriceChangedListener(executionHandler, portfolioHandler, signalFeed, orderHandler, eventNotifier));
         eventNotifier.addPropertyChangeListener(new SessionFinishedListener(historyHandler));
         eventNotifier.addPropertyChangeListener(new EndedTradingDayListener(portfolioHandler));
         return eventNotifier;

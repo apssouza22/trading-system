@@ -1,4 +1,4 @@
-package com.apssouza.mytrade.trading.forex.risk.stoporder.fixed;
+package com.apssouza.mytrade.trading.forex.risk.stoporder;
 
 import com.apssouza.mytrade.trading.forex.portfolio.Position;
 

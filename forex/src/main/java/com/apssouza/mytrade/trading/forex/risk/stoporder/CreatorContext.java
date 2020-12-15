@@ -1,4 +1,4 @@
-package com.apssouza.mytrade.trading.forex.risk.stoporder.fixed;
+package com.apssouza.mytrade.trading.forex.risk.stoporder;
 
 import com.apssouza.mytrade.trading.forex.order.OrderAction;
 import com.apssouza.mytrade.trading.forex.order.StopOrderDto;
@@ -11,7 +11,7 @@ import com.apssouza.mytrade.trading.misc.helper.TradingHelper;
 import java.math.BigDecimal;
 import java.util.Optional;
 
-public class CreatorContext {
+class CreatorContext {
 
     private final CreatorStrategy strategy;
 

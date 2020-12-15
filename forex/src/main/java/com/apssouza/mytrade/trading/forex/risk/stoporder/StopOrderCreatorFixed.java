@@ -1,22 +1,19 @@
-package com.apssouza.mytrade.trading.forex.risk.stoporder.fixed;
+package com.apssouza.mytrade.trading.forex.risk.stoporder;
 
 import com.apssouza.mytrade.feed.api.PriceDto;
-import com.apssouza.mytrade.trading.forex.order.StopOrderDto;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.forex.portfolio.PositionType;
-import com.apssouza.mytrade.trading.forex.risk.stoporder.PriceDistanceObject;
-import com.apssouza.mytrade.trading.forex.risk.stoporder.StopOrderCreator;
 import com.apssouza.mytrade.trading.forex.session.event.Event;
 
 import java.math.BigDecimal;
 import java.util.Map;
 import java.util.Optional;
 
-public class StopOrderCreatorFixed implements StopOrderCreator {
+class StopOrderCreatorFixed implements StopOrderCreator {
     private  CreatorContext creatorContext;
-    private final PriceDistanceObject priceDistance;
+    private final StopOrderDto priceDistance;
 
-    public StopOrderCreatorFixed(PriceDistanceObject priceDistance) {
+    public StopOrderCreatorFixed(StopOrderDto priceDistance) {
         this.priceDistance = priceDistance;
     }
 
@@ -30,24 +27,24 @@ public class StopOrderCreatorFixed implements StopOrderCreator {
     }
 
     @Override
-    public StopOrderDto getHardStopLoss(Position position) {
+    public com.apssouza.mytrade.trading.forex.order.StopOrderDto getHardStopLoss(Position position) {
         return creatorContext.getHardStopLoss(position);
     }
 
     @Override
-    public StopOrderDto getProfitStopOrder(Position position) {
+    public com.apssouza.mytrade.trading.forex.order.StopOrderDto getProfitStopOrder(Position position) {
         return creatorContext.getProfitStopOrder(position);
     }
 
     @Override
-    public Optional<StopOrderDto> getEntryStopOrder(Position position, Event event) {
+    public Optional<com.apssouza.mytrade.trading.forex.order.StopOrderDto> getEntryStopOrder(Position position, Event event) {
         Map<String, PriceDto> price = event.getPrice();
         BigDecimal priceClose = price.get(position.getSymbol()).close();
         return creatorContext.getEntryStopOrder(position, priceClose);
     }
 
     @Override
-    public Optional<StopOrderDto> getTrailingStopOrder(Position position, Event event) {
+    public Optional<com.apssouza.mytrade.trading.forex.order.StopOrderDto> getTrailingStopOrder(Position position, Event event) {
         Map<String, PriceDto> price = event.getPrice();
         BigDecimal priceClose = price.get(position.getSymbol()).close();
         return creatorContext.getTrailingStopOrder(position, priceClose);

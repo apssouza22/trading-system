@@ -1,8 +1,7 @@
-package com.apssouza.mytrade.trading.forex.risk.stoporder.fixed;
+package com.apssouza.mytrade.trading.forex.risk.stoporder;
 
 import com.apssouza.mytrade.trading.forex.order.StopOrderType;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;
-import com.apssouza.mytrade.trading.forex.risk.stoporder.PriceDistanceObject;
 import com.apssouza.mytrade.trading.misc.helper.NumberHelper;
 
 import java.math.BigDecimal;
@@ -10,9 +9,9 @@ import java.util.Optional;
 
 class ShortPositionStrategy implements CreatorStrategy {
 
-    private final PriceDistanceObject distanceObject;
+    private final StopOrderDto distanceObject;
 
-    public ShortPositionStrategy(PriceDistanceObject distanceObject) {
+    public ShortPositionStrategy(StopOrderDto distanceObject) {
         this.distanceObject = distanceObject;
     }
 

@@ -1,24 +1,22 @@
-package com.apssouza.mytrade.trading.builder;
+package com.apssouza.mytrade.trading.forex.risk.stoporder;
 
+import com.apssouza.mytrade.trading.builder.StopOrderBuilder;
 import com.apssouza.mytrade.trading.forex.order.StopOrderType;
 import com.apssouza.mytrade.trading.forex.portfolio.Portfolio;
 import com.apssouza.mytrade.trading.forex.risk.PositionSizer;
 import com.apssouza.mytrade.trading.forex.risk.RiskManagementHandler;
-import com.apssouza.mytrade.trading.forex.risk.stoporder.fixed.StopOrderCreatorFixed;
+
 import org.mockito.Mockito;
 
 import java.util.Optional;
 
 public class RiskManagementBuilder {
 
-
-
-
     public RiskManagementHandler build(){
         Portfolio portfolio = Mockito.mock(Portfolio.class);
         PositionSizer positionSizer = Mockito.mock(PositionSizer.class);
         StopOrderCreatorFixed stopOrderCreatorFixed = Mockito.mock(StopOrderCreatorFixed.class);
-        StopOrderBuilder stopOrderBuilder = new StopOrderBuilder();
+        var stopOrderBuilder = new StopOrderBuilder();
         stopOrderBuilder.setType(StopOrderType.ENTRY_STOP);
 
         Mockito.when(
