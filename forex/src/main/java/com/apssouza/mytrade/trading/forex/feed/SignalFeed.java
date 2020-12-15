@@ -1,4 +1,4 @@
-package com.apssouza.mytrade.trading.forex.feed.signal;
+package com.apssouza.mytrade.trading.forex.feed;
 
 import com.apssouza.mytrade.feed.api.SignalDto;
 

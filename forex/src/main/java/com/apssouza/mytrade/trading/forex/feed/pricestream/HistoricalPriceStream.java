@@ -1,5 +1,6 @@
-package com.apssouza.mytrade.trading.forex.feed.price;
+package com.apssouza.mytrade.trading.forex.feed.pricestream;
 
+import com.apssouza.mytrade.trading.forex.feed.PriceFeed;
 import com.apssouza.mytrade.trading.forex.session.event.EndedTradingDayEvent;
 import com.apssouza.mytrade.trading.forex.session.event.Event;
 import com.apssouza.mytrade.trading.forex.session.event.EventType;
@@ -12,12 +13,12 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.concurrent.BlockingQueue;
 
-public class HistoricalDbPriceStream implements PriceStream{
+public class HistoricalPriceStream implements PriceStream{
 
     private final BlockingQueue<Event> eventQueue;
     private final PriceFeed priceFeed;
 
-    public HistoricalDbPriceStream(BlockingQueue<Event> eventQueue, PriceFeed priceFeed) {
+    public HistoricalPriceStream(BlockingQueue<Event> eventQueue, PriceFeed priceFeed) {
         this.eventQueue = eventQueue;
         this.priceFeed = priceFeed;
     }

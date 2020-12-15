@@ -1,6 +1,6 @@
 package com.apssouza.mytrade.trading.builder;
 
-import com.apssouza.mytrade.trading.forex.feed.price.PriceFeed;
+import com.apssouza.mytrade.trading.forex.feed.PriceFeed;
 import com.apssouza.mytrade.trading.forex.portfolio.Portfolio;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.forex.portfolio.PositionType;

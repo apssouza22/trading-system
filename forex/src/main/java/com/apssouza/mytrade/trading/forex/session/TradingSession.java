@@ -5,11 +5,11 @@ import com.apssouza.mytrade.trading.api.SessionType;
 import com.apssouza.mytrade.trading.forex.execution.ExecutionHandler;
 import com.apssouza.mytrade.trading.forex.execution.InteractiveBrokerExecutionHandler;
 import com.apssouza.mytrade.trading.forex.execution.SimulatedExecutionHandler;
-import com.apssouza.mytrade.trading.forex.feed.price.HistoricalDbPriceStream;
-import com.apssouza.mytrade.trading.forex.feed.price.PriceFeed;
-import com.apssouza.mytrade.trading.forex.feed.price.PriceStream;
-import com.apssouza.mytrade.trading.forex.feed.price.RealTimeDbPriceStream;
-import com.apssouza.mytrade.trading.forex.feed.signal.SignalFeed;
+import com.apssouza.mytrade.trading.forex.feed.pricestream.HistoricalPriceStream;
+import com.apssouza.mytrade.trading.forex.feed.PriceFeed;
+import com.apssouza.mytrade.trading.forex.feed.pricestream.PriceStream;
+import com.apssouza.mytrade.trading.forex.feed.pricestream.RealtimePriceStream;
+import com.apssouza.mytrade.trading.forex.feed.SignalFeed;
 import com.apssouza.mytrade.trading.forex.order.MemoryOrderDao;
 import com.apssouza.mytrade.trading.forex.order.OrderHandler;
 import com.apssouza.mytrade.trading.forex.portfolio.Portfolio;
@@ -127,12 +127,12 @@ public class TradingSession {
 
     private PriceStream getPriceStream() {
         if (this.sessionType == SessionType.LIVE) {
-            return new RealTimeDbPriceStream(
+            return new RealtimePriceStream(
                     eventQueue,
                     this.priceFeed
             );
         }
-        return new HistoricalDbPriceStream(eventQueue, priceFeed);
+        return new HistoricalPriceStream(eventQueue, priceFeed);
     }
 
     private ExecutionHandler getExecutionHandler() {
