@@ -3,9 +3,9 @@ Simple High frequency trading with backtesting simulation and live trading engin
 
 It has been developed for both retail traders and institutional hedge funds to aid strategy development and deployment.
 
+![Alt text](assets/trading-system.png?raw=true "Trading system")
+
 ## Features
-* Based on Java 8: For botting on any operating system - Windows, macOS and Linux
-* Event driven architecture
 * Persistence: Persistence is achieved through the H2
 * Backtesting: Run a simulation of your buy/sell strategy.
 * Stop order/ Limit order management
@@ -13,6 +13,17 @@ It has been developed for both retail traders and institutional hedge funds to a
 * Multi position for currency pair
 * Daily summary of profit/loss: Provide a daily summary of your profit/loss.
 * Performance status report: Provide a performance status of your current trades.
+
+# Tech details
+* Java 14
+* Event driven architecture
+* Maven multi-modules
+* Java modularization
+* Packaging by domain
+* Domain driven design (DDD)
+* BDD with cucumber
+* Multiple design patterns (Strategy, factory, builder, Observer...)
+* Cross-cutting concern
 
 ## How to run
 ```

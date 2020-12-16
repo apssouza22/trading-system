@@ -142,15 +142,28 @@ public class TradingSession {
     private EventNotifier setListeners() {
         eventNotifier.addPropertyChangeListener(new FilledOrderListener(portfolio, historyHandler, eventNotifier));
         eventNotifier.addPropertyChangeListener(new OrderCreatedListener(orderHandler));
-        eventNotifier.addPropertyChangeListener(
-                new OrderFoundListener(executionHandler, historyHandler, orderHandler, eventNotifier,
-                        riskManagementHandler));
+        eventNotifier.addPropertyChangeListener(new OrderFoundListener(
+                executionHandler,
+                historyHandler,
+                orderHandler,
+                eventNotifier,
+                riskManagementHandler
+        ));
         eventNotifier.addPropertyChangeListener(new PortfolioChangedListener(reconciliationHandler, portfolioHandler));
-        eventNotifier.addPropertyChangeListener(
-                new SignalCreatedListener(riskManagementHandler, orderHandler, eventNotifier, historyHandler));
+        eventNotifier.addPropertyChangeListener(new SignalCreatedListener(
+                riskManagementHandler,
+                orderHandler,
+                eventNotifier,
+                historyHandler
+        ));
         eventNotifier.addPropertyChangeListener(new StopOrderFilledListener(portfolio, historyHandler, eventNotifier));
-        eventNotifier.addPropertyChangeListener(
-                new PriceChangedListener(executionHandler, portfolioHandler, signalFeed, orderHandler, eventNotifier));
+        eventNotifier.addPropertyChangeListener( new PriceChangedListener(
+                executionHandler,
+                portfolioHandler,
+                signalFeed,
+                orderHandler,
+                eventNotifier
+        ));
         eventNotifier.addPropertyChangeListener(new SessionFinishedListener(historyHandler));
         eventNotifier.addPropertyChangeListener(new EndedTradingDayListener(portfolioHandler));
         return eventNotifier;
