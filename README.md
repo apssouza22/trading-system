@@ -3,8 +3,6 @@ Simple High frequency trading with backtesting simulation and live trading engin
 
 It has been developed for both retail traders and institutional hedge funds to aid strategy development and deployment.
 
-![Alt text](assets/trading-system.png?raw=true "Trading system")
-
 ## Features
 * Persistence: Persistence is achieved through the H2
 * Backtesting: Run a simulation of your buy/sell strategy.
@@ -24,6 +22,8 @@ It has been developed for both retail traders and institutional hedge funds to a
 * BDD with cucumber
 * Multiple design patterns (Strategy, factory, builder, Observer...)
 * Cross-cutting concern
+
+![Alt text](assets/trading-system.png?raw=true "Trading system")
 
 ## How to run
 ```

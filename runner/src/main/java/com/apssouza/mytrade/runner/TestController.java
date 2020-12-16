@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class TestController {
 
-	@GetMapping("/api/test")
-	public String greeting(@RequestParam(name="name", required=false, defaultValue="World") String name) {
-		return "greeting alex!!";
-	}
+    @GetMapping("/api/test")
+    public String greeting(@RequestParam(name = "name", required = false, defaultValue = "World") String name) {
+        return "greeting " + name;
+    }
 }
