@@ -12,11 +12,11 @@ import java.math.BigDecimal;
 import java.util.Map;
 
 @RunWith(MockitoJUnitRunner.class)
-public class PortfolioTest extends TestCase {
+public class PortfolioModelTest extends TestCase {
 
     @Test
     public void updatePortfolioValue() {
-        Portfolio portfolio = new Portfolio(BigDecimal.valueOf(10000));
+        PortfolioModel portfolio = new PortfolioModel(BigDecimal.valueOf(10000));
         PositionBuilder positionBuilder = new PositionBuilder();
         Position ps = positionBuilder.build();
         LoopEventBuilder loopEventBuilder = new LoopEventBuilder();
@@ -38,7 +38,7 @@ public class PortfolioTest extends TestCase {
 
     @Test
     public void addNewPosition() {
-        Portfolio portfolio = new Portfolio(BigDecimal.valueOf(10000));
+        PortfolioModel portfolio = new PortfolioModel(BigDecimal.valueOf(10000));
         PositionBuilder positionBuilder = new PositionBuilder();
         Position ps = positionBuilder.build();
         portfolio.addNewPosition(ps);
@@ -48,7 +48,7 @@ public class PortfolioTest extends TestCase {
 
     @Test
     public void addPositionQtd() {
-        Portfolio portfolio = new Portfolio(BigDecimal.valueOf(10000));
+        PortfolioModel portfolio = new PortfolioModel(BigDecimal.valueOf(10000));
         PositionBuilder positionBuilder = new PositionBuilder();
         Position ps = positionBuilder.build();
 
@@ -63,7 +63,7 @@ public class PortfolioTest extends TestCase {
 
     @Test(expected = RuntimeException.class)
     public void addPositionQtdWithNoPosition() {
-        Portfolio portfolio = new Portfolio(BigDecimal.valueOf(10000));
+        PortfolioModel portfolio = new PortfolioModel(BigDecimal.valueOf(10000));
         PositionBuilder positionBuilder = new PositionBuilder();
         Position ps = positionBuilder.build();
 
@@ -74,7 +74,7 @@ public class PortfolioTest extends TestCase {
 
     @Test
     public void removePositionQtd() {
-        Portfolio portfolio = new Portfolio(BigDecimal.valueOf(10000));
+        PortfolioModel portfolio = new PortfolioModel(BigDecimal.valueOf(10000));
         PositionBuilder positionBuilder = new PositionBuilder();
         Position ps = positionBuilder.build();
 
@@ -88,7 +88,7 @@ public class PortfolioTest extends TestCase {
 
     @Test
     public void removePositionHalfQtd() {
-        Portfolio portfolio = new Portfolio(BigDecimal.valueOf(10000));
+        PortfolioModel portfolio = new PortfolioModel(BigDecimal.valueOf(10000));
         PositionBuilder positionBuilder = new PositionBuilder();
         Position ps = positionBuilder.build();
 
@@ -101,7 +101,7 @@ public class PortfolioTest extends TestCase {
 
     @Test(expected = RuntimeException.class)
     public void removePositionWithNoPosition() {
-        Portfolio portfolio = new Portfolio(BigDecimal.valueOf(10000));
+        PortfolioModel portfolio = new PortfolioModel(BigDecimal.valueOf(10000));
         PositionBuilder positionBuilder = new PositionBuilder();
         Position ps = positionBuilder.build();
 
@@ -112,7 +112,7 @@ public class PortfolioTest extends TestCase {
 
     @Test
     public void closePosition() {
-        Portfolio portfolio = new Portfolio(BigDecimal.valueOf(10000));
+        PortfolioModel portfolio = new PortfolioModel(BigDecimal.valueOf(10000));
         PositionBuilder positionBuilder = new PositionBuilder();
         Position ps = positionBuilder.build();
         portfolio.addNewPosition(ps);
@@ -126,7 +126,7 @@ public class PortfolioTest extends TestCase {
 
     @Test(expected = RuntimeException.class)
     public void closePositionWithNoPosition() {
-        Portfolio portfolio = new Portfolio(BigDecimal.valueOf(10000));
+        PortfolioModel portfolio = new PortfolioModel(BigDecimal.valueOf(10000));
         PositionBuilder positionBuilder = new PositionBuilder();
         Position ps = positionBuilder.build();
         portfolio.closePosition(ps.getIdentifier());
@@ -134,7 +134,7 @@ public class PortfolioTest extends TestCase {
 
     @Test
     public void getPosition() {
-        Portfolio portfolio = new Portfolio(BigDecimal.valueOf(10000));
+        PortfolioModel portfolio = new PortfolioModel(BigDecimal.valueOf(10000));
         PositionBuilder positionBuilder = new PositionBuilder();
         Position ps = positionBuilder.build();
         portfolio.addNewPosition(ps);
@@ -144,7 +144,7 @@ public class PortfolioTest extends TestCase {
 
     @Test(expected = RuntimeException.class)
     public void getPositionNotFound() {
-        Portfolio portfolio = new Portfolio(BigDecimal.valueOf(10000));
+        PortfolioModel portfolio = new PortfolioModel(BigDecimal.valueOf(10000));
         PositionBuilder positionBuilder = new PositionBuilder();
         Position ps = positionBuilder.build();
         portfolio.getPosition(ps.getIdentifier());

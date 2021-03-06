@@ -3,7 +3,7 @@ package com.apssouza.mytrade.trading.forex.session.listener;
 import com.apssouza.mytrade.trading.forex.order.StopOrderDto;
 import com.apssouza.mytrade.trading.forex.portfolio.ExitReason;
 import com.apssouza.mytrade.trading.forex.portfolio.FilledOrderDto;
-import com.apssouza.mytrade.trading.forex.portfolio.Portfolio;
+import com.apssouza.mytrade.trading.forex.portfolio.PortfolioModel;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.forex.session.EventNotifier;
 import com.apssouza.mytrade.trading.forex.session.MultiPositionHandler;
@@ -20,11 +20,11 @@ import java.time.LocalDateTime;
 
 public class StopOrderFilledListener implements PropertyChangeListener {
 
-    private final Portfolio portfolio;
+    private final PortfolioModel portfolio;
     private final HistoryBookHandler historyHandler;
     private final EventNotifier eventNotifier;
 
-    public StopOrderFilledListener(Portfolio portfolio, HistoryBookHandler historyHandler, EventNotifier eventNotifier) {
+    public StopOrderFilledListener(PortfolioModel portfolio, HistoryBookHandler historyHandler, EventNotifier eventNotifier) {
         this.portfolio = portfolio;
         this.historyHandler = historyHandler;
         this.eventNotifier = eventNotifier;

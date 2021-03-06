@@ -4,7 +4,7 @@ import com.apssouza.mytrade.trading.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.forex.order.OrderOrigin;
 import com.apssouza.mytrade.trading.forex.order.StopOrderDto;
 import com.apssouza.mytrade.trading.forex.order.StopOrderType;
-import com.apssouza.mytrade.trading.forex.portfolio.Portfolio;
+import com.apssouza.mytrade.trading.forex.portfolio.PortfolioModel;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.forex.risk.stoporder.StopOrderCreator;
 import com.apssouza.mytrade.trading.forex.session.event.Event;
@@ -17,11 +17,11 @@ import java.util.function.Consumer;
 
 public class RiskManagementHandler {
 
-    private final Portfolio portfolio;
+    private final PortfolioModel portfolio;
     private final PositionSizer positionSizer;
     private final StopOrderCreator stopOrderCreator;
 
-    public RiskManagementHandler(Portfolio portfolio, PositionSizer positionSizer, StopOrderCreator stopOrderCreator) {
+    public RiskManagementHandler(PortfolioModel portfolio, PositionSizer positionSizer, StopOrderCreator stopOrderCreator) {
         this.portfolio = portfolio;
         this.positionSizer = positionSizer;
         this.stopOrderCreator = stopOrderCreator;

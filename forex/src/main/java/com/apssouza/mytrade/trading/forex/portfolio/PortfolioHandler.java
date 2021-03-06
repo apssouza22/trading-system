@@ -20,7 +20,7 @@ public class PortfolioHandler {
     private final OrderHandler orderHandler;
     private final PositionExitHandler positionExitHandler;
     private final OrderExecution executionHandler;
-    private final Portfolio portfolio;
+    private final PortfolioModel portfolio;
     private final ReconciliationHandler reconciliationHandler;
     private final HistoryBookHandler historyHandler;
     private final RiskManagementHandler riskManagementHandler;
@@ -33,7 +33,7 @@ public class PortfolioHandler {
             OrderHandler orderHandler,
             PositionExitHandler positionExitHandler,
             OrderExecution executionHandler,
-            Portfolio portfolio,
+            PortfolioModel portfolio,
             ReconciliationHandler reconciliationHandler,
             HistoryBookHandler historyHandler,
             RiskManagementHandler riskManagementHandler,
@@ -167,7 +167,7 @@ public class PortfolioHandler {
         return exitedPositions;
     }
 
-    public Portfolio getPortfolio(){
+    public PortfolioModel getPortfolio(){
         return portfolio;
     }
 }

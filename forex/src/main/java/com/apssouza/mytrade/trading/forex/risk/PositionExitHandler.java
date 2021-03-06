@@ -5,7 +5,7 @@ import com.apssouza.mytrade.feed.api.SignalDto;
 import com.apssouza.mytrade.trading.forex.feed.PriceFeed;
 import com.apssouza.mytrade.trading.forex.order.OrderAction;
 import com.apssouza.mytrade.trading.forex.portfolio.ExitReason;
-import com.apssouza.mytrade.trading.forex.portfolio.Portfolio;
+import com.apssouza.mytrade.trading.forex.portfolio.PortfolioModel;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.forex.portfolio.PositionType;
 import com.apssouza.mytrade.trading.forex.session.event.PriceChangedEvent;
@@ -18,11 +18,11 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 public class PositionExitHandler {
-    private final Portfolio portfolio;
+    private final PortfolioModel portfolio;
     private final PriceFeed priceHandler;
     private static Logger log = Logger.getLogger(PositionExitHandler.class.getSimpleName());
 
-    public PositionExitHandler(Portfolio portfolio, PriceFeed priceHandler) {
+    public PositionExitHandler(PortfolioModel portfolio, PriceFeed priceHandler) {
         this.portfolio = portfolio;
         this.priceHandler = priceHandler;
     }

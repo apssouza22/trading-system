@@ -13,11 +13,11 @@ import com.apssouza.mytrade.trading.misc.observer.PropertyChangeListener;
 
 public class FilledOrderListener implements PropertyChangeListener {
 
-    private final Portfolio portfolio;
+    private final PortfolioModel portfolio;
     private final HistoryBookHandler historyHandler;
     private final EventNotifier eventNotifier;
 
-    public FilledOrderListener(Portfolio portfolio, HistoryBookHandler historyHandler, EventNotifier eventNotifier) {
+    public FilledOrderListener(PortfolioModel portfolio, HistoryBookHandler historyHandler, EventNotifier eventNotifier) {
         this.portfolio = portfolio;
         this.historyHandler = historyHandler;
         this.eventNotifier = eventNotifier;

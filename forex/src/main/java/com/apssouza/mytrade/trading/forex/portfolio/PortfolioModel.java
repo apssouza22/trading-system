@@ -8,12 +8,12 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
-public class Portfolio {
+public class PortfolioModel {
     private final BigDecimal equity;
     private Map<String, Position> positions = new ConcurrentHashMap<>();
-    private static Logger log = Logger.getLogger(Portfolio.class.getName());
+    private static Logger log = Logger.getLogger(PortfolioModel.class.getName());
 
-    public Portfolio(BigDecimal equity) {
+    public PortfolioModel(BigDecimal equity) {
         this.equity = equity;
     }
 

@@ -1,7 +1,7 @@
 package com.apssouza.mytrade.trading.builder;
 
 import com.apssouza.mytrade.trading.forex.feed.PriceFeed;
-import com.apssouza.mytrade.trading.forex.portfolio.Portfolio;
+import com.apssouza.mytrade.trading.forex.portfolio.PortfolioModel;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.forex.portfolio.PositionType;
 import com.apssouza.mytrade.trading.forex.risk.PositionExitHandler;
@@ -24,7 +24,7 @@ public class PositionExitBuilder {
     }
 
     public PositionExitHandler build(){
-        Portfolio portfolio = Mockito.mock(Portfolio.class);
+        PortfolioModel portfolio = Mockito.mock(PortfolioModel.class);
         PriceFeed priceHandler = Mockito.mock(PriceFeed.class);
 
         Mockito.when(portfolio.getPositions()).thenReturn(positionMap);

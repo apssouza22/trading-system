@@ -6,11 +6,11 @@ import com.apssouza.mytrade.trading.forex.execution.OrderExecution;
 import com.apssouza.mytrade.trading.forex.execution.OrderExecutionFactory;
 import com.apssouza.mytrade.trading.forex.feed.PriceFeed;
 import com.apssouza.mytrade.trading.forex.feed.SignalFeed;
-import com.apssouza.mytrade.trading.forex.feed.pricestream.PriceStream;
-import com.apssouza.mytrade.trading.forex.feed.pricestream.PriceStreamFactory;
+import com.apssouza.mytrade.trading.forex.feed.PriceStream;
+import com.apssouza.mytrade.trading.forex.feed.PriceStreamFactory;
 import com.apssouza.mytrade.trading.forex.order.OrderHandler;
 import com.apssouza.mytrade.trading.forex.order.OrderHandlerFactory;
-import com.apssouza.mytrade.trading.forex.portfolio.Portfolio;
+import com.apssouza.mytrade.trading.forex.portfolio.PortfolioModel;
 import com.apssouza.mytrade.trading.forex.portfolio.PortfolioHandler;
 import com.apssouza.mytrade.trading.forex.portfolio.ReconciliationHandler;
 import com.apssouza.mytrade.trading.forex.risk.PositionExitHandler;
@@ -54,7 +54,7 @@ public class TradingSession {
     protected final SignalFeed signalFeed;
     protected OrderExecution executionHandler;
     protected PositionSizer positionSizer;
-    protected Portfolio portfolio;
+    protected PortfolioModel portfolio;
     protected PositionExitHandler positionExitHandler;
     protected OrderHandler orderHandler;
     protected ReconciliationHandler reconciliationHandler;
@@ -93,7 +93,7 @@ public class TradingSession {
     private void configSession() {
         this.executionHandler = OrderExecutionFactory.factory(this.executionType);
         this.positionSizer = new PositionSizerFixed();
-        this.portfolio = new Portfolio(this.equity);
+        this.portfolio = new PortfolioModel(this.equity);
         this.positionExitHandler = new PositionExitHandler(this.portfolio, this.priceFeed);
         this.orderHandler = OrderHandlerFactory.factory(this.positionSizer);
 

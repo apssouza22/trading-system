@@ -8,10 +8,10 @@ import com.apssouza.mytrade.trading.forex.session.exception.ReconciliationExcept
 import java.util.Map;
 
 public class ReconciliationHandler {
-    private final Portfolio portfolio;
+    private final PortfolioModel portfolio;
     private final OrderExecution executionHandler;
 
-    public ReconciliationHandler(Portfolio portfolio, OrderExecution executionHandler) {
+    public ReconciliationHandler(PortfolioModel portfolio, OrderExecution executionHandler) {
         this.portfolio = portfolio;
         this.executionHandler = executionHandler;
     }

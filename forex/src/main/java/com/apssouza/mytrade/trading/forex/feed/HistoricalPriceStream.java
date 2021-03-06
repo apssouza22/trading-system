@@ -1,6 +1,5 @@
-package com.apssouza.mytrade.trading.forex.feed.pricestream;
+package com.apssouza.mytrade.trading.forex.feed;
 
-import com.apssouza.mytrade.trading.forex.feed.PriceFeed;
 import com.apssouza.mytrade.trading.forex.session.event.EndedTradingDayEvent;
 import com.apssouza.mytrade.trading.forex.session.event.Event;
 import com.apssouza.mytrade.trading.forex.session.event.EventType;
