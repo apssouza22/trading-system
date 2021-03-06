@@ -5,7 +5,7 @@ import com.apssouza.mytrade.trading.forex.portfolio.PortfolioHandler;
 import com.apssouza.mytrade.trading.forex.portfolio.ReconciliationHandler;
 import com.apssouza.mytrade.trading.forex.session.event.Event;
 import com.apssouza.mytrade.trading.forex.session.event.PortfolioChangedEvent;
-import com.apssouza.mytrade.trading.forex.session.exception.ReconciliationException;
+import com.apssouza.mytrade.trading.forex.portfolio.ReconciliationException;
 import com.apssouza.mytrade.trading.misc.observer.PropertyChangeEvent;
 import com.apssouza.mytrade.trading.misc.observer.PropertyChangeListener;
 

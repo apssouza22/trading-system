@@ -12,6 +12,9 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * Handle different stop orders(Stop loss, limit profit)
+ */
 class StopOrderExecutionHandler {
     private final Map<String, FilledOrderDto> positions;
     private final StopOrderPriceMonitor stopOrderPriceMonitor;
@@ -19,6 +22,17 @@ class StopOrderExecutionHandler {
 
     private static AtomicInteger stopOrderId = new AtomicInteger();
 
+    public StopOrderExecutionHandler(Map<String, FilledOrderDto> positions) {
+        this.positions = positions;
+        this.stopOrderPriceMonitor = new StopOrderPriceMonitor();
+    }
+
+    /**
+     * Place stop orders to be executed when the price match the target
+     *
+     * @param stop
+     * @return filled stop order info
+     */
     public StopOrderDto placeStopOrder(StopOrderDto stop) {
         int id = StopOrderExecutionHandler.stopOrderId.incrementAndGet();
 
@@ -38,19 +52,25 @@ class StopOrderExecutionHandler {
         return stopOrderDto;
     }
 
-    public void closeAllPositions() {
-        return;
+    /**
+     * Close all open stops
+     */
+    public void closeAllStops() {
+
     }
 
-    public StopOrderExecutionHandler(Map<String, FilledOrderDto> positions) {
-        this.positions = positions;
-        this.stopOrderPriceMonitor = new StopOrderPriceMonitor();
-    }
-
+    /**
+     * Delete all stop orders
+     */
     public void deleteStopOrders() {
         this.allStopOrders = new ConcurrentHashMap<>();
     }
 
+    /**
+     * Cancel all open stop orders
+     *
+     * @return return the number of cancelled orders
+     */
     public Integer cancelOpenStopOrders() {
         Integer count = 0;
         for (Map.Entry<Integer, StopOrderDto> entry : this.allStopOrders.entrySet()) {

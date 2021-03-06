@@ -1,7 +1,5 @@
-package com.apssouza.mytrade.trading.forex.session.exception;
+package com.apssouza.mytrade.trading.forex.portfolio;
 
-import com.apssouza.mytrade.trading.forex.portfolio.FilledOrderDto;
-import com.apssouza.mytrade.trading.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.forex.session.event.Event;
 
 import java.util.Map;

@@ -27,10 +27,6 @@
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
     </dependency>
-    <dependency>
-      <groupId>com.apssouza.mytrade</groupId>
-      <artifactId>feed</artifactId>
-    </dependency>
   </dependencies>
   <build>
     <plugins>

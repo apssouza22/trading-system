@@ -11,6 +11,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.BlockingQueue;
 
+/**
+ * Provide a feed price steam based on real time price feed
+ */
 class RealtimePriceStream implements PriceStream {
 
     private final BlockingQueue<Event> eventQueue;

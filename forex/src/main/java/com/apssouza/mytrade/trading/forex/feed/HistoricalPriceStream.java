@@ -12,6 +12,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.concurrent.BlockingQueue;
 
+/**
+ * Provide a feed price steam based on historical price
+ */
 class HistoricalPriceStream implements PriceStream{
 
     private final BlockingQueue<Event> eventQueue;

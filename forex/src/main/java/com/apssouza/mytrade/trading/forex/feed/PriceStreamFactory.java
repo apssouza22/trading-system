@@ -5,6 +5,10 @@ import com.apssouza.mytrade.trading.forex.session.event.Event;
 
 import java.util.concurrent.BlockingQueue;
 
+
+/**
+ * Price feed stream API factory
+ */
 public class PriceStreamFactory {
 
     private PriceStreamFactory() {

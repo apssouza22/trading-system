@@ -7,6 +7,9 @@ import com.apssouza.mytrade.trading.forex.feed.PriceFeed;
 import java.time.LocalDateTime;
 import java.util.Map;
 
+/**
+ * Price feed adapter is responsible for adapter the Feed Module api into the Forex system
+ */
 public class PriceFeedAdapter implements PriceFeed {
 
     private FeedModule feedModule;

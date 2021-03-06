@@ -3,7 +3,6 @@ package com.apssouza.mytrade.trading.forex.portfolio;
 import com.apssouza.mytrade.trading.forex.execution.OrderExecution;
 import com.apssouza.mytrade.trading.forex.order.OrderAction;
 import com.apssouza.mytrade.trading.forex.session.event.Event;
-import com.apssouza.mytrade.trading.forex.session.exception.ReconciliationException;
 
 import java.util.Map;
 

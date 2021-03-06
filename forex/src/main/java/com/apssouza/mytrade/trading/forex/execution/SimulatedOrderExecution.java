@@ -11,6 +11,7 @@ import com.apssouza.mytrade.trading.misc.helper.TradingParams;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -45,7 +46,7 @@ class SimulatedOrderExecution implements OrderExecution {
     }
 
     public void closeAllPositions() {
-        stopOrderHandler.closeAllPositions();
+        stopOrderHandler.closeAllStops();
     }
 
     public FilledOrderDto executeOrder(OrderDto order) {
@@ -117,7 +118,7 @@ class SimulatedOrderExecution implements OrderExecution {
     }
 
     @Override
-    public Map<String, FilledOrderDto>  getPositions() {
+    public Map<String, FilledOrderDto> getPositions() {
         return positions;
     }
 

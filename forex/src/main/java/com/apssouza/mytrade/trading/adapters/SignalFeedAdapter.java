@@ -7,6 +7,9 @@ import com.apssouza.mytrade.trading.forex.feed.SignalFeed;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Signal feed adapter is responsible for adapter the Feed Module api into the Forex system
+ */
 public class SignalFeedAdapter implements SignalFeed {
 
     private FeedModule feedModule;
