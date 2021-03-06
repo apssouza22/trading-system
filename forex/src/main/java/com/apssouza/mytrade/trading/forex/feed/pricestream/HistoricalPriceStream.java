@@ -13,7 +13,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.concurrent.BlockingQueue;
 
-public class HistoricalPriceStream implements PriceStream{
+class HistoricalPriceStream implements PriceStream{
 
     private final BlockingQueue<Event> eventQueue;
     private final PriceFeed priceFeed;

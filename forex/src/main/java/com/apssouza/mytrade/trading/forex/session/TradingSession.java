@@ -6,9 +6,8 @@ import com.apssouza.mytrade.trading.forex.execution.OrderExecution;
 import com.apssouza.mytrade.trading.forex.execution.OrderExecutionFactory;
 import com.apssouza.mytrade.trading.forex.feed.PriceFeed;
 import com.apssouza.mytrade.trading.forex.feed.SignalFeed;
-import com.apssouza.mytrade.trading.forex.feed.pricestream.HistoricalPriceStream;
 import com.apssouza.mytrade.trading.forex.feed.pricestream.PriceStream;
-import com.apssouza.mytrade.trading.forex.feed.pricestream.RealtimePriceStream;
+import com.apssouza.mytrade.trading.forex.feed.pricestream.PriceStreamFactory;
 import com.apssouza.mytrade.trading.forex.order.OrderHandler;
 import com.apssouza.mytrade.trading.forex.order.OrderHandlerFactory;
 import com.apssouza.mytrade.trading.forex.portfolio.Portfolio;
@@ -126,17 +125,7 @@ public class TradingSession {
         );
         this.eventNotifier = setListeners();
 
-        this.priceStream = getPriceStream();
-    }
-
-    private PriceStream getPriceStream() {
-        if (this.sessionType == SessionType.LIVE) {
-            return new RealtimePriceStream(
-                    eventQueue,
-                    this.priceFeed
-            );
-        }
-        return new HistoricalPriceStream(eventQueue, priceFeed);
+        this.priceStream = PriceStreamFactory.factory(this.sessionType, eventQueue, this.priceFeed);
     }
 
     private EventNotifier setListeners() {

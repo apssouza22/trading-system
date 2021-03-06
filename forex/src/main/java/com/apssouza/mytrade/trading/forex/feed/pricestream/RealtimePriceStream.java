@@ -12,7 +12,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.BlockingQueue;
 
-public class RealtimePriceStream implements PriceStream {
+class RealtimePriceStream implements PriceStream {
 
     private final BlockingQueue<Event> eventQueue;
     private final PriceFeed priceHandler;
