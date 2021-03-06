@@ -3,8 +3,9 @@ Feature: Get trade signals
 
   Scenario: Test get signals when exists signals
     Given that exists signal to a give time and system name
-    When try to retrieve signal to "system-test" and 2020-05-01 10:10:10
+    When try to retrieve signal to "system-test" and 2018-8-21 0:1:0
     Then return 1 signal
+    Then returned signal is "Sell"
 
   Scenario: Test get signals when doesn't exist signal to the given system name
     Given that exists signal to the given time but not for the given system

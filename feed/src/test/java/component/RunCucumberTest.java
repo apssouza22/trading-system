@@ -1,4 +1,4 @@
-package it;
+package component;
 
 
 import org.junit.runner.RunWith;
