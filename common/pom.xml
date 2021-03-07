@@ -12,5 +12,5 @@
 
     <groupId>com.apssouza.mytrade</groupId>
     <artifactId>common</artifactId>
-    <version>${mytrade.version}</version>
+    <version>1.0-SNAPSHOT</version>
 </project>
