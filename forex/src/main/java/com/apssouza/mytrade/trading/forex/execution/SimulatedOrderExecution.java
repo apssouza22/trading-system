@@ -1,25 +1,27 @@
 package com.apssouza.mytrade.trading.forex.execution;
 
-import com.apssouza.mytrade.trading.misc.helper.NumberHelper;
 import com.apssouza.mytrade.feed.api.PriceDto;
 import com.apssouza.mytrade.trading.forex.order.OrderAction;
 import com.apssouza.mytrade.trading.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.forex.order.StopOrderDto;
 import com.apssouza.mytrade.trading.forex.portfolio.FilledOrderDto;
 import com.apssouza.mytrade.trading.forex.session.MultiPositionHandler;
+import com.apssouza.mytrade.trading.misc.helper.NumberHelper;
 import com.apssouza.mytrade.trading.misc.helper.TradingParams;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
+/**
+ * Simulated order execution simulates interactions with a broker
+ */
 class SimulatedOrderExecution implements OrderExecution {
 
-    private static Logger log = Logger.getLogger(SimulatedOrderExecution.class.getSimpleName());
+    private static final Logger log = Logger.getLogger(SimulatedOrderExecution.class.getSimpleName());
     private final MultiPositionPerCPairHandler multiPositionPerCPairHandler;
     private final StopOrderExecutionHandler stopOrderHandler;
     private Map<Integer, StopOrderDto> limitOrders = new LinkedHashMap<>();
@@ -37,18 +39,22 @@ class SimulatedOrderExecution implements OrderExecution {
         return this.positions;
     }
 
+    @Override
     public void setCurrentTime(LocalDateTime current_time) {
         this.currentTime = current_time;
     }
 
+    @Override
     public void setPriceMap(Map<String, PriceDto> priceMap) {
         this.priceMap = priceMap;
     }
 
+    @Override
     public void closeAllPositions() {
-        stopOrderHandler.closeAllStops();
+        //TODO implement close all position
     }
 
+    @Override
     public FilledOrderDto executeOrder(OrderDto order) {
         String currency_pair = order.getSymbol();
         String position_identifier = MultiPositionHandler.getIdentifierFromOrder(order);
@@ -77,6 +83,21 @@ class SimulatedOrderExecution implements OrderExecution {
         return filled_order;
     }
 
+    @Override
+    public Map<Integer, StopOrderDto> getStopLossOrders() {
+        return stopOrderHandler.getStopOrders();
+    }
+
+    @Override
+    public Map<Integer, StopOrderDto> getLimitOrders() {
+        return limitOrders;
+    }
+
+    @Override
+    public StopOrderDto placeStopOrder(StopOrderDto stop) {
+        return stopOrderHandler.placeStopOrder(stop);
+    }
+
     private void handleExistingPosition(OrderDto order, OrderAction action, int quantity) {
         if (TradingParams.trading_multi_position_enabled || TradingParams.trading_position_edit_enabled) {
             this.multiPositionPerCPairHandler.handle(action, order.getSymbol(), quantity);
@@ -87,18 +108,6 @@ class SimulatedOrderExecution implements OrderExecution {
             }
             this.positions.remove(order.getSymbol());
         }
-    }
-
-    public Map<Integer, StopOrderDto> getStopLossOrders() {
-        return stopOrderHandler.getStopOrders();
-    }
-
-    public Map<Integer, StopOrderDto> getLimitOrders() {
-        return limitOrders;
-    }
-
-    public StopOrderDto placeStopOrder(StopOrderDto stop) {
-        return stopOrderHandler.placeStopOrder(stop);
     }
 
     public Integer cancelOpenStopOrders() {

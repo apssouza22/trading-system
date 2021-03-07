@@ -9,6 +9,7 @@ class MemoryOrderDao implements  OrderDao {
     private static AtomicInteger orderId = new AtomicInteger();
 
 
+    @Override
     public OrderDto persist(OrderDto order) {
         Integer id = MemoryOrderDao.orderId.incrementAndGet();
 
@@ -20,6 +21,7 @@ class MemoryOrderDao implements  OrderDao {
         return orderDto;
     }
 
+    @Override
     public void updateStatus(Integer id, OrderStatus status) {
         OrderDto order = MemoryOrderDao.ORDERS.get(id);
         OrderDto orderDto = new OrderDto(
@@ -29,6 +31,7 @@ class MemoryOrderDao implements  OrderDao {
         MemoryOrderDao.ORDERS.put(id, orderDto);
     }
 
+    @Override
     public List<OrderDto> getOrderByStatus(OrderStatus status) {
         List<OrderDto> orders = new ArrayList<>();
         for (Map.Entry<Integer, OrderDto> entry : MemoryOrderDao.ORDERS.entrySet()) {

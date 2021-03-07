@@ -8,6 +8,9 @@ import com.apssouza.mytrade.trading.forex.portfolio.FilledOrderDto;
 import java.time.LocalDateTime;
 import java.util.Map;
 
+/**
+ * Implementation to execute orders against the Broker called interactive broker
+ */
 class InteractiveBrokerOrderExecution implements OrderExecution {
 
     private final String brokerHost;

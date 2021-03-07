@@ -13,7 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * Handle different stop orders(Stop loss, limit profit)
+ * Handle different orders(Stop loss, limit profit, buy, sell)
  */
 class StopOrderExecutionHandler {
     private final Map<String, FilledOrderDto> positions;
@@ -50,13 +50,6 @@ class StopOrderExecutionHandler {
         );
         this.allStopOrders.put(id, stopOrderDto);
         return stopOrderDto;
-    }
-
-    /**
-     * Close all open stops
-     */
-    public void closeAllStops() {
-
     }
 
     /**
@@ -99,64 +92,64 @@ class StopOrderExecutionHandler {
         this.allStopOrders.put(stopOrder.getId(), stopOrder);
     }
 
-    private void changeLocalPosition(StopOrderDto stop_order, LocalDateTime currentTime) {
-        if (!this.positions.containsKey(stop_order.getSymbol())) {
-            addNewPosition(stop_order, currentTime);
+    private void changeLocalPosition(StopOrderDto stopOrderDto, LocalDateTime currentTime) {
+        if (!this.positions.containsKey(stopOrderDto.getSymbol())) {
+            addNewPosition(stopOrderDto, currentTime);
             return;
         }
 
-        FilledOrderDto filledOrderDto = this.positions.get(stop_order.getSymbol());
-        OrderAction action = stop_order.getAction();
+        FilledOrderDto filledOrderDto = this.positions.get(stopOrderDto.getSymbol());
+        OrderAction action = stopOrderDto.getAction();
 
         if (action.equals(OrderAction.SELL) && filledOrderDto.getAction().equals(OrderAction.BUY)) {
-            filledOrderDto = handleOppositeDirection(stop_order, filledOrderDto);
+            filledOrderDto = handleOppositeDirection(stopOrderDto, filledOrderDto);
         }
 
         if (action.equals(OrderAction.BUY) && filledOrderDto.getAction().equals(OrderAction.SELL)) {
-            filledOrderDto = handleOppositeDirection(stop_order, filledOrderDto);
+            filledOrderDto = handleOppositeDirection(stopOrderDto, filledOrderDto);
         }
 
         if (action.equals(OrderAction.BUY) && filledOrderDto.getAction().equals(OrderAction.BUY)) {
-            filledOrderDto = handleSameDirection(stop_order, filledOrderDto);
+            filledOrderDto = handleSameDirection(stopOrderDto, filledOrderDto);
         }
 
         if (action.equals(OrderAction.SELL) && filledOrderDto.getAction().equals(OrderAction.SELL)) {
-            filledOrderDto = handleSameDirection(stop_order, filledOrderDto);
+            filledOrderDto = handleSameDirection(stopOrderDto, filledOrderDto);
         }
 
-        if (filledOrderDto.getQuantity() < stop_order.getQuantity()) {
-            throw new RuntimeException("Position has less units than stop order. position){ " + filledOrderDto + " order){ " + stop_order);
+        if (filledOrderDto.getQuantity() < stopOrderDto.getQuantity()) {
+            throw new RuntimeException("Position has less units than stop order. position){ " + filledOrderDto + " order){ " + stopOrderDto);
         }
 
     }
 
-    private FilledOrderDto handleSameDirection(StopOrderDto stop_order, FilledOrderDto filledOrderDto) {
-        filledOrderDto = new FilledOrderDto(filledOrderDto.getQuantity() + stop_order.getQuantity(), filledOrderDto);
+    private FilledOrderDto handleSameDirection(StopOrderDto stopOrderDto, FilledOrderDto filledOrderDto) {
+        filledOrderDto = new FilledOrderDto(filledOrderDto.getQuantity() + stopOrderDto.getQuantity(), filledOrderDto);
         positions.put(filledOrderDto.getIdentifier(), filledOrderDto);
         return filledOrderDto;
     }
 
-    private FilledOrderDto handleOppositeDirection(StopOrderDto stop_order, FilledOrderDto filledOrderDto) {
-        if (filledOrderDto.getQuantity() == stop_order.getQuantity()) {
-            this.positions.remove(stop_order.getSymbol());
+    private FilledOrderDto handleOppositeDirection(StopOrderDto stopOrderDto, FilledOrderDto filledOrderDto) {
+        if (filledOrderDto.getQuantity() == stopOrderDto.getQuantity()) {
+            this.positions.remove(stopOrderDto.getSymbol());
         } else {
-            filledOrderDto = new FilledOrderDto(filledOrderDto.getQuantity() - stop_order.getQuantity(), filledOrderDto);
+            filledOrderDto = new FilledOrderDto(filledOrderDto.getQuantity() - stopOrderDto.getQuantity(), filledOrderDto);
             this.positions.put(filledOrderDto.getIdentifier(), filledOrderDto);
         }
         return filledOrderDto;
     }
 
-    private void addNewPosition(StopOrderDto stop_order, LocalDateTime currentTime) {
-        FilledOrderDto filled_order = new FilledOrderDto(
+    private void addNewPosition(StopOrderDto stopOrderDto, LocalDateTime currentTime) {
+        FilledOrderDto filledOrder = new FilledOrderDto(
                 currentTime,
-                stop_order.getSymbol(),
-                stop_order.getAction(),
-                stop_order.getQuantity(),
-                stop_order.getFilledPrice(),
-                stop_order.getIdentifier(),
-                stop_order.getId()
+                stopOrderDto.getSymbol(),
+                stopOrderDto.getAction(),
+                stopOrderDto.getQuantity(),
+                stopOrderDto.getFilledPrice(),
+                stopOrderDto.getIdentifier(),
+                stopOrderDto.getId()
         );
-        this.positions.put(stop_order.getSymbol(), filled_order);
+        this.positions.put(stopOrderDto.getSymbol(), filledOrder);
     }
 
     public Map<Integer, StopOrderDto> getStopOrders() {
