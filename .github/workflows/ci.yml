@@ -13,3 +13,8 @@ jobs:
 
       - name: Build with Maven
         run: mvn verify
+
+      - name: Publish to GitHub Packages Apache Maven
+        run: mvn --batch-mode deploy
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
