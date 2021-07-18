@@ -1,4 +1,4 @@
-name: Verify the project
+name: build & tests
 on: [ push ]
 jobs:
   build:

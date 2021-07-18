@@ -1,4 +1,4 @@
-# FXyou   [![Build Status](https://travis-ci.org/apssouza22/trading-system.svg?branch=master)](https://travis-ci.org/apssouza22/trading-system) [![Code Climate](https://codeclimate.com/github/apssouza22/trading-system.png)](https://codeclimate.com/github/apssouza22/trading-system) [![Test Coverage](https://api.codeclimate.com/v1/badges/d999a5f1311bd806b345/test_coverage)](https://codeclimate.com/github/apssouza22/trading-system/test_coverage) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=apssouza22_trading-system&metric=alert_status)](https://sonarcloud.io/dashboard?id=apssouza22_trading-system)
+# FXyou  ![Build status](https://github.com/apssouza22/trading-system/actions/workflows/ci.yml/badge.svg) [![Code Climate](https://codeclimate.com/github/apssouza22/trading-system.png)](https://codeclimate.com/github/apssouza22/trading-system) [![Test Coverage](https://api.codeclimate.com/v1/badges/d999a5f1311bd806b345/test_coverage)](https://codeclimate.com/github/apssouza22/trading-system/test_coverage) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=apssouza22_trading-system&metric=alert_status)](https://sonarcloud.io/dashboard?id=apssouza22_trading-system)
 Simple High frequency trading with backtesting simulation and live trading engine written in Java.
 
 It has been developed for both retail traders and institutional hedge funds to aid strategy development and deployment.
@@ -13,7 +13,7 @@ It has been developed for both retail traders and institutional hedge funds to a
 * Performance status report: Provide a performance status of your current trades.
 
 # Tech details
-* Java 14
+* Java 16
 * Event driven architecture
 * Maven multi-modules
 * Java modularization
@@ -28,7 +28,7 @@ It has been developed for both retail traders and institutional hedge funds to a
 ## How to run
 ```
 mvn package && \
-java --enable-preview -jar runner/target/runner-1.0-SNAPSHOT.jar
+java -jar runner/target/runner-1.0-SNAPSHOT.jar
 ``` 
 
 ### Using Docker
