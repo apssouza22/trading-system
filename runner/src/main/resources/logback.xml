@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+      <providers>
+        <timestamp>
+          <fieldName>time</fieldName>
+        </timestamp>
+        <logLevel/>
+        <!-- Add MDC content to the log -->
+        <mdc></mdc>
+        <pattern>
+          <pattern>
+            {"service":"forex-runner","class-name":"%c"}
+          </pattern>
+        </pattern>
+        <message>
+          <fieldName>msg</fieldName>
+        </message>
+        <stackTrace>
+          <throwableConverter class="net.logstash.logback.stacktrace.ShortenedThrowableConverter">
+            <maxDepthPerThrowable>30</maxDepthPerThrowable>
+            <maxLength>2048</maxLength>
+            <shortenedClassNameLength>20</shortenedClassNameLength>
+            <exclude>^sun\.reflect\..*\.invoke</exclude>
+            <exclude>^net\.sf\.cglib\.proxy\.MethodProxy\.invoke</exclude>
+            <rootCauseFirst>true</rootCauseFirst>
+          </throwableConverter>
+        </stackTrace>
+      </providers>
+    </encoder>
+  </appender>
+
+  <root level="${INFO_LEVEL:-INFO}">
+    <appender-ref ref="CONSOLE" />
+  </root>
+</configuration>
