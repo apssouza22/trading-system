@@ -22,39 +22,39 @@ public class PositionBuilder {
     PositionStatus positionStatus = PositionStatus.FILLED;
     private EnumMap<StopOrderType, StopOrderDto> stopOrders = new EnumMap(StopOrderType.class);
 
-    public void setType(PositionType type) {
+    public void withType(PositionType type) {
         this.type = type;
     }
 
-    public void setSymbol(String symbol) {
+    public void withSymbol(String symbol) {
         this.symbol = symbol;
     }
 
-    public void setQtd(Integer qtd) {
+    public void withQtd(Integer qtd) {
         this.qtd = qtd;
     }
 
-    public void setPrice(BigDecimal price) {
+    public void withPrice(BigDecimal price) {
         this.price = price;
     }
 
-    public void setTimestamp(LocalDateTime timestamp) {
+    public void withTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
     }
 
-    public void setIdentifier(String identifier) {
+    public void withIdentifier(String identifier) {
         this.identifier = identifier;
     }
 
-    public void setExitReason(ExitReason exitReason) {
+    public void withExitReason(ExitReason exitReason) {
         this.exitReason = exitReason;
     }
 
-    public void setFilledOrder(FilledOrderDto filledOrder) {
+    public void withFilledOrder(FilledOrderDto filledOrder) {
         this.filledOrder = filledOrder;
     }
 
-    public void setPositionStatus(PositionStatus positionStatus) {
+    public void withPositionStatus(PositionStatus positionStatus) {
         this.positionStatus = positionStatus;
     }
 

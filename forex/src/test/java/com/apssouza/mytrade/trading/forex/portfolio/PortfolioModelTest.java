@@ -20,7 +20,7 @@ public class PortfolioModelTest extends TestCase {
         PositionBuilder positionBuilder = new PositionBuilder();
         Position ps = positionBuilder.build();
         LoopEventBuilder loopEventBuilder = new LoopEventBuilder();
-        loopEventBuilder.createPriceMap(BigDecimal.valueOf(10));
+        loopEventBuilder.withPriceMap(BigDecimal.valueOf(10));
         PriceChangedEvent loopEvent = loopEventBuilder.build();
         portfolio.addNewPosition(ps);
         portfolio.updatePortfolioValue(loopEvent);

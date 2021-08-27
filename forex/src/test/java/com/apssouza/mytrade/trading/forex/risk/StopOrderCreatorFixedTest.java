@@ -35,7 +35,7 @@ public class StopOrderCreatorFixedTest extends TestCase {
     @Test
     public void getHardStopLossWhenLongPosition() {
         PositionBuilder positionBuilder = new PositionBuilder();
-        positionBuilder.setType(PositionType.LONG);
+        positionBuilder.withType(PositionType.LONG);
         Position position = positionBuilder.build();
         obj.createContext(PositionType.LONG);
         com.apssouza.mytrade.trading.forex.order.StopOrderDto hardStopLoss = obj.getHardStopLoss(position);
@@ -48,8 +48,8 @@ public class StopOrderCreatorFixedTest extends TestCase {
     @Test
     public void getHardStopLossWhenShortPosition() {
         PositionBuilder positionBuilder = new PositionBuilder();
-        positionBuilder.setType(PositionType.SHORT);
-        positionBuilder.setPrice(BigDecimal.valueOf(1.004));
+        positionBuilder.withType(PositionType.SHORT);
+        positionBuilder.withPrice(BigDecimal.valueOf(1.004));
         Position position = positionBuilder.build();
         obj.createContext(PositionType.SHORT);
 
@@ -63,7 +63,7 @@ public class StopOrderCreatorFixedTest extends TestCase {
     @Test
     public void getTakeProfitWhenShortPosition() {
         PositionBuilder positionBuilder = new PositionBuilder();
-        positionBuilder.setType(PositionType.SHORT);
+        positionBuilder.withType(PositionType.SHORT);
         Position position = positionBuilder.build();
         obj.createContext(PositionType.SHORT);
 
@@ -78,8 +78,8 @@ public class StopOrderCreatorFixedTest extends TestCase {
     @Test
     public void getTakeProfitWhenLongPosition() {
         PositionBuilder positionBuilder = new PositionBuilder();
-        positionBuilder.setType(PositionType.LONG);
-        positionBuilder.setPrice(BigDecimal.valueOf(1.004));
+        positionBuilder.withType(PositionType.LONG);
+        positionBuilder.withPrice(BigDecimal.valueOf(1.004));
         Position position = positionBuilder.build();
 
         obj.createContext(PositionType.LONG);
@@ -95,8 +95,8 @@ public class StopOrderCreatorFixedTest extends TestCase {
     @Test
     public void getEntryStopLossWhenLongPosition() {
         PositionBuilder positionBuilder = new PositionBuilder();
-        positionBuilder.setType(PositionType.LONG);
-        positionBuilder.setPrice(BigDecimal.valueOf(1.004));
+        positionBuilder.withType(PositionType.LONG);
+        positionBuilder.withPrice(BigDecimal.valueOf(1.004));
         Position position = positionBuilder.build();
 
         obj.createContext(PositionType.LONG);

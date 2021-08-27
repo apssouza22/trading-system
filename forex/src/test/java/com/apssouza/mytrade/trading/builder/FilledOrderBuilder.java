@@ -19,31 +19,31 @@ public class FilledOrderBuilder {
     private String identifier = "AUDUSD";
     private Integer id = 1;
 
-    public void setTime(LocalDateTime time) {
+    public void withTime(LocalDateTime time) {
         this.time = time;
     }
 
-    public void setSymbol(String symbol) {
+    public void withSymbol(String symbol) {
         this.symbol = symbol;
     }
 
-    public void setAction(OrderAction action) {
+    public void withAction(OrderAction action) {
         this.action = action;
     }
 
-    public void setQuantity(int quantity) {
+    public void withQuantity(int quantity) {
         this.quantity = quantity;
     }
 
-    public void setPriceWithSpread(BigDecimal priceWithSpread) {
+    public void withPriceWithSpread(BigDecimal priceWithSpread) {
         this.priceWithSpread = priceWithSpread;
     }
 
-    public void setIdentifier(String identifier) {
+    public void withIdentifier(String identifier) {
         this.identifier = identifier;
     }
 
-    public void setId(Integer id) {
+    public void withId(Integer id) {
         this.id = id;
     }
 

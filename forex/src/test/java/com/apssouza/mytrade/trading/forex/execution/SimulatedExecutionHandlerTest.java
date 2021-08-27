@@ -102,7 +102,7 @@ public class SimulatedExecutionHandlerTest extends TestCase {
     public void executeOrderSellAddingUnits() {
         TradingParams.trading_position_edit_enabled = true;
         OrderBuilder orderBuilder = new OrderBuilder();
-        OrderDto order = orderBuilder.addOrder(LocalDateTime.MIN, OrderAction.SELL, OrderStatus.CREATED).build();
+        OrderDto order = orderBuilder.withOrder(LocalDateTime.MIN, OrderAction.SELL, OrderStatus.CREATED).build();
         OrderDto order2 = orderBuilder.build();
         FilledOrderDto filledOrderDto = simulatedExecutionHandler.executeOrder(order);
         FilledOrderDto filledOrderDto2 = simulatedExecutionHandler.executeOrder(order2);
@@ -121,7 +121,7 @@ public class SimulatedExecutionHandlerTest extends TestCase {
         TradingParams.trading_position_edit_enabled = true;
         OrderBuilder orderBuilder = new OrderBuilder();
         OrderDto orderBuy = orderBuilder.build();
-        OrderDto orderSell = orderBuilder.setAction(OrderAction.SELL).build();
+        OrderDto orderSell = orderBuilder.withAction(OrderAction.SELL).build();
         FilledOrderDto filledOrderDto = simulatedExecutionHandler.executeOrder(orderBuy);
         FilledOrderDto filledOrderDto2 = simulatedExecutionHandler.executeOrder(orderSell);
 
@@ -135,7 +135,7 @@ public class SimulatedExecutionHandlerTest extends TestCase {
         TradingParams.trading_position_edit_enabled = true;
         OrderBuilder orderBuilder = new OrderBuilder();
         OrderDto orderBuy = orderBuilder.build();
-        OrderDto orderSell = orderBuilder.setAction(OrderAction.SELL).setQtd(100).build();
+        OrderDto orderSell = orderBuilder.withAction(OrderAction.SELL).withQtd(100).build();
         FilledOrderDto filledOrderDto = simulatedExecutionHandler.executeOrder(orderBuy);
         FilledOrderDto filledOrderDto2 = simulatedExecutionHandler.executeOrder(orderSell);
 
@@ -150,7 +150,7 @@ public class SimulatedExecutionHandlerTest extends TestCase {
         TradingParams.trading_position_edit_enabled = true;
         OrderBuilder orderBuilder = new OrderBuilder();
         OrderDto orderBuy = orderBuilder.build();
-        OrderDto orderSell = orderBuilder.setAction(OrderAction.SELL).build();
+        OrderDto orderSell = orderBuilder.withAction(OrderAction.SELL).build();
         FilledOrderDto filledOrderDto = simulatedExecutionHandler.executeOrder(orderSell);
         FilledOrderDto filledOrderDto2 = simulatedExecutionHandler.executeOrder(orderBuy);
 
@@ -163,7 +163,7 @@ public class SimulatedExecutionHandlerTest extends TestCase {
         TradingParams.trading_position_edit_enabled = true;
         OrderBuilder orderBuilder = new OrderBuilder();
         OrderDto orderBuy = orderBuilder.build();
-        OrderDto orderSell = orderBuilder.setAction(OrderAction.SELL).setQtd(100).build();
+        OrderDto orderSell = orderBuilder.withAction(OrderAction.SELL).withQtd(100).build();
         simulatedExecutionHandler.executeOrder(orderSell);
         simulatedExecutionHandler.executeOrder(orderBuy);
 
@@ -175,7 +175,7 @@ public class SimulatedExecutionHandlerTest extends TestCase {
     @Test
     public void getStopLossOrders() {
         StopOrderBuilder stopOrderBuilder = new StopOrderBuilder();
-        stopOrderBuilder.setType(StopOrderType.HARD_STOP);
+        stopOrderBuilder.withType(StopOrderType.HARD_STOP);
         StopOrderDto order = stopOrderBuilder.build();
         StopOrderDto stopOrderDto = simulatedExecutionHandler.placeStopOrder(order);
         Map<Integer, StopOrderDto> stopLossOrders = simulatedExecutionHandler.getStopLossOrders();
@@ -190,7 +190,7 @@ public class SimulatedExecutionHandlerTest extends TestCase {
     @Test
     public void placeStopOrder() {
         StopOrderBuilder stopOrderBuilder = new StopOrderBuilder();
-        stopOrderBuilder.setType(StopOrderType.HARD_STOP);
+        stopOrderBuilder.withType(StopOrderType.HARD_STOP);
         StopOrderDto order = stopOrderBuilder.build();
         StopOrderDto stopOrderDto = simulatedExecutionHandler.placeStopOrder(order);
         assertEquals(order.getType(), stopOrderDto.getType());
@@ -208,7 +208,7 @@ public class SimulatedExecutionHandlerTest extends TestCase {
     @Test
     public void cancelOpenStopOrdersWithOrders() {
         StopOrderBuilder stopOrderBuilder = new StopOrderBuilder();
-        stopOrderBuilder.setType(StopOrderType.HARD_STOP);
+        stopOrderBuilder.withType(StopOrderType.HARD_STOP);
         StopOrderDto order = stopOrderBuilder.build();
         simulatedExecutionHandler.placeStopOrder(order);
         assertEquals(Integer.valueOf(1), simulatedExecutionHandler.cancelOpenStopOrders());
@@ -231,13 +231,13 @@ public class SimulatedExecutionHandlerTest extends TestCase {
     @Test
     public void processStopOrderBuySameQtd() {
         OrderBuilder orderBuilder = new OrderBuilder();
-        OrderDto orderSell = orderBuilder.setAction(OrderAction.SELL).build();
+        OrderDto orderSell = orderBuilder.withAction(OrderAction.SELL).build();
         simulatedExecutionHandler.executeOrder(orderSell);
 
         StopOrderBuilder stopOrderBuilder = new StopOrderBuilder();
-        stopOrderBuilder.setPrice(BigDecimal.ZERO);
-        stopOrderBuilder.setType(STOP_LOSS);
-        stopOrderBuilder.setQtd(1000);
+        stopOrderBuilder.withPrice(BigDecimal.ZERO);
+        stopOrderBuilder.withType(STOP_LOSS);
+        stopOrderBuilder.withQtd(1000);
         StopOrderDto order = stopOrderBuilder.build();
         simulatedExecutionHandler.placeStopOrder(order);
         simulatedExecutionHandler.processStopOrders();
@@ -248,12 +248,12 @@ public class SimulatedExecutionHandlerTest extends TestCase {
     @Test
     public void processStopOrderBuyDiffQtd() {
         OrderBuilder orderBuilder = new OrderBuilder();
-        OrderDto orderSell = orderBuilder.setAction(OrderAction.SELL).build();
+        OrderDto orderSell = orderBuilder.withAction(OrderAction.SELL).build();
         simulatedExecutionHandler.executeOrder(orderSell);
 
         StopOrderBuilder stopOrderBuilder = new StopOrderBuilder();
-        stopOrderBuilder.setPrice(BigDecimal.ZERO);
-        stopOrderBuilder.setType(STOP_LOSS);
+        stopOrderBuilder.withPrice(BigDecimal.ZERO);
+        stopOrderBuilder.withType(STOP_LOSS);
         StopOrderDto order = stopOrderBuilder.build();
         simulatedExecutionHandler.placeStopOrder(order);
         simulatedExecutionHandler.processStopOrders();
@@ -269,10 +269,10 @@ public class SimulatedExecutionHandlerTest extends TestCase {
         simulatedExecutionHandler.executeOrder(orderBuy);
 
         StopOrderBuilder stopOrderBuilder = new StopOrderBuilder();
-        stopOrderBuilder.setPrice(BigDecimal.ZERO);
-        stopOrderBuilder.setType(STOP_LOSS);
-        stopOrderBuilder.setAction(OrderAction.BUY);
-        stopOrderBuilder.setQtd(1000);
+        stopOrderBuilder.withPrice(BigDecimal.ZERO);
+        stopOrderBuilder.withType(STOP_LOSS);
+        stopOrderBuilder.withAction(OrderAction.BUY);
+        stopOrderBuilder.withQtd(1000);
         StopOrderDto order = stopOrderBuilder.build();
         simulatedExecutionHandler.placeStopOrder(order);
         simulatedExecutionHandler.processStopOrders();

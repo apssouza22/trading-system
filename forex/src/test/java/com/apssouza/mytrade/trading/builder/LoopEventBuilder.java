@@ -13,7 +13,7 @@ public class LoopEventBuilder {
     HashMap<String, PriceDto> priceMap = new HashMap<>();
     LocalDateTime time;
 
-    public LoopEventBuilder createPriceMap(BigDecimal close) {
+    public LoopEventBuilder withPriceMap(BigDecimal close) {
         if (time == null)
             time = LocalDateTime.MIN;
         PriceDto priceDto = new PriceDto(time, close, close, close, close, "AUDUSD");
@@ -21,7 +21,7 @@ public class LoopEventBuilder {
         return this;
     }
 
-    public LoopEventBuilder setTime(LocalDateTime time) {
+    public LoopEventBuilder withTime(LocalDateTime time) {
         this.time = time;
         return this;
     }

@@ -34,7 +34,7 @@ public class PositionExitHandlerTest extends TestCase {
     @Test
     public void processWithOnePositionExitedWithCounterSignalSell() {
 
-        loopEventBuilder.createPriceMap(BigDecimal.valueOf(1.003));
+        loopEventBuilder.withPriceMap(BigDecimal.valueOf(1.003));
         PriceChangedEvent loopEvent = loopEventBuilder.build();
 
         exitBuilder.addPosition(PositionType.LONG);
@@ -49,7 +49,7 @@ public class PositionExitHandlerTest extends TestCase {
 
     @Test
     public void processWithOnePositionExitedWithCounterSignalBuy() {
-        loopEventBuilder.createPriceMap(BigDecimal.valueOf(1.003));
+        loopEventBuilder.withPriceMap(BigDecimal.valueOf(1.003));
         PriceChangedEvent loopEvent = loopEventBuilder.build();
 
         exitBuilder.addPosition(PositionType.SHORT);
@@ -65,7 +65,7 @@ public class PositionExitHandlerTest extends TestCase {
 
     @Test
     public void processWithNoPositionExitedWithCounterSignalBuy() {
-        loopEventBuilder.createPriceMap(BigDecimal.valueOf(1.003));
+        loopEventBuilder.withPriceMap(BigDecimal.valueOf(1.003));
         PriceChangedEvent loopEvent = loopEventBuilder.build();
 
         exitBuilder.addPosition(PositionType.LONG);
@@ -82,7 +82,7 @@ public class PositionExitHandlerTest extends TestCase {
 
     @Test
     public void processWithNoPositionExitedWithCounterSignalSell() {
-        loopEventBuilder.createPriceMap(BigDecimal.valueOf(1.003));
+        loopEventBuilder.withPriceMap(BigDecimal.valueOf(1.003));
         PriceChangedEvent loopEvent = loopEventBuilder.build();
 
         exitBuilder.addPosition(PositionType.SHORT);
@@ -98,8 +98,8 @@ public class PositionExitHandlerTest extends TestCase {
 
     @Test
     public void processWithNoSignal() {
-        loopEventBuilder.createPriceMap(BigDecimal.valueOf(1.003));
-        loopEventBuilder.setTime(LocalDateTime.of(2018,1,1,1,1));
+        loopEventBuilder.withPriceMap(BigDecimal.valueOf(1.003));
+        loopEventBuilder.withTime(LocalDateTime.of(2018,1,1,1,1));
         PriceChangedEvent loopEvent = loopEventBuilder.build();
 
         exitBuilder.addPosition(PositionType.SHORT);

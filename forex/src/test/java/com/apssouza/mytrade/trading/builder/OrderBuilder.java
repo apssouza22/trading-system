@@ -18,42 +18,42 @@ public class OrderBuilder {
     private LocalDateTime time = LocalDateTime.MIN;
     private OrderStatus status = OrderStatus.CREATED;
 
-    public OrderBuilder setSymbol(String symbol) {
+    public OrderBuilder withSymbol(String symbol) {
         this.symbol = symbol;
         return this;
     }
 
-    public OrderBuilder setIdentifier(String identifier) {
+    public OrderBuilder withIdentifier(String identifier) {
         this.identifier = identifier;
         return this;
     }
 
-    public OrderBuilder setAction(OrderAction action) {
+    public OrderBuilder withAction(OrderAction action) {
         this.action = action;
         return this;
     }
 
-    public OrderBuilder setQtd(int qtd) {
+    public OrderBuilder withQtd(int qtd) {
         this.qtd = qtd;
         return this;
     }
 
-    public void setOrigin(OrderOrigin origin) {
+    public void withOrigin(OrderOrigin origin) {
         this.origin = origin;
     }
 
-    public void setTime(LocalDateTime time) {
+    public void withTime(LocalDateTime time) {
         this.time = time;
     }
 
-    public OrderBuilder setStatus(OrderStatus status) {
+    public OrderBuilder withStatus(OrderStatus status) {
         this.status = status;
         return this;
     }
 
     List<OrderDto> orders = new ArrayList<>();
 
-    public OrderBuilder addOrder(LocalDateTime time, OrderAction action, OrderStatus status) {
+    public OrderBuilder withOrder(LocalDateTime time, OrderAction action, OrderStatus status) {
         orders.add(new OrderDto(
                 symbol,
                 action,

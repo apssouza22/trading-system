@@ -17,7 +17,7 @@ public class RiskManagementBuilder {
         PositionSizer positionSizer = Mockito.mock(PositionSizer.class);
         StopOrderCreatorFixed stopOrderCreatorFixed = Mockito.mock(StopOrderCreatorFixed.class);
         var stopOrderBuilder = new StopOrderBuilder();
-        stopOrderBuilder.setType(StopOrderType.ENTRY_STOP);
+        stopOrderBuilder.withType(StopOrderType.ENTRY_STOP);
 
         Mockito.when(
                 stopOrderCreatorFixed.getEntryStopOrder(Mockito.any(), Mockito.any())
@@ -25,19 +25,19 @@ public class RiskManagementBuilder {
                 Optional.of(stopOrderBuilder.build())
         );
 
-        stopOrderBuilder.setType(StopOrderType.TRAILLING_STOP);
+        stopOrderBuilder.withType(StopOrderType.TRAILLING_STOP);
         Mockito.when(
                 stopOrderCreatorFixed.getTrailingStopOrder(Mockito.any(), Mockito.any())
         ).thenReturn(
                 Optional.of(stopOrderBuilder.build())
         );
-        stopOrderBuilder.setType(StopOrderType.TAKE_PROFIT);
+        stopOrderBuilder.withType(StopOrderType.TAKE_PROFIT);
         Mockito.when(
                 stopOrderCreatorFixed.getProfitStopOrder(Mockito.any())
         ).thenReturn(
                 stopOrderBuilder.build()
         );
-        stopOrderBuilder.setType(StopOrderType.HARD_STOP);
+        stopOrderBuilder.withType(StopOrderType.HARD_STOP);
         Mockito.when(
                 stopOrderCreatorFixed.getProfitStopOrder(Mockito.any())
         ).thenReturn(

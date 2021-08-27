@@ -18,7 +18,7 @@ public class PositionExitBuilder {
 
     public PositionExitBuilder addPosition(PositionType type){
         PositionBuilder positionBuilder = new PositionBuilder();
-        positionBuilder.setType(type);
+        positionBuilder.withType(type);
         positionMap.put("AUDUSD", positionBuilder.build());
         return this;
     }

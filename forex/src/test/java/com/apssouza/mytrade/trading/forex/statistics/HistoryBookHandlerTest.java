@@ -9,18 +9,14 @@ import com.apssouza.mytrade.trading.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.forex.session.CycleHistory;
 import junit.framework.TestCase;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
-
-import static org.junit.Assert.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class HistoryBookHandlerTest extends TestCase {
@@ -108,7 +104,7 @@ public class HistoryBookHandlerTest extends TestCase {
         historyBookHandler.startCycle(LocalDateTime.MIN);
         OrderBuilder orderBuilder = new OrderBuilder();
         OrderDto orderDto =  orderBuilder.build();
-        OrderDto orderDto2 =  orderBuilder.setIdentifier("EURUSD").setSymbol("EURUSD").build();
+        OrderDto orderDto2 =  orderBuilder.withIdentifier("EURUSD").withSymbol("EURUSD").build();
         historyBookHandler.addOrder(orderDto);
         historyBookHandler.addOrder(orderDto2);
         historyBookHandler.endCycle();

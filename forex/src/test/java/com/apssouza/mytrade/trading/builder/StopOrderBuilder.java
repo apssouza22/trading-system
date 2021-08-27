@@ -19,39 +19,39 @@ public class StopOrderBuilder {
     Integer qtd = 100;
     String identifier = "AUDUSD";
 
-    public void setType(StopOrderType type) {
+    public void withType(StopOrderType type) {
         this.type = type;
     }
 
-    public void setId(Integer id) {
+    public void withId(Integer id) {
         this.id = id;
     }
 
-    public void setStatus(StopOrderStatus status) {
+    public void withStatus(StopOrderStatus status) {
         this.status = status;
     }
 
-    public void setAction(OrderAction action) {
+    public void withAction(OrderAction action) {
         this.action = action;
     }
 
-    public void setPrice(BigDecimal price) {
+    public void withPrice(BigDecimal price) {
         this.price = price;
     }
 
-    public void setFilledPrice(BigDecimal filledPrice) {
+    public void withFilledPrice(BigDecimal filledPrice) {
         this.filledPrice = filledPrice;
     }
 
-    public void setSymbol(String symbol) {
+    public void withSymbol(String symbol) {
         this.symbol = symbol;
     }
 
-    public void setQtd(Integer qtd) {
+    public void withQtd(Integer qtd) {
         this.qtd = qtd;
     }
 
-    public void setIdentifier(String identifier) {
+    public void withIdentifier(String identifier) {
         this.identifier = identifier;
     }
 
