@@ -1,4 +1,4 @@
-package com.apssouza.mytrade.trading.forex.feed;
+package com.apssouza.mytrade.trading.forex.pricefeed;
 
 import com.apssouza.mytrade.trading.api.SessionType;
 import com.apssouza.mytrade.trading.forex.session.event.Event;
@@ -17,14 +17,14 @@ public class PriceStreamFactory {
     public static PriceStream factory(
             final SessionType sessionType,
             final BlockingQueue<Event> eventQueue,
-            final PriceFeed priceFeed
+            final PriceFeedHandler priceFeedHandler
     ) {
         if (sessionType == SessionType.LIVE) {
             return new RealtimePriceStream(
                     eventQueue,
-                    priceFeed
+                    priceFeedHandler
             );
         }
-        return new HistoricalPriceStream(eventQueue, priceFeed);
+        return new HistoricalPriceStream(eventQueue, priceFeedHandler);
     }
 }

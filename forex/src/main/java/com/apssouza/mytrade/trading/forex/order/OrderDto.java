@@ -94,7 +94,7 @@ public class OrderDto {
         this.id = id;
     }
 
-    public boolean equals(final Object o) {
+    public boolean equals(Object o) {
         if (o == this) {
             return true;
         }
@@ -147,7 +147,7 @@ public class OrderDto {
         return true;
     }
 
-    protected boolean canEqual(final Object other) {
+    protected boolean canEqual(Object other) {
         return other instanceof OrderDto;
     }
 

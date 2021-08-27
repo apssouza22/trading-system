@@ -1,8 +1,8 @@
 package com.apssouza.mytrade.trading.api;
 
 import com.apssouza.mytrade.feed.api.FeedModule;
-import com.apssouza.mytrade.trading.adapters.PriceFeedAdapter;
-import com.apssouza.mytrade.trading.adapters.SignalFeedAdapter;
+import com.apssouza.mytrade.trading.forex.pricefeed.PriceFeedHandler;
+import com.apssouza.mytrade.trading.forex.signalfeed.SignalFeedHandler;
 import com.apssouza.mytrade.trading.forex.session.TradingSession;
 
 import java.math.BigDecimal;
@@ -53,8 +53,8 @@ public class ForexBuilder {
     }
 
     public TradingSession build() {
-        var priceAdapter = new PriceFeedAdapter(feed);
-        var signalFeed = new SignalFeedAdapter(feed);
+        var priceFeed = new PriceFeedHandler(feed);
+        var signalFeed = new SignalFeedHandler(feed);
 
         var tradingSession = new TradingSession(
                 equity,
@@ -64,13 +64,13 @@ public class ForexBuilder {
                 sessionType,
                 systemName,
                 getSafeExecutionType(),
-                priceAdapter
+                priceFeed
         );
         registerShutDownListener(tradingSession);
         return tradingSession;
     }
 
-    private static void registerShutDownListener(final TradingSession tradingSession) {
+    private static void registerShutDownListener(TradingSession tradingSession) {
         Thread shutdown = new Thread(tradingSession::shutdown);
         shutdown.setDaemon(true);
         Runtime.getRuntime().addShutdownHook(shutdown);

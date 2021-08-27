@@ -5,7 +5,7 @@ import com.apssouza.mytrade.trading.misc.helper.TradingParams;
 
 public class OrderExecutionFactory {
 
-    public static OrderExecution factory(final ExecutionType executionType){
+    public static OrderExecution factory(ExecutionType executionType){
         if (executionType == ExecutionType.BROKER) {
             return new InteractiveBrokerOrderExecution(
                     TradingParams.brokerHost,

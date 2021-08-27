@@ -136,7 +136,7 @@ public class StopOrderDto {
         this.quantity = quantity;
     }
 
-    public boolean equals(final Object o) {
+    public boolean equals(Object o) {
         if (o == this) {
             return true;
         }
@@ -194,7 +194,7 @@ public class StopOrderDto {
         return true;
     }
 
-    protected boolean canEqual(final Object other) {
+    protected boolean canEqual(Object other) {
         return other instanceof StopOrderDto;
     }
 

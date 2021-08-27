@@ -4,7 +4,7 @@ import com.apssouza.mytrade.trading.forex.risk.PositionSizer;
 
 public class OrderHandlerFactory {
 
-    public static OrderHandler factory(final PositionSizer positionSizer){
+    public static OrderHandler factory(PositionSizer positionSizer){
         return new OrderHandler(new MemoryOrderDao(), positionSizer);
     }
 }

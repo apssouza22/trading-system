@@ -25,7 +25,7 @@ public class ForexEngine {
                 systemName,
                 LocalDateTime.of(date.minusDays(20), LocalTime.MIN),
                 LocalDateTime.of(date.plusDays(6), LocalTime.MIN),
-                BigDecimal.valueOf(100000l),
+                BigDecimal.valueOf(100000L),
                 SessionType.BACK_TEST,
                 ExecutionType.SIMULATED
         );
@@ -38,7 +38,7 @@ public class ForexEngine {
         tradingSession.start();
     }
 
-    public void setUp(final ForexDto dto) {
+    public void setUp(ForexDto dto) {
         var feed = new FeedBuilder()
                 .withStartTime(dto.startDay())
                 .withEndTime(dto.endDay())

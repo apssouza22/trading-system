@@ -2,7 +2,7 @@ package com.apssouza.mytrade.trading.forex.session.listener;
 
 import com.apssouza.mytrade.feed.api.SignalDto;
 import com.apssouza.mytrade.trading.forex.execution.OrderExecution;
-import com.apssouza.mytrade.trading.forex.feed.SignalFeed;
+import com.apssouza.mytrade.trading.forex.signalfeed.SignalFeedHandler;
 import com.apssouza.mytrade.trading.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.forex.order.OrderHandler;
 import com.apssouza.mytrade.trading.forex.order.OrderStatus;
@@ -25,20 +25,20 @@ public class PriceChangedListener implements PropertyChangeListener {
 
     private final OrderExecution executionHandler;
     private final PortfolioHandler portfolioHandler;
-    private final SignalFeed signalFeed;
+    private final SignalFeedHandler signalFeedHandler;
     private final OrderHandler orderHandler;
     private final EventNotifier eventNotifier;
 
     public PriceChangedListener(
             OrderExecution executionHandler,
             PortfolioHandler portfolioHandler,
-            SignalFeed signalFeed,
+            SignalFeedHandler signalFeedHandler,
             OrderHandler orderHandler,
             EventNotifier eventNotifier
     ) {
         this.executionHandler = executionHandler;
         this.portfolioHandler = portfolioHandler;
-        this.signalFeed = signalFeed;
+        this.signalFeedHandler = signalFeedHandler;
         this.orderHandler = orderHandler;
         this.eventNotifier = eventNotifier;
     }
@@ -69,7 +69,7 @@ public class PriceChangedListener implements PropertyChangeListener {
     }
 
     private List<SignalDto> processSignals(PriceChangedEvent event, LocalDateTime currentTime) {
-        var signals = this.signalFeed.getSignal(TradingParams.systemName, event.getTimestamp());
+        var signals = this.signalFeedHandler.getSignal(TradingParams.systemName, event.getTimestamp());
 
         for (SignalDto signal : signals) {
             eventNotifier.notify(new SignalCreatedEvent(
@@ -86,8 +86,9 @@ public class PriceChangedListener implements PropertyChangeListener {
         List<OrderDto> orders = this.orderHandler.getOrderByStatus(OrderStatus.CREATED);
         List<OrderDto> orderList = MultiPositionHandler.createPositionIdentifier(orders);
 
-        if (orderList.isEmpty())
+        if (orderList.isEmpty()) {
             return;
+        }
 
         eventNotifier.notify(new OrderFoundEvent(
                 EventType.ORDER_FOUND,

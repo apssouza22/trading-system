@@ -1,4 +1,4 @@
-package com.apssouza.mytrade.trading.forex.feed;
+package com.apssouza.mytrade.trading.forex.pricefeed;
 
 import com.apssouza.mytrade.trading.forex.session.event.EndedTradingDayEvent;
 import com.apssouza.mytrade.trading.forex.session.event.Event;
@@ -18,13 +18,14 @@ import java.util.concurrent.BlockingQueue;
 class HistoricalPriceStream implements PriceStream{
 
     private final BlockingQueue<Event> eventQueue;
-    private final PriceFeed priceFeed;
+    private final PriceFeedHandler priceFeedHandler;
 
-    public HistoricalPriceStream(BlockingQueue<Event> eventQueue, PriceFeed priceFeed) {
+    public HistoricalPriceStream(BlockingQueue<Event> eventQueue, PriceFeedHandler priceFeedHandler) {
         this.eventQueue = eventQueue;
-        this.priceFeed = priceFeed;
+        this.priceFeedHandler = priceFeedHandler;
     }
 
+    @Override
     public void start(LocalDateTime start, LocalDateTime end) {
         LocalDateTime current = start;
         LocalDate lastDayProcessed = start.toLocalDate().minusDays(1);
@@ -34,7 +35,7 @@ class HistoricalPriceStream implements PriceStream{
                 addToQueue(new EndedTradingDayEvent(
                         EventType.ENDED_TRADING_DAY,
                         current,
-                        priceFeed.getPriceSymbolMapped(current)
+                        priceFeedHandler.getPriceSymbolMapped(current)
                 ));
                 trading = false;
             }
@@ -49,7 +50,7 @@ class HistoricalPriceStream implements PriceStream{
             PriceChangedEvent event = new PriceChangedEvent(
                     EventType.PRICE_CHANGED,
                     current,
-                    priceFeed.getPriceSymbolMapped(current)
+                    priceFeedHandler.getPriceSymbolMapped(current)
             );
 
             addToQueue(event);
@@ -58,7 +59,7 @@ class HistoricalPriceStream implements PriceStream{
         SessionFinishedEvent endEvent = new SessionFinishedEvent(
                 EventType.SESSION_FINISHED,
                 current,
-                priceFeed.getPriceSymbolMapped(current)
+                priceFeedHandler.getPriceSymbolMapped(current)
         );
         addToQueue(endEvent);
 

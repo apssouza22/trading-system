@@ -4,10 +4,10 @@ import com.apssouza.mytrade.trading.api.ExecutionType;
 import com.apssouza.mytrade.trading.api.SessionType;
 import com.apssouza.mytrade.trading.forex.execution.OrderExecution;
 import com.apssouza.mytrade.trading.forex.execution.OrderExecutionFactory;
-import com.apssouza.mytrade.trading.forex.feed.PriceFeed;
-import com.apssouza.mytrade.trading.forex.feed.SignalFeed;
-import com.apssouza.mytrade.trading.forex.feed.PriceStream;
-import com.apssouza.mytrade.trading.forex.feed.PriceStreamFactory;
+import com.apssouza.mytrade.trading.forex.pricefeed.PriceFeedHandler;
+import com.apssouza.mytrade.trading.forex.pricefeed.PriceStream;
+import com.apssouza.mytrade.trading.forex.pricefeed.PriceStreamFactory;
+import com.apssouza.mytrade.trading.forex.signalfeed.SignalFeedHandler;
 import com.apssouza.mytrade.trading.forex.order.OrderHandler;
 import com.apssouza.mytrade.trading.forex.order.OrderHandlerFactory;
 import com.apssouza.mytrade.trading.forex.portfolio.PortfolioModel;
@@ -50,8 +50,8 @@ public class TradingSession {
     protected final String systemName;
     protected final ExecutionType executionType;
 
-    protected final PriceFeed priceFeed;
-    protected final SignalFeed signalFeed;
+    protected final PriceFeedHandler priceFeedHandler;
+    protected final SignalFeedHandler signalFeedHandler;
     protected OrderExecution executionHandler;
     protected PositionSizer positionSizer;
     protected PortfolioModel portfolio;
@@ -72,11 +72,11 @@ public class TradingSession {
             BigDecimal equity,
             LocalDateTime startDate,
             LocalDateTime endDate,
-            SignalFeed signalFeed,
+            SignalFeedHandler signalFeedHandler,
             SessionType sessionType,
             String systemName,
             ExecutionType executionType,
-            PriceFeed priceFeed
+            PriceFeedHandler priceFeedHandler
     ) {
         this.equity = equity;
         this.startDate = startDate;
@@ -85,8 +85,8 @@ public class TradingSession {
         this.systemName = systemName;
         this.executionType = executionType;
         this.eventQueue = new LinkedBlockingDeque<>();
-        this.priceFeed = priceFeed;
-        this.signalFeed = signalFeed;
+        this.priceFeedHandler = priceFeedHandler;
+        this.signalFeedHandler = signalFeedHandler;
         this.configSession();
     }
 
@@ -94,7 +94,7 @@ public class TradingSession {
         this.executionHandler = OrderExecutionFactory.factory(this.executionType);
         this.positionSizer = new PositionSizerFixed();
         this.portfolio = new PortfolioModel(this.equity);
-        this.positionExitHandler = new PositionExitHandler(this.portfolio, this.priceFeed);
+        this.positionExitHandler = new PositionExitHandler(this.portfolio, this.priceFeedHandler);
         this.orderHandler = OrderHandlerFactory.factory(this.positionSizer);
 
         this.reconciliationHandler = new ReconciliationHandler(this.portfolio, this.executionHandler);
@@ -125,7 +125,7 @@ public class TradingSession {
         );
         this.eventNotifier = setListeners();
 
-        this.priceStream = PriceStreamFactory.factory(this.sessionType, eventQueue, this.priceFeed);
+        this.priceStream = PriceStreamFactory.factory(this.sessionType, eventQueue, this.priceFeedHandler);
     }
 
     private EventNotifier setListeners() {
@@ -149,7 +149,7 @@ public class TradingSession {
         eventNotifier.addPropertyChangeListener( new PriceChangedListener(
                 executionHandler,
                 portfolioHandler,
-                signalFeed,
+                signalFeedHandler,
                 orderHandler,
                 eventNotifier
         ));
@@ -169,7 +169,7 @@ public class TradingSession {
         var event = new EndedTradingDayEvent(
                 EventType.ENDED_TRADING_DAY,
                 current,
-                priceFeed.getPriceSymbolMapped(current)
+                priceFeedHandler.getPriceSymbolMapped(current)
         );
         eventNotifier.notify(event);
     }

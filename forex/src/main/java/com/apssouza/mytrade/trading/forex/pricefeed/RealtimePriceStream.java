@@ -1,4 +1,4 @@
-package com.apssouza.mytrade.trading.forex.feed;
+package com.apssouza.mytrade.trading.forex.pricefeed;
 
 import com.apssouza.mytrade.common.misc.helper.time.DateTimeHelper;
 import com.apssouza.mytrade.trading.forex.session.event.Event;
@@ -17,13 +17,14 @@ import java.util.concurrent.BlockingQueue;
 class RealtimePriceStream implements PriceStream {
 
     private final BlockingQueue<Event> eventQueue;
-    private final PriceFeed priceHandler;
+    private final PriceFeedHandler priceHandler;
 
-    public RealtimePriceStream(BlockingQueue<Event> eventQueue, PriceFeed priceHandler) {
+    public RealtimePriceStream(BlockingQueue<Event> eventQueue, PriceFeedHandler priceHandler) {
         this.eventQueue = eventQueue;
         this.priceHandler = priceHandler;
     }
 
+    @Override
     public void start(LocalDateTime start, LocalDateTime end) {
         TimerTask repeatedTask = new TimerTask() {
             public void run() {

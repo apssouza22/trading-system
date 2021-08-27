@@ -17,11 +17,11 @@ public class FeedModule {
         this.priceHandler = priceHandler;
     }
 
-    public List<SignalDto> getSignal(final String systemName, final LocalDateTime currentTime) {
+    public List<SignalDto> getSignal(String systemName, final LocalDateTime currentTime) {
         return signalHandler.getSignal(systemName, currentTime);
     }
 
-    public Map<String, PriceDto> getPriceSymbolMapped(final LocalDateTime time) {
+    public Map<String, PriceDto> getPriceSymbolMapped(LocalDateTime time) {
         return priceHandler.getPriceSymbolMapped(time);
     }
 }
