@@ -5,8 +5,8 @@ import com.apssouza.mytrade.trading.forex.order.StopOrderDto;
 import com.apssouza.mytrade.trading.forex.order.StopOrderStatus;
 import com.apssouza.mytrade.trading.forex.order.StopOrderType;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;
-import com.apssouza.mytrade.trading.misc.helper.NumberHelper;
-import com.apssouza.mytrade.trading.misc.helper.TradingHelper;
+import com.apssouza.mytrade.trading.forex.common.NumberHelper;
+import com.apssouza.mytrade.trading.forex.common.TradingHelper;
 
 import java.math.BigDecimal;
 import java.util.Optional;

@@ -1,4 +1,4 @@
-package com.apssouza.mytrade.trading.misc.observer;
+package com.apssouza.mytrade.trading.forex.common.observer;
 
 /**
  * A "PropertyChange" event gets fired whenever a bean changes a "bound"

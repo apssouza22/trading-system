@@ -4,7 +4,7 @@ import com.apssouza.mytrade.trading.forex.portfolio.PortfolioHandler;
 import com.apssouza.mytrade.trading.forex.session.event.Event;
 import com.apssouza.mytrade.trading.forex.session.event.EventType;
 import com.apssouza.mytrade.trading.forex.statistics.HistoryBookHandler;
-import com.apssouza.mytrade.trading.misc.ForexException;
+import com.apssouza.mytrade.trading.forex.common.ForexException;
 
 import java.time.LocalDateTime;
 import java.util.concurrent.BlockingQueue;

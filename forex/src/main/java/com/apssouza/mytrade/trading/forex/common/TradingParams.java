@@ -1,4 +1,4 @@
-package com.apssouza.mytrade.trading.misc.helper;
+package com.apssouza.mytrade.trading.forex.common;
 
 import java.time.LocalTime;
 import java.util.HashMap;

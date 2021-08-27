@@ -1,7 +1,7 @@
 package com.apssouza.mytrade.trading.forex.execution;
 
 import com.apssouza.mytrade.trading.api.ExecutionType;
-import com.apssouza.mytrade.trading.misc.helper.TradingParams;
+import com.apssouza.mytrade.trading.forex.common.TradingParams;
 
 public class OrderExecutionFactory {
 

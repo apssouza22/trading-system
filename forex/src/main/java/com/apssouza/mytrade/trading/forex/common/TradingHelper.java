@@ -1,4 +1,4 @@
-package com.apssouza.mytrade.trading.misc.helper;
+package com.apssouza.mytrade.trading.forex.common;
 
 import com.apssouza.mytrade.trading.forex.order.OrderAction;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;

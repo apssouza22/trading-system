@@ -5,7 +5,7 @@ import com.apssouza.mytrade.trading.builder.OrderBuilder;
 import com.apssouza.mytrade.trading.builder.StopOrderBuilder;
 import com.apssouza.mytrade.trading.forex.order.*;
 import com.apssouza.mytrade.trading.forex.portfolio.FilledOrderDto;
-import com.apssouza.mytrade.trading.misc.helper.TradingParams;
+import com.apssouza.mytrade.trading.forex.common.TradingParams;
 import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;

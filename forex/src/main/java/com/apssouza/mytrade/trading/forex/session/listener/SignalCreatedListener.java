@@ -9,8 +9,8 @@ import com.apssouza.mytrade.trading.forex.session.event.EventType;
 import com.apssouza.mytrade.trading.forex.session.event.OrderCreatedEvent;
 import com.apssouza.mytrade.trading.forex.session.event.SignalCreatedEvent;
 import com.apssouza.mytrade.trading.forex.statistics.HistoryBookHandler;
-import com.apssouza.mytrade.trading.misc.observer.PropertyChangeEvent;
-import com.apssouza.mytrade.trading.misc.observer.PropertyChangeListener;
+import com.apssouza.mytrade.trading.forex.common.observer.PropertyChangeEvent;
+import com.apssouza.mytrade.trading.forex.common.observer.PropertyChangeListener;
 
 import java.util.logging.Logger;
 

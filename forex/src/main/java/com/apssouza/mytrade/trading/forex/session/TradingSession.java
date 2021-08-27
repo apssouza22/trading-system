@@ -33,7 +33,7 @@ import com.apssouza.mytrade.trading.forex.session.listener.SignalCreatedListener
 import com.apssouza.mytrade.trading.forex.session.listener.StopOrderFilledListener;
 import com.apssouza.mytrade.trading.forex.statistics.HistoryBookHandler;
 import com.apssouza.mytrade.trading.forex.statistics.TransactionsExporter;
-import com.apssouza.mytrade.trading.misc.helper.TradingParams;
+import com.apssouza.mytrade.trading.forex.common.TradingParams;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

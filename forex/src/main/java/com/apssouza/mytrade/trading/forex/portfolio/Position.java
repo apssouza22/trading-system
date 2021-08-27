@@ -3,15 +3,12 @@ package com.apssouza.mytrade.trading.forex.portfolio;
 import com.apssouza.mytrade.trading.forex.common.Symbol;
 import com.apssouza.mytrade.trading.forex.order.StopOrderDto;
 import com.apssouza.mytrade.trading.forex.order.StopOrderType;
-import com.apssouza.mytrade.trading.misc.helper.NumberHelper;
+import com.apssouza.mytrade.trading.forex.common.NumberHelper;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.EnumMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 
 public class Position {
 

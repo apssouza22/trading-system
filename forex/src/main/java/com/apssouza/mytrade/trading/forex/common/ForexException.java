@@ -1,4 +1,4 @@
-package com.apssouza.mytrade.trading.misc;
+package com.apssouza.mytrade.trading.forex.common;
 
 public class ForexException extends RuntimeException {
 

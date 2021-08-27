@@ -13,8 +13,8 @@ import com.apssouza.mytrade.trading.forex.session.event.PortfolioChangedEvent;
 import com.apssouza.mytrade.trading.forex.session.event.StopOrderFilledEvent;
 import com.apssouza.mytrade.trading.forex.statistics.HistoryBookHandler;
 import com.apssouza.mytrade.trading.forex.statistics.TransactionState;
-import com.apssouza.mytrade.trading.misc.observer.PropertyChangeEvent;
-import com.apssouza.mytrade.trading.misc.observer.PropertyChangeListener;
+import com.apssouza.mytrade.trading.forex.common.observer.PropertyChangeEvent;
+import com.apssouza.mytrade.trading.forex.common.observer.PropertyChangeListener;
 
 import java.time.LocalDateTime;
 

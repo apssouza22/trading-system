@@ -4,7 +4,7 @@ import com.apssouza.mytrade.common.misc.helper.time.DateTimeHelper;
 import com.apssouza.mytrade.trading.forex.session.event.Event;
 import com.apssouza.mytrade.trading.forex.session.event.EventType;
 import com.apssouza.mytrade.trading.forex.session.event.PriceChangedEvent;
-import com.apssouza.mytrade.trading.misc.helper.TradingHelper;
+import com.apssouza.mytrade.trading.forex.common.TradingHelper;
 
 import java.time.LocalDateTime;
 import java.util.Timer;

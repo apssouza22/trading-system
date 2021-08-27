@@ -2,7 +2,7 @@ package com.apssouza.mytrade.trading.api;
 
 import com.apssouza.mytrade.feed.api.FeedBuilder;
 import com.apssouza.mytrade.trading.forex.session.TradingSession;
-import com.apssouza.mytrade.trading.misc.ForexException;
+import com.apssouza.mytrade.trading.forex.common.ForexException;
 
 import java.math.BigDecimal;
 import java.sql.Connection;

@@ -7,7 +7,7 @@ import com.apssouza.mytrade.trading.forex.order.StopOrderDto;
 import com.apssouza.mytrade.trading.forex.order.StopOrderType;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.forex.risk.stoporder.RiskManagementBuilder;
-import com.apssouza.mytrade.trading.misc.helper.TradingParams;
+import com.apssouza.mytrade.trading.forex.common.TradingParams;
 import junit.framework.TestCase;
 import org.junit.Test;
 import org.junit.runner.RunWith;

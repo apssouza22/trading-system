@@ -9,7 +9,7 @@ import com.apssouza.mytrade.trading.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.forex.risk.stoporder.StopOrderCreator;
 import com.apssouza.mytrade.trading.forex.session.event.Event;
 import com.apssouza.mytrade.trading.forex.session.event.SignalCreatedEvent;
-import com.apssouza.mytrade.trading.misc.helper.TradingParams;
+import com.apssouza.mytrade.trading.forex.common.TradingParams;
 import com.apssouza.mytrade.common.misc.helper.time.MarketTimeHelper;
 
 import java.util.*;

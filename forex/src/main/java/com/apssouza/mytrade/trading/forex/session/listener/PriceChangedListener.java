@@ -14,9 +14,9 @@ import com.apssouza.mytrade.trading.forex.session.event.EventType;
 import com.apssouza.mytrade.trading.forex.session.event.OrderFoundEvent;
 import com.apssouza.mytrade.trading.forex.session.event.PriceChangedEvent;
 import com.apssouza.mytrade.trading.forex.session.event.SignalCreatedEvent;
-import com.apssouza.mytrade.trading.misc.helper.TradingParams;
-import com.apssouza.mytrade.trading.misc.observer.PropertyChangeEvent;
-import com.apssouza.mytrade.trading.misc.observer.PropertyChangeListener;
+import com.apssouza.mytrade.trading.forex.common.TradingParams;
+import com.apssouza.mytrade.trading.forex.common.observer.PropertyChangeEvent;
+import com.apssouza.mytrade.trading.forex.common.observer.PropertyChangeListener;
 
 import java.time.LocalDateTime;
 import java.util.List;

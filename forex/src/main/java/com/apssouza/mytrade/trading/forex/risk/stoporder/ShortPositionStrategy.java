@@ -2,7 +2,7 @@ package com.apssouza.mytrade.trading.forex.risk.stoporder;
 
 import com.apssouza.mytrade.trading.forex.order.StopOrderType;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;
-import com.apssouza.mytrade.trading.misc.helper.NumberHelper;
+import com.apssouza.mytrade.trading.forex.common.NumberHelper;
 
 import java.math.BigDecimal;
 import java.util.Optional;

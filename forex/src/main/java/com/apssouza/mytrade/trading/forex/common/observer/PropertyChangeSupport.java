@@ -1,4 +1,4 @@
-package com.apssouza.mytrade.trading.misc.observer;
+package com.apssouza.mytrade.trading.forex.common.observer;
 
 import java.io.Serializable;
 import java.io.ObjectStreamField;

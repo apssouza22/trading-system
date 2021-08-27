@@ -6,8 +6,8 @@ import com.apssouza.mytrade.trading.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.forex.order.StopOrderDto;
 import com.apssouza.mytrade.trading.forex.portfolio.FilledOrderDto;
 import com.apssouza.mytrade.trading.forex.session.MultiPositionHandler;
-import com.apssouza.mytrade.trading.misc.helper.NumberHelper;
-import com.apssouza.mytrade.trading.misc.helper.TradingParams;
+import com.apssouza.mytrade.trading.forex.common.NumberHelper;
+import com.apssouza.mytrade.trading.forex.common.TradingParams;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
