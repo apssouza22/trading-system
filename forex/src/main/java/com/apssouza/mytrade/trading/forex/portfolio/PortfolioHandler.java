@@ -109,8 +109,9 @@ public class PortfolioHandler {
         Map<Integer, StopOrderDto> stopOrders = this.executionHandler.getStopLossOrders();
         Map<Integer, StopOrderDto> limitOrders = this.executionHandler.getLimitOrders();
         stopOrders.putAll(limitOrders);
-        if (stopOrders.isEmpty())
+        if (stopOrders.isEmpty()) {
             return filledStopLoss;
+        }
 
         for (Map.Entry<Integer, StopOrderDto> entry : this.currentStopOrders.entrySet()) {
             StopOrderDto stopOrder = stopOrders.get(entry.getKey());
@@ -133,7 +134,7 @@ public class PortfolioHandler {
         }
     }
 
-    public synchronized void processExits(PriceChangedEvent event, List<SignalDto> signals){
+    public synchronized void processExits(PriceChangedEvent event, List<SignalDto> signals) {
         if (portfolio.getPositions().isEmpty()) {
             return;
         }
@@ -155,7 +156,7 @@ public class PortfolioHandler {
         }
     }
 
-    public List<Position> closeAllPositions(ExitReason reason, Event event){
+    public List<Position> closeAllPositions(ExitReason reason, Event event) {
         List<Position> exitedPositions = new ArrayList<>();
         for (Map.Entry<String, Position> entry : this.portfolio.getPositions().entrySet()) {
             Position position = entry.getValue();
@@ -167,7 +168,16 @@ public class PortfolioHandler {
         return exitedPositions;
     }
 
-    public PortfolioModel getPortfolio(){
+    public PortfolioModel getPortfolio() {
         return portfolio;
+    }
+
+    public void processReconciliation(final Event e) {
+        try {
+            reconciliationHandler.process(e);
+        } catch (ReconciliationException reconciliationException) {
+            closeAllPositions(ExitReason.RECONCILIATION_FAILED, e);
+            log.warning(reconciliationException.getMessage());
+        }
     }
 }

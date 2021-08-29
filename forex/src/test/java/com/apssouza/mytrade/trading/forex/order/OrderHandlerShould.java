@@ -5,22 +5,27 @@ import com.apssouza.mytrade.trading.builder.SignalBuilder;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.forex.portfolio.PositionStatus;
 import com.apssouza.mytrade.trading.forex.portfolio.PositionType;
+import com.apssouza.mytrade.trading.forex.risk.PositionSizerFixed;
 import com.apssouza.mytrade.trading.forex.session.event.EventType;
 import com.apssouza.mytrade.trading.forex.session.event.SignalCreatedEvent;
+
+import static com.apssouza.mytrade.trading.forex.order.OrderAction.BUY;
+import static com.apssouza.mytrade.trading.forex.order.OrderOrigin.*;
+import static com.apssouza.mytrade.trading.forex.order.OrderStatus.*;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.List;
 
 import junit.framework.TestCase;
 
 @RunWith(MockitoJUnitRunner.class)
-public class OrderHandlerTest extends TestCase {
-
+public class OrderHandlerShould extends TestCase {
 
 
     @Test
@@ -37,48 +42,54 @@ public class OrderHandlerTest extends TestCase {
 
     @Test
     public void createOrderFromClosedPositionShortType() {
-        OrderHandlerBuilder orderHandlerBuilder = new OrderHandlerBuilder();
-        OrderHandler orderHandler = orderHandlerBuilder.build();
         PositionBuilder positionBuilder = new PositionBuilder();
         positionBuilder.withPositionStatus(PositionStatus.CLOSED);
         positionBuilder.withType(PositionType.SHORT);
         Position position = positionBuilder.build();
+
+        OrderHandler orderHandler = OrderHandlerFactory.factory(new PositionSizerFixed(), new MemoryOrderDao());
         OrderDto orderFromClosedPosition = orderHandler.createOrderFromClosedPosition(position, LocalDateTime.MIN);
-        assertEquals(OrderOrigin.EXITS, orderFromClosedPosition.getOrigin());
-        assertEquals(OrderAction.BUY, orderFromClosedPosition.getAction());
+        assertEquals(EXITS, orderFromClosedPosition.getOrigin());
+        assertEquals(BUY, orderFromClosedPosition.getAction());
     }
 
     @Test
     public void createOrderFromClosedPositionLongType() {
-        OrderHandlerBuilder orderHandlerBuilder = new OrderHandlerBuilder();
-        OrderHandler orderHandler = orderHandlerBuilder.build();
         PositionBuilder positionBuilder = new PositionBuilder();
         positionBuilder.withPositionStatus(PositionStatus.CLOSED);
         positionBuilder.withType(PositionType.LONG);
         Position position = positionBuilder.build();
+
+        OrderHandler orderHandler = OrderHandlerFactory.factory(new PositionSizerFixed(), new MemoryOrderDao());
         OrderDto orderFromClosedPosition = orderHandler.createOrderFromClosedPosition(position, LocalDateTime.MIN);
-        assertEquals(OrderOrigin.EXITS, orderFromClosedPosition.getOrigin());
+        assertEquals(EXITS, orderFromClosedPosition.getOrigin());
         assertEquals(OrderAction.SELL, orderFromClosedPosition.getAction());
     }
 
     @Test
-    public void persist(){
+    public void persist() {
         MemoryOrderDao memoryOrderDao = Mockito.mock(MemoryOrderDao.class);
-        OrderHandlerBuilder orderHandlerBuilder = new OrderHandlerBuilder();
-        orderHandlerBuilder.setMemoryOrderDao(memoryOrderDao);
-        OrderHandler orderHandler = orderHandlerBuilder.build();
+        OrderHandler orderHandler = OrderHandlerFactory.factory(new PositionSizerFixed(), memoryOrderDao);
         orderHandler.persist(Mockito.mock(OrderDto.class));
         Mockito.verify(memoryOrderDao).persist(Mockito.any());
     }
 
+    @Test
+    public void updateStatus() {
+        OrderHandler orderHandler = OrderHandlerFactory.factory(new PositionSizerFixed(), new MemoryOrderDao());
+        var order = new OrderDto("AUDUSD", BUY, 10, STOP_ORDER, LocalDateTime.MIN, "123", CREATED);
+        var createdOrder = orderHandler.persist(order);
+        orderHandler.updateOrderStatus(createdOrder.getId(), EXECUTED);
+        List<OrderDto> orderByStatus = orderHandler.getOrderByStatus(EXECUTED);
+        assertEquals(createdOrder.getId(), orderByStatus.get(0).getId());
+    }
 
     @Test
-    public void updateStatus(){
-        MemoryOrderDao memoryOrderDao = Mockito.mock(MemoryOrderDao.class);
-        OrderHandlerBuilder orderHandlerBuilder = new OrderHandlerBuilder();
-        orderHandlerBuilder.setMemoryOrderDao(memoryOrderDao);
-        OrderHandler orderHandler = orderHandlerBuilder.build();
-        orderHandler.updateOrderStatus(1, OrderStatus.CREATED);
-        Mockito.verify(memoryOrderDao).updateStatus(Mockito.anyInt(), Mockito.any());
+    public void getOrdersByStatus() {
+        OrderHandler orderHandler = OrderHandlerFactory.factory(new PositionSizerFixed(), new MemoryOrderDao());
+        var order = new OrderDto("AUDUSD", BUY, 10, STOP_ORDER, LocalDateTime.MIN, "123", CREATED);
+        var createdOrder = orderHandler.persist(order);
+        List<OrderDto> orderByStatus = orderHandler.getOrderByStatus(CREATED);
+        assertEquals(createdOrder.getId(), orderByStatus.get(0).getId());
     }
 }

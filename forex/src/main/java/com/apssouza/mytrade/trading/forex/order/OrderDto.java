@@ -94,6 +94,7 @@ public class OrderDto {
         this.id = id;
     }
 
+    @Override
     public boolean equals(Object o) {
         if (o == this) {
             return true;
@@ -151,6 +152,7 @@ public class OrderDto {
         return other instanceof OrderDto;
     }
 
+    @Override
     public int hashCode() {
         final int PRIME = 59;
         int result = 1;
@@ -172,6 +174,7 @@ public class OrderDto {
         return result;
     }
 
+    @Override
     public String toString() {
         return "OrderDto(symbol=" + this.getSymbol() + ", action=" + this.getAction() + ", quantity=" +
                 this.getQuantity() + ", origin=" + this.getOrigin() + ", time=" + this.getTime() + ", identifier=" +

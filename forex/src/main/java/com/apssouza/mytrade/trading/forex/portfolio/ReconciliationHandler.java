@@ -6,7 +6,7 @@ import com.apssouza.mytrade.trading.forex.session.event.Event;
 
 import java.util.Map;
 
-public class ReconciliationHandler {
+class ReconciliationHandler {
     private final PortfolioModel portfolio;
     private final OrderExecution executionHandler;
 

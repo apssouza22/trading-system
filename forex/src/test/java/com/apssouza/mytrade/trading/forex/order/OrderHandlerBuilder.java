@@ -6,17 +6,16 @@ import org.mockito.Mockito;
 
 public class OrderHandlerBuilder {
 
-    MemoryOrderDao memoryOrderDao = Mockito.mock(MemoryOrderDao.class);
+    MemoryOrderDao memoryOrderDao = new MemoryOrderDao();
 
     public void setMemoryOrderDao(MemoryOrderDao memoryOrderDao){
         this.memoryOrderDao = memoryOrderDao;
     }
 
     public OrderHandler build(){
-        PositionSizerFixed positionSizerFixed = new PositionSizerFixed();
         OrderHandler orderHandler = new OrderHandler(
                 memoryOrderDao,
-                positionSizerFixed
+                new PositionSizerFixed()
         );
         return orderHandler;
     }

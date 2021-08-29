@@ -73,8 +73,6 @@ public class PortfolioModel {
     }
 
     public void printPortfolio() {
-        for (Map.Entry<String, Position> entry : positions.entrySet()){
-            log.info(entry.getValue().toString());
-        }
+        positions.entrySet().forEach(entry -> log.info(entry.getValue().toString()));
     }
 }

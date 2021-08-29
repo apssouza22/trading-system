@@ -2,17 +2,17 @@ package com.apssouza.mytrade.trading.forex.session;
 
 import com.apssouza.mytrade.trading.api.ExecutionType;
 import com.apssouza.mytrade.trading.api.SessionType;
+import com.apssouza.mytrade.trading.forex.common.TradingParams;
 import com.apssouza.mytrade.trading.forex.execution.OrderExecution;
 import com.apssouza.mytrade.trading.forex.execution.OrderExecutionFactory;
+import com.apssouza.mytrade.trading.forex.order.OrderHandler;
+import com.apssouza.mytrade.trading.forex.order.OrderHandlerFactory;
+import com.apssouza.mytrade.trading.forex.portfolio.PortfolioFactory;
+import com.apssouza.mytrade.trading.forex.portfolio.PortfolioHandler;
+import com.apssouza.mytrade.trading.forex.portfolio.PortfolioModel;
 import com.apssouza.mytrade.trading.forex.pricefeed.PriceFeedHandler;
 import com.apssouza.mytrade.trading.forex.pricefeed.PriceStream;
 import com.apssouza.mytrade.trading.forex.pricefeed.PriceStreamFactory;
-import com.apssouza.mytrade.trading.forex.signalfeed.SignalFeedHandler;
-import com.apssouza.mytrade.trading.forex.order.OrderHandler;
-import com.apssouza.mytrade.trading.forex.order.OrderHandlerFactory;
-import com.apssouza.mytrade.trading.forex.portfolio.PortfolioModel;
-import com.apssouza.mytrade.trading.forex.portfolio.PortfolioHandler;
-import com.apssouza.mytrade.trading.forex.portfolio.ReconciliationHandler;
 import com.apssouza.mytrade.trading.forex.risk.PositionExitHandler;
 import com.apssouza.mytrade.trading.forex.risk.PositionSizer;
 import com.apssouza.mytrade.trading.forex.risk.PositionSizerFixed;
@@ -31,9 +31,9 @@ import com.apssouza.mytrade.trading.forex.session.listener.PriceChangedListener;
 import com.apssouza.mytrade.trading.forex.session.listener.SessionFinishedListener;
 import com.apssouza.mytrade.trading.forex.session.listener.SignalCreatedListener;
 import com.apssouza.mytrade.trading.forex.session.listener.StopOrderFilledListener;
+import com.apssouza.mytrade.trading.forex.signalfeed.SignalFeedHandler;
 import com.apssouza.mytrade.trading.forex.statistics.HistoryBookHandler;
 import com.apssouza.mytrade.trading.forex.statistics.TransactionsExporter;
-import com.apssouza.mytrade.trading.forex.common.TradingParams;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -57,7 +57,6 @@ public class TradingSession {
     protected PortfolioModel portfolio;
     protected PositionExitHandler positionExitHandler;
     protected OrderHandler orderHandler;
-    protected ReconciliationHandler reconciliationHandler;
     protected HistoryBookHandler historyHandler;
     protected PriceStream priceStream;
     protected PortfolioHandler portfolioHandler;
@@ -96,8 +95,6 @@ public class TradingSession {
         this.portfolio = new PortfolioModel(this.equity);
         this.positionExitHandler = new PositionExitHandler(this.portfolio, this.priceFeedHandler);
         this.orderHandler = OrderHandlerFactory.factory(this.positionSizer);
-
-        this.reconciliationHandler = new ReconciliationHandler(this.portfolio, this.executionHandler);
         this.historyHandler = new HistoryBookHandler(new TransactionsExporter());
         this.riskManagementHandler = new RiskManagementHandler(
                 this.portfolio,
@@ -112,13 +109,12 @@ public class TradingSession {
         );
 
         eventNotifier = new EventNotifier();
-        this.portfolioHandler = new PortfolioHandler(
+        this.portfolioHandler = PortfolioFactory.factory(
                 this.equity,
                 this.orderHandler,
                 this.positionExitHandler,
                 this.executionHandler,
                 this.portfolio,
-                this.reconciliationHandler,
                 this.historyHandler,
                 this.riskManagementHandler,
                 eventNotifier
@@ -138,7 +134,7 @@ public class TradingSession {
                 eventNotifier,
                 riskManagementHandler
         ));
-        eventNotifier.addPropertyChangeListener(new PortfolioChangedListener(reconciliationHandler, portfolioHandler));
+        eventNotifier.addPropertyChangeListener(new PortfolioChangedListener(portfolioHandler));
         eventNotifier.addPropertyChangeListener(new SignalCreatedListener(
                 riskManagementHandler,
                 orderHandler,
@@ -146,7 +142,7 @@ public class TradingSession {
                 historyHandler
         ));
         eventNotifier.addPropertyChangeListener(new StopOrderFilledListener(portfolio, historyHandler, eventNotifier));
-        eventNotifier.addPropertyChangeListener( new PriceChangedListener(
+        eventNotifier.addPropertyChangeListener(new PriceChangedListener(
                 executionHandler,
                 portfolioHandler,
                 signalFeedHandler,

@@ -6,7 +6,7 @@ interface OrderDao {
 
     OrderDto persist(OrderDto order);
 
-    void updateStatus(Integer id, OrderStatus status);
+    boolean updateStatus(Integer id, OrderStatus status);
 
     List<OrderDto> getOrderByStatus(OrderStatus status);
 }

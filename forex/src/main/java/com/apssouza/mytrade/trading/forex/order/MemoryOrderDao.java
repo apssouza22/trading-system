@@ -22,13 +22,14 @@ class MemoryOrderDao implements  OrderDao {
     }
 
     @Override
-    public void updateStatus(Integer id, OrderStatus status) {
+    public boolean updateStatus(Integer id, OrderStatus status) {
         OrderDto order = MemoryOrderDao.ORDERS.get(id);
         OrderDto orderDto = new OrderDto(
                 status,
                 order
         );
         MemoryOrderDao.ORDERS.put(id, orderDto);
+        return true;
     }
 
     @Override
