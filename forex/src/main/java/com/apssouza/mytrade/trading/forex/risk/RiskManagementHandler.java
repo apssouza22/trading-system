@@ -142,4 +142,8 @@ public class RiskManagementHandler {
         }
         return false;
     }
+
+    public int getPositionSize() {
+        return 0;
+    }
 }

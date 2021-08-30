@@ -5,11 +5,11 @@ import com.apssouza.mytrade.trading.forex.risk.stoporder.StopOrderCreator;
 
 public class RiskManagementFactory {
 
-    public static RiskManagementHandler create(PortfolioModel portfolio, StopOrderCreator factory) {
+    public static RiskManagementHandler create(PortfolioModel portfolio, StopOrderCreator stopOrderCreator) {
         return new RiskManagementHandler(
                 portfolio,
                 new PositionExitHandler(portfolio),
-                factory
+                stopOrderCreator
         );
     }
 }

@@ -1,8 +1,7 @@
 package com.apssouza.mytrade.trading.forex.risk;
 
-public class PositionSizerFixed implements PositionSizer {
+class PositionSizerFixed{
 
-    @Override
     public Integer getQuantity() {
         return 10000;
     }

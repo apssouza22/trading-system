@@ -1,8 +1,13 @@
 package com.apssouza.mytrade.trading.forex.order;
 
-import com.apssouza.mytrade.trading.forex.risk.PositionSizerFixed;
+import com.apssouza.mytrade.trading.forex.common.TradingParams;
+import com.apssouza.mytrade.trading.forex.portfolio.PortfolioModel;
+import com.apssouza.mytrade.trading.forex.risk.RiskManagementFactory;
+import com.apssouza.mytrade.trading.forex.risk.stoporder.StopOrderCreator;
+import com.apssouza.mytrade.trading.forex.risk.stoporder.StopOrderDto;
+import com.apssouza.mytrade.trading.forex.risk.stoporder.StopOrderFactory;
 
-import org.mockito.Mockito;
+import java.math.BigDecimal;
 
 public class OrderHandlerBuilder {
 
@@ -13,9 +18,16 @@ public class OrderHandlerBuilder {
     }
 
     public OrderHandler build(){
+        StopOrderCreator stopOrderCreator = StopOrderFactory.factory(new StopOrderDto(
+                TradingParams.hard_stop_loss_distance,
+                TradingParams.take_profit_distance_fixed,
+                TradingParams.entry_stop_loss_distance_fixed,
+                TradingParams.trailing_stop_loss_distance
+        ));
+        var riskManagementHandler = RiskManagementFactory.create(new PortfolioModel(BigDecimal.TEN), stopOrderCreator);
         OrderHandler orderHandler = new OrderHandler(
                 memoryOrderDao,
-                new PositionSizerFixed()
+                riskManagementHandler
         );
         return orderHandler;
     }

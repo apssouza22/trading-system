@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Optional;
 
 class StopOrderCreatorFixed implements StopOrderCreator {
-    private  CreatorContext creatorContext;
+    private CreatorContext creatorContext;
     private final StopOrderDto priceDistance;
 
     public StopOrderCreatorFixed(StopOrderDto priceDistance) {
@@ -17,12 +17,13 @@ class StopOrderCreatorFixed implements StopOrderCreator {
     }
 
     @Override
-    public void createContext(Position.PositionType type){
+    public void createContext(Position.PositionType type) {
         if (type == Position.PositionType.LONG) {
             this.creatorContext = new CreatorContext(new LongPositionStrategy(priceDistance));
-        }else{
-            this.creatorContext = new CreatorContext(new ShortPositionStrategy(priceDistance));
+            return;
         }
+        this.creatorContext = new CreatorContext(new ShortPositionStrategy(priceDistance));
+
     }
 
     @Override

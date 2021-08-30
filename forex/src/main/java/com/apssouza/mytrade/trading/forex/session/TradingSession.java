@@ -13,8 +13,6 @@ import com.apssouza.mytrade.trading.forex.portfolio.PortfolioModel;
 import com.apssouza.mytrade.trading.forex.pricefeed.PriceFeedHandler;
 import com.apssouza.mytrade.trading.forex.pricefeed.PriceStream;
 import com.apssouza.mytrade.trading.forex.pricefeed.PriceStreamFactory;
-import com.apssouza.mytrade.trading.forex.risk.PositionSizer;
-import com.apssouza.mytrade.trading.forex.risk.PositionSizerFixed;
 import com.apssouza.mytrade.trading.forex.risk.RiskManagementFactory;
 import com.apssouza.mytrade.trading.forex.risk.RiskManagementHandler;
 import com.apssouza.mytrade.trading.forex.risk.stoporder.StopOrderDto;
@@ -53,7 +51,6 @@ public class TradingSession {
     protected final PriceFeedHandler priceFeedHandler;
     protected final SignalFeedHandler signalFeedHandler;
     protected OrderExecution executionHandler;
-    protected PositionSizer positionSizer;
     protected PortfolioModel portfolio;
     protected OrderHandler orderHandler;
     protected HistoryBookHandler historyHandler;
@@ -90,9 +87,7 @@ public class TradingSession {
 
     private void configSession() {
         this.executionHandler = OrderExecutionFactory.factory(this.executionType);
-        this.positionSizer = new PositionSizerFixed();
         this.portfolio = new PortfolioModel(this.equity);
-        this.orderHandler = OrderHandlerFactory.factory(this.positionSizer);
         this.historyHandler = new HistoryBookHandler(new TransactionsExporter());
         this.riskManagementHandler = RiskManagementFactory.create(
                 this.portfolio,
@@ -103,6 +98,7 @@ public class TradingSession {
                         TradingParams.trailing_stop_loss_distance
                 ))
         );
+        this.orderHandler = OrderHandlerFactory.factory(this.riskManagementHandler);
 
         eventNotifier = new EventNotifier();
         this.portfolioHandler = PortfolioFactory.factory(

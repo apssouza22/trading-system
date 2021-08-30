@@ -13,11 +13,12 @@ class LongPositionStrategy implements CreatorStrategy {
         this.distanceObject = distanceObject;
     }
 
-
+    @Override
     public BigDecimal getHardStopPrice(Position position) {
         return position.getInitPrice().subtract(distanceObject.getHardStopDistance());
     }
 
+    @Override
     public BigDecimal getEntryStopPrice(Position position, BigDecimal priceClose) {
         BigDecimal stopPrice = null;
         if (priceClose.compareTo(position.getInitPrice().add(distanceObject.getEntryStopDistance())) > 0) {
@@ -26,10 +27,12 @@ class LongPositionStrategy implements CreatorStrategy {
         return stopPrice;
     }
 
+    @Override
     public BigDecimal getProfitStopPrice(Position position) {
         return position.getInitPrice().add(distanceObject.getTakeProfitDistance());
     }
 
+    @Override
     public Optional<BigDecimal> getTrailingStopPrice(Position position, BigDecimal last_close) {
         BigDecimal stopPrice = null;
         //           if price is high enough to warrant creating trailing stop loss:

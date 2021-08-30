@@ -14,6 +14,7 @@ class ShortPositionStrategy implements CreatorStrategy {
         this.distanceObject = distanceObject;
     }
 
+    @Override
     public BigDecimal getEntryStopPrice(Position position, BigDecimal priceClose) {
         BigDecimal stopPrice = null;
         if (priceClose.compareTo(position.getInitPrice().subtract(distanceObject.getEntryStopDistance())) < 0) {
@@ -22,14 +23,17 @@ class ShortPositionStrategy implements CreatorStrategy {
         return stopPrice;
     }
 
+    @Override
     public BigDecimal getProfitStopPrice(Position position) {
         return position.getInitPrice().subtract(distanceObject.getTakeProfitDistance());
     }
 
+    @Override
     public BigDecimal getHardStopPrice(Position position) {
         return position.getInitPrice().add(distanceObject.getHardStopDistance());
     }
 
+    @Override
     public Optional<BigDecimal> getTrailingStopPrice(Position position, BigDecimal last_close) {
         BigDecimal stopPrice;
         BigDecimal tsPrice = position.getInitPrice().subtract(distanceObject.getTraillingStopDistance());
