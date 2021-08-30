@@ -1,7 +1,6 @@
 package com.apssouza.mytrade.trading.forex.session.listener;
 
 import com.apssouza.mytrade.trading.forex.order.StopOrderDto;
-import com.apssouza.mytrade.trading.forex.portfolio.ExitReason;
 import com.apssouza.mytrade.trading.forex.portfolio.FilledOrderDto;
 import com.apssouza.mytrade.trading.forex.portfolio.PortfolioModel;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;
@@ -40,7 +39,7 @@ public class StopOrderFilledListener implements PropertyChangeListener {
         StopOrderDto stopOrder = orderFilledEvent.getStopOrder();
         LocalDateTime time = orderFilledEvent.getTimestamp();
         Position ps = MultiPositionHandler.getPositionByStopOrder(stopOrder);
-        ps = ps.closePosition(ExitReason.STOP_ORDER_FILLED);
+        ps = ps.closePosition(Position.ExitReason.STOP_ORDER_FILLED);
         this.portfolio.closePosition(ps.getIdentifier());
         this.historyHandler.setState(TransactionState.EXIT, ps.getIdentifier());
         this.historyHandler.addPosition(ps);

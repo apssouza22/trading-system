@@ -144,7 +144,7 @@ public class PortfolioHandler {
 
     private void createOrderFromClosedPosition(List<Position> positions, Event event) {
         for (Position position : positions) {
-            if (position.getStatus() == PositionStatus.CLOSED) {
+            if (position.getStatus() == Position.PositionStatus.CLOSED) {
                 OrderDto order = this.orderHandler.createOrderFromClosedPosition(position, event.getTimestamp());
                 eventNotifier.notify(new OrderCreatedEvent(
                         EventType.ORDER_CREATED,
@@ -156,7 +156,7 @@ public class PortfolioHandler {
         }
     }
 
-    public List<Position> closeAllPositions(ExitReason reason, Event event) {
+    public List<Position> closeAllPositions(Position.ExitReason reason, Event event) {
         List<Position> exitedPositions = new ArrayList<>();
         for (Map.Entry<String, Position> entry : this.portfolio.getPositions().entrySet()) {
             Position position = entry.getValue();
@@ -176,7 +176,7 @@ public class PortfolioHandler {
         try {
             reconciliationHandler.process(e);
         } catch (ReconciliationException reconciliationException) {
-            closeAllPositions(ExitReason.RECONCILIATION_FAILED, e);
+            closeAllPositions(Position.ExitReason.RECONCILIATION_FAILED, e);
             log.warning(reconciliationException.getMessage());
         }
     }

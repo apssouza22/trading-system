@@ -37,14 +37,14 @@ public class PositionExitHandlerTest extends TestCase {
         loopEventBuilder.withPriceMap(BigDecimal.valueOf(1.003));
         PriceChangedEvent loopEvent = loopEventBuilder.build();
 
-        exitBuilder.addPosition(PositionType.LONG);
+        exitBuilder.addPosition(Position.PositionType.LONG);
         PositionExitHandler handler = exitBuilder.build();
 
         signalBuilder.addSignal(LocalDateTime.MIN, "Sell");
         List<SignalDto> signals = signalBuilder.buildList();
 
         List<Position> exit_list = handler.process(loopEvent, signals);
-        assertEquals(ExitReason.COUNTER_SIGNAL, exit_list.get(0).getExitReason());
+        assertEquals(Position.ExitReason.COUNTER_SIGNAL, exit_list.get(0).getExitReason());
     }
 
     @Test
@@ -52,14 +52,14 @@ public class PositionExitHandlerTest extends TestCase {
         loopEventBuilder.withPriceMap(BigDecimal.valueOf(1.003));
         PriceChangedEvent loopEvent = loopEventBuilder.build();
 
-        exitBuilder.addPosition(PositionType.SHORT);
+        exitBuilder.addPosition(Position.PositionType.SHORT);
         PositionExitHandler handler = exitBuilder.build();
 
         signalBuilder.addSignal(LocalDateTime.MIN, "Buy");
         List<SignalDto> signals = signalBuilder.buildList();
 
         List<Position> exit_list = handler.process(loopEvent, signals);
-        assertEquals(ExitReason.COUNTER_SIGNAL, exit_list.get(0).getExitReason());
+        assertEquals(Position.ExitReason.COUNTER_SIGNAL, exit_list.get(0).getExitReason());
 
     }
 
@@ -68,7 +68,7 @@ public class PositionExitHandlerTest extends TestCase {
         loopEventBuilder.withPriceMap(BigDecimal.valueOf(1.003));
         PriceChangedEvent loopEvent = loopEventBuilder.build();
 
-        exitBuilder.addPosition(PositionType.LONG);
+        exitBuilder.addPosition(Position.PositionType.LONG);
         PositionExitHandler handler = exitBuilder.build();
 
         signalBuilder.addSignal(LocalDateTime.MIN, "Buy");
@@ -85,7 +85,7 @@ public class PositionExitHandlerTest extends TestCase {
         loopEventBuilder.withPriceMap(BigDecimal.valueOf(1.003));
         PriceChangedEvent loopEvent = loopEventBuilder.build();
 
-        exitBuilder.addPosition(PositionType.SHORT);
+        exitBuilder.addPosition(Position.PositionType.SHORT);
         PositionExitHandler handler = exitBuilder.build();
 
         signalBuilder.addSignal(LocalDateTime.MIN, "Sell");
@@ -102,7 +102,7 @@ public class PositionExitHandlerTest extends TestCase {
         loopEventBuilder.withTime(LocalDateTime.of(2018,1,1,1,1));
         PriceChangedEvent loopEvent = loopEventBuilder.build();
 
-        exitBuilder.addPosition(PositionType.SHORT);
+        exitBuilder.addPosition(Position.PositionType.SHORT);
         PositionExitHandler handler = exitBuilder.build();
 
         List<SignalDto> signals = signalBuilder.buildList();

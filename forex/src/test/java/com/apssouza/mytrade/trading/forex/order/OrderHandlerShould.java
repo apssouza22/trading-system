@@ -3,8 +3,6 @@ package com.apssouza.mytrade.trading.forex.order;
 import com.apssouza.mytrade.trading.builder.PositionBuilder;
 import com.apssouza.mytrade.trading.builder.SignalBuilder;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;
-import com.apssouza.mytrade.trading.forex.portfolio.PositionStatus;
-import com.apssouza.mytrade.trading.forex.portfolio.PositionType;
 import com.apssouza.mytrade.trading.forex.risk.PositionSizerFixed;
 import com.apssouza.mytrade.trading.forex.session.event.EventType;
 import com.apssouza.mytrade.trading.forex.session.event.SignalCreatedEvent;
@@ -43,8 +41,8 @@ public class OrderHandlerShould extends TestCase {
     @Test
     public void createOrderFromClosedPositionShortType() {
         PositionBuilder positionBuilder = new PositionBuilder();
-        positionBuilder.withPositionStatus(PositionStatus.CLOSED);
-        positionBuilder.withType(PositionType.SHORT);
+        positionBuilder.withPositionStatus(Position.PositionStatus.CLOSED);
+        positionBuilder.withType(Position.PositionType.SHORT);
         Position position = positionBuilder.build();
 
         OrderHandler orderHandler = OrderHandlerFactory.factory(new PositionSizerFixed(), new MemoryOrderDao());
@@ -56,8 +54,8 @@ public class OrderHandlerShould extends TestCase {
     @Test
     public void createOrderFromClosedPositionLongType() {
         PositionBuilder positionBuilder = new PositionBuilder();
-        positionBuilder.withPositionStatus(PositionStatus.CLOSED);
-        positionBuilder.withType(PositionType.LONG);
+        positionBuilder.withPositionStatus(Position.PositionStatus.CLOSED);
+        positionBuilder.withType(Position.PositionType.LONG);
         Position position = positionBuilder.build();
 
         OrderHandler orderHandler = OrderHandlerFactory.factory(new PositionSizerFixed(), new MemoryOrderDao());

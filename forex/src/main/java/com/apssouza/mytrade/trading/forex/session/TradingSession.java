@@ -93,7 +93,7 @@ public class TradingSession {
         this.executionHandler = OrderExecutionFactory.factory(this.executionType);
         this.positionSizer = new PositionSizerFixed();
         this.portfolio = new PortfolioModel(this.equity);
-        this.positionExitHandler = new PositionExitHandler(this.portfolio, this.priceFeedHandler);
+        this.positionExitHandler = new PositionExitHandler(this.portfolio);
         this.orderHandler = OrderHandlerFactory.factory(this.positionSizer);
         this.historyHandler = new HistoryBookHandler(new TransactionsExporter());
         this.riskManagementHandler = new RiskManagementHandler(

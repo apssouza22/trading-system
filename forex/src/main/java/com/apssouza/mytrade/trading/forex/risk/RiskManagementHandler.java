@@ -27,18 +27,6 @@ public class RiskManagementHandler {
         this.stopOrderCreator = stopOrderCreator;
     }
 
-    private boolean canOpenPosition() {
-        return true;
-    }
-
-    private Integer getPositionSize() {
-        return 0;
-    }
-
-    private void setLeverageStats() {
-
-    }
-
 
     public EnumMap<StopOrderType, StopOrderDto> createStopOrders(Position position, Event event) {
         stopOrderCreator.createContext(position.getPositionType());

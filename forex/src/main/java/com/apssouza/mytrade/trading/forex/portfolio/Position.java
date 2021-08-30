@@ -1,6 +1,7 @@
 package com.apssouza.mytrade.trading.forex.portfolio;
 
 import com.apssouza.mytrade.trading.forex.common.Symbol;
+import com.apssouza.mytrade.trading.forex.order.OrderAction;
 import com.apssouza.mytrade.trading.forex.order.StopOrderDto;
 import com.apssouza.mytrade.trading.forex.order.StopOrderType;
 import com.apssouza.mytrade.trading.forex.common.NumberHelper;
@@ -26,7 +27,6 @@ public class Position {
     private int id = 0;
 
     EnumMap<StopOrderType, StopOrderDto> stopOrders = new EnumMap<>(StopOrderType.class);
-    private StopOrderDto placedStopLoss;
 
     public Position(
             PositionType positionType,
@@ -51,7 +51,6 @@ public class Position {
         this.status = status;
         this.currentPrice = initPrice;
         this.avgPrice = initPrice;
-        this.placedStopLoss = null;
     }
 
 
@@ -157,8 +156,9 @@ public class Position {
     }
 
     public StopOrderDto getPlacedStopLoss() {
-        if (stopOrders.containsKey(StopOrderType.STOP_LOSS))
+        if (stopOrders.containsKey(StopOrderType.STOP_LOSS)) {
             return stopOrders.get(StopOrderType.STOP_LOSS);
+        }
         return null;
     }
 
@@ -174,5 +174,24 @@ public class Position {
                 ", quantity=" + quantity +
                 ", initPrice=" + initPrice +
                 '}';
+    }
+
+    public enum PositionType {
+        LONG, SHORT;
+
+        public OrderAction getOrderAction(){
+            if (this == LONG){
+                return OrderAction.BUY;
+            }
+            return OrderAction.SELL;
+        }
+    }
+
+    public enum PositionStatus {
+        OPEN, FILLED, CANCELLED, CLOSED
+    }
+
+    public enum ExitReason {
+        STOP_ORDER_FILLED, COUNTER_SIGNAL, RECONCILIATION_FAILED, END_OF_DAY
     }
 }

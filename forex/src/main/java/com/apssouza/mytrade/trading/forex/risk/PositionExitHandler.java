@@ -2,12 +2,9 @@ package com.apssouza.mytrade.trading.forex.risk;
 
 import com.apssouza.mytrade.common.misc.helper.time.MarketTimeHelper;
 import com.apssouza.mytrade.feed.api.SignalDto;
-import com.apssouza.mytrade.trading.forex.pricefeed.PriceFeedHandler;
 import com.apssouza.mytrade.trading.forex.order.OrderAction;
-import com.apssouza.mytrade.trading.forex.portfolio.ExitReason;
 import com.apssouza.mytrade.trading.forex.portfolio.PortfolioModel;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;
-import com.apssouza.mytrade.trading.forex.portfolio.PositionType;
 import com.apssouza.mytrade.trading.forex.session.event.PriceChangedEvent;
 
 import java.time.LocalDateTime;
@@ -19,12 +16,10 @@ import java.util.logging.Logger;
 
 public class PositionExitHandler {
     private final PortfolioModel portfolio;
-    private final PriceFeedHandler priceHandler;
     private static Logger log = Logger.getLogger(PositionExitHandler.class.getSimpleName());
 
-    public PositionExitHandler(PortfolioModel portfolio, PriceFeedHandler priceHandler) {
+    public PositionExitHandler(PortfolioModel portfolio) {
         this.portfolio = portfolio;
-        this.priceHandler = priceHandler;
     }
 
     public List<Position> process(PriceChangedEvent event, List<SignalDto> signals) {
@@ -35,10 +30,10 @@ public class PositionExitHandler {
         List<Position> exitedPositions = new ArrayList<>();
         for (Map.Entry<String, Position> entry : this.portfolio.getPositions().entrySet()) {
             Position position = entry.getValue();
-            ExitReason exit_reason = null;
+            Position.ExitReason exit_reason = null;
 
             if (this.hasCounterSignal(position, signals)) {
-                exit_reason = ExitReason.COUNTER_SIGNAL;
+                exit_reason = Position.ExitReason.COUNTER_SIGNAL;
             }
             if (exit_reason != null) {
                 log.info("Exiting position for(" + position.getSymbol() + " Reason " + exit_reason);
@@ -66,11 +61,12 @@ public class PositionExitHandler {
 
     private boolean hasCounterSignal(Position position, List<SignalDto> signals) {
         SignalDto signal = getSignalBySymbol(position.getSymbol(), signals);
-        if (signal == null)
+        if (signal == null) {
             return false;
+        }
 
         OrderAction exit_direction = null;
-        if (position.getPositionType() == PositionType.LONG) {
+        if (position.getPositionType() == Position.PositionType.LONG) {
             exit_direction = OrderAction.SELL;
         } else {
             exit_direction = OrderAction.BUY;

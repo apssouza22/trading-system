@@ -1,6 +1,5 @@
 package com.apssouza.mytrade.trading.forex.session.listener;
 
-import com.apssouza.mytrade.trading.forex.portfolio.ExitReason;
 import com.apssouza.mytrade.trading.forex.portfolio.PortfolioHandler;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.forex.session.event.EndedTradingDayEvent;
@@ -29,7 +28,7 @@ public class EndedTradingDayListener implements PropertyChangeListener {
         }
 
         EndedTradingDayEvent finishedEvent = (EndedTradingDayEvent) event;
-        List<Position> positions = portfolioHandler.closeAllPositions(ExitReason.END_OF_DAY, finishedEvent);
+        List<Position> positions = portfolioHandler.closeAllPositions(Position.ExitReason.END_OF_DAY, finishedEvent);
         log.info(positions.size() + " positions closed");
     }
 

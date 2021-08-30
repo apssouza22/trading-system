@@ -7,22 +7,21 @@ import com.apssouza.mytrade.trading.forex.portfolio.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.EnumMap;
-import java.util.List;
 
 public class PositionBuilder {
 
-    PositionType type = PositionType.LONG;
+    Position.PositionType type = Position.PositionType.LONG;
     String symbol = "AUDUSD";
     Integer qtd = 1000;
     BigDecimal price = BigDecimal.valueOf(1.004);
     LocalDateTime timestamp = LocalDateTime.MIN;
     String identifier = "AUDUSD";
-    ExitReason exitReason = null;
+    Position.ExitReason exitReason = null;
     FilledOrderDto filledOrder = null;
-    PositionStatus positionStatus = PositionStatus.FILLED;
+    Position.PositionStatus positionStatus = Position.PositionStatus.FILLED;
     private EnumMap<StopOrderType, StopOrderDto> stopOrders = new EnumMap(StopOrderType.class);
 
-    public void withType(PositionType type) {
+    public void withType(Position.PositionType type) {
         this.type = type;
     }
 
@@ -46,7 +45,7 @@ public class PositionBuilder {
         this.identifier = identifier;
     }
 
-    public void withExitReason(ExitReason exitReason) {
+    public void withExitReason(Position.ExitReason exitReason) {
         this.exitReason = exitReason;
     }
 
@@ -54,7 +53,7 @@ public class PositionBuilder {
         this.filledOrder = filledOrder;
     }
 
-    public void withPositionStatus(PositionStatus positionStatus) {
+    public void withPositionStatus(Position.PositionStatus positionStatus) {
         this.positionStatus = positionStatus;
     }
 
@@ -69,7 +68,7 @@ public class PositionBuilder {
                 identifier,
                 filledOrder,
                 exitReason,
-                PositionStatus.FILLED
+                Position.PositionStatus.FILLED
         );
 
         if (stopOrders.isEmpty()) {

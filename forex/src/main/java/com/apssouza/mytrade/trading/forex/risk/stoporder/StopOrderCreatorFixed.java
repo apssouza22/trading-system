@@ -2,7 +2,6 @@ package com.apssouza.mytrade.trading.forex.risk.stoporder;
 
 import com.apssouza.mytrade.feed.api.PriceDto;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;
-import com.apssouza.mytrade.trading.forex.portfolio.PositionType;
 import com.apssouza.mytrade.trading.forex.session.event.Event;
 
 import java.math.BigDecimal;
@@ -18,8 +17,8 @@ class StopOrderCreatorFixed implements StopOrderCreator {
     }
 
     @Override
-    public void createContext(PositionType type){
-        if (type == PositionType.LONG) {
+    public void createContext(Position.PositionType type){
+        if (type == Position.PositionType.LONG) {
             this.creatorContext = new CreatorContext(new LongPositionStrategy(priceDistance));
         }else{
             this.creatorContext = new CreatorContext(new ShortPositionStrategy(priceDistance));

@@ -2,7 +2,6 @@ package com.apssouza.mytrade.trading.forex.order;
 
 import com.apssouza.mytrade.feed.api.SignalDto;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;
-import com.apssouza.mytrade.trading.forex.portfolio.PositionType;
 import com.apssouza.mytrade.trading.forex.risk.PositionSizer;
 import com.apssouza.mytrade.trading.forex.session.event.SignalCreatedEvent;
 
@@ -25,7 +24,7 @@ public class OrderHandler {
     }
 
     public OrderDto createOrderFromClosedPosition(Position position, LocalDateTime time) {
-        OrderAction action = position.getPositionType().equals(PositionType.LONG) ? OrderAction.SELL : OrderAction.BUY;
+        OrderAction action = position.getPositionType().equals(Position.PositionType.LONG) ? OrderAction.SELL : OrderAction.BUY;
         return new OrderDto(
                 position.getSymbol(),
                 action, position.getQuantity(),

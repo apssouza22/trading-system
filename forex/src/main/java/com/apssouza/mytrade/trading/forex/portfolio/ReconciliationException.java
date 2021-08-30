@@ -4,7 +4,7 @@ import com.apssouza.mytrade.trading.forex.session.event.Event;
 
 import java.util.Map;
 
-public class ReconciliationException extends Exception {
+class ReconciliationException extends Exception {
 
     private final Map<String, Position> localPositions;
     private final Map<String, FilledOrderDto> remotePositions;

@@ -5,7 +5,6 @@ import com.apssouza.mytrade.trading.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.forex.order.StopOrderDto;
 import com.apssouza.mytrade.trading.forex.portfolio.FilledOrderDto;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;
-import com.apssouza.mytrade.trading.forex.portfolio.PositionType;
 import com.apssouza.mytrade.common.misc.helper.time.DateTimeHelper;
 
 import java.time.LocalDateTime;
@@ -75,11 +74,11 @@ public class MultiPositionHandler {
             processExistingSymbol(currencyPositions, ps);
             return;
         }
-        if (ps.getPositionType().equals(PositionType.LONG)) {
+        if (ps.getPositionType().equals(Position.PositionType.LONG)) {
             currencyPositions.put(ps.getSymbol(), ps.getQuantity());
         }
 
-        if (ps.getPositionType().equals(PositionType.SHORT)) {
+        if (ps.getPositionType().equals(Position.PositionType.SHORT)) {
             currencyPositions.put(ps.getSymbol(), -ps.getQuantity());
         }
 
@@ -87,10 +86,10 @@ public class MultiPositionHandler {
 
     private static void processExistingSymbol(Map<String, Integer> currencyPositions, Position ps) {
         Integer position_units = currencyPositions.get(ps.getSymbol());
-        if (ps.getPositionType().equals(PositionType.LONG)) {
+        if (ps.getPositionType().equals(Position.PositionType.LONG)) {
             currencyPositions.put(ps.getSymbol(), position_units + ps.getQuantity());
         }
-        if (ps.getPositionType().equals(PositionType.SHORT)) {
+        if (ps.getPositionType().equals(Position.PositionType.SHORT)) {
             currencyPositions.put(ps.getSymbol(), position_units - ps.getQuantity());
         }
     }
