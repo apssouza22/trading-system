@@ -24,14 +24,14 @@ public class OrderHandler {
     }
 
     public OrderDto createOrderFromClosedPosition(Position position, LocalDateTime time) {
-        OrderAction action = position.getPositionType().equals(Position.PositionType.LONG) ? OrderAction.SELL : OrderAction.BUY;
+        OrderDto.OrderAction action = position.getPositionType().equals(Position.PositionType.LONG) ? OrderDto.OrderAction.SELL : OrderDto.OrderAction.BUY;
         return new OrderDto(
                 position.getSymbol(),
                 action, position.getQuantity(),
-                OrderOrigin.EXITS,
+                OrderDto.OrderOrigin.EXITS,
                 time,
                 position.getIdentifier(),
-                OrderStatus.CREATED
+                OrderDto.OrderStatus.CREATED
         );
     }
 
@@ -40,7 +40,7 @@ public class OrderHandler {
     }
 
 
-    public boolean updateOrderStatus(Integer id, OrderStatus status) {
+    public boolean updateOrderStatus(Integer id, OrderDto.OrderStatus status) {
         return orderDao.updateStatus(id, status);
     }
 
@@ -51,18 +51,18 @@ public class OrderHandler {
 
         OrderDto order = new OrderDto(
                 signal.symbol(),
-                OrderAction.valueOf(action.toUpperCase()),
+                OrderDto.OrderAction.valueOf(action.toUpperCase()),
                 positionSizer.getQuantity(),
-                OrderOrigin.SIGNAL,
+                OrderDto.OrderOrigin.SIGNAL,
                 time,
                 "",
-                OrderStatus.CREATED
+                OrderDto.OrderStatus.CREATED
         );
         log.info("Created order: " + order);
         return order;
     }
 
-    public List<OrderDto> getOrderByStatus(OrderStatus status) {
+    public List<OrderDto> getOrderByStatus(OrderDto.OrderStatus status) {
         return orderDao.getOrderByStatus(status);
     }
 

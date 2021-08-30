@@ -1,9 +1,7 @@
 package com.apssouza.mytrade.trading.forex.risk.stoporder;
 
-import com.apssouza.mytrade.trading.forex.order.OrderAction;
+import com.apssouza.mytrade.trading.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.forex.order.StopOrderDto;
-import com.apssouza.mytrade.trading.forex.order.StopOrderStatus;
-import com.apssouza.mytrade.trading.forex.order.StopOrderType;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.forex.common.NumberHelper;
 import com.apssouza.mytrade.trading.forex.common.TradingHelper;
@@ -21,12 +19,12 @@ class CreatorContext {
 
 
     public StopOrderDto getHardStopLoss(Position position) {
-        OrderAction action = TradingHelper.getExitOrderActionFromPosition(position);
+        OrderDto.OrderAction action = TradingHelper.getExitOrderActionFromPosition(position);
         BigDecimal stopPrice = strategy.getHardStopPrice(position);
         return new StopOrderDto(
-                StopOrderType.HARD_STOP,
+                StopOrderDto.StopOrderType.HARD_STOP,
                 null,
-                StopOrderStatus.CREATED,
+                StopOrderDto.StopOrderStatus.CREATED,
                 action,
                 NumberHelper.roundSymbolPrice(position.getSymbol(), stopPrice),
                 null,
@@ -37,7 +35,7 @@ class CreatorContext {
     }
 
     public Optional<StopOrderDto> getTrailingStopOrder(Position position, BigDecimal priceClose) {
-        OrderAction action = TradingHelper.getExitOrderActionFromPosition(position);
+        OrderDto.OrderAction action = TradingHelper.getExitOrderActionFromPosition(position);
         Optional<BigDecimal> stopPrice = strategy.getTrailingStopPrice(position, priceClose);
 
         if (!stopPrice.isPresent()) {
@@ -45,9 +43,9 @@ class CreatorContext {
         }
 
         return Optional.of(new StopOrderDto(
-                StopOrderType.TRAILLING_STOP,
+                StopOrderDto.StopOrderType.TRAILLING_STOP,
                 null,
-                StopOrderStatus.CREATED,
+                StopOrderDto.StopOrderStatus.CREATED,
                 action,
                 stopPrice.get(),
                 null,
@@ -58,7 +56,7 @@ class CreatorContext {
     }
 
     public Optional<StopOrderDto> getEntryStopOrder(Position position, BigDecimal priceClose) {
-        OrderAction action = TradingHelper.getExitOrderActionFromPosition(position);
+        OrderDto.OrderAction action = TradingHelper.getExitOrderActionFromPosition(position);
         BigDecimal stopPrice = strategy.getEntryStopPrice(position, priceClose);
 
         if (stopPrice == null) {
@@ -66,9 +64,9 @@ class CreatorContext {
         }
 
         return Optional.of(new StopOrderDto(
-                StopOrderType.ENTRY_STOP,
+                StopOrderDto.StopOrderType.ENTRY_STOP,
                 null,
-                StopOrderStatus.CREATED,
+                StopOrderDto.StopOrderStatus.CREATED,
                 action,
                 NumberHelper.roundSymbolPrice(position.getSymbol(), stopPrice),
                 null,
@@ -82,12 +80,12 @@ class CreatorContext {
 
     public StopOrderDto getProfitStopOrder(Position position) {
         BigDecimal stopPrice = strategy.getProfitStopPrice(position);
-        OrderAction action = TradingHelper.getExitOrderActionFromPosition(position);
+        OrderDto.OrderAction action = TradingHelper.getExitOrderActionFromPosition(position);
         stopPrice = NumberHelper.roundSymbolPrice(position.getSymbol(), stopPrice);
         return new StopOrderDto(
-                StopOrderType.TAKE_PROFIT,
+                StopOrderDto.StopOrderType.TAKE_PROFIT,
                 null,
-                StopOrderStatus.CREATED,
+                StopOrderDto.StopOrderStatus.CREATED,
                 action,
                 stopPrice,
                 null,

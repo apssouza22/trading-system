@@ -2,10 +2,9 @@ package com.apssouza.mytrade.trading.forex.execution;
 
 import com.apssouza.mytrade.feed.api.PriceDto;
 import com.apssouza.mytrade.trading.builder.StopOrderBuilder;
-import com.apssouza.mytrade.trading.forex.order.OrderAction;
+import com.apssouza.mytrade.trading.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.forex.order.StopOrderDto;
-import com.apssouza.mytrade.trading.forex.order.StopOrderStatus;
-import com.apssouza.mytrade.trading.forex.order.StopOrderType;
+
 import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;
@@ -40,8 +39,8 @@ public class StopOrderPriceMonitorTest extends TestCase {
     @Test
     public void getFilledOrdersWithNoSubmittedOrder() {
         StopOrderBuilder stopOrderBuilder = new StopOrderBuilder();
-        stopOrderBuilder.withType(StopOrderType.STOP_LOSS);
-        stopOrderBuilder.withStatus(StopOrderStatus.CREATED);
+        stopOrderBuilder.withType(StopOrderDto.StopOrderType.STOP_LOSS);
+        stopOrderBuilder.withStatus(StopOrderDto.StopOrderStatus.CREATED);
         stopOrders.put(1, stopOrderBuilder.build());
 
         priceMap.put("AUDUSD", new PriceDto(LocalDateTime.MIN, BigDecimal.TEN, BigDecimal.TEN, BigDecimal.TEN, BigDecimal.TEN, "AUDUSD"));
@@ -52,11 +51,11 @@ public class StopOrderPriceMonitorTest extends TestCase {
     @Test
     public void getFilledOrdersWith2FilledOrderFor1Position() {
         StopOrderBuilder stopOrderBuilder = new StopOrderBuilder();
-        stopOrderBuilder.withType(StopOrderType.STOP_LOSS);
-        stopOrderBuilder.withStatus(StopOrderStatus.SUBMITTED);
+        stopOrderBuilder.withType(StopOrderDto.StopOrderType.STOP_LOSS);
+        stopOrderBuilder.withStatus(StopOrderDto.StopOrderStatus.SUBMITTED);
         stopOrders.put(1, stopOrderBuilder.build());
 
-        stopOrderBuilder.withType(StopOrderType.TAKE_PROFIT);
+        stopOrderBuilder.withType(StopOrderDto.StopOrderType.TAKE_PROFIT);
         stopOrders.put(2, stopOrderBuilder.build());
 
         priceMap.put("AUDUSD", new PriceDto(LocalDateTime.MIN, BigDecimal.TEN, BigDecimal.TEN, BigDecimal.TEN, BigDecimal.TEN, "AUDUSD"));
@@ -68,12 +67,12 @@ public class StopOrderPriceMonitorTest extends TestCase {
     @Test
     public void getFilledOrdersWithBuyStopLossFilled() {
         StopOrderBuilder stopOrderBuilder = new StopOrderBuilder();
-        stopOrderBuilder.withType(StopOrderType.STOP_LOSS);
-        stopOrderBuilder.withStatus(StopOrderStatus.SUBMITTED);
+        stopOrderBuilder.withType(StopOrderDto.StopOrderType.STOP_LOSS);
+        stopOrderBuilder.withStatus(StopOrderDto.StopOrderStatus.SUBMITTED);
         StopOrderDto stopLoss = stopOrderBuilder.build();
         stopOrders.put(1, stopLoss);
 
-        stopOrderBuilder.withType(StopOrderType.TAKE_PROFIT);
+        stopOrderBuilder.withType(StopOrderDto.StopOrderType.TAKE_PROFIT);
         stopOrders.put(2, stopOrderBuilder.build());
 
         priceMap.put("AUDUSD", new PriceDto(LocalDateTime.MIN, BigDecimal.TEN, BigDecimal.TEN, BigDecimal.TEN, BigDecimal.TEN, "AUDUSD"));
@@ -87,57 +86,57 @@ public class StopOrderPriceMonitorTest extends TestCase {
     @Test
     public void getFilledOrdersWithBuyTakeProfitFilled() {
         StopOrderBuilder stopOrderBuilder = new StopOrderBuilder();
-        stopOrderBuilder.withType(StopOrderType.STOP_LOSS);
-        stopOrderBuilder.withStatus(StopOrderStatus.SUBMITTED);
+        stopOrderBuilder.withType(StopOrderDto.StopOrderType.STOP_LOSS);
+        stopOrderBuilder.withStatus(StopOrderDto.StopOrderStatus.SUBMITTED);
         StopOrderDto stopLoss = stopOrderBuilder.build();
         stopOrders.put(1, stopLoss);
 
-        stopOrderBuilder.withType(StopOrderType.TAKE_PROFIT);
+        stopOrderBuilder.withType(StopOrderDto.StopOrderType.TAKE_PROFIT);
         stopOrders.put(2, stopOrderBuilder.build());
 
         priceMap.put("AUDUSD", new PriceDto(LocalDateTime.MIN, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, "AUDUSD"));
 
         Set<StopOrderDto> filledOrders = stopOrderPriceMonitor.getFilledOrders(priceMap, stopOrders);
         assertEquals(1, filledOrders.size());
-        assertEquals(StopOrderType.TAKE_PROFIT, filledOrders.iterator().next().getType());
+        assertEquals(StopOrderDto.StopOrderType.TAKE_PROFIT, filledOrders.iterator().next().getType());
     }
 
     @Test
     public void getFilledOrdersWithSellTakeProfitFilled() {
         StopOrderBuilder stopOrderBuilder = new StopOrderBuilder();
-        stopOrderBuilder.withType(StopOrderType.STOP_LOSS);
-        stopOrderBuilder.withAction(OrderAction.SELL);
-        stopOrderBuilder.withStatus(StopOrderStatus.SUBMITTED);
+        stopOrderBuilder.withType(StopOrderDto.StopOrderType.STOP_LOSS);
+        stopOrderBuilder.withAction(OrderDto.OrderAction.SELL);
+        stopOrderBuilder.withStatus(StopOrderDto.StopOrderStatus.SUBMITTED);
         StopOrderDto stopLoss = stopOrderBuilder.build();
         stopOrders.put(1, stopLoss);
 
-        stopOrderBuilder.withType(StopOrderType.TAKE_PROFIT);
+        stopOrderBuilder.withType(StopOrderDto.StopOrderType.TAKE_PROFIT);
         stopOrders.put(2, stopOrderBuilder.build());
 
         priceMap.put("AUDUSD", new PriceDto(LocalDateTime.MIN, BigDecimal.TEN, BigDecimal.TEN, BigDecimal.TEN, BigDecimal.TEN, "AUDUSD"));
 
         Set<StopOrderDto> filledOrders = stopOrderPriceMonitor.getFilledOrders(priceMap, stopOrders);
         assertEquals(1, filledOrders.size());
-        assertEquals(StopOrderType.TAKE_PROFIT, filledOrders.iterator().next().getType());
+        assertEquals(StopOrderDto.StopOrderType.TAKE_PROFIT, filledOrders.iterator().next().getType());
     }
 
 
     @Test
     public void getFilledOrdersWithSellStopLossFilled() {
         StopOrderBuilder stopOrderBuilder = new StopOrderBuilder();
-        stopOrderBuilder.withType(StopOrderType.STOP_LOSS);
-        stopOrderBuilder.withAction(OrderAction.SELL);
-        stopOrderBuilder.withStatus(StopOrderStatus.SUBMITTED);
+        stopOrderBuilder.withType(StopOrderDto.StopOrderType.STOP_LOSS);
+        stopOrderBuilder.withAction(OrderDto.OrderAction.SELL);
+        stopOrderBuilder.withStatus(StopOrderDto.StopOrderStatus.SUBMITTED);
         StopOrderDto stopLoss = stopOrderBuilder.build();
         stopOrders.put(1, stopLoss);
 
-        stopOrderBuilder.withType(StopOrderType.TAKE_PROFIT);
+        stopOrderBuilder.withType(StopOrderDto.StopOrderType.TAKE_PROFIT);
         stopOrders.put(2, stopOrderBuilder.build());
 
         priceMap.put("AUDUSD", new PriceDto(LocalDateTime.MIN, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, "AUDUSD"));
 
         Set<StopOrderDto> filledOrders = stopOrderPriceMonitor.getFilledOrders(priceMap, stopOrders);
         assertEquals(1, filledOrders.size());
-        assertEquals(StopOrderType.STOP_LOSS, filledOrders.iterator().next().getType());
+        assertEquals(StopOrderDto.StopOrderType.STOP_LOSS, filledOrders.iterator().next().getType());
     }
 }

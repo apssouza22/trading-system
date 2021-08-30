@@ -1,6 +1,6 @@
 package com.apssouza.mytrade.trading.forex.session.listener;
 
-import com.apssouza.mytrade.trading.forex.order.OrderAction;
+import com.apssouza.mytrade.trading.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.forex.portfolio.*;
 import com.apssouza.mytrade.trading.forex.session.EventNotifier;
 import com.apssouza.mytrade.trading.forex.statistics.HistoryBookHandler;
@@ -62,11 +62,11 @@ public class FilledOrderListener implements PropertyChangeListener {
 
 
     private Position handleExistingPosition(FilledOrderDto filledOrder, Position ps) {
-        if (filledOrder.getAction().equals(OrderAction.SELL) && ps.getPositionType().equals(Position.PositionType.LONG)) {
+        if (filledOrder.getAction().equals(OrderDto.OrderAction.SELL) && ps.getPositionType().equals(Position.PositionType.LONG)) {
             handleOppositeDirection(filledOrder, ps);
             return ps;
         }
-        if (filledOrder.getAction().equals(OrderAction.BUY) && ps.getPositionType().equals(Position.PositionType.SHORT)) {
+        if (filledOrder.getAction().equals(OrderDto.OrderAction.BUY) && ps.getPositionType().equals(Position.PositionType.SHORT)) {
             handleOppositeDirection(filledOrder, ps);
             return ps;
         }
@@ -75,12 +75,12 @@ public class FilledOrderListener implements PropertyChangeListener {
     }
 
     private void handleSameDirection(FilledOrderDto filledOrder, Position ps) {
-        if (filledOrder.getAction().equals(OrderAction.BUY) && ps.getPositionType().equals(Position.PositionType.LONG)) {
+        if (filledOrder.getAction().equals(OrderDto.OrderAction.BUY) && ps.getPositionType().equals(Position.PositionType.LONG)) {
             this.portfolio.addPositionQtd(filledOrder.getIdentifier(), filledOrder.getQuantity(), filledOrder.getPriceWithSpread());
             this.historyHandler.setState(TransactionState.ADD_QTD, filledOrder.getIdentifier());
 
         }
-        if (filledOrder.getAction().equals(OrderAction.SELL) && ps.getPositionType().equals(Position.PositionType.SHORT)) {
+        if (filledOrder.getAction().equals(OrderDto.OrderAction.SELL) && ps.getPositionType().equals(Position.PositionType.SHORT)) {
             this.portfolio.addPositionQtd(filledOrder.getIdentifier(), filledOrder.getQuantity(), filledOrder.getPriceWithSpread());
             this.historyHandler.setState(TransactionState.ADD_QTD, filledOrder.getIdentifier());
         }
@@ -97,7 +97,7 @@ public class FilledOrderListener implements PropertyChangeListener {
     }
 
     private Position createNewPosition(FilledOrderDto filledOrder) {
-        Position.PositionType position_type = filledOrder.getAction().equals(OrderAction.BUY) ? Position.PositionType.LONG : Position.PositionType.SHORT;
+        Position.PositionType position_type = filledOrder.getAction().equals(OrderDto.OrderAction.BUY) ? Position.PositionType.LONG : Position.PositionType.SHORT;
 
         Position ps1 = new Position(
                 position_type,

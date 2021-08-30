@@ -1,10 +1,8 @@
 package com.apssouza.mytrade.trading.forex.execution;
 
 import com.apssouza.mytrade.feed.api.PriceDto;
-import com.apssouza.mytrade.trading.forex.order.OrderAction;
+import com.apssouza.mytrade.trading.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.forex.order.StopOrderDto;
-import com.apssouza.mytrade.trading.forex.order.StopOrderStatus;
-import com.apssouza.mytrade.trading.forex.order.StopOrderType;
 
 import java.util.*;
 
@@ -19,7 +17,7 @@ class StopOrderPriceMonitor {
                 continue;
             }
 
-            if (!stopOrder.getStatus().equals(StopOrderStatus.SUBMITTED)) {
+            if (!stopOrder.getStatus().equals(StopOrderDto.StopOrderStatus.SUBMITTED)) {
                 continue;
             }
             PriceDto df_current_price = priceMap.get(stopOrder.getSymbol());
@@ -33,13 +31,13 @@ class StopOrderPriceMonitor {
             Set<StopOrderDto> filledPositions,
             StopOrderDto stopOrder, PriceDto priceDto
     ) {
-        if (stopOrder.getAction().equals(OrderAction.BUY)) {
+        if (stopOrder.getAction().equals(OrderDto.OrderAction.BUY)) {
             if(hasFilledBuyOrder(stopOrder, priceDto)){
                 filledPositions.add(stopOrder);
             }
         }
 
-        if (stopOrder.getAction().equals(OrderAction.SELL)) {
+        if (stopOrder.getAction().equals(OrderDto.OrderAction.SELL)) {
             if(hasFilledSellOrder(stopOrder, priceDto)){
                 filledPositions.add(stopOrder);
             }
@@ -48,12 +46,12 @@ class StopOrderPriceMonitor {
 
 
     private boolean hasFilledSellOrder(StopOrderDto stopOrder, PriceDto priceDto) {
-        if (stopOrder.getType().equals(StopOrderType.TAKE_PROFIT)) {
+        if (stopOrder.getType().equals(StopOrderDto.StopOrderType.TAKE_PROFIT)) {
             if (priceDto.high().compareTo(stopOrder.getPrice()) >= 0) {
                return true;
             }
         }
-        if (stopOrder.getType().equals(StopOrderType.STOP_LOSS)) {
+        if (stopOrder.getType().equals(StopOrderDto.StopOrderType.STOP_LOSS)) {
             if (priceDto.high().compareTo(stopOrder.getPrice()) <= 0) {
                 return true;
             }
@@ -62,12 +60,12 @@ class StopOrderPriceMonitor {
     }
 
     private boolean hasFilledBuyOrder( StopOrderDto stopOrder, PriceDto priceDto) {
-        if (stopOrder.getType().equals(StopOrderType.TAKE_PROFIT)) {
+        if (stopOrder.getType().equals(StopOrderDto.StopOrderType.TAKE_PROFIT)) {
             if (priceDto.low().compareTo(stopOrder.getPrice()) <= 0) {
                 return true;
             }
         }
-        if (stopOrder.getType().equals(StopOrderType.STOP_LOSS)) {
+        if (stopOrder.getType().equals(StopOrderDto.StopOrderType.STOP_LOSS)) {
             if (priceDto.high().compareTo(stopOrder.getPrice()) >= 0) {
                 return true;
             }

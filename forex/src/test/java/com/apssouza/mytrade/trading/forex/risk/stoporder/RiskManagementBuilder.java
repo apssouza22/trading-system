@@ -1,7 +1,7 @@
 package com.apssouza.mytrade.trading.forex.risk.stoporder;
 
 import com.apssouza.mytrade.trading.builder.StopOrderBuilder;
-import com.apssouza.mytrade.trading.forex.order.StopOrderType;
+import com.apssouza.mytrade.trading.forex.order.StopOrderDto;
 import com.apssouza.mytrade.trading.forex.portfolio.PortfolioModel;
 import com.apssouza.mytrade.trading.forex.risk.PositionSizer;
 import com.apssouza.mytrade.trading.forex.risk.RiskManagementHandler;
@@ -17,7 +17,7 @@ public class RiskManagementBuilder {
         PositionSizer positionSizer = Mockito.mock(PositionSizer.class);
         StopOrderCreatorFixed stopOrderCreatorFixed = Mockito.mock(StopOrderCreatorFixed.class);
         var stopOrderBuilder = new StopOrderBuilder();
-        stopOrderBuilder.withType(StopOrderType.ENTRY_STOP);
+        stopOrderBuilder.withType(StopOrderDto.StopOrderType.ENTRY_STOP);
 
         Mockito.when(
                 stopOrderCreatorFixed.getEntryStopOrder(Mockito.any(), Mockito.any())
@@ -25,19 +25,19 @@ public class RiskManagementBuilder {
                 Optional.of(stopOrderBuilder.build())
         );
 
-        stopOrderBuilder.withType(StopOrderType.TRAILLING_STOP);
+        stopOrderBuilder.withType(StopOrderDto.StopOrderType.TRAILLING_STOP);
         Mockito.when(
                 stopOrderCreatorFixed.getTrailingStopOrder(Mockito.any(), Mockito.any())
         ).thenReturn(
                 Optional.of(stopOrderBuilder.build())
         );
-        stopOrderBuilder.withType(StopOrderType.TAKE_PROFIT);
+        stopOrderBuilder.withType(StopOrderDto.StopOrderType.TAKE_PROFIT);
         Mockito.when(
                 stopOrderCreatorFixed.getProfitStopOrder(Mockito.any())
         ).thenReturn(
                 stopOrderBuilder.build()
         );
-        stopOrderBuilder.withType(StopOrderType.HARD_STOP);
+        stopOrderBuilder.withType(StopOrderDto.StopOrderType.HARD_STOP);
         Mockito.when(
                 stopOrderCreatorFixed.getProfitStopOrder(Mockito.any())
         ).thenReturn(

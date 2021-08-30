@@ -66,9 +66,9 @@ public class PortfolioHandler {
         Map<Integer, StopOrderDto> stopOrders = new HashMap<>();
         for (Map.Entry<String, Position> entry : this.portfolio.getPositions().entrySet()) {
             Position position = entry.getValue();
-            EnumMap<StopOrderType, StopOrderDto> stops = this.riskManagementHandler.createStopOrders(position, event);
+            EnumMap<StopOrderDto.StopOrderType, StopOrderDto> stops = this.riskManagementHandler.createStopOrders(position, event);
             position = new Position(position, stops);
-            StopOrderDto stopLoss = stops.get(StopOrderType.STOP_LOSS);
+            StopOrderDto stopLoss = stops.get(StopOrderDto.StopOrderType.STOP_LOSS);
             log.info("Created stop loss - " + stopLoss);
 
             StopOrderDto stopOrderLoss = this.executionHandler.placeStopOrder(stopLoss);
@@ -76,7 +76,7 @@ public class PortfolioHandler {
             MultiPositionHandler.mapStopOrderToPosition(stopOrderLoss, position);
 
             if (TradingParams.take_profit_stop_enabled) {
-                StopOrderDto stopOrderProfit = this.executionHandler.placeStopOrder(stops.get(StopOrderType.TAKE_PROFIT));
+                StopOrderDto stopOrderProfit = this.executionHandler.placeStopOrder(stops.get(StopOrderDto.StopOrderType.TAKE_PROFIT));
                 log.info("Created take profit stop - " + stopOrderProfit);
                 stopOrders.put(stopOrderProfit.getId(), stopOrderProfit);
                 MultiPositionHandler.mapStopOrderToPosition(stopOrderProfit, position);
@@ -115,7 +115,7 @@ public class PortfolioHandler {
 
         for (Map.Entry<Integer, StopOrderDto> entry : this.currentStopOrders.entrySet()) {
             StopOrderDto stopOrder = stopOrders.get(entry.getKey());
-            if (stopOrder.getStatus() == StopOrderStatus.FILLED) {
+            if (stopOrder.getStatus() == StopOrderDto.StopOrderStatus.FILLED) {
                 filledStopLoss.add(stopOrder);
             }
         }

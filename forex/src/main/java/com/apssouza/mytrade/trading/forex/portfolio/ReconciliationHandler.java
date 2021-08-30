@@ -1,7 +1,7 @@
 package com.apssouza.mytrade.trading.forex.portfolio;
 
 import com.apssouza.mytrade.trading.forex.execution.OrderExecution;
-import com.apssouza.mytrade.trading.forex.order.OrderAction;
+import com.apssouza.mytrade.trading.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.forex.session.event.Event;
 
 import java.util.Map;
@@ -41,7 +41,7 @@ class ReconciliationHandler {
             if (!remotePositions.containsKey(symbol)){
                 throw new ReconciliationException(localPositions, remotePositions, event);
             }
-            OrderAction orderAction = entry.getValue().getPositionType().getOrderAction();
+            OrderDto.OrderAction orderAction = entry.getValue().getPositionType().getOrderAction();
             if (!remotePositions.get(symbol).getAction().equals(orderAction)){
                 throw new ReconciliationException(localPositions, remotePositions, event);
             }

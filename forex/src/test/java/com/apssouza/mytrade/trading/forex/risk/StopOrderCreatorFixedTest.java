@@ -37,9 +37,9 @@ public class StopOrderCreatorFixedTest extends TestCase {
         Position position = positionBuilder.build();
         obj.createContext(Position.PositionType.LONG);
         com.apssouza.mytrade.trading.forex.order.StopOrderDto hardStopLoss = obj.getHardStopLoss(position);
-        assertEquals(StopOrderStatus.CREATED, hardStopLoss.getStatus());
-        assertEquals(StopOrderType.HARD_STOP, hardStopLoss.getType());
-        assertEquals(OrderAction.SELL, hardStopLoss.getAction());
+        assertEquals(com.apssouza.mytrade.trading.forex.order.StopOrderDto.StopOrderStatus.CREATED, hardStopLoss.getStatus());
+        assertEquals(com.apssouza.mytrade.trading.forex.order.StopOrderDto.StopOrderType.HARD_STOP, hardStopLoss.getType());
+        assertEquals(OrderDto.OrderAction.SELL, hardStopLoss.getAction());
         assertEquals(BigDecimal.valueOf(0.904), hardStopLoss.getPrice());
     }
 
@@ -52,9 +52,9 @@ public class StopOrderCreatorFixedTest extends TestCase {
         obj.createContext(Position.PositionType.SHORT);
 
         com.apssouza.mytrade.trading.forex.order.StopOrderDto hardStopLoss = obj.getHardStopLoss(position);
-        assertEquals(StopOrderStatus.CREATED, hardStopLoss.getStatus());
-        assertEquals(StopOrderType.HARD_STOP, hardStopLoss.getType());
-        assertEquals(OrderAction.BUY, hardStopLoss.getAction());
+        assertEquals(com.apssouza.mytrade.trading.forex.order.StopOrderDto.StopOrderStatus.CREATED, hardStopLoss.getStatus());
+        assertEquals(com.apssouza.mytrade.trading.forex.order.StopOrderDto.StopOrderType.HARD_STOP, hardStopLoss.getType());
+        assertEquals(OrderDto.OrderAction.BUY, hardStopLoss.getAction());
         assertEquals(BigDecimal.valueOf(1.104), hardStopLoss.getPrice());
     }
 
@@ -66,9 +66,9 @@ public class StopOrderCreatorFixedTest extends TestCase {
         obj.createContext(Position.PositionType.SHORT);
 
         com.apssouza.mytrade.trading.forex.order.StopOrderDto hardStopLoss = obj.getProfitStopOrder(position);
-        assertEquals(StopOrderStatus.CREATED, hardStopLoss.getStatus());
-        assertEquals(StopOrderType.TAKE_PROFIT, hardStopLoss.getType());
-        assertEquals(OrderAction.BUY, hardStopLoss.getAction());
+        assertEquals(com.apssouza.mytrade.trading.forex.order.StopOrderDto.StopOrderStatus.CREATED, hardStopLoss.getStatus());
+        assertEquals(com.apssouza.mytrade.trading.forex.order.StopOrderDto.StopOrderType.TAKE_PROFIT, hardStopLoss.getType());
+        assertEquals(OrderDto.OrderAction.BUY, hardStopLoss.getAction());
         assertEquals(BigDecimal.valueOf(0.804), hardStopLoss.getPrice());
     }
 
@@ -83,9 +83,9 @@ public class StopOrderCreatorFixedTest extends TestCase {
         obj.createContext(Position.PositionType.LONG);
 
         com.apssouza.mytrade.trading.forex.order.StopOrderDto hardStopLoss = obj.getProfitStopOrder(position);
-        assertEquals(StopOrderStatus.CREATED, hardStopLoss.getStatus());
-        assertEquals(StopOrderType.TAKE_PROFIT, hardStopLoss.getType());
-        assertEquals(OrderAction.SELL, hardStopLoss.getAction());
+        assertEquals(com.apssouza.mytrade.trading.forex.order.StopOrderDto.StopOrderStatus.CREATED, hardStopLoss.getStatus());
+        assertEquals(com.apssouza.mytrade.trading.forex.order.StopOrderDto.StopOrderType.TAKE_PROFIT, hardStopLoss.getType());
+        assertEquals(OrderDto.OrderAction.SELL, hardStopLoss.getAction());
         assertEquals(BigDecimal.valueOf(1.204), hardStopLoss.getPrice());
     }
 
@@ -107,9 +107,9 @@ public class StopOrderCreatorFixedTest extends TestCase {
         PriceChangedEvent event = new PriceChangedEvent(EventType.PRICE_CHANGED,now, priceMap);
         Optional<com.apssouza.mytrade.trading.forex.order.StopOrderDto> optional = obj.getEntryStopOrder(position, event);
         com.apssouza.mytrade.trading.forex.order.StopOrderDto hardStopLoss = optional.get();
-        assertEquals(StopOrderStatus.CREATED, hardStopLoss.getStatus());
-        assertEquals(StopOrderType.ENTRY_STOP, hardStopLoss.getType());
-        assertEquals(OrderAction.SELL, hardStopLoss.getAction());
+        assertEquals(com.apssouza.mytrade.trading.forex.order.StopOrderDto.StopOrderStatus.CREATED, hardStopLoss.getStatus());
+        assertEquals(com.apssouza.mytrade.trading.forex.order.StopOrderDto.StopOrderType.ENTRY_STOP, hardStopLoss.getType());
+        assertEquals(OrderDto.OrderAction.SELL, hardStopLoss.getAction());
         assertEquals(BigDecimal.valueOf(1.004), hardStopLoss.getPrice());
     }
 
@@ -158,9 +158,9 @@ public class StopOrderCreatorFixedTest extends TestCase {
         PriceChangedEvent event = new PriceChangedEvent(EventType.PRICE_CHANGED,now, priceMap);
         Optional<com.apssouza.mytrade.trading.forex.order.StopOrderDto> optional = obj.getEntryStopOrder(position, event);
         com.apssouza.mytrade.trading.forex.order.StopOrderDto hardStopLoss = optional.get();
-        assertEquals(StopOrderStatus.CREATED, hardStopLoss.getStatus());
-        assertEquals(StopOrderType.ENTRY_STOP, hardStopLoss.getType());
-        assertEquals(OrderAction.BUY, hardStopLoss.getAction());
+        assertEquals(com.apssouza.mytrade.trading.forex.order.StopOrderDto.StopOrderStatus.CREATED, hardStopLoss.getStatus());
+        assertEquals(com.apssouza.mytrade.trading.forex.order.StopOrderDto.StopOrderType.ENTRY_STOP, hardStopLoss.getType());
+        assertEquals(OrderDto.OrderAction.BUY, hardStopLoss.getAction());
         assertEquals(BigDecimal.valueOf(1.004), hardStopLoss.getPrice());
     }
 

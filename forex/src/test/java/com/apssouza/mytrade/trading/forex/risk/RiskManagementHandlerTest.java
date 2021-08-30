@@ -4,7 +4,6 @@ import com.apssouza.mytrade.trading.builder.LoopEventBuilder;
 import com.apssouza.mytrade.trading.builder.PositionBuilder;
 import com.apssouza.mytrade.trading.builder.StopOrderBuilder;
 import com.apssouza.mytrade.trading.forex.order.StopOrderDto;
-import com.apssouza.mytrade.trading.forex.order.StopOrderType;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.forex.risk.stoporder.RiskManagementBuilder;
 import com.apssouza.mytrade.trading.forex.common.TradingParams;
@@ -39,7 +38,7 @@ public class RiskManagementHandlerTest extends TestCase {
         Position position = positionBuilder.build();
         LoopEventBuilder loopEventBuilder = new LoopEventBuilder();
         loopEventBuilder.withPriceMap(BigDecimal.TEN);
-        EnumMap<StopOrderType, StopOrderDto> stopOrders = risk.createStopOrders(position, loopEventBuilder.build());
+        EnumMap<StopOrderDto.StopOrderType, StopOrderDto> stopOrders = risk.createStopOrders(position, loopEventBuilder.build());
         assertEquals(0, stopOrders.size());
 
     }
@@ -58,10 +57,10 @@ public class RiskManagementHandlerTest extends TestCase {
         Position position = positionBuilder.build();
         LoopEventBuilder loopEventBuilder = new LoopEventBuilder();
         loopEventBuilder.withPriceMap(BigDecimal.TEN);
-        EnumMap<StopOrderType, StopOrderDto> stopOrders = risk.createStopOrders(position, loopEventBuilder.build());
+        EnumMap<StopOrderDto.StopOrderType, StopOrderDto> stopOrders = risk.createStopOrders(position, loopEventBuilder.build());
         assertEquals(2, stopOrders.size());
-        assertTrue(stopOrders.containsKey(StopOrderType.TAKE_PROFIT));
-        assertTrue(stopOrders.containsKey(StopOrderType.STOP_LOSS));
+        assertTrue(stopOrders.containsKey(StopOrderDto.StopOrderType.TAKE_PROFIT));
+        assertTrue(stopOrders.containsKey(StopOrderDto.StopOrderType.STOP_LOSS));
 
     }
 
@@ -79,9 +78,9 @@ public class RiskManagementHandlerTest extends TestCase {
         Position position = positionBuilder.build();
         LoopEventBuilder loopEventBuilder = new LoopEventBuilder();
         loopEventBuilder.withPriceMap(BigDecimal.TEN);
-        EnumMap<StopOrderType, StopOrderDto> stopOrders = risk.createStopOrders(position, loopEventBuilder.build());
+        EnumMap<StopOrderDto.StopOrderType, StopOrderDto> stopOrders = risk.createStopOrders(position, loopEventBuilder.build());
         assertEquals(1, stopOrders.size());
-        assertTrue(stopOrders.containsKey(StopOrderType.STOP_LOSS));
+        assertTrue(stopOrders.containsKey(StopOrderDto.StopOrderType.STOP_LOSS));
     }
 
     @Test
@@ -100,10 +99,10 @@ public class RiskManagementHandlerTest extends TestCase {
         LoopEventBuilder loopEventBuilder = new LoopEventBuilder();
         loopEventBuilder.withPriceMap(BigDecimal.TEN);
 
-        EnumMap<StopOrderType, StopOrderDto> stopOrders = risk.createStopOrders(position, loopEventBuilder.build());
+        EnumMap<StopOrderDto.StopOrderType, StopOrderDto> stopOrders = risk.createStopOrders(position, loopEventBuilder.build());
         assertEquals(2, stopOrders.size());
-        assertTrue(stopOrders.containsKey(StopOrderType.TAKE_PROFIT));
-        assertTrue(stopOrders.containsKey(StopOrderType.STOP_LOSS));
+        assertTrue(stopOrders.containsKey(StopOrderDto.StopOrderType.TAKE_PROFIT));
+        assertTrue(stopOrders.containsKey(StopOrderDto.StopOrderType.STOP_LOSS));
     }
 
     @Test
@@ -122,9 +121,9 @@ public class RiskManagementHandlerTest extends TestCase {
         LoopEventBuilder loopEventBuilder = new LoopEventBuilder();
         loopEventBuilder.withPriceMap(BigDecimal.TEN);
 
-        EnumMap<StopOrderType, StopOrderDto> stopOrders = risk.createStopOrders(position, loopEventBuilder.build());
+        EnumMap<StopOrderDto.StopOrderType, StopOrderDto> stopOrders = risk.createStopOrders(position, loopEventBuilder.build());
         assertEquals(1, stopOrders.size());
-        assertTrue(stopOrders.containsKey(StopOrderType.STOP_LOSS));
+        assertTrue(stopOrders.containsKey(StopOrderDto.StopOrderType.STOP_LOSS));
     }
 
     @Test
@@ -146,10 +145,10 @@ public class RiskManagementHandlerTest extends TestCase {
         LoopEventBuilder loopEventBuilder = new LoopEventBuilder();
         loopEventBuilder.withPriceMap(BigDecimal.TEN);
 
-        EnumMap<StopOrderType, StopOrderDto> stopOrders = risk.createStopOrders(position, loopEventBuilder.build());
+        EnumMap<StopOrderDto.StopOrderType, StopOrderDto> stopOrders = risk.createStopOrders(position, loopEventBuilder.build());
         assertEquals(1, stopOrders.size());
-        assertTrue(stopOrders.containsKey(StopOrderType.STOP_LOSS));
-        assertEquals(StopOrderType.ENTRY_STOP, stopOrders.get(StopOrderType.STOP_LOSS).getType());
+        assertTrue(stopOrders.containsKey(StopOrderDto.StopOrderType.STOP_LOSS));
+        assertEquals(StopOrderDto.StopOrderType.ENTRY_STOP, stopOrders.get(StopOrderDto.StopOrderType.STOP_LOSS).getType());
     }
 
     @Test
@@ -171,10 +170,10 @@ public class RiskManagementHandlerTest extends TestCase {
         LoopEventBuilder loopEventBuilder = new LoopEventBuilder();
         loopEventBuilder.withPriceMap(BigDecimal.TEN);
 
-        EnumMap<StopOrderType, StopOrderDto> stopOrders = risk.createStopOrders(position, loopEventBuilder.build());
+        EnumMap<StopOrderDto.StopOrderType, StopOrderDto> stopOrders = risk.createStopOrders(position, loopEventBuilder.build());
         assertEquals(1, stopOrders.size());
-        assertTrue(stopOrders.containsKey(StopOrderType.STOP_LOSS));
-        assertEquals(StopOrderType.TRAILLING_STOP, stopOrders.get(StopOrderType.STOP_LOSS).getType());
+        assertTrue(stopOrders.containsKey(StopOrderDto.StopOrderType.STOP_LOSS));
+        assertEquals(StopOrderDto.StopOrderType.TRAILLING_STOP, stopOrders.get(StopOrderDto.StopOrderType.STOP_LOSS).getType());
     }
 
 }

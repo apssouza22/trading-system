@@ -1,7 +1,6 @@
 package com.apssouza.mytrade.trading.builder;
 
 import com.apssouza.mytrade.trading.forex.order.StopOrderDto;
-import com.apssouza.mytrade.trading.forex.order.StopOrderType;
 import com.apssouza.mytrade.trading.forex.portfolio.*;
 
 import java.math.BigDecimal;
@@ -19,7 +18,7 @@ public class PositionBuilder {
     Position.ExitReason exitReason = null;
     FilledOrderDto filledOrder = null;
     Position.PositionStatus positionStatus = Position.PositionStatus.FILLED;
-    private EnumMap<StopOrderType, StopOrderDto> stopOrders = new EnumMap(StopOrderType.class);
+    private EnumMap<StopOrderDto.StopOrderType, StopOrderDto> stopOrders = new EnumMap(StopOrderDto.StopOrderType.class);
 
     public void withType(Position.PositionType type) {
         this.type = type;

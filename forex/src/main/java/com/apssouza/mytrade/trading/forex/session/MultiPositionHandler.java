@@ -1,6 +1,5 @@
 package com.apssouza.mytrade.trading.forex.session;
 
-import com.apssouza.mytrade.trading.forex.order.OrderAction;
 import com.apssouza.mytrade.trading.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.forex.order.StopOrderDto;
 import com.apssouza.mytrade.trading.forex.portfolio.FilledOrderDto;
@@ -53,7 +52,7 @@ public class MultiPositionHandler {
             if (currencyPositions.get(entry.getKey()) == 0) {
                 continue;
             }
-            OrderAction position_type = currencyPositions.get(entry.getKey()) > 0 ? OrderAction.BUY : OrderAction.SELL;
+            OrderDto.OrderAction position_type = currencyPositions.get(entry.getKey()) > 0 ? OrderDto.OrderAction.BUY : OrderDto.OrderAction.SELL;
 
             positionList.put(entry.getKey(), new FilledOrderDto(
                     LocalDateTime.now(),

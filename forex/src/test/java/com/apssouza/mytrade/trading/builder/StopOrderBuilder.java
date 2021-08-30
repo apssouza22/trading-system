@@ -1,25 +1,23 @@
 package com.apssouza.mytrade.trading.builder;
 
-import com.apssouza.mytrade.trading.forex.order.OrderAction;
+import com.apssouza.mytrade.trading.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.forex.order.StopOrderDto;
-import com.apssouza.mytrade.trading.forex.order.StopOrderStatus;
-import com.apssouza.mytrade.trading.forex.order.StopOrderType;
 
 import java.math.BigDecimal;
 
 public class StopOrderBuilder {
 
-    StopOrderType type = StopOrderType.HARD_STOP;
+    StopOrderDto.StopOrderType type = StopOrderDto.StopOrderType.HARD_STOP;
     Integer id = 0;
-    StopOrderStatus status = StopOrderStatus.CREATED;
-    OrderAction action = OrderAction.BUY;
+    StopOrderDto.StopOrderStatus status = StopOrderDto.StopOrderStatus.CREATED;
+    OrderDto.OrderAction action = OrderDto.OrderAction.BUY;
     BigDecimal price = BigDecimal.ONE;
     BigDecimal filledPrice = null;
     String symbol = "AUDUSD";
     Integer qtd = 100;
     String identifier = "AUDUSD";
 
-    public void withType(StopOrderType type) {
+    public void withType(StopOrderDto.StopOrderType type) {
         this.type = type;
     }
 
@@ -27,11 +25,11 @@ public class StopOrderBuilder {
         this.id = id;
     }
 
-    public void withStatus(StopOrderStatus status) {
+    public void withStatus(StopOrderDto.StopOrderStatus status) {
         this.status = status;
     }
 
-    public void withAction(OrderAction action) {
+    public void withAction(OrderDto.OrderAction action) {
         this.action = action;
     }
 

@@ -5,7 +5,6 @@ import com.apssouza.mytrade.trading.forex.execution.OrderExecution;
 import com.apssouza.mytrade.trading.forex.signalfeed.SignalFeedHandler;
 import com.apssouza.mytrade.trading.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.forex.order.OrderHandler;
-import com.apssouza.mytrade.trading.forex.order.OrderStatus;
 import com.apssouza.mytrade.trading.forex.portfolio.PortfolioHandler;
 import com.apssouza.mytrade.trading.forex.session.EventNotifier;
 import com.apssouza.mytrade.trading.forex.session.MultiPositionHandler;
@@ -83,7 +82,7 @@ public class PriceChangedListener implements PropertyChangeListener {
     }
 
     private void processOrders(PriceChangedEvent event, LocalDateTime currentTime) {
-        List<OrderDto> orders = this.orderHandler.getOrderByStatus(OrderStatus.CREATED);
+        List<OrderDto> orders = this.orderHandler.getOrderByStatus(OrderDto.OrderStatus.CREATED);
         List<OrderDto> orderList = MultiPositionHandler.createPositionIdentifier(orders);
 
         if (orderList.isEmpty()) {

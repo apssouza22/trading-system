@@ -1,9 +1,8 @@
 package com.apssouza.mytrade.trading.forex.portfolio;
 
 import com.apssouza.mytrade.trading.forex.common.Symbol;
-import com.apssouza.mytrade.trading.forex.order.OrderAction;
+import com.apssouza.mytrade.trading.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.forex.order.StopOrderDto;
-import com.apssouza.mytrade.trading.forex.order.StopOrderType;
 import com.apssouza.mytrade.trading.forex.common.NumberHelper;
 
 import java.math.BigDecimal;
@@ -26,7 +25,7 @@ public class Position {
     private BigDecimal avgPrice;
     private int id = 0;
 
-    EnumMap<StopOrderType, StopOrderDto> stopOrders = new EnumMap<>(StopOrderType.class);
+    EnumMap<StopOrderDto.StopOrderType, StopOrderDto> stopOrders = new EnumMap<>(StopOrderDto.StopOrderType.class);
 
     public Position(
             PositionType positionType,
@@ -54,7 +53,7 @@ public class Position {
     }
 
 
-    public Position(Position position, EnumMap<StopOrderType, StopOrderDto> stopOrders) {
+    public Position(Position position, EnumMap<StopOrderDto.StopOrderType, StopOrderDto> stopOrders) {
         this(
                 position.getPositionType(),
                 position.getSymbol(),
@@ -70,8 +69,8 @@ public class Position {
     }
 
     public StopOrderDto getTakeProfitOrder() {
-        if (this.stopOrders.containsKey(StopOrderType.TAKE_PROFIT)) {
-            return this.stopOrders.get(StopOrderType.TAKE_PROFIT);
+        if (this.stopOrders.containsKey(StopOrderDto.StopOrderType.TAKE_PROFIT)) {
+            return this.stopOrders.get(StopOrderDto.StopOrderType.TAKE_PROFIT);
         }
         return null;
     }
@@ -151,13 +150,13 @@ public class Position {
         return id;
     }
 
-    public EnumMap<StopOrderType, StopOrderDto> getStopOrders() {
+    public EnumMap<StopOrderDto.StopOrderType, StopOrderDto> getStopOrders() {
         return stopOrders;
     }
 
     public StopOrderDto getPlacedStopLoss() {
-        if (stopOrders.containsKey(StopOrderType.STOP_LOSS)) {
-            return stopOrders.get(StopOrderType.STOP_LOSS);
+        if (stopOrders.containsKey(StopOrderDto.StopOrderType.STOP_LOSS)) {
+            return stopOrders.get(StopOrderDto.StopOrderType.STOP_LOSS);
         }
         return null;
     }
@@ -179,11 +178,11 @@ public class Position {
     public enum PositionType {
         LONG, SHORT;
 
-        public OrderAction getOrderAction(){
+        public OrderDto.OrderAction getOrderAction(){
             if (this == LONG){
-                return OrderAction.BUY;
+                return OrderDto.OrderAction.BUY;
             }
-            return OrderAction.SELL;
+            return OrderDto.OrderAction.SELL;
         }
     }
 

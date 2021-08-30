@@ -1,9 +1,7 @@
 package com.apssouza.mytrade.trading.forex.risk;
 
 import com.apssouza.mytrade.trading.forex.order.OrderDto;
-import com.apssouza.mytrade.trading.forex.order.OrderOrigin;
 import com.apssouza.mytrade.trading.forex.order.StopOrderDto;
-import com.apssouza.mytrade.trading.forex.order.StopOrderType;
 import com.apssouza.mytrade.trading.forex.portfolio.PortfolioModel;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.forex.risk.stoporder.StopOrderCreator;
@@ -28,31 +26,31 @@ public class RiskManagementHandler {
     }
 
 
-    public EnumMap<StopOrderType, StopOrderDto> createStopOrders(Position position, Event event) {
+    public EnumMap<StopOrderDto.StopOrderType, StopOrderDto> createStopOrders(Position position, Event event) {
         stopOrderCreator.createContext(position.getPositionType());
 
-        EnumMap<StopOrderType, StopOrderDto> stop_orders = new EnumMap<>(StopOrderType.class);
+        EnumMap<StopOrderDto.StopOrderType, StopOrderDto> stop_orders = new EnumMap<>(StopOrderDto.StopOrderType.class);
         if (!hasStop()) {
-            return new EnumMap(StopOrderType.class);
+            return new EnumMap(StopOrderDto.StopOrderType.class);
         }
 
-        EnumMap<StopOrderType, StopOrderDto> stopOrders = position.getStopOrders();
+        EnumMap<StopOrderDto.StopOrderType, StopOrderDto> stopOrders = position.getStopOrders();
         boolean changed_units = false;
         if (!stopOrders.isEmpty()) {
-            changed_units = stopOrders.get(StopOrderType.HARD_STOP).getQuantity() != position.getQuantity();
+            changed_units = stopOrders.get(StopOrderDto.StopOrderType.HARD_STOP).getQuantity() != position.getQuantity();
         }
 
         if (stopOrders.isEmpty() || changed_units) {
-            stop_orders.put(StopOrderType.HARD_STOP, this.stopOrderCreator.getHardStopLoss(position));
-            stop_orders.put(StopOrderType.TAKE_PROFIT, this.stopOrderCreator.getProfitStopOrder(position));
+            stop_orders.put(StopOrderDto.StopOrderType.HARD_STOP, this.stopOrderCreator.getHardStopLoss(position));
+            stop_orders.put(StopOrderDto.StopOrderType.TAKE_PROFIT, this.stopOrderCreator.getProfitStopOrder(position));
         }
 
         stop_orders.putAll(getMovingStops(position, event));
         return chooseStopOrders(stop_orders);
     }
 
-    private EnumMap<StopOrderType, StopOrderDto>  getMovingStops(Position position, Event event) {
-        EnumMap<StopOrderType, StopOrderDto> stop_orders = new EnumMap(StopOrderType.class);
+    private EnumMap<StopOrderDto.StopOrderType, StopOrderDto>  getMovingStops(Position position, Event event) {
+        EnumMap<StopOrderDto.StopOrderType, StopOrderDto> stop_orders = new EnumMap(StopOrderDto.StopOrderType.class);
         Consumer<StopOrderDto> consumer = (dto) -> stop_orders.put(dto.getType(), dto);
         if (TradingParams.entry_stop_loss_enabled) {
             Optional<StopOrderDto> entryStopOrder = this.stopOrderCreator.getEntryStopOrder(position, event);
@@ -72,26 +70,26 @@ public class RiskManagementHandler {
                 TradingParams.take_profit_stop_enabled;
     }
 
-    private EnumMap<StopOrderType, StopOrderDto> chooseStopOrders(EnumMap<StopOrderType, StopOrderDto> stop_losses) {
-        EnumMap<StopOrderType, StopOrderDto> stop_orders = new EnumMap<>(StopOrderType.class);
+    private EnumMap<StopOrderDto.StopOrderType, StopOrderDto> chooseStopOrders(EnumMap<StopOrderDto.StopOrderType, StopOrderDto> stop_losses) {
+        EnumMap<StopOrderDto.StopOrderType, StopOrderDto> stop_orders = new EnumMap<>(StopOrderDto.StopOrderType.class);
 
         if (TradingParams.take_profit_stop_enabled) {
-            stop_orders.put(StopOrderType.TAKE_PROFIT, stop_losses.get(StopOrderType.TAKE_PROFIT));
+            stop_orders.put(StopOrderDto.StopOrderType.TAKE_PROFIT, stop_losses.get(StopOrderDto.StopOrderType.TAKE_PROFIT));
         }
 
         StopOrderDto stopOrderDto = null;
-        if (stop_losses.containsKey(StopOrderType.TRAILLING_STOP)) {
-            stopOrderDto = stop_losses.get(StopOrderType.TRAILLING_STOP);
+        if (stop_losses.containsKey(StopOrderDto.StopOrderType.TRAILLING_STOP)) {
+            stopOrderDto = stop_losses.get(StopOrderDto.StopOrderType.TRAILLING_STOP);
 
-        } else if (stop_losses.containsKey(StopOrderType.ENTRY_STOP)) {
-            stopOrderDto = stop_losses.get(StopOrderType.ENTRY_STOP);
+        } else if (stop_losses.containsKey(StopOrderDto.StopOrderType.ENTRY_STOP)) {
+            stopOrderDto = stop_losses.get(StopOrderDto.StopOrderType.ENTRY_STOP);
         }
 
         if (stopOrderDto == null) {
-            stop_orders.put(StopOrderType.STOP_LOSS, stop_losses.get(StopOrderType.HARD_STOP));
+            stop_orders.put(StopOrderDto.StopOrderType.STOP_LOSS, stop_losses.get(StopOrderDto.StopOrderType.HARD_STOP));
             return stop_orders;
         }
-        stop_orders.put(StopOrderType.STOP_LOSS, stopOrderDto);
+        stop_orders.put(StopOrderDto.StopOrderType.STOP_LOSS, stopOrderDto);
         return stop_orders;
     }
 
@@ -126,7 +124,7 @@ public class RiskManagementHandler {
          #     - many signals
          #     - order generated by exits and by the signals
          **/
-        if (order.getOrigin().equals(OrderOrigin.SIGNAL)) {
+        if (order.getOrigin().equals(OrderDto.OrderOrigin.SIGNAL)) {
             if (processedOrders.contains(order.getSymbol())) {
                 return true;
             }

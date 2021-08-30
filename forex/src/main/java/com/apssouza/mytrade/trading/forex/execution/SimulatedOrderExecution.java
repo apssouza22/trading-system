@@ -1,7 +1,6 @@
 package com.apssouza.mytrade.trading.forex.execution;
 
 import com.apssouza.mytrade.feed.api.PriceDto;
-import com.apssouza.mytrade.trading.forex.order.OrderAction;
 import com.apssouza.mytrade.trading.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.forex.order.StopOrderDto;
 import com.apssouza.mytrade.trading.forex.portfolio.FilledOrderDto;
@@ -58,7 +57,7 @@ class SimulatedOrderExecution implements OrderExecution {
     public FilledOrderDto executeOrder(OrderDto order) {
         String currency_pair = order.getSymbol();
         String position_identifier = MultiPositionHandler.getIdentifierFromOrder(order);
-        OrderAction action = order.getAction();
+        OrderDto.OrderAction action = order.getAction();
         int quantity = order.getQuantity();
 
         PriceDto fill_price = priceMap.get(currency_pair);
@@ -98,7 +97,7 @@ class SimulatedOrderExecution implements OrderExecution {
         return stopOrderHandler.placeStopOrder(stop);
     }
 
-    private void handleExistingPosition(OrderDto order, OrderAction action, int quantity) {
+    private void handleExistingPosition(OrderDto order, OrderDto.OrderAction action, int quantity) {
         if (TradingParams.trading_multi_position_enabled || TradingParams.trading_position_edit_enabled) {
             this.multiPositionPerCPairHandler.handle(action, order.getSymbol(), quantity);
         } else {

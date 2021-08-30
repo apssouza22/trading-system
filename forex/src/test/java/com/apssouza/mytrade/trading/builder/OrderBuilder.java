@@ -1,9 +1,6 @@
 package com.apssouza.mytrade.trading.builder;
 
-import com.apssouza.mytrade.trading.forex.order.OrderAction;
 import com.apssouza.mytrade.trading.forex.order.OrderDto;
-import com.apssouza.mytrade.trading.forex.order.OrderOrigin;
-import com.apssouza.mytrade.trading.forex.order.OrderStatus;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -12,11 +9,11 @@ import java.util.List;
 public class OrderBuilder {
     private String symbol = "AUDUSD";
     private String identifier = "AUDUSD";
-    private OrderAction action = OrderAction.BUY;
+    private OrderDto.OrderAction action = OrderDto.OrderAction.BUY;
     private int qtd = 1000;
-    private OrderOrigin origin = OrderOrigin.SIGNAL;
+    private OrderDto.OrderOrigin origin = OrderDto.OrderOrigin.SIGNAL;
     private LocalDateTime time = LocalDateTime.MIN;
-    private OrderStatus status = OrderStatus.CREATED;
+    private OrderDto.OrderStatus status = OrderDto.OrderStatus.CREATED;
 
     public OrderBuilder withSymbol(String symbol) {
         this.symbol = symbol;
@@ -28,7 +25,7 @@ public class OrderBuilder {
         return this;
     }
 
-    public OrderBuilder withAction(OrderAction action) {
+    public OrderBuilder withAction(OrderDto.OrderAction action) {
         this.action = action;
         return this;
     }
@@ -38,7 +35,7 @@ public class OrderBuilder {
         return this;
     }
 
-    public void withOrigin(OrderOrigin origin) {
+    public void withOrigin(OrderDto.OrderOrigin origin) {
         this.origin = origin;
     }
 
@@ -46,14 +43,14 @@ public class OrderBuilder {
         this.time = time;
     }
 
-    public OrderBuilder withStatus(OrderStatus status) {
+    public OrderBuilder withStatus(OrderDto.OrderStatus status) {
         this.status = status;
         return this;
     }
 
     List<OrderDto> orders = new ArrayList<>();
 
-    public OrderBuilder withOrder(LocalDateTime time, OrderAction action, OrderStatus status) {
+    public OrderBuilder withOrder(LocalDateTime time, OrderDto.OrderAction action, OrderDto.OrderStatus status) {
         orders.add(new OrderDto(
                 symbol,
                 action,

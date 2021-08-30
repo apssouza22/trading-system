@@ -6,7 +6,7 @@ public class StopOrderDto {
     private StopOrderType type;
     private Integer id;
     private StopOrderStatus status;
-    private OrderAction action;
+    private OrderDto.OrderAction action;
     private BigDecimal price;
     private BigDecimal filledPrice;
     private String symbol;
@@ -17,7 +17,7 @@ public class StopOrderDto {
             StopOrderType type,
             Integer id,
             StopOrderStatus status,
-            OrderAction action,
+            OrderDto.OrderAction action,
             BigDecimal price,
             BigDecimal filledPrice,
             String symbol,
@@ -80,7 +80,7 @@ public class StopOrderDto {
         return this.status;
     }
 
-    public OrderAction getAction() {
+    public OrderDto.OrderAction getAction() {
         return this.action;
     }
 
@@ -116,7 +116,7 @@ public class StopOrderDto {
         this.status = status;
     }
 
-    public void setAction(OrderAction action) {
+    public void setAction(OrderDto.OrderAction action) {
         this.action = action;
     }
 
@@ -221,10 +221,19 @@ public class StopOrderDto {
         return result;
     }
 
+    @Override
     public String toString() {
         return "StopOrderDto(type=" + this.getType() + ", id=" + this.getId() + ", status=" + this.getStatus() +
                 ", action=" + this.getAction() + ", price=" + this.getPrice() + ", filledPrice=" +
                 this.getFilledPrice() + ", symbol=" + this.getSymbol() + ", quantity=" + this.getQuantity() +
                 ", identifier=" + this.getIdentifier() + ")";
+    }
+
+    public enum StopOrderType {
+        HARD_STOP, ENTRY_STOP, TRAILLING_STOP, STOP_LOSS, TAKE_PROFIT
+    }
+
+    public enum StopOrderStatus {
+        FILLED, CANCELLED, OPENED,SUBMITTED, CREATED;
     }
 }

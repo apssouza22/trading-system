@@ -7,9 +7,9 @@ import com.apssouza.mytrade.trading.forex.risk.PositionSizerFixed;
 import com.apssouza.mytrade.trading.forex.session.event.EventType;
 import com.apssouza.mytrade.trading.forex.session.event.SignalCreatedEvent;
 
-import static com.apssouza.mytrade.trading.forex.order.OrderAction.BUY;
-import static com.apssouza.mytrade.trading.forex.order.OrderOrigin.*;
-import static com.apssouza.mytrade.trading.forex.order.OrderStatus.*;
+import static com.apssouza.mytrade.trading.forex.order.OrderDto.OrderAction.BUY;
+import static com.apssouza.mytrade.trading.forex.order.OrderDto.OrderOrigin.*;
+import static com.apssouza.mytrade.trading.forex.order.OrderDto.OrderStatus.*;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -61,7 +61,7 @@ public class OrderHandlerShould extends TestCase {
         OrderHandler orderHandler = OrderHandlerFactory.factory(new PositionSizerFixed(), new MemoryOrderDao());
         OrderDto orderFromClosedPosition = orderHandler.createOrderFromClosedPosition(position, LocalDateTime.MIN);
         assertEquals(EXITS, orderFromClosedPosition.getOrigin());
-        assertEquals(OrderAction.SELL, orderFromClosedPosition.getAction());
+        assertEquals(OrderDto.OrderAction.SELL, orderFromClosedPosition.getAction());
     }
 
     @Test

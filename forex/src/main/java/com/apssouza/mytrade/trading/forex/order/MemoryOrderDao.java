@@ -22,7 +22,7 @@ class MemoryOrderDao implements  OrderDao {
     }
 
     @Override
-    public boolean updateStatus(Integer id, OrderStatus status) {
+    public boolean updateStatus(Integer id, OrderDto.OrderStatus status) {
         OrderDto order = MemoryOrderDao.ORDERS.get(id);
         OrderDto orderDto = new OrderDto(
                 status,
@@ -33,7 +33,7 @@ class MemoryOrderDao implements  OrderDao {
     }
 
     @Override
-    public List<OrderDto> getOrderByStatus(OrderStatus status) {
+    public List<OrderDto> getOrderByStatus(OrderDto.OrderStatus status) {
         List<OrderDto> orders = new ArrayList<>();
         for (Map.Entry<Integer, OrderDto> entry : MemoryOrderDao.ORDERS.entrySet()) {
             if (entry.getValue().getStatus().equals(status)) {

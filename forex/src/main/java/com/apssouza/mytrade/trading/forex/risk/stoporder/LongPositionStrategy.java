@@ -1,6 +1,5 @@
 package com.apssouza.mytrade.trading.forex.risk.stoporder;
 
-import com.apssouza.mytrade.trading.forex.order.StopOrderType;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.forex.common.NumberHelper;
 
@@ -41,7 +40,7 @@ class LongPositionStrategy implements CreatorStrategy {
         if (position.getPlacedStopLoss() == null){
             return Optional.empty();
         }
-        if (!position.getPlacedStopLoss().getType().equals(StopOrderType.TRAILLING_STOP)) {
+        if (!position.getPlacedStopLoss().getType().equals(com.apssouza.mytrade.trading.forex.order.StopOrderDto.StopOrderType.TRAILLING_STOP)) {
             stopPrice = last_close.subtract(distanceObject.getTraillingStopDistance());
         } else {
             stopPrice = position.getPlacedStopLoss().getPrice().subtract(distanceObject.getTraillingStopDistance());

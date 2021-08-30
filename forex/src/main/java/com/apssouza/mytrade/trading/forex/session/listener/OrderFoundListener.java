@@ -3,8 +3,6 @@ package com.apssouza.mytrade.trading.forex.session.listener;
 import com.apssouza.mytrade.trading.forex.execution.OrderExecution;
 import com.apssouza.mytrade.trading.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.forex.order.OrderHandler;
-import com.apssouza.mytrade.trading.forex.order.OrderOrigin;
-import com.apssouza.mytrade.trading.forex.order.OrderStatus;
 import com.apssouza.mytrade.trading.forex.portfolio.FilledOrderDto;
 import com.apssouza.mytrade.trading.forex.risk.RiskManagementHandler;
 import com.apssouza.mytrade.trading.forex.session.EventNotifier;
@@ -62,14 +60,14 @@ public class OrderFoundListener implements PropertyChangeListener {
         List<String> processedOrders = new ArrayList<>();
         List<String> exitedPositions = new ArrayList<>();
         for (OrderDto order : orders) {
-            if (order.getOrigin() == OrderOrigin.EXITS) {
+            if (order.getOrigin() == OrderDto.OrderOrigin.EXITS) {
                 exitedPositions.add(order.getSymbol());
             }
         }
 
         for (OrderDto order : orders) {
             if (!riskManagementHandler.canExecuteOrder(event, order, processedOrders, exitedPositions)) {
-                orderHandler.updateOrderStatus(order.getId(), OrderStatus.CANCELLED);
+                orderHandler.updateOrderStatus(order.getId(), OrderDto.OrderStatus.CANCELLED);
                 continue;
             }
             this.historyHandler.addOrder(order);
@@ -86,10 +84,10 @@ public class OrderFoundListener implements PropertyChangeListener {
                     event.getPrice(),
                     filledOrder
             ));
-            orderHandler.updateOrderStatus(order.getId(), OrderStatus.EXECUTED);
+            orderHandler.updateOrderStatus(order.getId(), OrderDto.OrderStatus.EXECUTED);
             processedOrders.add(order.getSymbol());
         } else {
-            orderHandler.updateOrderStatus(order.getId(), OrderStatus.FAILED);
+            orderHandler.updateOrderStatus(order.getId(), OrderDto.OrderStatus.FAILED);
         }
     }
 

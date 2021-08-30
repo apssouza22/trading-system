@@ -2,7 +2,7 @@ package com.apssouza.mytrade.trading.forex.risk;
 
 import com.apssouza.mytrade.common.misc.helper.time.MarketTimeHelper;
 import com.apssouza.mytrade.feed.api.SignalDto;
-import com.apssouza.mytrade.trading.forex.order.OrderAction;
+import com.apssouza.mytrade.trading.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.forex.portfolio.PortfolioModel;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.forex.session.event.PriceChangedEvent;
@@ -65,14 +65,14 @@ public class PositionExitHandler {
             return false;
         }
 
-        OrderAction exit_direction = null;
+        OrderDto.OrderAction exit_direction = null;
         if (position.getPositionType() == Position.PositionType.LONG) {
-            exit_direction = OrderAction.SELL;
+            exit_direction = OrderDto.OrderAction.SELL;
         } else {
-            exit_direction = OrderAction.BUY;
+            exit_direction = OrderDto.OrderAction.BUY;
         }
 
-        if (OrderAction.valueOf(signal.action().toUpperCase()) == exit_direction) {
+        if (OrderDto.OrderAction.valueOf(signal.action().toUpperCase()) == exit_direction) {
             return true;
         }
         return false;

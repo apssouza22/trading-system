@@ -1,6 +1,6 @@
 package com.apssouza.mytrade.trading.forex.portfolio;
 
-import com.apssouza.mytrade.trading.forex.order.OrderAction;
+import com.apssouza.mytrade.trading.forex.order.OrderDto;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 public class FilledOrderDto {
     private final LocalDateTime time;
     private final String symbol;
-    private final OrderAction action;
+    private final OrderDto.OrderAction action;
     private final int quantity;
     private final BigDecimal priceWithSpread;
     private final String identifier;
@@ -17,7 +17,7 @@ public class FilledOrderDto {
     public FilledOrderDto(
             LocalDateTime time,
             String symbol,
-            OrderAction action,
+            OrderDto.OrderAction action,
             int quantity,
             BigDecimal priceWithSpread,
             String identifier,
@@ -53,7 +53,7 @@ public class FilledOrderDto {
         return this.symbol;
     }
 
-    public OrderAction getAction() {
+    public OrderDto.OrderAction getAction() {
         return this.action;
     }
 

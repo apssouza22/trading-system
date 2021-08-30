@@ -1,9 +1,8 @@
 package com.apssouza.mytrade.trading.forex.execution;
 
 import com.apssouza.mytrade.feed.api.PriceDto;
-import com.apssouza.mytrade.trading.forex.order.OrderAction;
+import com.apssouza.mytrade.trading.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.forex.order.StopOrderDto;
-import com.apssouza.mytrade.trading.forex.order.StopOrderStatus;
 import com.apssouza.mytrade.trading.forex.portfolio.FilledOrderDto;
 
 import java.time.LocalDateTime;
@@ -36,7 +35,7 @@ class StopOrderExecutionHandler {
     public StopOrderDto placeStopOrder(StopOrderDto stop) {
         int id = StopOrderExecutionHandler.stopOrderId.incrementAndGet();
 
-        StopOrderStatus status = StopOrderStatus.SUBMITTED;
+        StopOrderDto.StopOrderStatus status = StopOrderDto.StopOrderStatus.SUBMITTED;
         StopOrderDto stopOrderDto = new StopOrderDto(
                 stop.getType(),
                 id,
@@ -68,8 +67,8 @@ class StopOrderExecutionHandler {
         Integer count = 0;
         for (Map.Entry<Integer, StopOrderDto> entry : this.allStopOrders.entrySet()) {
             StopOrderDto stop_loss = this.allStopOrders.get(entry.getKey());
-            if (stop_loss.getStatus().equals(StopOrderStatus.SUBMITTED)) {
-                this.allStopOrders.put(entry.getKey(), new StopOrderDto(StopOrderStatus.CANCELLED, stop_loss));
+            if (stop_loss.getStatus().equals(StopOrderDto.StopOrderStatus.SUBMITTED)) {
+                this.allStopOrders.put(entry.getKey(), new StopOrderDto(StopOrderDto.StopOrderStatus.CANCELLED, stop_loss));
                 count += 1;
             }
         }
@@ -88,7 +87,7 @@ class StopOrderExecutionHandler {
     }
 
     private void updateStopOrderStatus(StopOrderDto stopOrder, PriceDto priceDto) {
-        stopOrder = new StopOrderDto(StopOrderStatus.FILLED, priceDto.close(), stopOrder);
+        stopOrder = new StopOrderDto(StopOrderDto.StopOrderStatus.FILLED, priceDto.close(), stopOrder);
         this.allStopOrders.put(stopOrder.getId(), stopOrder);
     }
 
@@ -99,21 +98,21 @@ class StopOrderExecutionHandler {
         }
 
         FilledOrderDto filledOrderDto = this.positions.get(stopOrderDto.getSymbol());
-        OrderAction action = stopOrderDto.getAction();
+        OrderDto.OrderAction action = stopOrderDto.getAction();
 
-        if (action.equals(OrderAction.SELL) && filledOrderDto.getAction().equals(OrderAction.BUY)) {
+        if (action.equals(OrderDto.OrderAction.SELL) && filledOrderDto.getAction().equals(OrderDto.OrderAction.BUY)) {
             filledOrderDto = handleOppositeDirection(stopOrderDto, filledOrderDto);
         }
 
-        if (action.equals(OrderAction.BUY) && filledOrderDto.getAction().equals(OrderAction.SELL)) {
+        if (action.equals(OrderDto.OrderAction.BUY) && filledOrderDto.getAction().equals(OrderDto.OrderAction.SELL)) {
             filledOrderDto = handleOppositeDirection(stopOrderDto, filledOrderDto);
         }
 
-        if (action.equals(OrderAction.BUY) && filledOrderDto.getAction().equals(OrderAction.BUY)) {
+        if (action.equals(OrderDto.OrderAction.BUY) && filledOrderDto.getAction().equals(OrderDto.OrderAction.BUY)) {
             filledOrderDto = handleSameDirection(stopOrderDto, filledOrderDto);
         }
 
-        if (action.equals(OrderAction.SELL) && filledOrderDto.getAction().equals(OrderAction.SELL)) {
+        if (action.equals(OrderDto.OrderAction.SELL) && filledOrderDto.getAction().equals(OrderDto.OrderAction.SELL)) {
             filledOrderDto = handleSameDirection(stopOrderDto, filledOrderDto);
         }
 

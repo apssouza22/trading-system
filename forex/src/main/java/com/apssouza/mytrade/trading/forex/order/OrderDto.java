@@ -180,4 +180,16 @@ public class OrderDto {
                 this.getQuantity() + ", origin=" + this.getOrigin() + ", time=" + this.getTime() + ", identifier=" +
                 this.getIdentifier() + ", status=" + this.getStatus() + ", id=" + this.getId() + ")";
     }
+
+    public enum OrderOrigin {
+        STOP_ORDER, EXITS, SIGNAL
+    }
+
+    public enum OrderStatus {
+        CREATED, FILLED, FAILED, EXECUTED, PROCESSING, CANCELLED
+    }
+
+    public enum OrderAction {
+        BUY, SELL
+    }
 }
