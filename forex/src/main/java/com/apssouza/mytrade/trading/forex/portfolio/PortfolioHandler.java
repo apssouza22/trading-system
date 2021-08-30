@@ -3,7 +3,6 @@ package com.apssouza.mytrade.trading.forex.portfolio;
 import com.apssouza.mytrade.feed.api.SignalDto;
 import com.apssouza.mytrade.trading.forex.execution.OrderExecution;
 import com.apssouza.mytrade.trading.forex.order.*;
-import com.apssouza.mytrade.trading.forex.risk.PositionExitHandler;
 import com.apssouza.mytrade.trading.forex.risk.RiskManagementHandler;
 import com.apssouza.mytrade.trading.forex.session.*;
 import com.apssouza.mytrade.trading.forex.session.event.*;
@@ -15,10 +14,8 @@ import java.util.*;
 import java.util.logging.Logger;
 
 public class PortfolioHandler {
-    private final BigDecimal equity;
 
     private final OrderHandler orderHandler;
-    private final PositionExitHandler positionExitHandler;
     private final OrderExecution executionHandler;
     private final PortfolioModel portfolio;
     private final ReconciliationHandler reconciliationHandler;
@@ -29,9 +26,7 @@ public class PortfolioHandler {
     private Map<Integer, StopOrderDto> currentStopOrders = new HashMap<>();
 
     public PortfolioHandler(
-            BigDecimal equity,
             OrderHandler orderHandler,
-            PositionExitHandler positionExitHandler,
             OrderExecution executionHandler,
             PortfolioModel portfolio,
             ReconciliationHandler reconciliationHandler,
@@ -39,10 +34,7 @@ public class PortfolioHandler {
             RiskManagementHandler riskManagementHandler,
             EventNotifier eventNotifier
     ) {
-
-        this.equity = equity;
         this.orderHandler = orderHandler;
-        this.positionExitHandler = positionExitHandler;
         this.executionHandler = executionHandler;
         this.portfolio = portfolio;
         this.reconciliationHandler = reconciliationHandler;
@@ -138,7 +130,7 @@ public class PortfolioHandler {
         if (portfolio.getPositions().isEmpty()) {
             return;
         }
-        List<Position> exitedPositionss = this.positionExitHandler.process(event, signals);
+        List<Position> exitedPositionss = this.riskManagementHandler.processPositionExit(event, signals);
         this.createOrderFromClosedPosition(exitedPositionss, event);
     }
 

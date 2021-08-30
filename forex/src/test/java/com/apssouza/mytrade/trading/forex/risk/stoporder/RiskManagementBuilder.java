@@ -4,6 +4,7 @@ import com.apssouza.mytrade.trading.builder.StopOrderBuilder;
 import com.apssouza.mytrade.trading.forex.order.StopOrderDto;
 import com.apssouza.mytrade.trading.forex.portfolio.PortfolioModel;
 import com.apssouza.mytrade.trading.forex.risk.PositionSizer;
+import com.apssouza.mytrade.trading.forex.risk.RiskManagementFactory;
 import com.apssouza.mytrade.trading.forex.risk.RiskManagementHandler;
 
 import org.mockito.Mockito;
@@ -14,7 +15,6 @@ public class RiskManagementBuilder {
 
     public RiskManagementHandler build(){
         PortfolioModel portfolio = Mockito.mock(PortfolioModel.class);
-        PositionSizer positionSizer = Mockito.mock(PositionSizer.class);
         StopOrderCreatorFixed stopOrderCreatorFixed = Mockito.mock(StopOrderCreatorFixed.class);
         var stopOrderBuilder = new StopOrderBuilder();
         stopOrderBuilder.withType(StopOrderDto.StopOrderType.ENTRY_STOP);
@@ -43,6 +43,6 @@ public class RiskManagementBuilder {
         ).thenReturn(
                 stopOrderBuilder.build()
         );
-        return new RiskManagementHandler(portfolio, positionSizer, stopOrderCreatorFixed);
+        return RiskManagementFactory.create(portfolio, stopOrderCreatorFixed);
     }
 }

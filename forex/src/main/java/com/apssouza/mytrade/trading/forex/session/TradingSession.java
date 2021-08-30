@@ -13,9 +13,9 @@ import com.apssouza.mytrade.trading.forex.portfolio.PortfolioModel;
 import com.apssouza.mytrade.trading.forex.pricefeed.PriceFeedHandler;
 import com.apssouza.mytrade.trading.forex.pricefeed.PriceStream;
 import com.apssouza.mytrade.trading.forex.pricefeed.PriceStreamFactory;
-import com.apssouza.mytrade.trading.forex.risk.PositionExitHandler;
 import com.apssouza.mytrade.trading.forex.risk.PositionSizer;
 import com.apssouza.mytrade.trading.forex.risk.PositionSizerFixed;
+import com.apssouza.mytrade.trading.forex.risk.RiskManagementFactory;
 import com.apssouza.mytrade.trading.forex.risk.RiskManagementHandler;
 import com.apssouza.mytrade.trading.forex.risk.stoporder.StopOrderDto;
 import com.apssouza.mytrade.trading.forex.risk.stoporder.StopOrderFactory;
@@ -55,7 +55,6 @@ public class TradingSession {
     protected OrderExecution executionHandler;
     protected PositionSizer positionSizer;
     protected PortfolioModel portfolio;
-    protected PositionExitHandler positionExitHandler;
     protected OrderHandler orderHandler;
     protected HistoryBookHandler historyHandler;
     protected PriceStream priceStream;
@@ -93,26 +92,21 @@ public class TradingSession {
         this.executionHandler = OrderExecutionFactory.factory(this.executionType);
         this.positionSizer = new PositionSizerFixed();
         this.portfolio = new PortfolioModel(this.equity);
-        this.positionExitHandler = new PositionExitHandler(this.portfolio);
         this.orderHandler = OrderHandlerFactory.factory(this.positionSizer);
         this.historyHandler = new HistoryBookHandler(new TransactionsExporter());
-        this.riskManagementHandler = new RiskManagementHandler(
+        this.riskManagementHandler = RiskManagementFactory.create(
                 this.portfolio,
-                positionSizer,
                 StopOrderFactory.factory(new StopOrderDto(
                         TradingParams.hard_stop_loss_distance,
                         TradingParams.take_profit_distance_fixed,
                         TradingParams.entry_stop_loss_distance_fixed,
                         TradingParams.trailing_stop_loss_distance
                 ))
-
         );
 
         eventNotifier = new EventNotifier();
         this.portfolioHandler = PortfolioFactory.factory(
-                this.equity,
                 this.orderHandler,
-                this.positionExitHandler,
                 this.executionHandler,
                 this.portfolio,
                 this.historyHandler,

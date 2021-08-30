@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
-public class PositionExitHandler {
+class PositionExitHandler {
     private final PortfolioModel portfolio;
     private static Logger log = Logger.getLogger(PositionExitHandler.class.getSimpleName());
 

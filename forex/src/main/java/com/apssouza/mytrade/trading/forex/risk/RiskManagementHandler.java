@@ -1,11 +1,13 @@
 package com.apssouza.mytrade.trading.forex.risk;
 
+import com.apssouza.mytrade.feed.api.SignalDto;
 import com.apssouza.mytrade.trading.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.forex.order.StopOrderDto;
 import com.apssouza.mytrade.trading.forex.portfolio.PortfolioModel;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.forex.risk.stoporder.StopOrderCreator;
 import com.apssouza.mytrade.trading.forex.session.event.Event;
+import com.apssouza.mytrade.trading.forex.session.event.PriceChangedEvent;
 import com.apssouza.mytrade.trading.forex.session.event.SignalCreatedEvent;
 import com.apssouza.mytrade.trading.forex.common.TradingParams;
 import com.apssouza.mytrade.common.misc.helper.time.MarketTimeHelper;
@@ -16,12 +18,12 @@ import java.util.function.Consumer;
 public class RiskManagementHandler {
 
     private final PortfolioModel portfolio;
-    private final PositionSizer positionSizer;
+    private PositionExitHandler exitHandler;
     private final StopOrderCreator stopOrderCreator;
 
-    public RiskManagementHandler(PortfolioModel portfolio, PositionSizer positionSizer, StopOrderCreator stopOrderCreator) {
+    public RiskManagementHandler(PortfolioModel portfolio, PositionExitHandler exitHandler, StopOrderCreator stopOrderCreator) {
         this.portfolio = portfolio;
-        this.positionSizer = positionSizer;
+        this.exitHandler = exitHandler;
         this.stopOrderCreator = stopOrderCreator;
     }
 
@@ -47,6 +49,10 @@ public class RiskManagementHandler {
 
         stop_orders.putAll(getMovingStops(position, event));
         return chooseStopOrders(stop_orders);
+    }
+
+    public List<Position> processPositionExit(PriceChangedEvent event, List<SignalDto> signals) {
+        return exitHandler.process(event,signals);
     }
 
     private EnumMap<StopOrderDto.StopOrderType, StopOrderDto>  getMovingStops(Position position, Event event) {
