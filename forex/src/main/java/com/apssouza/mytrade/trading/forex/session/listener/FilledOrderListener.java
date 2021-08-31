@@ -3,9 +3,9 @@ package com.apssouza.mytrade.trading.forex.session.listener;
 import com.apssouza.mytrade.trading.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.forex.portfolio.*;
 import com.apssouza.mytrade.trading.forex.session.EventNotifier;
+import com.apssouza.mytrade.trading.forex.session.TransactionDto;
 import com.apssouza.mytrade.trading.forex.statistics.HistoryBookHandler;
 import com.apssouza.mytrade.trading.forex.session.event.*;
-import com.apssouza.mytrade.trading.forex.statistics.TransactionState;
 import com.apssouza.mytrade.trading.forex.common.TradingParams;
 import com.apssouza.mytrade.trading.forex.common.observer.PropertyChangeEvent;
 import com.apssouza.mytrade.trading.forex.common.observer.PropertyChangeListener;
@@ -77,22 +77,22 @@ public class FilledOrderListener implements PropertyChangeListener {
     private void handleSameDirection(FilledOrderDto filledOrder, Position ps) {
         if (filledOrder.getAction().equals(OrderDto.OrderAction.BUY) && ps.getPositionType().equals(Position.PositionType.LONG)) {
             this.portfolio.addPositionQtd(filledOrder.getIdentifier(), filledOrder.getQuantity(), filledOrder.getPriceWithSpread());
-            this.historyHandler.setState(TransactionState.ADD_QTD, filledOrder.getIdentifier());
+            this.historyHandler.setState(TransactionDto.TransactionState.ADD_QTD, filledOrder.getIdentifier());
 
         }
         if (filledOrder.getAction().equals(OrderDto.OrderAction.SELL) && ps.getPositionType().equals(Position.PositionType.SHORT)) {
             this.portfolio.addPositionQtd(filledOrder.getIdentifier(), filledOrder.getQuantity(), filledOrder.getPriceWithSpread());
-            this.historyHandler.setState(TransactionState.ADD_QTD, filledOrder.getIdentifier());
+            this.historyHandler.setState(TransactionDto.TransactionState.ADD_QTD, filledOrder.getIdentifier());
         }
     }
 
     private void handleOppositeDirection(FilledOrderDto filledOrder, Position ps) {
         if (filledOrder.getQuantity() == ps.getQuantity()) {
             this.portfolio.closePosition(filledOrder.getIdentifier());
-            this.historyHandler.setState(TransactionState.EXIT, filledOrder.getIdentifier());
+            this.historyHandler.setState(TransactionDto.TransactionState.EXIT, filledOrder.getIdentifier());
         } else {
             this.portfolio.removePositionQtd(filledOrder.getIdentifier(), filledOrder.getQuantity());
-            this.historyHandler.setState(TransactionState.REMOVE_QTD, filledOrder.getIdentifier());
+            this.historyHandler.setState(TransactionDto.TransactionState.REMOVE_QTD, filledOrder.getIdentifier());
         }
     }
 
@@ -112,7 +112,7 @@ public class FilledOrderListener implements PropertyChangeListener {
         );
 
         portfolio.addNewPosition(ps1);
-        historyHandler.setState(TransactionState.ENTRY, ps1.getIdentifier());
+        historyHandler.setState(TransactionDto.TransactionState.ENTRY, ps1.getIdentifier());
         historyHandler.addPosition(ps1);
         return ps1;
     }

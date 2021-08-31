@@ -3,7 +3,6 @@ package com.apssouza.mytrade.trading.forex.session;
 import com.apssouza.mytrade.trading.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.forex.portfolio.FilledOrderDto;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;
-import com.apssouza.mytrade.trading.forex.statistics.TransactionState;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -19,7 +18,7 @@ public class CycleHistory {
         this.time = time;
     }
 
-    public void setState(TransactionState state, String identifier) {
+    public void setState(TransactionDto.TransactionState state, String identifier) {
         getTransaction(identifier).setState(state);
     }
 

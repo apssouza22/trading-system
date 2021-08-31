@@ -5,14 +5,15 @@ import com.apssouza.mytrade.trading.api.SessionType;
 import com.apssouza.mytrade.trading.forex.common.TradingParams;
 import com.apssouza.mytrade.trading.forex.execution.OrderExecution;
 import com.apssouza.mytrade.trading.forex.execution.OrderExecutionFactory;
+import com.apssouza.mytrade.trading.forex.feed.pricefeed.PriceFeedHandler;
+import com.apssouza.mytrade.trading.forex.feed.pricefeed.PriceStream;
+import com.apssouza.mytrade.trading.forex.feed.pricefeed.PriceStreamFactory;
+import com.apssouza.mytrade.trading.forex.feed.signalfeed.SignalFeedHandler;
 import com.apssouza.mytrade.trading.forex.order.OrderHandler;
 import com.apssouza.mytrade.trading.forex.order.OrderHandlerFactory;
 import com.apssouza.mytrade.trading.forex.portfolio.PortfolioFactory;
 import com.apssouza.mytrade.trading.forex.portfolio.PortfolioHandler;
 import com.apssouza.mytrade.trading.forex.portfolio.PortfolioModel;
-import com.apssouza.mytrade.trading.forex.feed.pricefeed.PriceFeedHandler;
-import com.apssouza.mytrade.trading.forex.feed.pricefeed.PriceStream;
-import com.apssouza.mytrade.trading.forex.feed.pricefeed.PriceStreamFactory;
 import com.apssouza.mytrade.trading.forex.risk.RiskManagementFactory;
 import com.apssouza.mytrade.trading.forex.risk.RiskManagementHandler;
 import com.apssouza.mytrade.trading.forex.risk.stoporder.StopOrderDto;
@@ -29,9 +30,8 @@ import com.apssouza.mytrade.trading.forex.session.listener.PriceChangedListener;
 import com.apssouza.mytrade.trading.forex.session.listener.SessionFinishedListener;
 import com.apssouza.mytrade.trading.forex.session.listener.SignalCreatedListener;
 import com.apssouza.mytrade.trading.forex.session.listener.StopOrderFilledListener;
-import com.apssouza.mytrade.trading.forex.feed.signalfeed.SignalFeedHandler;
 import com.apssouza.mytrade.trading.forex.statistics.HistoryBookHandler;
-import com.apssouza.mytrade.trading.forex.statistics.TransactionsExporter;
+import com.apssouza.mytrade.trading.forex.statistics.HistoryBookHandlerFactory;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -88,7 +88,7 @@ public class TradingSession {
     private void configSession() {
         this.executionHandler = OrderExecutionFactory.factory(this.executionType);
         this.portfolio = new PortfolioModel(this.equity);
-        this.historyHandler = new HistoryBookHandler(new TransactionsExporter());
+        this.historyHandler = HistoryBookHandlerFactory.create();
         this.riskManagementHandler = RiskManagementFactory.create(
                 this.portfolio,
                 StopOrderFactory.factory(new StopOrderDto(

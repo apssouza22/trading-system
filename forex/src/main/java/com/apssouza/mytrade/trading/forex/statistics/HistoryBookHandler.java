@@ -4,6 +4,7 @@ import com.apssouza.mytrade.trading.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.forex.portfolio.FilledOrderDto;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.forex.session.CycleHistory;
+import com.apssouza.mytrade.trading.forex.session.TransactionDto;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -32,7 +33,7 @@ public class HistoryBookHandler {
         transactions.add(this.cycle);
     }
 
-    public void setState(TransactionState exit, String identifier) {
+    public void setState(TransactionDto.TransactionState exit, String identifier) {
         this.cycle.setState(exit, identifier);
     }
 

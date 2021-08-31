@@ -7,6 +7,8 @@ import com.apssouza.mytrade.trading.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.forex.portfolio.FilledOrderDto;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.forex.session.CycleHistory;
+import com.apssouza.mytrade.trading.forex.session.TransactionDto;
+
 import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;
@@ -57,11 +59,11 @@ public class HistoryBookHandlerTest extends TestCase {
     @Test
     public void setState() {
         historyBookHandler.startCycle(LocalDateTime.MIN);
-        historyBookHandler.setState(TransactionState.EXIT,"AUDUSD");
+        historyBookHandler.setState(TransactionDto.TransactionState.EXIT,"AUDUSD");
         historyBookHandler.endCycle();
         List<CycleHistory> transactions = historyBookHandler.getTransactions();
         CycleHistory cycleHistory = transactions.get(0);
-        assertEquals(TransactionState.EXIT, cycleHistory.getTransactions().get("AUDUSD").getState());
+        assertEquals(TransactionDto.TransactionState.EXIT, cycleHistory.getTransactions().get("AUDUSD").getState());
     }
 
     @Test

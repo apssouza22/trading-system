@@ -3,7 +3,6 @@ package com.apssouza.mytrade.trading.forex.session;
 import com.apssouza.mytrade.trading.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.forex.portfolio.FilledOrderDto;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;
-import com.apssouza.mytrade.trading.forex.statistics.TransactionState;
 
 import java.time.LocalDateTime;
 
@@ -109,6 +108,7 @@ public class TransactionDto {
         return other instanceof TransactionDto;
     }
 
+    @Override
     public int hashCode() {
         final int PRIME = 59;
         int result = 1;
@@ -127,9 +127,14 @@ public class TransactionDto {
         return result;
     }
 
+    @Override
     public String toString() {
         return "TransactionDto(time=" + this.getTime() + ", identifier=" + this.getIdentifier() + ", order=" +
                 this.getOrder() + ", position=" + this.getPosition() + ", filledOrder=" + this.getFilledOrder() +
                 ", state=" + this.getState() + ")";
+    }
+
+    public enum TransactionState {
+        ENTRY, REMOVE_QTD, ADD_QTD, EXIT
     }
 }

@@ -6,12 +6,12 @@ import com.apssouza.mytrade.trading.forex.portfolio.PortfolioModel;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.forex.session.EventNotifier;
 import com.apssouza.mytrade.trading.forex.session.MultiPositionHandler;
+import com.apssouza.mytrade.trading.forex.session.TransactionDto;
 import com.apssouza.mytrade.trading.forex.session.event.Event;
 import com.apssouza.mytrade.trading.forex.session.event.EventType;
 import com.apssouza.mytrade.trading.forex.session.event.PortfolioChangedEvent;
 import com.apssouza.mytrade.trading.forex.session.event.StopOrderFilledEvent;
 import com.apssouza.mytrade.trading.forex.statistics.HistoryBookHandler;
-import com.apssouza.mytrade.trading.forex.statistics.TransactionState;
 import com.apssouza.mytrade.trading.forex.common.observer.PropertyChangeEvent;
 import com.apssouza.mytrade.trading.forex.common.observer.PropertyChangeListener;
 
@@ -41,7 +41,7 @@ public class StopOrderFilledListener implements PropertyChangeListener {
         Position ps = MultiPositionHandler.getPositionByStopOrder(stopOrder);
         ps = ps.closePosition(Position.ExitReason.STOP_ORDER_FILLED);
         this.portfolio.closePosition(ps.getIdentifier());
-        this.historyHandler.setState(TransactionState.EXIT, ps.getIdentifier());
+        this.historyHandler.setState(TransactionDto.TransactionState.EXIT, ps.getIdentifier());
         this.historyHandler.addPosition(ps);
 
         this.historyHandler.addOrderFilled(new FilledOrderDto(

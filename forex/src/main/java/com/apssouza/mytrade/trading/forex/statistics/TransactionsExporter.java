@@ -14,7 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-public class TransactionsExporter {
+class TransactionsExporter {
 
     public void exportCsv(List<CycleHistory> transactions, String filepath) throws IOException {
         Path path = Paths.get(filepath);
