@@ -2,6 +2,10 @@ package com.apssouza.mytrade.trading.builder;
 
 import com.apssouza.mytrade.trading.forex.order.OrderDto;
 
+import static com.apssouza.mytrade.trading.forex.order.OrderDto.OrderAction.*;
+import static com.apssouza.mytrade.trading.forex.order.OrderDto.OrderOrigin.*;
+import static com.apssouza.mytrade.trading.forex.order.OrderDto.OrderStatus.*;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,11 +13,11 @@ import java.util.List;
 public class OrderBuilder {
     private String symbol = "AUDUSD";
     private String identifier = "AUDUSD";
-    private OrderDto.OrderAction action = OrderDto.OrderAction.BUY;
+    private OrderDto.OrderAction action = BUY;
     private int qtd = 1000;
-    private OrderDto.OrderOrigin origin = OrderDto.OrderOrigin.SIGNAL;
+    private OrderDto.OrderOrigin origin = SIGNAL;
     private LocalDateTime time = LocalDateTime.MIN;
-    private OrderDto.OrderStatus status = OrderDto.OrderStatus.CREATED;
+    private OrderDto.OrderStatus status = CREATED;
 
     public OrderBuilder withSymbol(String symbol) {
         this.symbol = symbol;

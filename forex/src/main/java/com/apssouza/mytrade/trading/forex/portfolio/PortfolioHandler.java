@@ -1,16 +1,26 @@
 package com.apssouza.mytrade.trading.forex.portfolio;
 
 import com.apssouza.mytrade.feed.api.SignalDto;
-import com.apssouza.mytrade.trading.forex.execution.OrderExecution;
-import com.apssouza.mytrade.trading.forex.order.*;
-import com.apssouza.mytrade.trading.forex.risk.RiskManagementHandler;
-import com.apssouza.mytrade.trading.forex.session.*;
-import com.apssouza.mytrade.trading.forex.session.event.*;
-import com.apssouza.mytrade.trading.forex.statistics.HistoryBookHandler;
 import com.apssouza.mytrade.trading.forex.common.TradingParams;
+import com.apssouza.mytrade.trading.forex.execution.OrderExecution;
+import com.apssouza.mytrade.trading.forex.order.OrderDto;
+import com.apssouza.mytrade.trading.forex.order.OrderHandler;
+import com.apssouza.mytrade.trading.forex.order.StopOrderDto;
+import com.apssouza.mytrade.trading.forex.risk.RiskManagementHandler;
+import com.apssouza.mytrade.trading.forex.session.EventNotifier;
+import com.apssouza.mytrade.trading.forex.session.MultiPositionHandler;
+import com.apssouza.mytrade.trading.forex.session.event.Event;
+import com.apssouza.mytrade.trading.forex.session.event.EventType;
+import com.apssouza.mytrade.trading.forex.session.event.OrderCreatedEvent;
+import com.apssouza.mytrade.trading.forex.session.event.PriceChangedEvent;
+import com.apssouza.mytrade.trading.forex.session.event.StopOrderFilledEvent;
+import com.apssouza.mytrade.trading.forex.statistics.HistoryBookHandler;
 
-import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 public class PortfolioHandler {
@@ -77,7 +87,7 @@ public class PortfolioHandler {
         this.currentStopOrders = stopOrders;
     }
 
-    public void stopOrderHandle(Event event) throws InterruptedException {
+    public void handleStopOrder(Event event) throws InterruptedException {
         if (portfolio.getPositions().isEmpty()) {
             return;
         }

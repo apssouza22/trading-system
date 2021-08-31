@@ -2,14 +2,14 @@ package com.apssouza.mytrade.trading.forex.risk.stoporder;
 
 import java.math.BigDecimal;
 
-public class StopOrderDto {
+public class StopOrderConfigDto {
 
     private final BigDecimal hardStopDistance;
     private final BigDecimal takeProfitDistance;
     private final BigDecimal entryStopDistance;
     private final BigDecimal traillingStopDistance;
 
-    public StopOrderDto(
+    public StopOrderConfigDto(
             double hardStopDistance,
             double takeProfitDistance,
             double entryStopDistance,

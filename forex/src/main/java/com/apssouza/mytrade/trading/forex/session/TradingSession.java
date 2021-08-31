@@ -16,7 +16,7 @@ import com.apssouza.mytrade.trading.forex.portfolio.PortfolioHandler;
 import com.apssouza.mytrade.trading.forex.portfolio.PortfolioModel;
 import com.apssouza.mytrade.trading.forex.risk.RiskManagementFactory;
 import com.apssouza.mytrade.trading.forex.risk.RiskManagementHandler;
-import com.apssouza.mytrade.trading.forex.risk.stoporder.StopOrderDto;
+import com.apssouza.mytrade.trading.forex.risk.stoporder.StopOrderConfigDto;
 import com.apssouza.mytrade.trading.forex.risk.stoporder.StopOrderFactory;
 import com.apssouza.mytrade.trading.forex.session.event.EndedTradingDayEvent;
 import com.apssouza.mytrade.trading.forex.session.event.Event;
@@ -91,7 +91,7 @@ public class TradingSession {
         this.historyHandler = HistoryBookHandlerFactory.create();
         this.riskManagementHandler = RiskManagementFactory.create(
                 this.portfolio,
-                StopOrderFactory.factory(new StopOrderDto(
+                StopOrderFactory.factory(new StopOrderConfigDto(
                         TradingParams.hard_stop_loss_distance,
                         TradingParams.take_profit_distance_fixed,
                         TradingParams.entry_stop_loss_distance_fixed,

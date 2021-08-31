@@ -7,9 +7,9 @@ import java.math.BigDecimal;
 import java.util.Optional;
 
 class LongPositionStrategy implements CreatorStrategy {
-    private final StopOrderDto distanceObject;
+    private final StopOrderConfigDto distanceObject;
 
-    public LongPositionStrategy(StopOrderDto distanceObject) {
+    public LongPositionStrategy(StopOrderConfigDto distanceObject) {
         this.distanceObject = distanceObject;
     }
 

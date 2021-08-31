@@ -4,7 +4,7 @@ import com.apssouza.mytrade.trading.forex.common.TradingParams;
 import com.apssouza.mytrade.trading.forex.portfolio.PortfolioModel;
 import com.apssouza.mytrade.trading.forex.risk.RiskManagementFactory;
 import com.apssouza.mytrade.trading.forex.risk.stoporder.StopOrderCreator;
-import com.apssouza.mytrade.trading.forex.risk.stoporder.StopOrderDto;
+import com.apssouza.mytrade.trading.forex.risk.stoporder.StopOrderConfigDto;
 import com.apssouza.mytrade.trading.forex.risk.stoporder.StopOrderFactory;
 
 import java.math.BigDecimal;
@@ -18,7 +18,7 @@ public class OrderHandlerBuilder {
     }
 
     public OrderHandler build(){
-        StopOrderCreator stopOrderCreator = StopOrderFactory.factory(new StopOrderDto(
+        StopOrderCreator stopOrderCreator = StopOrderFactory.factory(new StopOrderConfigDto(
                 TradingParams.hard_stop_loss_distance,
                 TradingParams.take_profit_distance_fixed,
                 TradingParams.entry_stop_loss_distance_fixed,

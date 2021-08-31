@@ -60,7 +60,7 @@ public class PriceChangedListener implements PropertyChangeListener {
         this.executionHandler.setCurrentTime(currentTime);
         this.executionHandler.setPriceMap(event.getPrice());
         this.portfolioHandler.updatePortfolioValue(event);
-        this.portfolioHandler.stopOrderHandle(event);
+        this.portfolioHandler.handleStopOrder(event);
 
         List<SignalDto> signals = processSignals(event, currentTime);
         portfolioHandler.processExits(event, signals);

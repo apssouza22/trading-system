@@ -5,7 +5,7 @@ import com.apssouza.mytrade.trading.builder.PositionBuilder;
 import com.apssouza.mytrade.trading.forex.order.*;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.forex.risk.stoporder.StopOrderCreator;
-import com.apssouza.mytrade.trading.forex.risk.stoporder.StopOrderDto;
+import com.apssouza.mytrade.trading.forex.risk.stoporder.StopOrderConfigDto;
 import com.apssouza.mytrade.trading.forex.risk.stoporder.StopOrderFactory;
 import com.apssouza.mytrade.trading.forex.session.event.EventType;
 import com.apssouza.mytrade.trading.forex.session.event.PriceChangedEvent;
@@ -27,7 +27,7 @@ public class StopOrderCreatorFixedTest extends TestCase {
 
     @Before
     public void setUp() throws Exception {
-        this.obj = StopOrderFactory.factory(new StopOrderDto( .1, .2, .2, .2));
+        this.obj = StopOrderFactory.factory(new StopOrderConfigDto( .1, .2, .2, .2));
     }
 
     @Test

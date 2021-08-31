@@ -10,9 +10,9 @@ import java.util.Optional;
 
 class StopOrderCreatorFixed implements StopOrderCreator {
     private CreatorContext creatorContext;
-    private final StopOrderDto priceDistance;
+    private final StopOrderConfigDto priceDistance;
 
-    public StopOrderCreatorFixed(StopOrderDto priceDistance) {
+    public StopOrderCreatorFixed(StopOrderConfigDto priceDistance) {
         this.priceDistance = priceDistance;
     }
 

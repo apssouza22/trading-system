@@ -8,9 +8,9 @@ import java.util.Optional;
 
 class ShortPositionStrategy implements CreatorStrategy {
 
-    private final StopOrderDto distanceObject;
+    private final StopOrderConfigDto distanceObject;
 
-    public ShortPositionStrategy(StopOrderDto distanceObject) {
+    public ShortPositionStrategy(StopOrderConfigDto distanceObject) {
         this.distanceObject = distanceObject;
     }
 

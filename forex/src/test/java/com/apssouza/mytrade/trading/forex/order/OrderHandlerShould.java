@@ -8,7 +8,7 @@ import com.apssouza.mytrade.trading.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.forex.risk.RiskManagementFactory;
 import com.apssouza.mytrade.trading.forex.risk.RiskManagementHandler;
 import com.apssouza.mytrade.trading.forex.risk.stoporder.StopOrderCreator;
-import com.apssouza.mytrade.trading.forex.risk.stoporder.StopOrderDto;
+import com.apssouza.mytrade.trading.forex.risk.stoporder.StopOrderConfigDto;
 import com.apssouza.mytrade.trading.forex.risk.stoporder.StopOrderFactory;
 import com.apssouza.mytrade.trading.forex.session.event.EventType;
 import com.apssouza.mytrade.trading.forex.session.event.SignalCreatedEvent;
@@ -38,7 +38,7 @@ public class OrderHandlerShould extends TestCase {
 
     @Before
     public void setUp(){
-        StopOrderCreator stopOrderCreator = StopOrderFactory.factory(new StopOrderDto(
+        StopOrderCreator stopOrderCreator = StopOrderFactory.factory(new StopOrderConfigDto(
                 TradingParams.hard_stop_loss_distance,
                 TradingParams.take_profit_distance_fixed,
                 TradingParams.entry_stop_loss_distance_fixed,
