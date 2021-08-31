@@ -1,4 +1,4 @@
-package com.apssouza.mytrade.trading.forex.pricefeed;
+package com.apssouza.mytrade.trading.forex.feed.pricefeed;
 
 import com.apssouza.mytrade.common.misc.helper.time.DateTimeHelper;
 import com.apssouza.mytrade.trading.forex.session.event.Event;
