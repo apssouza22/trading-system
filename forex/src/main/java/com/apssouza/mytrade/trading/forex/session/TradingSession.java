@@ -105,7 +105,6 @@ public class TradingSession {
                 this.orderHandler,
                 this.executionHandler,
                 this.portfolio,
-                this.historyHandler,
                 this.riskManagementHandler,
                 eventNotifier
         );

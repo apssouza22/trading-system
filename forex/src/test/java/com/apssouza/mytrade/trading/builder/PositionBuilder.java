@@ -52,8 +52,9 @@ public class PositionBuilder {
         this.filledOrder = filledOrder;
     }
 
-    public void withPositionStatus(Position.PositionStatus positionStatus) {
+    public PositionBuilder withPositionStatus(Position.PositionStatus positionStatus) {
         this.positionStatus = positionStatus;
+        return this;
     }
 
     public Position build() {
@@ -67,7 +68,7 @@ public class PositionBuilder {
                 identifier,
                 filledOrder,
                 exitReason,
-                Position.PositionStatus.FILLED
+                positionStatus
         );
 
         if (stopOrders.isEmpty()) {

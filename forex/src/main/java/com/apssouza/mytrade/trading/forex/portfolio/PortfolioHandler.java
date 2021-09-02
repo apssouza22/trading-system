@@ -14,10 +14,10 @@ import com.apssouza.mytrade.trading.forex.session.event.EventType;
 import com.apssouza.mytrade.trading.forex.session.event.OrderCreatedEvent;
 import com.apssouza.mytrade.trading.forex.session.event.PriceChangedEvent;
 import com.apssouza.mytrade.trading.forex.session.event.StopOrderFilledEvent;
-import com.apssouza.mytrade.trading.forex.statistics.HistoryBookHandler;
+import static com.apssouza.mytrade.trading.forex.order.StopOrderDto.StopOrderType.STOP_LOSS;
+import static com.apssouza.mytrade.trading.forex.order.StopOrderDto.StopOrderType.TAKE_PROFIT;
 
 import java.util.ArrayList;
-import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,7 +29,6 @@ public class PortfolioHandler {
     private final OrderExecution executionHandler;
     private final PortfolioModel portfolio;
     private final ReconciliationHandler reconciliationHandler;
-    private final HistoryBookHandler historyHandler;
     private final RiskManagementHandler riskManagementHandler;
     private final EventNotifier eventNotifier;
     private static Logger log = Logger.getLogger(PortfolioHandler.class.getName());
@@ -40,7 +39,6 @@ public class PortfolioHandler {
             OrderExecution executionHandler,
             PortfolioModel portfolio,
             ReconciliationHandler reconciliationHandler,
-            HistoryBookHandler historyHandler,
             RiskManagementHandler riskManagementHandler,
             EventNotifier eventNotifier
     ) {
@@ -48,7 +46,6 @@ public class PortfolioHandler {
         this.executionHandler = executionHandler;
         this.portfolio = portfolio;
         this.reconciliationHandler = reconciliationHandler;
-        this.historyHandler = historyHandler;
         this.riskManagementHandler = riskManagementHandler;
         this.eventNotifier = eventNotifier;
     }
@@ -68,9 +65,9 @@ public class PortfolioHandler {
         Map<Integer, StopOrderDto> stopOrders = new HashMap<>();
         for (Map.Entry<String, Position> entry : this.portfolio.getPositions().entrySet()) {
             Position position = entry.getValue();
-            EnumMap<StopOrderDto.StopOrderType, StopOrderDto> stops = this.riskManagementHandler.createStopOrders(position, event);
+            var stops = riskManagementHandler.createStopOrders(position, event);
             position = new Position(position, stops);
-            StopOrderDto stopLoss = stops.get(StopOrderDto.StopOrderType.STOP_LOSS);
+            var stopLoss = stops.get(STOP_LOSS);
             log.info("Created stop loss - " + stopLoss);
 
             StopOrderDto stopOrderLoss = this.executionHandler.placeStopOrder(stopLoss);
@@ -78,7 +75,7 @@ public class PortfolioHandler {
             MultiPositionHandler.mapStopOrderToPosition(stopOrderLoss, position);
 
             if (TradingParams.take_profit_stop_enabled) {
-                StopOrderDto stopOrderProfit = this.executionHandler.placeStopOrder(stops.get(StopOrderDto.StopOrderType.TAKE_PROFIT));
+                var stopOrderProfit = this.executionHandler.placeStopOrder(stops.get(TAKE_PROFIT));
                 log.info("Created take profit stop - " + stopOrderProfit);
                 stopOrders.put(stopOrderProfit.getId(), stopOrderProfit);
                 MultiPositionHandler.mapStopOrderToPosition(stopOrderProfit, position);
@@ -87,7 +84,7 @@ public class PortfolioHandler {
         this.currentStopOrders = stopOrders;
     }
 
-    public void handleStopOrder(Event event) throws InterruptedException {
+    public void handleStopOrder(Event event) {
         if (portfolio.getPositions().isEmpty()) {
             return;
         }
@@ -126,7 +123,6 @@ public class PortfolioHandler {
     }
 
     private void cancelOpenStopOrders() {
-
         if (!this.currentStopOrders.isEmpty()) {
             int count = this.executionHandler.cancelOpenStopOrders();
             log.info("Cancelled " + count + " stop loss");

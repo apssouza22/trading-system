@@ -1,18 +1,22 @@
 package com.apssouza.mytrade.trading.forex.risk;
 
+import com.apssouza.mytrade.common.misc.helper.time.MarketTimeHelper;
 import com.apssouza.mytrade.feed.api.SignalDto;
+import com.apssouza.mytrade.trading.forex.common.TradingParams;
 import com.apssouza.mytrade.trading.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.forex.order.StopOrderDto;
+import com.apssouza.mytrade.trading.forex.order.StopOrderDto.StopOrderType;
 import com.apssouza.mytrade.trading.forex.portfolio.PortfolioModel;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.forex.risk.stoporder.StopOrderCreator;
 import com.apssouza.mytrade.trading.forex.session.event.Event;
 import com.apssouza.mytrade.trading.forex.session.event.PriceChangedEvent;
 import com.apssouza.mytrade.trading.forex.session.event.SignalCreatedEvent;
-import com.apssouza.mytrade.trading.forex.common.TradingParams;
-import com.apssouza.mytrade.common.misc.helper.time.MarketTimeHelper;
 
-import java.util.*;
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 public class RiskManagementHandler {
@@ -28,35 +32,34 @@ public class RiskManagementHandler {
     }
 
 
-    public EnumMap<StopOrderDto.StopOrderType, StopOrderDto> createStopOrders(Position position, Event event) {
+    public EnumMap<StopOrderType, StopOrderDto> createStopOrders(Position position, Event event) {
         stopOrderCreator.createContext(position.getPositionType());
-
-        EnumMap<StopOrderDto.StopOrderType, StopOrderDto> stop_orders = new EnumMap<>(StopOrderDto.StopOrderType.class);
+        var orders = new EnumMap<StopOrderType, StopOrderDto>(StopOrderType.class);
         if (!hasStop()) {
-            return new EnumMap(StopOrderDto.StopOrderType.class);
+            return new EnumMap(StopOrderType.class);
         }
 
-        EnumMap<StopOrderDto.StopOrderType, StopOrderDto> stopOrders = position.getStopOrders();
+        var stopOrders = position.getStopOrders();
         boolean changed_units = false;
         if (!stopOrders.isEmpty()) {
-            changed_units = stopOrders.get(StopOrderDto.StopOrderType.HARD_STOP).getQuantity() != position.getQuantity();
+            changed_units = stopOrders.get(StopOrderType.HARD_STOP).getQuantity() != position.getQuantity();
         }
 
         if (stopOrders.isEmpty() || changed_units) {
-            stop_orders.put(StopOrderDto.StopOrderType.HARD_STOP, this.stopOrderCreator.getHardStopLoss(position));
-            stop_orders.put(StopOrderDto.StopOrderType.TAKE_PROFIT, this.stopOrderCreator.getProfitStopOrder(position));
+            orders.put(StopOrderType.HARD_STOP, this.stopOrderCreator.getHardStopLoss(position));
+            orders.put(StopOrderType.TAKE_PROFIT, this.stopOrderCreator.getProfitStopOrder(position));
         }
 
-        stop_orders.putAll(getMovingStops(position, event));
-        return chooseStopOrders(stop_orders);
+        orders.putAll(getMovingStops(position, event));
+        return chooseStopOrders(orders);
     }
 
     public List<Position> processPositionExit(PriceChangedEvent event, List<SignalDto> signals) {
         return exitHandler.process(event,signals);
     }
 
-    private EnumMap<StopOrderDto.StopOrderType, StopOrderDto>  getMovingStops(Position position, Event event) {
-        EnumMap<StopOrderDto.StopOrderType, StopOrderDto> stop_orders = new EnumMap(StopOrderDto.StopOrderType.class);
+    private EnumMap<StopOrderType, StopOrderDto>  getMovingStops(Position position, Event event) {
+        EnumMap<StopOrderType, StopOrderDto> stop_orders = new EnumMap(StopOrderType.class);
         Consumer<StopOrderDto> consumer = (dto) -> stop_orders.put(dto.getType(), dto);
         if (TradingParams.entry_stop_loss_enabled) {
             Optional<StopOrderDto> entryStopOrder = this.stopOrderCreator.getEntryStopOrder(position, event);
@@ -76,26 +79,26 @@ public class RiskManagementHandler {
                 TradingParams.take_profit_stop_enabled;
     }
 
-    private EnumMap<StopOrderDto.StopOrderType, StopOrderDto> chooseStopOrders(EnumMap<StopOrderDto.StopOrderType, StopOrderDto> stop_losses) {
-        EnumMap<StopOrderDto.StopOrderType, StopOrderDto> stop_orders = new EnumMap<>(StopOrderDto.StopOrderType.class);
+    private EnumMap<StopOrderType, StopOrderDto> chooseStopOrders(EnumMap<StopOrderType, StopOrderDto> stop_losses) {
+        EnumMap<StopOrderType, StopOrderDto> stop_orders = new EnumMap<>(StopOrderType.class);
 
         if (TradingParams.take_profit_stop_enabled) {
-            stop_orders.put(StopOrderDto.StopOrderType.TAKE_PROFIT, stop_losses.get(StopOrderDto.StopOrderType.TAKE_PROFIT));
+            stop_orders.put(StopOrderType.TAKE_PROFIT, stop_losses.get(StopOrderType.TAKE_PROFIT));
         }
 
         StopOrderDto stopOrderDto = null;
-        if (stop_losses.containsKey(StopOrderDto.StopOrderType.TRAILLING_STOP)) {
-            stopOrderDto = stop_losses.get(StopOrderDto.StopOrderType.TRAILLING_STOP);
+        if (stop_losses.containsKey(StopOrderType.TRAILLING_STOP)) {
+            stopOrderDto = stop_losses.get(StopOrderType.TRAILLING_STOP);
 
-        } else if (stop_losses.containsKey(StopOrderDto.StopOrderType.ENTRY_STOP)) {
-            stopOrderDto = stop_losses.get(StopOrderDto.StopOrderType.ENTRY_STOP);
+        } else if (stop_losses.containsKey(StopOrderType.ENTRY_STOP)) {
+            stopOrderDto = stop_losses.get(StopOrderType.ENTRY_STOP);
         }
 
         if (stopOrderDto == null) {
-            stop_orders.put(StopOrderDto.StopOrderType.STOP_LOSS, stop_losses.get(StopOrderDto.StopOrderType.HARD_STOP));
+            stop_orders.put(StopOrderType.STOP_LOSS, stop_losses.get(StopOrderType.HARD_STOP));
             return stop_orders;
         }
-        stop_orders.put(StopOrderDto.StopOrderType.STOP_LOSS, stopOrderDto);
+        stop_orders.put(StopOrderType.STOP_LOSS, stopOrderDto);
         return stop_orders;
     }
 
@@ -144,6 +147,6 @@ public class RiskManagementHandler {
     }
 
     public int getPositionSize() {
-        return 0;
+        return 10;
     }
 }
