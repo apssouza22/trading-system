@@ -1,4 +1,4 @@
-package com.apssouza.mytrade.trading.domain.forex.session.listener;
+package com.apssouza.mytrade.trading.domain.forex.feed.pricefeed;
 
 import com.apssouza.mytrade.feed.api.SignalDto;
 import com.apssouza.mytrade.trading.domain.forex.execution.OrderExecution;

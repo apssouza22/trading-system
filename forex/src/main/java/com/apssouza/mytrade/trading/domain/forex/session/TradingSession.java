@@ -20,15 +20,13 @@ import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderConfigD
 import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderFactory;
 import com.apssouza.mytrade.trading.domain.forex.event.Event;
 import com.apssouza.mytrade.trading.domain.forex.event.EventType;
-import com.apssouza.mytrade.trading.domain.forex.session.listener.EndedTradingDayListener;
-import com.apssouza.mytrade.trading.domain.forex.session.listener.FilledOrderListener;
-import com.apssouza.mytrade.trading.domain.forex.session.listener.OrderCreatedListener;
-import com.apssouza.mytrade.trading.domain.forex.session.listener.OrderFoundListener;
-import com.apssouza.mytrade.trading.domain.forex.session.listener.PortfolioChangedListener;
-import com.apssouza.mytrade.trading.domain.forex.session.listener.PriceChangedListener;
-import com.apssouza.mytrade.trading.domain.forex.session.listener.SessionFinishedListener;
-import com.apssouza.mytrade.trading.domain.forex.session.listener.SignalCreatedListener;
-import com.apssouza.mytrade.trading.domain.forex.session.listener.StopOrderFilledListener;
+import com.apssouza.mytrade.trading.domain.forex.order.FilledOrderListener;
+import com.apssouza.mytrade.trading.domain.forex.order.OrderCreatedListener;
+import com.apssouza.mytrade.trading.domain.forex.order.OrderFoundListener;
+import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioChangedListener;
+import com.apssouza.mytrade.trading.domain.forex.feed.pricefeed.PriceChangedListener;
+import com.apssouza.mytrade.trading.domain.forex.feed.signalfeed.SignalCreatedListener;
+import com.apssouza.mytrade.trading.domain.forex.order.StopOrderFilledListener;
 import com.apssouza.mytrade.trading.domain.forex.statistics.HistoryBookHandler;
 import com.apssouza.mytrade.trading.domain.forex.statistics.HistoryBookHandlerFactory;
 

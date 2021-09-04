@@ -1,19 +1,17 @@
-package com.apssouza.mytrade.trading.domain.forex.session.listener;
+package com.apssouza.mytrade.trading.domain.forex.order;
 
-import com.apssouza.mytrade.trading.domain.forex.order.StopOrderDto;
+import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeEvent;
+import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeListener;
+import com.apssouza.mytrade.trading.domain.forex.event.Event;
+import com.apssouza.mytrade.trading.domain.forex.event.EventType;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.FilledOrderDto;
+import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioChangedEvent;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioModel;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.domain.forex.session.EventNotifier;
 import com.apssouza.mytrade.trading.domain.forex.session.MultiPositionHandler;
 import com.apssouza.mytrade.trading.domain.forex.session.TransactionDto;
-import com.apssouza.mytrade.trading.domain.forex.event.Event;
-import com.apssouza.mytrade.trading.domain.forex.event.EventType;
-import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioChangedEvent;
-import com.apssouza.mytrade.trading.domain.forex.order.StopOrderFilledEvent;
 import com.apssouza.mytrade.trading.domain.forex.statistics.HistoryBookHandler;
-import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeEvent;
-import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeListener;
 
 import java.time.LocalDateTime;
 

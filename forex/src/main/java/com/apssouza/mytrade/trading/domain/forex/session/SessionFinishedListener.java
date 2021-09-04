@@ -1,4 +1,4 @@
-package com.apssouza.mytrade.trading.domain.forex.session.listener;
+package com.apssouza.mytrade.trading.domain.forex.session;
 
 import com.apssouza.mytrade.trading.domain.forex.event.Event;
 import com.apssouza.mytrade.trading.domain.forex.session.SessionFinishedEvent;
