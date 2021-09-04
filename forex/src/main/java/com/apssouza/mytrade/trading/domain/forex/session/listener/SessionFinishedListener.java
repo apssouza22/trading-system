@@ -1,7 +1,7 @@
 package com.apssouza.mytrade.trading.domain.forex.session.listener;
 
-import com.apssouza.mytrade.trading.domain.forex.session.event.Event;
-import com.apssouza.mytrade.trading.domain.forex.session.event.SessionFinishedEvent;
+import com.apssouza.mytrade.trading.domain.forex.event.Event;
+import com.apssouza.mytrade.trading.domain.forex.session.SessionFinishedEvent;
 import com.apssouza.mytrade.trading.domain.forex.statistics.HistoryBookHandler;
 import com.apssouza.mytrade.trading.domain.forex.common.TradingParams;
 import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeEvent;

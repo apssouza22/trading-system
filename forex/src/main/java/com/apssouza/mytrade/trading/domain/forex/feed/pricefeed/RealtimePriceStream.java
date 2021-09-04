@@ -1,9 +1,8 @@
 package com.apssouza.mytrade.trading.domain.forex.feed.pricefeed;
 
 import com.apssouza.mytrade.common.misc.helper.time.DateTimeHelper;
-import com.apssouza.mytrade.trading.domain.forex.session.event.Event;
-import com.apssouza.mytrade.trading.domain.forex.session.event.EventType;
-import com.apssouza.mytrade.trading.domain.forex.session.event.PriceChangedEvent;
+import com.apssouza.mytrade.trading.domain.forex.event.Event;
+import com.apssouza.mytrade.trading.domain.forex.event.EventType;
 import com.apssouza.mytrade.trading.domain.forex.common.TradingHelper;
 
 import java.time.LocalDateTime;

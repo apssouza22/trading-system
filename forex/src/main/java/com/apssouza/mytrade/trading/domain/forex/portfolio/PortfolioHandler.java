@@ -9,11 +9,11 @@ import com.apssouza.mytrade.trading.domain.forex.order.StopOrderDto;
 import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementHandler;
 import com.apssouza.mytrade.trading.domain.forex.session.EventNotifier;
 import com.apssouza.mytrade.trading.domain.forex.session.MultiPositionHandler;
-import com.apssouza.mytrade.trading.domain.forex.session.event.Event;
-import com.apssouza.mytrade.trading.domain.forex.session.event.EventType;
-import com.apssouza.mytrade.trading.domain.forex.session.event.OrderCreatedEvent;
-import com.apssouza.mytrade.trading.domain.forex.session.event.PriceChangedEvent;
-import com.apssouza.mytrade.trading.domain.forex.session.event.StopOrderFilledEvent;
+import com.apssouza.mytrade.trading.domain.forex.event.Event;
+import com.apssouza.mytrade.trading.domain.forex.event.EventType;
+import com.apssouza.mytrade.trading.domain.forex.order.OrderCreatedEvent;
+import com.apssouza.mytrade.trading.domain.forex.feed.pricefeed.PriceChangedEvent;
+import com.apssouza.mytrade.trading.domain.forex.order.StopOrderFilledEvent;
 import static com.apssouza.mytrade.trading.domain.forex.order.StopOrderDto.StopOrderType.STOP_LOSS;
 import static com.apssouza.mytrade.trading.domain.forex.order.StopOrderDto.StopOrderType.TAKE_PROFIT;
 

@@ -1,11 +1,13 @@
 package com.apssouza.mytrade.trading.domain.forex.session.listener;
 
+import com.apssouza.mytrade.trading.domain.forex.event.Event;
+import com.apssouza.mytrade.trading.domain.forex.event.EventType;
 import com.apssouza.mytrade.trading.domain.forex.order.OrderDto;
+import com.apssouza.mytrade.trading.domain.forex.order.OrderFilledEvent;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.*;
 import com.apssouza.mytrade.trading.domain.forex.session.EventNotifier;
 import com.apssouza.mytrade.trading.domain.forex.session.TransactionDto;
 import com.apssouza.mytrade.trading.domain.forex.statistics.HistoryBookHandler;
-import com.apssouza.mytrade.trading.domain.forex.session.event.*;
 import com.apssouza.mytrade.trading.domain.forex.common.TradingParams;
 import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeEvent;
 import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeListener;

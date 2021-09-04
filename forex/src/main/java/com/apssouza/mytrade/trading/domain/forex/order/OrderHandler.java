@@ -3,7 +3,7 @@ package com.apssouza.mytrade.trading.domain.forex.order;
 import com.apssouza.mytrade.feed.api.SignalDto;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementHandler;
-import com.apssouza.mytrade.trading.domain.forex.session.event.SignalCreatedEvent;
+import com.apssouza.mytrade.trading.domain.forex.feed.signalfeed.SignalCreatedEvent;
 
 import java.time.LocalDateTime;
 import java.util.List;

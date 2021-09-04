@@ -1,7 +1,7 @@
 package com.apssouza.mytrade.trading.domain.forex.portfolio;
 
 import com.apssouza.mytrade.trading.domain.forex.session.LoopEventBuilder;
-import com.apssouza.mytrade.trading.domain.forex.session.event.PriceChangedEvent;
+import com.apssouza.mytrade.trading.domain.forex.feed.pricefeed.PriceChangedEvent;
 
 import junit.framework.TestCase;
 

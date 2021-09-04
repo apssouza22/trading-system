@@ -1,7 +1,7 @@
 package com.apssouza.mytrade.trading.domain.forex.portfolio;
 
 import com.apssouza.mytrade.feed.api.PriceDto;
-import com.apssouza.mytrade.trading.domain.forex.session.event.Event;
+import com.apssouza.mytrade.trading.domain.forex.event.Event;
 
 import java.math.BigDecimal;
 import java.util.HashMap;

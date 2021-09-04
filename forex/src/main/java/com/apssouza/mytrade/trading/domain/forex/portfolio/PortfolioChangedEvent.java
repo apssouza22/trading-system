@@ -1,6 +1,8 @@
-package com.apssouza.mytrade.trading.domain.forex.session.event;
+package com.apssouza.mytrade.trading.domain.forex.portfolio;
 
 import com.apssouza.mytrade.feed.api.PriceDto;
+import com.apssouza.mytrade.trading.domain.forex.event.AbstractEvent;
+import com.apssouza.mytrade.trading.domain.forex.event.EventType;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.Position;
 
 import java.time.LocalDateTime;

@@ -1,8 +1,8 @@
 package com.apssouza.mytrade.trading.domain.forex.session;
 
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioHandler;
-import com.apssouza.mytrade.trading.domain.forex.session.event.Event;
-import com.apssouza.mytrade.trading.domain.forex.session.event.EventType;
+import com.apssouza.mytrade.trading.domain.forex.event.Event;
+import com.apssouza.mytrade.trading.domain.forex.event.EventType;
 import com.apssouza.mytrade.trading.domain.forex.statistics.HistoryBookHandler;
 import com.apssouza.mytrade.trading.domain.forex.common.ForexException;
 

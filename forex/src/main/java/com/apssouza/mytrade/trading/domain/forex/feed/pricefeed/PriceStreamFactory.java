@@ -1,7 +1,7 @@
 package com.apssouza.mytrade.trading.domain.forex.feed.pricefeed;
 
 import com.apssouza.mytrade.trading.api.SessionType;
-import com.apssouza.mytrade.trading.domain.forex.session.event.Event;
+import com.apssouza.mytrade.trading.domain.forex.event.Event;
 
 import java.util.concurrent.BlockingQueue;
 

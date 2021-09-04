@@ -9,9 +9,9 @@ import com.apssouza.mytrade.trading.domain.forex.order.StopOrderDto.StopOrderTyp
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioModel;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderCreator;
-import com.apssouza.mytrade.trading.domain.forex.session.event.Event;
-import com.apssouza.mytrade.trading.domain.forex.session.event.PriceChangedEvent;
-import com.apssouza.mytrade.trading.domain.forex.session.event.SignalCreatedEvent;
+import com.apssouza.mytrade.trading.domain.forex.event.Event;
+import com.apssouza.mytrade.trading.domain.forex.feed.pricefeed.PriceChangedEvent;
+import com.apssouza.mytrade.trading.domain.forex.feed.signalfeed.SignalCreatedEvent;
 
 import java.util.EnumMap;
 import java.util.List;
