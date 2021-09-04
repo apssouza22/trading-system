@@ -1,15 +1,14 @@
 package com.apssouza.mytrade.trading.domain.forex.session;
 
-import com.apssouza.mytrade.trading.domain.forex.event.Event;
-import com.apssouza.mytrade.trading.domain.forex.session.SessionFinishedEvent;
-import com.apssouza.mytrade.trading.domain.forex.statistics.HistoryBookHandler;
 import com.apssouza.mytrade.trading.domain.forex.common.TradingParams;
 import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeEvent;
 import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeListener;
+import com.apssouza.mytrade.trading.domain.forex.event.Event;
+import com.apssouza.mytrade.trading.domain.forex.statistics.HistoryBookHandler;
 
 import java.io.IOException;
 
-public class SessionFinishedListener implements PropertyChangeListener {
+class SessionFinishedListener implements PropertyChangeListener {
 
     private final HistoryBookHandler historyHandler;
 

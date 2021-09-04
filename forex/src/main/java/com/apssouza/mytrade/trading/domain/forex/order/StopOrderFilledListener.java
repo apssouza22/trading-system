@@ -15,7 +15,7 @@ import com.apssouza.mytrade.trading.domain.forex.statistics.HistoryBookHandler;
 
 import java.time.LocalDateTime;
 
-public class StopOrderFilledListener implements PropertyChangeListener {
+class StopOrderFilledListener implements PropertyChangeListener {
 
     private final PortfolioModel portfolio;
     private final HistoryBookHandler historyHandler;

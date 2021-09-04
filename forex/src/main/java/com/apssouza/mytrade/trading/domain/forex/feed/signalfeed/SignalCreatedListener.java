@@ -13,7 +13,7 @@ import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeL
 
 import java.util.logging.Logger;
 
-public class SignalCreatedListener implements PropertyChangeListener {
+class SignalCreatedListener implements PropertyChangeListener {
     private static Logger log = Logger.getLogger(SignalCreatedListener.class.getName());
     private final RiskManagementHandler riskManagementHandler;
     private final OrderHandler orderHandler;

@@ -15,7 +15,7 @@ import com.apssouza.mytrade.trading.domain.forex.statistics.HistoryBookHandler;
 import static com.apssouza.mytrade.trading.domain.forex.portfolio.Position.PositionStatus.FILLED;
 
 
-public class FilledOrderListener implements PropertyChangeListener {
+class FilledOrderListener implements PropertyChangeListener {
 
     private final PortfolioModel portfolio;
     private final HistoryBookHandler historyHandler;

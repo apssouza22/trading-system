@@ -2,6 +2,7 @@ package com.apssouza.mytrade.trading.api;
 
 import com.apssouza.mytrade.feed.api.FeedModule;
 import com.apssouza.mytrade.trading.domain.forex.feed.pricefeed.PriceFeedHandler;
+import com.apssouza.mytrade.trading.domain.forex.feed.signalfeed.SignalFeedFactory;
 import com.apssouza.mytrade.trading.domain.forex.feed.signalfeed.SignalFeedHandler;
 import com.apssouza.mytrade.trading.domain.forex.session.TradingSession;
 
@@ -54,13 +55,11 @@ public class ForexBuilder {
 
     public TradingSession build() {
         var priceFeed = new PriceFeedHandler(feed);
-        var signalFeed = new SignalFeedHandler(feed);
-
         var tradingSession = new TradingSession(
                 equity,
                 start,
                 end,
-                signalFeed,
+                SignalFeedFactory.create(feed),
                 sessionType,
                 systemName,
                 getSafeExecutionType(),

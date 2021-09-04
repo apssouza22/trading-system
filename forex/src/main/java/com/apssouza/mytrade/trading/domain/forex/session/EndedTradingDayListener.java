@@ -1,15 +1,15 @@
 package com.apssouza.mytrade.trading.domain.forex.session;
 
-import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioHandler;
-import com.apssouza.mytrade.trading.domain.forex.portfolio.Position;
-import com.apssouza.mytrade.trading.domain.forex.event.Event;
 import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeEvent;
 import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeListener;
+import com.apssouza.mytrade.trading.domain.forex.event.Event;
+import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioHandler;
+import com.apssouza.mytrade.trading.domain.forex.portfolio.Position;
 
 import java.util.List;
 import java.util.logging.Logger;
 
-public class EndedTradingDayListener implements PropertyChangeListener {
+class EndedTradingDayListener implements PropertyChangeListener {
 
     private final PortfolioHandler portfolioHandler;
 

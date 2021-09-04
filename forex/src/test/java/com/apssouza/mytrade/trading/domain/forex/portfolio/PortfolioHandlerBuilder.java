@@ -18,7 +18,7 @@ public class PortfolioHandlerBuilder {
     EventNotifier eventNotifier = mock(EventNotifier.class);
 
     public PortfolioHandler build() {
-        return PortfolioFactory.factory(
+        return PortfolioFactory.create(
                 orderHandler,
                 executionHandler,
                 portfolio,

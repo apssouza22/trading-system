@@ -1,26 +1,25 @@
 package com.apssouza.mytrade.trading.domain.forex.feed.pricefeed;
 
 import com.apssouza.mytrade.feed.api.SignalDto;
+import com.apssouza.mytrade.trading.domain.forex.common.TradingParams;
+import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeEvent;
+import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeListener;
+import com.apssouza.mytrade.trading.domain.forex.event.Event;
+import com.apssouza.mytrade.trading.domain.forex.event.EventType;
 import com.apssouza.mytrade.trading.domain.forex.execution.OrderExecution;
+import com.apssouza.mytrade.trading.domain.forex.feed.signalfeed.SignalCreatedEvent;
 import com.apssouza.mytrade.trading.domain.forex.feed.signalfeed.SignalFeedHandler;
 import com.apssouza.mytrade.trading.domain.forex.order.OrderDto;
+import com.apssouza.mytrade.trading.domain.forex.order.OrderFoundEvent;
 import com.apssouza.mytrade.trading.domain.forex.order.OrderHandler;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioHandler;
 import com.apssouza.mytrade.trading.domain.forex.session.EventNotifier;
 import com.apssouza.mytrade.trading.domain.forex.session.MultiPositionHandler;
-import com.apssouza.mytrade.trading.domain.forex.event.Event;
-import com.apssouza.mytrade.trading.domain.forex.event.EventType;
-import com.apssouza.mytrade.trading.domain.forex.order.OrderFoundEvent;
-import com.apssouza.mytrade.trading.domain.forex.feed.pricefeed.PriceChangedEvent;
-import com.apssouza.mytrade.trading.domain.forex.feed.signalfeed.SignalCreatedEvent;
-import com.apssouza.mytrade.trading.domain.forex.common.TradingParams;
-import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeEvent;
-import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeListener;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class PriceChangedListener implements PropertyChangeListener {
+class PriceChangedListener implements PropertyChangeListener {
 
     private final OrderExecution executionHandler;
     private final PortfolioHandler portfolioHandler;

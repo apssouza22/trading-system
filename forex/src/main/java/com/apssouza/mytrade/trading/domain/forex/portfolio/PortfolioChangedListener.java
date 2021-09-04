@@ -4,7 +4,7 @@ import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeE
 import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeListener;
 import com.apssouza.mytrade.trading.domain.forex.event.Event;
 
-public class PortfolioChangedListener implements PropertyChangeListener {
+class PortfolioChangedListener implements PropertyChangeListener {
     private final PortfolioHandler portfolioHandler;
 
     public PortfolioChangedListener(PortfolioHandler portfolioHandler) {

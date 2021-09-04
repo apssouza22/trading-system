@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-public class OrderFoundListener implements PropertyChangeListener {
+class OrderFoundListener implements PropertyChangeListener {
 
     private static Logger log = Logger.getLogger(OrderFoundListener.class.getSimpleName());
     private final OrderExecution executionHandler;
