@@ -1,9 +1,8 @@
-package com.apssouza.mytrade.trading.domain.forex.order;
+package com.apssouza.mytrade.trading.domain.forex.risk.stoporder;
 
 import com.apssouza.mytrade.feed.api.PriceDto;
 import com.apssouza.mytrade.trading.domain.forex.event.AbstractEvent;
 import com.apssouza.mytrade.trading.domain.forex.event.EventType;
-import com.apssouza.mytrade.trading.domain.forex.order.StopOrderDto;
 
 import java.time.LocalDateTime;
 import java.util.Map;

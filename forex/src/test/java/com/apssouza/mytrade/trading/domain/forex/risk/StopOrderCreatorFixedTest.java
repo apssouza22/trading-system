@@ -6,6 +6,7 @@ import com.apssouza.mytrade.trading.domain.forex.order.*;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderCreator;
 import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderConfigDto;
+import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderDto;
 import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderFactory;
 import com.apssouza.mytrade.trading.domain.forex.event.EventType;
 import com.apssouza.mytrade.trading.domain.forex.feed.pricefeed.PriceChangedEvent;
@@ -36,9 +37,9 @@ public class StopOrderCreatorFixedTest extends TestCase {
         positionBuilder.withType(Position.PositionType.LONG);
         Position position = positionBuilder.build();
         obj.createContext(Position.PositionType.LONG);
-        com.apssouza.mytrade.trading.domain.forex.order.StopOrderDto hardStopLoss = obj.getHardStopLoss(position);
-        assertEquals(com.apssouza.mytrade.trading.domain.forex.order.StopOrderDto.StopOrderStatus.CREATED, hardStopLoss.getStatus());
-        assertEquals(com.apssouza.mytrade.trading.domain.forex.order.StopOrderDto.StopOrderType.HARD_STOP, hardStopLoss.getType());
+        StopOrderDto hardStopLoss = obj.getHardStopLoss(position);
+        assertEquals(StopOrderDto.StopOrderStatus.CREATED, hardStopLoss.getStatus());
+        assertEquals(StopOrderDto.StopOrderType.HARD_STOP, hardStopLoss.getType());
         assertEquals(OrderDto.OrderAction.SELL, hardStopLoss.getAction());
         assertEquals(BigDecimal.valueOf(0.904), hardStopLoss.getPrice());
     }
@@ -51,9 +52,9 @@ public class StopOrderCreatorFixedTest extends TestCase {
         Position position = positionBuilder.build();
         obj.createContext(Position.PositionType.SHORT);
 
-        com.apssouza.mytrade.trading.domain.forex.order.StopOrderDto hardStopLoss = obj.getHardStopLoss(position);
-        assertEquals(com.apssouza.mytrade.trading.domain.forex.order.StopOrderDto.StopOrderStatus.CREATED, hardStopLoss.getStatus());
-        assertEquals(com.apssouza.mytrade.trading.domain.forex.order.StopOrderDto.StopOrderType.HARD_STOP, hardStopLoss.getType());
+        StopOrderDto hardStopLoss = obj.getHardStopLoss(position);
+        assertEquals(StopOrderDto.StopOrderStatus.CREATED, hardStopLoss.getStatus());
+        assertEquals(StopOrderDto.StopOrderType.HARD_STOP, hardStopLoss.getType());
         assertEquals(OrderDto.OrderAction.BUY, hardStopLoss.getAction());
         assertEquals(BigDecimal.valueOf(1.104), hardStopLoss.getPrice());
     }
@@ -65,9 +66,9 @@ public class StopOrderCreatorFixedTest extends TestCase {
         Position position = positionBuilder.build();
         obj.createContext(Position.PositionType.SHORT);
 
-        com.apssouza.mytrade.trading.domain.forex.order.StopOrderDto hardStopLoss = obj.getProfitStopOrder(position);
-        assertEquals(com.apssouza.mytrade.trading.domain.forex.order.StopOrderDto.StopOrderStatus.CREATED, hardStopLoss.getStatus());
-        assertEquals(com.apssouza.mytrade.trading.domain.forex.order.StopOrderDto.StopOrderType.TAKE_PROFIT, hardStopLoss.getType());
+        StopOrderDto hardStopLoss = obj.getProfitStopOrder(position);
+        assertEquals(StopOrderDto.StopOrderStatus.CREATED, hardStopLoss.getStatus());
+        assertEquals(StopOrderDto.StopOrderType.TAKE_PROFIT, hardStopLoss.getType());
         assertEquals(OrderDto.OrderAction.BUY, hardStopLoss.getAction());
         assertEquals(BigDecimal.valueOf(0.804), hardStopLoss.getPrice());
     }
@@ -82,9 +83,9 @@ public class StopOrderCreatorFixedTest extends TestCase {
 
         obj.createContext(Position.PositionType.LONG);
 
-        com.apssouza.mytrade.trading.domain.forex.order.StopOrderDto hardStopLoss = obj.getProfitStopOrder(position);
-        assertEquals(com.apssouza.mytrade.trading.domain.forex.order.StopOrderDto.StopOrderStatus.CREATED, hardStopLoss.getStatus());
-        assertEquals(com.apssouza.mytrade.trading.domain.forex.order.StopOrderDto.StopOrderType.TAKE_PROFIT, hardStopLoss.getType());
+        StopOrderDto hardStopLoss = obj.getProfitStopOrder(position);
+        assertEquals(StopOrderDto.StopOrderStatus.CREATED, hardStopLoss.getStatus());
+        assertEquals(StopOrderDto.StopOrderType.TAKE_PROFIT, hardStopLoss.getType());
         assertEquals(OrderDto.OrderAction.SELL, hardStopLoss.getAction());
         assertEquals(BigDecimal.valueOf(1.204), hardStopLoss.getPrice());
     }
@@ -105,10 +106,10 @@ public class StopOrderCreatorFixedTest extends TestCase {
         PriceDto priceDto = new PriceDto(now, close, close, close, close, "AUDUSD");
         priceMap.put("AUDUSD", priceDto);
         PriceChangedEvent event = new PriceChangedEvent(EventType.PRICE_CHANGED,now, priceMap);
-        Optional<com.apssouza.mytrade.trading.domain.forex.order.StopOrderDto> optional = obj.getEntryStopOrder(position, event);
-        com.apssouza.mytrade.trading.domain.forex.order.StopOrderDto hardStopLoss = optional.get();
-        assertEquals(com.apssouza.mytrade.trading.domain.forex.order.StopOrderDto.StopOrderStatus.CREATED, hardStopLoss.getStatus());
-        assertEquals(com.apssouza.mytrade.trading.domain.forex.order.StopOrderDto.StopOrderType.ENTRY_STOP, hardStopLoss.getType());
+        Optional<StopOrderDto> optional = obj.getEntryStopOrder(position, event);
+        StopOrderDto hardStopLoss = optional.get();
+        assertEquals(StopOrderDto.StopOrderStatus.CREATED, hardStopLoss.getStatus());
+        assertEquals(StopOrderDto.StopOrderType.ENTRY_STOP, hardStopLoss.getType());
         assertEquals(OrderDto.OrderAction.SELL, hardStopLoss.getAction());
         assertEquals(BigDecimal.valueOf(1.004), hardStopLoss.getPrice());
     }
@@ -132,7 +133,7 @@ public class StopOrderCreatorFixedTest extends TestCase {
         PriceDto priceDto = new PriceDto(now, close, close, close, close, "AUDUSD");
         priceMap.put("AUDUSD", priceDto);
         PriceChangedEvent event = new PriceChangedEvent(EventType.PRICE_CHANGED,now, priceMap);
-        Optional<com.apssouza.mytrade.trading.domain.forex.order.StopOrderDto> optional = obj.getEntryStopOrder(position, event);
+        Optional<StopOrderDto> optional = obj.getEntryStopOrder(position, event);
         assertFalse(optional.isPresent());
     }
 
@@ -156,10 +157,10 @@ public class StopOrderCreatorFixedTest extends TestCase {
         PriceDto priceDto = new PriceDto(now, close, close, close, close, "AUDUSD");
         priceMap.put("AUDUSD", priceDto);
         PriceChangedEvent event = new PriceChangedEvent(EventType.PRICE_CHANGED,now, priceMap);
-        Optional<com.apssouza.mytrade.trading.domain.forex.order.StopOrderDto> optional = obj.getEntryStopOrder(position, event);
-        com.apssouza.mytrade.trading.domain.forex.order.StopOrderDto hardStopLoss = optional.get();
-        assertEquals(com.apssouza.mytrade.trading.domain.forex.order.StopOrderDto.StopOrderStatus.CREATED, hardStopLoss.getStatus());
-        assertEquals(com.apssouza.mytrade.trading.domain.forex.order.StopOrderDto.StopOrderType.ENTRY_STOP, hardStopLoss.getType());
+        Optional<StopOrderDto> optional = obj.getEntryStopOrder(position, event);
+        StopOrderDto hardStopLoss = optional.get();
+        assertEquals(StopOrderDto.StopOrderStatus.CREATED, hardStopLoss.getStatus());
+        assertEquals(StopOrderDto.StopOrderType.ENTRY_STOP, hardStopLoss.getType());
         assertEquals(OrderDto.OrderAction.BUY, hardStopLoss.getAction());
         assertEquals(BigDecimal.valueOf(1.004), hardStopLoss.getPrice());
     }
@@ -183,7 +184,7 @@ public class StopOrderCreatorFixedTest extends TestCase {
         PriceDto priceDto = new PriceDto(now, close, close, close, close, "AUDUSD");
         priceMap.put("AUDUSD", priceDto);
         PriceChangedEvent event = new PriceChangedEvent(EventType.PRICE_CHANGED,now, priceMap);
-        Optional<com.apssouza.mytrade.trading.domain.forex.order.StopOrderDto> optional = obj.getEntryStopOrder(position, event);
+        Optional<StopOrderDto> optional = obj.getEntryStopOrder(position, event);
         assertFalse(optional.isPresent());
     }
 

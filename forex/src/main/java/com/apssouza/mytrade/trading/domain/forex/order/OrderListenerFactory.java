@@ -10,7 +10,7 @@ import com.apssouza.mytrade.trading.domain.forex.statistics.HistoryBookHandler;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OrderListenerFactory{
+public class OrderListenerFactory {
 
     public static List<PropertyChangeListener> create(
             PortfolioModel portfolio,
@@ -19,11 +19,10 @@ public class OrderListenerFactory{
             RiskManagementHandler riskManagementHandler,
             OrderExecution executionHandler,
             EventNotifier eventNotifier
-    ){
+    ) {
         var listeners = new ArrayList<PropertyChangeListener>();
         listeners.add(new FilledOrderListener(portfolio, historyHandler, eventNotifier));
         listeners.add(new OrderCreatedListener(orderHandler));
-        listeners.add(new StopOrderFilledListener(portfolio, historyHandler, eventNotifier));
         listeners.add(new OrderFoundListener(
                 executionHandler,
                 historyHandler,

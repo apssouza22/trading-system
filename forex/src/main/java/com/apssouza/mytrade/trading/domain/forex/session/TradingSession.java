@@ -107,6 +107,7 @@ public class TradingSession {
 
     private EventNotifier setListeners() {
         var eventListeners = OrderListenerFactory.create(portfolio, historyHandler, orderHandler, riskManagementHandler, executionHandler, eventNotifier);
+        eventListeners.addAll(StopOrderFactory.createListeners(portfolio, historyHandler, eventNotifier));
         eventListeners.addAll(PortfolioFactory.createListeners(portfolioHandler));
         eventListeners.add(new SessionFinishedListener(historyHandler));
         eventListeners.add(new EndedTradingDayListener(portfolioHandler));

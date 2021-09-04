@@ -27,24 +27,24 @@ class StopOrderCreatorFixed implements StopOrderCreator {
     }
 
     @Override
-    public com.apssouza.mytrade.trading.domain.forex.order.StopOrderDto getHardStopLoss(Position position) {
+    public StopOrderDto getHardStopLoss(Position position) {
         return creatorContext.getHardStopLoss(position);
     }
 
     @Override
-    public com.apssouza.mytrade.trading.domain.forex.order.StopOrderDto getProfitStopOrder(Position position) {
+    public StopOrderDto getProfitStopOrder(Position position) {
         return creatorContext.getProfitStopOrder(position);
     }
 
     @Override
-    public Optional<com.apssouza.mytrade.trading.domain.forex.order.StopOrderDto> getEntryStopOrder(Position position, Event event) {
+    public Optional<StopOrderDto> getEntryStopOrder(Position position, Event event) {
         Map<String, PriceDto> price = event.getPrice();
         BigDecimal priceClose = price.get(position.getSymbol()).close();
         return creatorContext.getEntryStopOrder(position, priceClose);
     }
 
     @Override
-    public Optional<com.apssouza.mytrade.trading.domain.forex.order.StopOrderDto> getTrailingStopOrder(Position position, Event event) {
+    public Optional<StopOrderDto> getTrailingStopOrder(Position position, Event event) {
         Map<String, PriceDto> price = event.getPrice();
         BigDecimal priceClose = price.get(position.getSymbol()).close();
         return creatorContext.getTrailingStopOrder(position, priceClose);

@@ -3,7 +3,7 @@ package com.apssouza.mytrade.trading.domain.forex.execution;
 import com.apssouza.mytrade.feed.api.PriceDto;
 import com.apssouza.mytrade.trading.domain.forex.order.StopOrderBuilder;
 import com.apssouza.mytrade.trading.domain.forex.order.OrderDto;
-import com.apssouza.mytrade.trading.domain.forex.order.StopOrderDto;
+import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderDto;
 
 import junit.framework.TestCase;
 import org.junit.Before;

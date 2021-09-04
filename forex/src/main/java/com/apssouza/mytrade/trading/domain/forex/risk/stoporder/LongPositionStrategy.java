@@ -43,7 +43,7 @@ class LongPositionStrategy implements CreatorStrategy {
         if (position.getPlacedStopLoss() == null){
             return Optional.empty();
         }
-        if (!position.getPlacedStopLoss().getType().equals(com.apssouza.mytrade.trading.domain.forex.order.StopOrderDto.StopOrderType.TRAILLING_STOP)) {
+        if (!position.getPlacedStopLoss().getType().equals(StopOrderDto.StopOrderType.TRAILLING_STOP)) {
             stopPrice = last_close.subtract(distanceObject.getTraillingStopDistance());
         } else {
             stopPrice = position.getPlacedStopLoss().getPrice().subtract(distanceObject.getTraillingStopDistance());

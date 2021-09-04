@@ -1,7 +1,6 @@
 package com.apssouza.mytrade.trading.domain.forex.risk.stoporder;
 
 import com.apssouza.mytrade.trading.domain.forex.order.StopOrderBuilder;
-import com.apssouza.mytrade.trading.domain.forex.order.StopOrderDto;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioModel;
 import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementFactory;
 import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementHandler;

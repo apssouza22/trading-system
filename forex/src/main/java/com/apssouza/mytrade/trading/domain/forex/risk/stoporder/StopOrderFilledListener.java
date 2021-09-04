@@ -1,4 +1,4 @@
-package com.apssouza.mytrade.trading.domain.forex.order;
+package com.apssouza.mytrade.trading.domain.forex.risk.stoporder;
 
 import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeEvent;
 import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeListener;

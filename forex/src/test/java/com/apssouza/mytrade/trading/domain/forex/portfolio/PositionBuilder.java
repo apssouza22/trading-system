@@ -1,6 +1,6 @@
 package com.apssouza.mytrade.trading.domain.forex.portfolio;
 
-import com.apssouza.mytrade.trading.domain.forex.order.StopOrderDto;
+import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderDto;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
