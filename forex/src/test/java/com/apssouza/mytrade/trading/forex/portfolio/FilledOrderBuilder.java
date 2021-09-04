@@ -1,4 +1,4 @@
-package com.apssouza.mytrade.trading.builder;
+package com.apssouza.mytrade.trading.forex.portfolio;
 
 import com.apssouza.mytrade.trading.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.forex.portfolio.*;

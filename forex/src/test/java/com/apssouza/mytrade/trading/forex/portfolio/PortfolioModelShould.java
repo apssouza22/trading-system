@@ -1,18 +1,19 @@
 package com.apssouza.mytrade.trading.forex.portfolio;
 
-import com.apssouza.mytrade.trading.builder.LoopEventBuilder;
-import com.apssouza.mytrade.trading.builder.PositionBuilder;
+import com.apssouza.mytrade.trading.forex.session.LoopEventBuilder;
 import com.apssouza.mytrade.trading.forex.session.event.PriceChangedEvent;
+
 import junit.framework.TestCase;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import java.math.BigDecimal;
 import java.util.Map;
 
 @RunWith(MockitoJUnitRunner.class)
-public class PortfolioModelTest extends TestCase {
+public class PortfolioModelShould extends TestCase {
 
     @Test
     public void updatePortfolioValue() {
@@ -33,7 +34,11 @@ public class PortfolioModelTest extends TestCase {
 
 
     @Test
-    public void getPositions() {
+    public void returnPositions() {
+        PortfolioModel portfolio = new PortfolioModel(BigDecimal.valueOf(10000));
+        portfolio.addNewPosition(new PositionBuilder().build());
+        Map<String, Position> positions = portfolio.getPositions();
+        assertEquals(1, positions.size());
     }
 
     @Test
@@ -57,12 +62,12 @@ public class PortfolioModelTest extends TestCase {
         portfolio.addPositionQtd(ps.getIdentifier(), 100, BigDecimal.ONE);
         Map<String, Position> positions = portfolio.getPositions();
 
-        assertTrue( positions.get(ps.getIdentifier()).getQuantity() == qtd + 100);
+        assertTrue(positions.get(ps.getIdentifier()).getQuantity() == qtd + 100);
         assertEquals(BigDecimal.valueOf(1.0040).setScale(4), positions.get(ps.getIdentifier()).getAvgPrice());
     }
 
     @Test(expected = RuntimeException.class)
-    public void addPositionQtdWithNoPosition() {
+    public void notAddPositionQtd_withoutPosition() {
         PortfolioModel portfolio = new PortfolioModel(BigDecimal.valueOf(10000));
         PositionBuilder positionBuilder = new PositionBuilder();
         Position ps = positionBuilder.build();
@@ -80,10 +85,10 @@ public class PortfolioModelTest extends TestCase {
 
         int qtd = ps.getQuantity();
         portfolio.addNewPosition(ps);
-        portfolio.removePositionQtd(ps.getIdentifier(),qtd);
+        portfolio.removePositionQtd(ps.getIdentifier(), qtd);
         Map<String, Position> positions = portfolio.getPositions();
 
-        assertTrue(positions.get(ps.getIdentifier()).getQuantity()==0);
+        assertTrue(positions.get(ps.getIdentifier()).getQuantity() == 0);
     }
 
     @Test
@@ -96,11 +101,11 @@ public class PortfolioModelTest extends TestCase {
         portfolio.removePositionQtd(ps.getIdentifier(), 50);
         Map<String, Position> positions = portfolio.getPositions();
 
-        assertTrue( positions.get(ps.getIdentifier()).getQuantity() == 950);
+        assertTrue(positions.get(ps.getIdentifier()).getQuantity() == 950);
     }
 
     @Test(expected = RuntimeException.class)
-    public void removePositionWithNoPosition() {
+    public void notRemovePosition_withoutPosition() {
         PortfolioModel portfolio = new PortfolioModel(BigDecimal.valueOf(10000));
         PositionBuilder positionBuilder = new PositionBuilder();
         Position ps = positionBuilder.build();
@@ -125,7 +130,7 @@ public class PortfolioModelTest extends TestCase {
 
 
     @Test(expected = RuntimeException.class)
-    public void closePositionWithNoPosition() {
+    public void notClosePosition_WithoutPosition() {
         PortfolioModel portfolio = new PortfolioModel(BigDecimal.valueOf(10000));
         PositionBuilder positionBuilder = new PositionBuilder();
         Position ps = positionBuilder.build();
@@ -133,7 +138,7 @@ public class PortfolioModelTest extends TestCase {
     }
 
     @Test
-    public void getPosition() {
+    public void returnPosition() {
         PortfolioModel portfolio = new PortfolioModel(BigDecimal.valueOf(10000));
         PositionBuilder positionBuilder = new PositionBuilder();
         Position ps = positionBuilder.build();
@@ -143,7 +148,7 @@ public class PortfolioModelTest extends TestCase {
     }
 
     @Test(expected = RuntimeException.class)
-    public void getPositionNotFound() {
+    public void notReturnPosition_NotExists() {
         PortfolioModel portfolio = new PortfolioModel(BigDecimal.valueOf(10000));
         PositionBuilder positionBuilder = new PositionBuilder();
         Position ps = positionBuilder.build();

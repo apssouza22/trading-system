@@ -1,6 +1,4 @@
-package com.apssouza.mytrade.trading.builder;
-
-import com.apssouza.mytrade.trading.forex.order.OrderDto;
+package com.apssouza.mytrade.trading.forex.order;
 
 import static com.apssouza.mytrade.trading.forex.order.OrderDto.OrderAction.*;
 import static com.apssouza.mytrade.trading.forex.order.OrderDto.OrderOrigin.*;

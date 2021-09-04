@@ -1,8 +1,8 @@
 package com.apssouza.mytrade.trading.forex.statistics;
 
-import com.apssouza.mytrade.trading.builder.FilledOrderBuilder;
-import com.apssouza.mytrade.trading.builder.OrderBuilder;
-import com.apssouza.mytrade.trading.builder.PositionBuilder;
+import com.apssouza.mytrade.trading.forex.portfolio.FilledOrderBuilder;
+import com.apssouza.mytrade.trading.forex.order.OrderBuilder;
+import com.apssouza.mytrade.trading.forex.portfolio.PositionBuilder;
 import com.apssouza.mytrade.trading.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.forex.portfolio.FilledOrderDto;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;

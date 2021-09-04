@@ -1,7 +1,7 @@
 package com.apssouza.mytrade.trading.forex.execution;
 
 import com.apssouza.mytrade.feed.api.PriceDto;
-import com.apssouza.mytrade.trading.builder.StopOrderBuilder;
+import com.apssouza.mytrade.trading.forex.order.StopOrderBuilder;
 import com.apssouza.mytrade.trading.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.forex.order.StopOrderDto;
 

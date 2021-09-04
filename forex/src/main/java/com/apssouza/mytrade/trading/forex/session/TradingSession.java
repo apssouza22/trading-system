@@ -98,7 +98,7 @@ public class TradingSession {
                         TradingParams.trailing_stop_loss_distance
                 ))
         );
-        this.orderHandler = OrderHandlerFactory.factory(this.riskManagementHandler);
+        this.orderHandler = OrderHandlerFactory.create(this.riskManagementHandler);
 
         eventNotifier = new EventNotifier();
         this.portfolioHandler = PortfolioFactory.factory(

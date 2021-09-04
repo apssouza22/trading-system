@@ -1,7 +1,6 @@
-package com.apssouza.mytrade.trading.builder;
+package com.apssouza.mytrade.trading.forex.portfolio;
 
 import com.apssouza.mytrade.trading.forex.order.StopOrderDto;
-import com.apssouza.mytrade.trading.forex.portfolio.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

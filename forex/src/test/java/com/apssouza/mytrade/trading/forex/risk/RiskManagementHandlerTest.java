@@ -1,8 +1,8 @@
 package com.apssouza.mytrade.trading.forex.risk;
 
-import com.apssouza.mytrade.trading.builder.LoopEventBuilder;
-import com.apssouza.mytrade.trading.builder.PositionBuilder;
-import com.apssouza.mytrade.trading.builder.StopOrderBuilder;
+import com.apssouza.mytrade.trading.forex.session.LoopEventBuilder;
+import com.apssouza.mytrade.trading.forex.portfolio.PositionBuilder;
+import com.apssouza.mytrade.trading.forex.order.StopOrderBuilder;
 import com.apssouza.mytrade.trading.forex.order.StopOrderDto;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.forex.risk.stoporder.RiskManagementBuilder;

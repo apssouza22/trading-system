@@ -1,7 +1,7 @@
 package com.apssouza.mytrade.trading.forex.order;
 
-import com.apssouza.mytrade.trading.builder.PositionBuilder;
-import com.apssouza.mytrade.trading.builder.SignalBuilder;
+import com.apssouza.mytrade.trading.forex.portfolio.PositionBuilder;
+import com.apssouza.mytrade.trading.forex.feed.SignalBuilder;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.forex.risk.RiskManagementHandler;
 import com.apssouza.mytrade.trading.forex.session.event.EventType;
@@ -15,7 +15,6 @@ import static com.apssouza.mytrade.trading.forex.order.OrderDto.OrderStatus.EXEC
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import static org.mockito.Mockito.mock;
 
@@ -37,7 +36,7 @@ public class OrderHandlerShould extends TestCase {
 
     @Test
     public void createOrderFromSignal() {
-        OrderHandler orderHandler = new OrderHandler(new MemoryOrderDao(), this.riskManagementHandler);
+        OrderHandler orderHandler = OrderHandlerFactory.create(this.riskManagementHandler);
         SignalBuilder signalBuilder = new SignalBuilder();
         signalBuilder.addSignal(LocalDateTime.MIN, "Buy");
         SignalCreatedEvent event = new SignalCreatedEvent(EventType.SIGNAL_CREATED, LocalDateTime.MIN, Collections.emptyMap(), signalBuilder.build());
@@ -52,7 +51,7 @@ public class OrderHandlerShould extends TestCase {
         positionBuilder.withType(Position.PositionType.SHORT);
         Position position = positionBuilder.build();
 
-        OrderHandler orderHandler = OrderHandlerFactory.factory(riskManagementHandler, new MemoryOrderDao());
+        OrderHandler orderHandler = OrderHandlerFactory.create(this.riskManagementHandler);
         OrderDto orderFromClosedPosition = orderHandler.createOrderFromClosedPosition(position, LocalDateTime.MIN);
         assertEquals(EXITS, orderFromClosedPosition.getOrigin());
         assertEquals(BUY, orderFromClosedPosition.getAction());
@@ -65,7 +64,7 @@ public class OrderHandlerShould extends TestCase {
         positionBuilder.withType(Position.PositionType.LONG);
         Position position = positionBuilder.build();
 
-        OrderHandler orderHandler = OrderHandlerFactory.factory(riskManagementHandler, new MemoryOrderDao());
+        OrderHandler orderHandler = OrderHandlerFactory.create(this.riskManagementHandler);
         OrderDto orderFromClosedPosition = orderHandler.createOrderFromClosedPosition(position, LocalDateTime.MIN);
         assertEquals(EXITS, orderFromClosedPosition.getOrigin());
         assertEquals(OrderDto.OrderAction.SELL, orderFromClosedPosition.getAction());
@@ -73,15 +72,15 @@ public class OrderHandlerShould extends TestCase {
 
     @Test
     public void persistOrder() {
-        MemoryOrderDao memoryOrderDao = mock(MemoryOrderDao.class);
-        OrderHandler orderHandler = OrderHandlerFactory.factory(riskManagementHandler, memoryOrderDao);
-        orderHandler.persist(mock(OrderDto.class));
-        Mockito.verify(memoryOrderDao).persist(Mockito.any());
+        OrderHandler orderHandler = OrderHandlerFactory.create(riskManagementHandler);
+        orderHandler.persist(new OrderBuilder().build());
+        List<OrderDto> ordersByStatus = orderHandler.getOrderByStatus(CREATED);
+        assertNotNull(ordersByStatus.get(0));
     }
 
     @Test
     public void updateOrderStatus() {
-        OrderHandler orderHandler = OrderHandlerFactory.factory(riskManagementHandler, new MemoryOrderDao());
+        OrderHandler orderHandler = OrderHandlerFactory.create(this.riskManagementHandler);
         var order = new OrderDto("AUDUSD", BUY, 10, STOP_ORDER, LocalDateTime.MIN, "123", CREATED);
         var createdOrder = orderHandler.persist(order);
         orderHandler.updateOrderStatus(createdOrder.getId(), EXECUTED);
@@ -91,7 +90,7 @@ public class OrderHandlerShould extends TestCase {
 
     @Test
     public void returnOrdersByStatus() {
-        OrderHandler orderHandler = OrderHandlerFactory.factory(riskManagementHandler, new MemoryOrderDao());
+        OrderHandler orderHandler = OrderHandlerFactory.create(this.riskManagementHandler);
         var order = new OrderDto("AUDUSD", BUY, 10, STOP_ORDER, LocalDateTime.MIN, "123", CREATED);
         var createdOrder = orderHandler.persist(order);
         List<OrderDto> orderByStatus = orderHandler.getOrderByStatus(CREATED);

@@ -1,7 +1,7 @@
 package com.apssouza.mytrade.trading.forex.risk;
 
 import com.apssouza.mytrade.feed.api.PriceDto;
-import com.apssouza.mytrade.trading.builder.PositionBuilder;
+import com.apssouza.mytrade.trading.forex.portfolio.PositionBuilder;
 import com.apssouza.mytrade.trading.forex.order.*;
 import com.apssouza.mytrade.trading.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.forex.risk.stoporder.StopOrderCreator;
