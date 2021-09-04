@@ -1,9 +1,9 @@
 package com.apssouza.mytrade.trading.api;
 
 import com.apssouza.mytrade.feed.api.FeedModule;
-import com.apssouza.mytrade.trading.forex.feed.pricefeed.PriceFeedHandler;
-import com.apssouza.mytrade.trading.forex.feed.signalfeed.SignalFeedHandler;
-import com.apssouza.mytrade.trading.forex.session.TradingSession;
+import com.apssouza.mytrade.trading.domain.forex.feed.pricefeed.PriceFeedHandler;
+import com.apssouza.mytrade.trading.domain.forex.feed.signalfeed.SignalFeedHandler;
+import com.apssouza.mytrade.trading.domain.forex.session.TradingSession;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

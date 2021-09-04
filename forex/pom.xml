@@ -59,13 +59,13 @@
       <!--                <path>${project.basedir}/../common/target/classes</path>-->
       <!--              </modulePath>-->
       <!--              <modules>-->
-      <!--                <module>com.apssouza.mytrade.trading.forex</module>-->
+      <!--                <module>com.apssouza.mytrade.trading.domain.forex</module>-->
       <!--                <module>com.apssouza.mytrade.feed</module>-->
       <!--                <module>com.apssouza.mytrade.common</module>-->
       <!--              </modules>-->
       <!--              <launcher>-->
       <!--                <name>my-trade-engine</name>-->
-      <!--                <module>com.apssouza.mytrade.trading.forex/com.apssouza.mytrade.trading.api.ForexEngine</module>-->
+      <!--                <module>com.apssouza.mytrade.trading.domain.forex/com.apssouza.mytrade.trading.api.ForexEngine</module>-->
       <!--              </launcher>-->
       <!--              <outputDirectory>-->
       <!--                ${project.build.directory}/jlink-image-->
