@@ -1,8 +1,8 @@
 package com.apssouza.mytrade.trading.domain.forex.session;
 
+import com.apssouza.mytrade.trading.domain.forex.feed.pricefeed.PriceChangedEvent;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioHandler;
-import com.apssouza.mytrade.trading.domain.forex.event.Event;
-import com.apssouza.mytrade.trading.domain.forex.event.EventType;
+import com.apssouza.mytrade.trading.domain.forex.common.Event;
 import com.apssouza.mytrade.trading.domain.forex.statistics.HistoryBookHandler;
 import com.apssouza.mytrade.trading.domain.forex.common.ForexException;
 
@@ -43,7 +43,7 @@ public class QueueConsumer extends Thread {
                 Event event = eventQueue.take();
                 var logMsg = String.format(
                         "%s - %s - %s",
-                        event.getType().name(),
+                        event,
                         event.getTimestamp(),
                         event.getPrice().get("AUDUSD").close()
                 );
@@ -51,15 +51,14 @@ public class QueueConsumer extends Thread {
                 historyHandler.startCycle(event.getTimestamp());
 
                 notifier.notify(event);
-                if (event.getType() == EventType.PRICE_CHANGED) {
+                if (event instanceof PriceChangedEvent) {
                     this.portfolioHandler.createStopOrder(event);
                 }
 
                 portfolioHandler.getPortfolio().printPortfolio();
 
                 historyHandler.endCycle();
-
-                if (event.getType() == EventType.SESSION_FINISHED) {
+                if (event instanceof SessionFinishedEvent) {
                     return;
                 }
             } catch (InterruptedException ex) {

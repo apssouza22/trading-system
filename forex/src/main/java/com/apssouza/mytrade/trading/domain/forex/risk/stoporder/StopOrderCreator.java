@@ -1,7 +1,7 @@
 package com.apssouza.mytrade.trading.domain.forex.risk.stoporder;
 
 import com.apssouza.mytrade.trading.domain.forex.portfolio.Position;
-import com.apssouza.mytrade.trading.domain.forex.event.Event;
+import com.apssouza.mytrade.trading.domain.forex.common.Event;
 
 import java.util.Optional;
 

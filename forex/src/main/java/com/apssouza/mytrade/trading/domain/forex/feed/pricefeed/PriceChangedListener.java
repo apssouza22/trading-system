@@ -4,8 +4,7 @@ import com.apssouza.mytrade.feed.api.SignalDto;
 import com.apssouza.mytrade.trading.domain.forex.common.TradingParams;
 import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeEvent;
 import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeListener;
-import com.apssouza.mytrade.trading.domain.forex.event.Event;
-import com.apssouza.mytrade.trading.domain.forex.event.EventType;
+import com.apssouza.mytrade.trading.domain.forex.common.Event;
 import com.apssouza.mytrade.trading.domain.forex.execution.OrderExecution;
 import com.apssouza.mytrade.trading.domain.forex.feed.signalfeed.SignalCreatedEvent;
 import com.apssouza.mytrade.trading.domain.forex.feed.signalfeed.SignalFeedHandler;
@@ -71,7 +70,6 @@ class PriceChangedListener implements PropertyChangeListener {
 
         for (SignalDto signal : signals) {
             eventNotifier.notify(new SignalCreatedEvent(
-                    EventType.SIGNAL_CREATED,
                     currentTime,
                     event.getPrice(),
                     signal
@@ -89,7 +87,6 @@ class PriceChangedListener implements PropertyChangeListener {
         }
 
         eventNotifier.notify(new OrderFoundEvent(
-                EventType.ORDER_FOUND,
                 currentTime,
                 event.getPrice(),
                 orderList

@@ -3,8 +3,7 @@ package com.apssouza.mytrade.trading.domain.forex.order;
 import com.apssouza.mytrade.trading.domain.forex.common.TradingParams;
 import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeEvent;
 import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeListener;
-import com.apssouza.mytrade.trading.domain.forex.event.Event;
-import com.apssouza.mytrade.trading.domain.forex.event.EventType;
+import com.apssouza.mytrade.trading.domain.forex.common.Event;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.FilledOrderDto;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioChangedEvent;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioModel;
@@ -56,7 +55,6 @@ class FilledOrderListener implements PropertyChangeListener {
 
     private void emitEvent(OrderFilledEvent orderFilledEvent, Position position) {
             eventNotifier.notify(new PortfolioChangedEvent(
-                    EventType.PORTFOLIO_CHANGED,
                     orderFilledEvent.getTimestamp(),
                     orderFilledEvent.getPrice(),
                     position

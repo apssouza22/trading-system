@@ -1,26 +1,18 @@
 package com.apssouza.mytrade.trading.domain.forex.feed.pricefeed;
 
 import com.apssouza.mytrade.feed.api.PriceDto;
-import com.apssouza.mytrade.trading.domain.forex.event.Event;
-import com.apssouza.mytrade.trading.domain.forex.event.EventType;
+import com.apssouza.mytrade.trading.domain.forex.common.Event;
 
 import java.time.LocalDateTime;
 import java.util.Map;
 
 public class PriceChangedEvent implements Event {
-    private final EventType type;
     private final LocalDateTime time;
     private final Map<String, PriceDto> priceSymbolMapped;
 
-    public PriceChangedEvent(EventType type, LocalDateTime time, Map<String, PriceDto> priceSymbolMapped) {
-        this.type = type;
+    public PriceChangedEvent(LocalDateTime time, Map<String, PriceDto> priceSymbolMapped) {
         this.time = time;
         this.priceSymbolMapped = priceSymbolMapped;
-    }
-
-    @Override
-    public EventType getType() {
-        return type;
     }
 
     @Override

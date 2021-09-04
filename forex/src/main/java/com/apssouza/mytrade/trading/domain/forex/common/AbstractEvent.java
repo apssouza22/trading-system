@@ -1,4 +1,4 @@
-package com.apssouza.mytrade.trading.domain.forex.event;
+package com.apssouza.mytrade.trading.domain.forex.common;
 
 import com.apssouza.mytrade.feed.api.PriceDto;
 
@@ -7,19 +7,12 @@ import java.util.Map;
 
 public class AbstractEvent implements Event {
 
-    protected final EventType type;
     protected final LocalDateTime timestamp;
     private final Map<String, PriceDto> priceDtoMap;
 
-    public AbstractEvent(EventType type, LocalDateTime timestamp, Map<String, PriceDto> priceDtoMap) {
-        this.type = type;
+    public AbstractEvent( LocalDateTime timestamp, Map<String, PriceDto> priceDtoMap) {
         this.timestamp = timestamp;
         this.priceDtoMap = priceDtoMap;
-    }
-
-    @Override
-    public EventType getType() {
-        return type;
     }
 
     @Override
@@ -27,6 +20,7 @@ public class AbstractEvent implements Event {
         return timestamp;
     }
 
+    @Override
     public Map<String, PriceDto> getPrice() {
         return priceDtoMap;
     }

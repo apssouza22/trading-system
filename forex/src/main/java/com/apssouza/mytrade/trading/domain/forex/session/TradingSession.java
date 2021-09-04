@@ -3,8 +3,7 @@ package com.apssouza.mytrade.trading.domain.forex.session;
 import com.apssouza.mytrade.trading.api.ExecutionType;
 import com.apssouza.mytrade.trading.api.SessionType;
 import com.apssouza.mytrade.trading.domain.forex.common.TradingParams;
-import com.apssouza.mytrade.trading.domain.forex.event.Event;
-import com.apssouza.mytrade.trading.domain.forex.event.EventType;
+import com.apssouza.mytrade.trading.domain.forex.common.Event;
 import com.apssouza.mytrade.trading.domain.forex.execution.OrderExecution;
 import com.apssouza.mytrade.trading.domain.forex.execution.OrderExecutionFactory;
 import com.apssouza.mytrade.trading.domain.forex.feed.pricefeed.PriceFeedHandler;
@@ -137,7 +136,6 @@ public class TradingSession {
         log.warning("Shutting down the application");
         var current = LocalDateTime.now();
         var event = new EndedTradingDayEvent(
-                EventType.ENDED_TRADING_DAY,
                 current,
                 priceFeedHandler.getPriceSymbolMapped(current)
         );

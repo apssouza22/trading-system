@@ -1,6 +1,6 @@
 package com.apssouza.mytrade.trading.domain.forex.session;
 
-import com.apssouza.mytrade.trading.domain.forex.event.Event;
+import com.apssouza.mytrade.trading.domain.forex.common.Event;
 
 import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeListener;
 import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeSupport;

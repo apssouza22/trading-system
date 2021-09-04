@@ -2,7 +2,7 @@ package com.apssouza.mytrade.trading.domain.forex.order;
 
 import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeEvent;
 import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeListener;
-import com.apssouza.mytrade.trading.domain.forex.event.Event;
+import com.apssouza.mytrade.trading.domain.forex.common.Event;
 
 
 class OrderCreatedListener implements PropertyChangeListener {

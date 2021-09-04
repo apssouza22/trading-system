@@ -2,7 +2,7 @@ package com.apssouza.mytrade.trading.domain.forex.portfolio;
 
 import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeEvent;
 import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeListener;
-import com.apssouza.mytrade.trading.domain.forex.event.Event;
+import com.apssouza.mytrade.trading.domain.forex.common.Event;
 
 class PortfolioChangedListener implements PropertyChangeListener {
     private final PortfolioHandler portfolioHandler;

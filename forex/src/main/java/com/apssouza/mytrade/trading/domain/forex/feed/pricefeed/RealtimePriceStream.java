@@ -1,8 +1,7 @@
 package com.apssouza.mytrade.trading.domain.forex.feed.pricefeed;
 
 import com.apssouza.mytrade.common.misc.helper.time.DateTimeHelper;
-import com.apssouza.mytrade.trading.domain.forex.event.Event;
-import com.apssouza.mytrade.trading.domain.forex.event.EventType;
+import com.apssouza.mytrade.trading.domain.forex.common.Event;
 import com.apssouza.mytrade.trading.domain.forex.common.TradingHelper;
 
 import java.time.LocalDateTime;
@@ -26,16 +25,13 @@ class RealtimePriceStream implements PriceStream {
     @Override
     public void start(LocalDateTime start, LocalDateTime end) {
         TimerTask repeatedTask = new TimerTask() {
+            @Override
             public void run() {
                 LocalDateTime time = LocalDateTime.now(DateTimeHelper.ZONEID_UTC);
                 if (!TradingHelper.isTradingTime(time)) {
                     return;
                 }
-                PriceChangedEvent event = new PriceChangedEvent(
-                        EventType.PRICE_CHANGED,
-                        time,
-                        priceHandler.getPriceSymbolMapped(time)
-                );
+                var event = new PriceChangedEvent(time, priceHandler.getPriceSymbolMapped(time));
 
                 try {
                     eventQueue.put(event);

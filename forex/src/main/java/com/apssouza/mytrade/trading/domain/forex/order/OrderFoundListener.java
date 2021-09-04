@@ -1,9 +1,8 @@
 package com.apssouza.mytrade.trading.domain.forex.order;
 
+import com.apssouza.mytrade.trading.domain.forex.common.Event;
 import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeEvent;
 import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeListener;
-import com.apssouza.mytrade.trading.domain.forex.event.Event;
-import com.apssouza.mytrade.trading.domain.forex.event.EventType;
 import com.apssouza.mytrade.trading.domain.forex.execution.OrderExecution;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.FilledOrderDto;
 import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementHandler;
@@ -75,7 +74,6 @@ class OrderFoundListener implements PropertyChangeListener {
         FilledOrderDto filledOrder = executionHandler.executeOrder(order);
         if (filledOrder != null) {
             eventNotifier.notify(new OrderFilledEvent(
-                    EventType.ORDER_FILLED,
                     filledOrder.getTime(),
                     event.getPrice(),
                     filledOrder

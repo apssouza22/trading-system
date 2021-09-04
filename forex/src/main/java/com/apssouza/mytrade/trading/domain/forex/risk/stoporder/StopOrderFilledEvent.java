@@ -1,8 +1,7 @@
 package com.apssouza.mytrade.trading.domain.forex.risk.stoporder;
 
 import com.apssouza.mytrade.feed.api.PriceDto;
-import com.apssouza.mytrade.trading.domain.forex.event.AbstractEvent;
-import com.apssouza.mytrade.trading.domain.forex.event.EventType;
+import com.apssouza.mytrade.trading.domain.forex.common.AbstractEvent;
 
 import java.time.LocalDateTime;
 import java.util.Map;
@@ -11,12 +10,11 @@ public class StopOrderFilledEvent extends AbstractEvent {
     private final StopOrderDto order;
 
     public StopOrderFilledEvent(
-            EventType type,
             LocalDateTime timestamp,
             Map<String, PriceDto> price,
             StopOrderDto order
     ) {
-        super(type, timestamp, price);
+        super(timestamp, price);
         this.order = order;
     }
 

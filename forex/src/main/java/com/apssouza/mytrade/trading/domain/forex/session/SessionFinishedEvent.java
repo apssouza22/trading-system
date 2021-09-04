@@ -1,28 +1,19 @@
 package com.apssouza.mytrade.trading.domain.forex.session;
 
 import com.apssouza.mytrade.feed.api.PriceDto;
-import com.apssouza.mytrade.trading.domain.forex.event.Event;
-import com.apssouza.mytrade.trading.domain.forex.event.EventType;
+import com.apssouza.mytrade.trading.domain.forex.common.Event;
 
 import java.time.LocalDateTime;
 import java.util.Map;
 
 public class SessionFinishedEvent implements Event {
 
-    private final EventType type;
     private final LocalDateTime timestamp;
     private final Map<String, PriceDto> price;
 
-    public SessionFinishedEvent(EventType type, LocalDateTime timestamp, Map<String, PriceDto> price) {
-
-        this.type = type;
+    public SessionFinishedEvent(LocalDateTime timestamp, Map<String, PriceDto> price) {
         this.timestamp = timestamp;
         this.price = price;
-    }
-
-    @Override
-    public EventType getType() {
-        return type;
     }
 
     @Override

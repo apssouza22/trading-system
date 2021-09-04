@@ -2,8 +2,7 @@ package com.apssouza.mytrade.trading.domain.forex.risk.stoporder;
 
 import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeEvent;
 import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeListener;
-import com.apssouza.mytrade.trading.domain.forex.event.Event;
-import com.apssouza.mytrade.trading.domain.forex.event.EventType;
+import com.apssouza.mytrade.trading.domain.forex.common.Event;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.FilledOrderDto;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioChangedEvent;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioModel;
@@ -53,7 +52,6 @@ class StopOrderFilledListener implements PropertyChangeListener {
         ));
 
         eventNotifier.notify(new PortfolioChangedEvent(
-                EventType.PORTFOLIO_CHANGED,
                 event.getTimestamp(),
                 event.getPrice(),
                 ps

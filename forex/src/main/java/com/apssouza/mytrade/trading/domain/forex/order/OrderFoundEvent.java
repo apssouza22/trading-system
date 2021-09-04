@@ -1,9 +1,7 @@
 package com.apssouza.mytrade.trading.domain.forex.order;
 
 import com.apssouza.mytrade.feed.api.PriceDto;
-import com.apssouza.mytrade.trading.domain.forex.event.AbstractEvent;
-import com.apssouza.mytrade.trading.domain.forex.event.EventType;
-import com.apssouza.mytrade.trading.domain.forex.order.OrderDto;
+import com.apssouza.mytrade.trading.domain.forex.common.AbstractEvent;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -13,8 +11,8 @@ public class OrderFoundEvent extends AbstractEvent {
 
     private final List<OrderDto> orders;
 
-    public OrderFoundEvent(EventType type, LocalDateTime timestamp, Map<String, PriceDto> priceDtoMap, List<OrderDto> orders) {
-        super(type, timestamp, priceDtoMap);
+    public OrderFoundEvent(LocalDateTime timestamp, Map<String, PriceDto> priceDtoMap, List<OrderDto> orders) {
+        super(timestamp, priceDtoMap);
         this.orders = orders;
     }
 

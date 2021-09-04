@@ -1,8 +1,7 @@
 package com.apssouza.mytrade.trading.domain.forex.feed.pricefeed;
 
 import com.apssouza.mytrade.trading.domain.forex.session.EndedTradingDayEvent;
-import com.apssouza.mytrade.trading.domain.forex.event.Event;
-import com.apssouza.mytrade.trading.domain.forex.event.EventType;
+import com.apssouza.mytrade.trading.domain.forex.common.Event;
 import com.apssouza.mytrade.trading.domain.forex.session.SessionFinishedEvent;
 import com.apssouza.mytrade.trading.domain.forex.common.ForexException;
 import com.apssouza.mytrade.trading.domain.forex.common.TradingHelper;
@@ -32,7 +31,6 @@ class HistoricalPriceStream implements PriceStream{
         while (current.compareTo(end) <= 0) {
             if (TradingHelper.hasEndedTradingTime(current) && trading){
                 addToQueue(new EndedTradingDayEvent(
-                        EventType.ENDED_TRADING_DAY,
                         current,
                         priceFeedHandler.getPriceSymbolMapped(current)
                 ));
@@ -47,7 +45,6 @@ class HistoricalPriceStream implements PriceStream{
                 lastDayProcessed = current.toLocalDate();
             }
             PriceChangedEvent event = new PriceChangedEvent(
-                    EventType.PRICE_CHANGED,
                     current,
                     priceFeedHandler.getPriceSymbolMapped(current)
             );
@@ -56,7 +53,6 @@ class HistoricalPriceStream implements PriceStream{
             current = current.plusSeconds(1L);
         }
         SessionFinishedEvent endEvent = new SessionFinishedEvent(
-                EventType.SESSION_FINISHED,
                 current,
                 priceFeedHandler.getPriceSymbolMapped(current)
         );

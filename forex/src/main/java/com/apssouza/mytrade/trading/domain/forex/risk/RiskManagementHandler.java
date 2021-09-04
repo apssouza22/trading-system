@@ -9,7 +9,7 @@ import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderDto.Sto
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioModel;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderCreator;
-import com.apssouza.mytrade.trading.domain.forex.event.Event;
+import com.apssouza.mytrade.trading.domain.forex.common.Event;
 import com.apssouza.mytrade.trading.domain.forex.feed.pricefeed.PriceChangedEvent;
 import com.apssouza.mytrade.trading.domain.forex.feed.signalfeed.SignalCreatedEvent;
 

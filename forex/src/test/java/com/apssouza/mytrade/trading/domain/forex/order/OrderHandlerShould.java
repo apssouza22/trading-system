@@ -4,7 +4,6 @@ import com.apssouza.mytrade.trading.domain.forex.portfolio.PositionBuilder;
 import com.apssouza.mytrade.trading.domain.forex.feed.SignalBuilder;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementHandler;
-import com.apssouza.mytrade.trading.domain.forex.event.EventType;
 import com.apssouza.mytrade.trading.domain.forex.feed.signalfeed.SignalCreatedEvent;
 import static com.apssouza.mytrade.trading.domain.forex.order.OrderDto.OrderAction.BUY;
 import static com.apssouza.mytrade.trading.domain.forex.order.OrderDto.OrderOrigin.EXITS;
@@ -30,7 +29,7 @@ public class OrderHandlerShould extends TestCase {
     private RiskManagementHandler riskManagementHandler;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         this.riskManagementHandler = mock(RiskManagementHandler.class);
     }
 
@@ -39,7 +38,7 @@ public class OrderHandlerShould extends TestCase {
         OrderHandler orderHandler = OrderHandlerFactory.create(this.riskManagementHandler);
         SignalBuilder signalBuilder = new SignalBuilder();
         signalBuilder.addSignal(LocalDateTime.MIN, "Buy");
-        SignalCreatedEvent event = new SignalCreatedEvent(EventType.SIGNAL_CREATED, LocalDateTime.MIN, Collections.emptyMap(), signalBuilder.build());
+        SignalCreatedEvent event = new SignalCreatedEvent(LocalDateTime.MIN, Collections.emptyMap(), signalBuilder.build());
         OrderDto orderFromSignal = orderHandler.createOrderFromSignal(event);
         assertEquals("BUY", orderFromSignal.getAction().name());
     }

@@ -8,7 +8,6 @@ import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderCreator
 import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderConfigDto;
 import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderDto;
 import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderFactory;
-import com.apssouza.mytrade.trading.domain.forex.event.EventType;
 import com.apssouza.mytrade.trading.domain.forex.feed.pricefeed.PriceChangedEvent;
 import junit.framework.TestCase;
 import org.junit.Before;
@@ -105,7 +104,7 @@ public class StopOrderCreatorFixedTest extends TestCase {
         BigDecimal close = BigDecimal.valueOf(1.305);
         PriceDto priceDto = new PriceDto(now, close, close, close, close, "AUDUSD");
         priceMap.put("AUDUSD", priceDto);
-        PriceChangedEvent event = new PriceChangedEvent(EventType.PRICE_CHANGED,now, priceMap);
+        PriceChangedEvent event = new PriceChangedEvent(now, priceMap);
         Optional<StopOrderDto> optional = obj.getEntryStopOrder(position, event);
         StopOrderDto hardStopLoss = optional.get();
         assertEquals(StopOrderDto.StopOrderStatus.CREATED, hardStopLoss.getStatus());
@@ -132,7 +131,7 @@ public class StopOrderCreatorFixedTest extends TestCase {
         BigDecimal close = BigDecimal.valueOf(1.105);
         PriceDto priceDto = new PriceDto(now, close, close, close, close, "AUDUSD");
         priceMap.put("AUDUSD", priceDto);
-        PriceChangedEvent event = new PriceChangedEvent(EventType.PRICE_CHANGED,now, priceMap);
+        PriceChangedEvent event = new PriceChangedEvent(now, priceMap);
         Optional<StopOrderDto> optional = obj.getEntryStopOrder(position, event);
         assertFalse(optional.isPresent());
     }
@@ -156,7 +155,7 @@ public class StopOrderCreatorFixedTest extends TestCase {
         BigDecimal close = BigDecimal.valueOf(0.803);
         PriceDto priceDto = new PriceDto(now, close, close, close, close, "AUDUSD");
         priceMap.put("AUDUSD", priceDto);
-        PriceChangedEvent event = new PriceChangedEvent(EventType.PRICE_CHANGED,now, priceMap);
+        PriceChangedEvent event = new PriceChangedEvent(now, priceMap);
         Optional<StopOrderDto> optional = obj.getEntryStopOrder(position, event);
         StopOrderDto hardStopLoss = optional.get();
         assertEquals(StopOrderDto.StopOrderStatus.CREATED, hardStopLoss.getStatus());
@@ -183,7 +182,7 @@ public class StopOrderCreatorFixedTest extends TestCase {
         BigDecimal close = BigDecimal.valueOf(1.105);
         PriceDto priceDto = new PriceDto(now, close, close, close, close, "AUDUSD");
         priceMap.put("AUDUSD", priceDto);
-        PriceChangedEvent event = new PriceChangedEvent(EventType.PRICE_CHANGED,now, priceMap);
+        PriceChangedEvent event = new PriceChangedEvent(now, priceMap);
         Optional<StopOrderDto> optional = obj.getEntryStopOrder(position, event);
         assertFalse(optional.isPresent());
     }

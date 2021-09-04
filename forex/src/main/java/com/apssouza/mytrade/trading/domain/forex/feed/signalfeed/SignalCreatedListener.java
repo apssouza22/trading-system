@@ -4,8 +4,7 @@ import com.apssouza.mytrade.trading.domain.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.domain.forex.order.OrderHandler;
 import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementHandler;
 import com.apssouza.mytrade.trading.domain.forex.session.EventNotifier;
-import com.apssouza.mytrade.trading.domain.forex.event.Event;
-import com.apssouza.mytrade.trading.domain.forex.event.EventType;
+import com.apssouza.mytrade.trading.domain.forex.common.Event;
 import com.apssouza.mytrade.trading.domain.forex.order.OrderCreatedEvent;
 import com.apssouza.mytrade.trading.domain.forex.statistics.HistoryBookHandler;
 import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeEvent;
@@ -44,7 +43,6 @@ class SignalCreatedListener implements PropertyChangeListener {
         if (riskManagementHandler.canCreateOrder(event)) {
             OrderDto order = this.orderHandler.createOrderFromSignal(event);
             eventNotifier.notify(new OrderCreatedEvent(
-                    EventType.ORDER_CREATED,
                     event.getTimestamp(),
                     event.getPrice(),
                     order

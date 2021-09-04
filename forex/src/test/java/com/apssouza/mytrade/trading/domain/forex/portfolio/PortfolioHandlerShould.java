@@ -3,20 +3,18 @@ package com.apssouza.mytrade.trading.domain.forex.portfolio;
 import com.apssouza.mytrade.feed.api.PriceDto;
 import com.apssouza.mytrade.trading.domain.forex.common.TradingParams;
 import com.apssouza.mytrade.trading.domain.forex.feed.PriceBuilder;
+import com.apssouza.mytrade.trading.domain.forex.feed.pricefeed.PriceChangedEvent;
 import com.apssouza.mytrade.trading.domain.forex.order.StopOrderBuilder;
 import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderDto;
 import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderDto.StopOrderType;
 import com.apssouza.mytrade.trading.domain.forex.session.EndedTradingDayEvent;
-import com.apssouza.mytrade.trading.domain.forex.event.EventType;
-import com.apssouza.mytrade.trading.domain.forex.feed.pricefeed.PriceChangedEvent;
 import static com.apssouza.mytrade.trading.domain.forex.order.OrderDto.OrderAction.BUY;
 import static com.apssouza.mytrade.trading.domain.forex.order.OrderDto.OrderAction.SELL;
-import static com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderDto.StopOrderStatus.CREATED;
-import static com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderDto.StopOrderStatus.FILLED;
 import static com.apssouza.mytrade.trading.domain.forex.portfolio.Position.ExitReason.END_OF_DAY;
 import static com.apssouza.mytrade.trading.domain.forex.portfolio.Position.ExitReason.RECONCILIATION_FAILED;
 import static com.apssouza.mytrade.trading.domain.forex.portfolio.Position.PositionStatus.CLOSED;
-import static com.apssouza.mytrade.trading.domain.forex.event.EventType.PRICE_CHANGED;
+import static com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderDto.StopOrderStatus.CREATED;
+import static com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderDto.StopOrderStatus.FILLED;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -53,7 +51,7 @@ public class PortfolioHandlerShould {
         var newPrice = BigDecimal.valueOf(2);
         var priceMap = new PriceBuilder().withPrice("AUDUSD", newPrice).builderMap();
 
-        portfolio.updatePositionsPrices(new PriceChangedEvent(PRICE_CHANGED, LocalDateTime.now(), priceMap));
+        portfolio.updatePositionsPrices(new PriceChangedEvent(LocalDateTime.now(), priceMap));
 
         var modelPosition = model.getPosition(position.getIdentifier());
         assertEquals(newPrice, modelPosition.getCurrentPrice());
@@ -77,7 +75,7 @@ public class PortfolioHandlerShould {
                 .thenReturn(takeProfitOrder);
         TradingParams.take_profit_stop_enabled = false;
 
-        portfolio.createStopOrder(new PriceChangedEvent(PRICE_CHANGED, null, new PriceBuilder().builderMap()));
+        portfolio.createStopOrder(new PriceChangedEvent(null, new PriceBuilder().builderMap()));
 
         assert_createStopOrder_withoutTakeProfitStopOrder(builder, model);
     }
@@ -114,7 +112,7 @@ public class PortfolioHandlerShould {
                 .thenReturn(new StopOrderDto(FILLED, stopLossOrder))
                 .thenReturn(takeProfitOrder);
 
-        portfolio.createStopOrder(new PriceChangedEvent(PRICE_CHANGED, null, null));
+        portfolio.createStopOrder(new PriceChangedEvent(null, null));
         assert_createStopOrder_withTakeProfitStopOrder(builder, model);
     }
 
@@ -152,7 +150,7 @@ public class PortfolioHandlerShould {
                 new StopOrderDto(FILLED, stopOrders.get(StopOrderType.STOP_LOSS))
         );
 
-        var event = new PriceChangedEvent(PRICE_CHANGED, null, new PriceBuilder().builderMap());
+        var event = new PriceChangedEvent(null, new PriceBuilder().builderMap());
         portfolio.createStopOrder(event);
         portfolio.handleStopOrder(event);
 
@@ -173,7 +171,7 @@ public class PortfolioHandlerShould {
 
         var model = portfolio.getPortfolio();
         model.addNewPosition(new PositionBuilder().build());
-        var event = new PriceChangedEvent(PRICE_CHANGED, null, null);
+        var event = new PriceChangedEvent(null, null);
 
         portfolio.processExits(event, emptyList());
 
@@ -203,7 +201,7 @@ public class PortfolioHandlerShould {
                 ONE,
                 "AUDUSD"
         ));
-        var event = new EndedTradingDayEvent(EventType.ENDED_TRADING_DAY, LocalDateTime.MIN, priceMap);
+        var event = new EndedTradingDayEvent(LocalDateTime.MIN, priceMap);
 
         var closedPositions = portfolio.closeAllPositions(END_OF_DAY, event);
 
@@ -225,7 +223,7 @@ public class PortfolioHandlerShould {
     public void processReconciliation_remotePortfolioNotInSync() {
         var builder = new PortfolioHandlerBuilder();
         var priceMap = new PriceBuilder().builderMap();
-        var event = new PriceChangedEvent(PRICE_CHANGED, LocalDateTime.now(), priceMap);
+        var event = new PriceChangedEvent(LocalDateTime.now(), priceMap);
         var portfolio = builder.build();
         var model = portfolio.getPortfolio();
         Position position = new PositionBuilder().build();
@@ -244,7 +242,7 @@ public class PortfolioHandlerShould {
     public void processReconciliation_remotePortfolioInSync() {
         var builder = new PortfolioHandlerBuilder();
         var priceMap = new PriceBuilder().builderMap();
-        var event = new PriceChangedEvent(PRICE_CHANGED, LocalDateTime.now(), priceMap);
+        var event = new PriceChangedEvent(LocalDateTime.now(), priceMap);
         var portfolio = builder.build();
         var model = portfolio.getPortfolio();
         Position position = new PositionBuilder().build();

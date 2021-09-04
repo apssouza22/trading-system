@@ -9,8 +9,7 @@ import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderDto;
 import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementHandler;
 import com.apssouza.mytrade.trading.domain.forex.session.EventNotifier;
 import com.apssouza.mytrade.trading.domain.forex.session.MultiPositionHandler;
-import com.apssouza.mytrade.trading.domain.forex.event.Event;
-import com.apssouza.mytrade.trading.domain.forex.event.EventType;
+import com.apssouza.mytrade.trading.domain.forex.common.Event;
 import com.apssouza.mytrade.trading.domain.forex.order.OrderCreatedEvent;
 import com.apssouza.mytrade.trading.domain.forex.feed.pricefeed.PriceChangedEvent;
 import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderFilledEvent;
@@ -95,7 +94,6 @@ public class PortfolioHandler {
 
         for (StopOrderDto stopOrder : filledOrders) {
             eventNotifier.notify(new StopOrderFilledEvent(
-                    EventType.STOP_ORDER_FILLED,
                     event.getTimestamp(),
                     event.getPrice(),
                     stopOrder
@@ -147,7 +145,6 @@ public class PortfolioHandler {
             }
             OrderDto order = this.orderHandler.createOrderFromClosedPosition(position, event.getTimestamp());
             eventNotifier.notify(new OrderCreatedEvent(
-                    EventType.ORDER_CREATED,
                     event.getTimestamp(),
                     event.getPrice(),
                     order
