@@ -1,5 +1,6 @@
 package com.apssouza.mytrade.trading.domain.forex.feed.pricefeed;
 
+import com.apssouza.mytrade.feed.api.FeedModule;
 import com.apssouza.mytrade.trading.api.SessionType;
 import com.apssouza.mytrade.trading.domain.forex.common.Event;
 import com.apssouza.mytrade.trading.domain.forex.execution.OrderExecution;
@@ -21,8 +22,9 @@ public class PriceStreamFactory {
     public static PriceStream create(
             final SessionType sessionType,
             final BlockingQueue<Event> eventQueue,
-            final PriceFeedHandler priceFeedHandler
+            final FeedModule feed
     ) {
+        var priceFeedHandler = new PriceFeedHandler(feed);
         if (sessionType == SessionType.LIVE) {
             return new RealtimePriceStream(
                     eventQueue,
@@ -37,7 +39,7 @@ public class PriceStreamFactory {
             final SignalFeedHandler signalFeedHandler,
             final OrderHandler orderHandler,
             final EventNotifier eventNotifier
-    ){
+    ) {
         return Collections.singletonList(new PriceChangedListener(
                 executionHandler,
                 portfolioHandler,

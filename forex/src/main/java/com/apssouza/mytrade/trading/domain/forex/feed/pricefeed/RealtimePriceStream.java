@@ -1,10 +1,12 @@
 package com.apssouza.mytrade.trading.domain.forex.feed.pricefeed;
 
 import com.apssouza.mytrade.common.misc.helper.time.DateTimeHelper;
+import com.apssouza.mytrade.feed.api.PriceDto;
 import com.apssouza.mytrade.trading.domain.forex.common.Event;
 import com.apssouza.mytrade.trading.domain.forex.common.TradingHelper;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.BlockingQueue;
@@ -45,5 +47,10 @@ class RealtimePriceStream implements PriceStream {
         long delay = 1000L;
         long period = 1000L;
         timer.scheduleAtFixedRate(repeatedTask, delay, period);
+    }
+
+    @Override
+    public Map<String, PriceDto> getPriceSymbolMapped(LocalDateTime current) {
+        return priceHandler.getPriceSymbolMapped(current);
     }
 }

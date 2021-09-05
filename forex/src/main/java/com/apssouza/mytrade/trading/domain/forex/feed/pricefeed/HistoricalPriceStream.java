@@ -1,5 +1,6 @@
 package com.apssouza.mytrade.trading.domain.forex.feed.pricefeed;
 
+import com.apssouza.mytrade.feed.api.PriceDto;
 import com.apssouza.mytrade.trading.domain.forex.session.EndedTradingDayEvent;
 import com.apssouza.mytrade.trading.domain.forex.common.Event;
 import com.apssouza.mytrade.trading.domain.forex.session.SessionFinishedEvent;
@@ -8,6 +9,7 @@ import com.apssouza.mytrade.trading.domain.forex.common.TradingHelper;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 
 /**
@@ -57,7 +59,11 @@ class HistoricalPriceStream implements PriceStream{
                 priceFeedHandler.getPriceSymbolMapped(current)
         );
         addToQueue(endEvent);
+    }
 
+    @Override
+    public Map<String, PriceDto> getPriceSymbolMapped(LocalDateTime current) {
+        return priceFeedHandler.getPriceSymbolMapped(current);
     }
 
     private void addToQueue(Event event) {

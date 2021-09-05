@@ -54,16 +54,14 @@ public class ForexBuilder {
     }
 
     public TradingSession build() {
-        var priceFeed = new PriceFeedHandler(feed);
         var tradingSession = new TradingSession(
                 equity,
                 start,
                 end,
-                SignalFeedFactory.create(feed),
                 sessionType,
                 systemName,
                 getSafeExecutionType(),
-                priceFeed
+                feed
         );
         registerShutDownListener(tradingSession);
         return tradingSession;

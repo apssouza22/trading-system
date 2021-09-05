@@ -1,12 +1,12 @@
 package com.apssouza.mytrade.trading.domain.forex.session;
 
+import com.apssouza.mytrade.feed.api.FeedModule;
 import com.apssouza.mytrade.trading.api.ExecutionType;
 import com.apssouza.mytrade.trading.api.SessionType;
-import com.apssouza.mytrade.trading.domain.forex.common.TradingParams;
 import com.apssouza.mytrade.trading.domain.forex.common.Event;
+import com.apssouza.mytrade.trading.domain.forex.common.TradingParams;
 import com.apssouza.mytrade.trading.domain.forex.execution.OrderExecution;
 import com.apssouza.mytrade.trading.domain.forex.execution.OrderExecutionFactory;
-import com.apssouza.mytrade.trading.domain.forex.feed.pricefeed.PriceFeedHandler;
 import com.apssouza.mytrade.trading.domain.forex.feed.pricefeed.PriceStream;
 import com.apssouza.mytrade.trading.domain.forex.feed.pricefeed.PriceStreamFactory;
 import com.apssouza.mytrade.trading.domain.forex.feed.signalfeed.SignalFeedFactory;
@@ -39,8 +39,8 @@ public class TradingSession {
     protected final String systemName;
     protected final ExecutionType executionType;
 
-    protected final PriceFeedHandler priceFeedHandler;
-    protected final SignalFeedHandler signalFeedHandler;
+    protected SignalFeedHandler signalFeedHandler;
+    private final FeedModule feedModule;
     protected OrderExecution executionHandler;
     protected PortfolioModel portfolio;
     protected OrderHandler orderHandler;
@@ -58,11 +58,10 @@ public class TradingSession {
             BigDecimal equity,
             LocalDateTime startDate,
             LocalDateTime endDate,
-            SignalFeedHandler signalFeedHandler,
             SessionType sessionType,
             String systemName,
             ExecutionType executionType,
-            PriceFeedHandler priceFeedHandler
+            FeedModule feedModule
     ) {
         this.equity = equity;
         this.startDate = startDate;
@@ -71,12 +70,12 @@ public class TradingSession {
         this.systemName = systemName;
         this.executionType = executionType;
         this.eventQueue = new LinkedBlockingDeque<>();
-        this.priceFeedHandler = priceFeedHandler;
-        this.signalFeedHandler = signalFeedHandler;
+        this.feedModule = feedModule;
         this.configSession();
     }
 
     private void configSession() {
+        this.signalFeedHandler = SignalFeedFactory.create(feedModule);
         this.executionHandler = OrderExecutionFactory.factory(this.executionType);
         this.portfolio = new PortfolioModel(this.equity);
         this.historyHandler = HistoryBookHandlerFactory.create();
@@ -101,7 +100,7 @@ public class TradingSession {
         );
         this.eventNotifier = setListeners();
 
-        this.priceStream = PriceStreamFactory.create(this.sessionType, eventQueue, this.priceFeedHandler);
+        this.priceStream = PriceStreamFactory.create(this.sessionType, eventQueue, this.feedModule);
     }
 
     private EventNotifier setListeners() {
@@ -137,7 +136,7 @@ public class TradingSession {
         var current = LocalDateTime.now();
         var event = new EndedTradingDayEvent(
                 current,
-                priceFeedHandler.getPriceSymbolMapped(current)
+                priceStream.getPriceSymbolMapped(current)
         );
         eventNotifier.notify(event);
     }
