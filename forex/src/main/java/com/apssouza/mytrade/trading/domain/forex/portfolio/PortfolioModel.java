@@ -79,7 +79,7 @@ public class PortfolioModel {
 
     public Position getPosition(String identifier) {
         if (!this.positions.containsKey(identifier)) {
-            throw new RuntimeException("Position not found");
+            throw new RuntimeException(String.format("Position %s not found", identifier));
         }
         return this.positions.get(identifier);
     }

@@ -7,7 +7,7 @@ import com.apssouza.mytrade.trading.domain.forex.execution.OrderExecution;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.FilledOrderDto;
 import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementHandler;
 import com.apssouza.mytrade.trading.domain.forex.session.EventNotifier;
-import com.apssouza.mytrade.trading.domain.forex.statistics.HistoryBookHandler;
+import static com.apssouza.mytrade.trading.domain.forex.order.OrderDto.OrderOrigin.EXITS;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,21 +17,18 @@ class OrderFoundListener implements PropertyChangeListener {
 
     private static Logger log = Logger.getLogger(OrderFoundListener.class.getSimpleName());
     private final OrderExecution executionHandler;
-    private final HistoryBookHandler historyHandler;
     private final OrderHandler orderHandler;
     private final EventNotifier eventNotifier;
     private final RiskManagementHandler riskManagementHandler;
 
     public OrderFoundListener(
             OrderExecution executionHandler,
-            HistoryBookHandler historyHandler,
             OrderHandler orderHandler,
             EventNotifier eventNotifier,
             RiskManagementHandler riskManagementHandler
     ) {
 
         this.executionHandler = executionHandler;
-        this.historyHandler = historyHandler;
         this.orderHandler = orderHandler;
         this.eventNotifier = eventNotifier;
         this.riskManagementHandler = riskManagementHandler;
@@ -52,25 +49,23 @@ class OrderFoundListener implements PropertyChangeListener {
         }
 
         log.info(orders.size() + " new orders");
-        List<String> processedOrders = new ArrayList<>();
         List<String> exitedPositions = new ArrayList<>();
         for (OrderDto order : orders) {
-            if (order.getOrigin() == OrderDto.OrderOrigin.EXITS) {
+            if (order.getOrigin() == EXITS) {
                 exitedPositions.add(order.getSymbol());
             }
         }
 
         for (OrderDto order : orders) {
-            if (!riskManagementHandler.canExecuteOrder(event, order, processedOrders, exitedPositions)) {
+            if (!riskManagementHandler.canExecuteOrder(event, order, new ArrayList<>(), exitedPositions)) {
                 orderHandler.updateOrderStatus(order.getId(), OrderDto.OrderStatus.CANCELLED);
                 continue;
             }
-            this.historyHandler.addOrder(order);
-            processNewOrder(processedOrders, order, orderFoundEvent);
+            processNewOrder(order, orderFoundEvent);
         }
     }
 
-    private void processNewOrder(List<String> processedOrders, OrderDto order, OrderFoundEvent event) {
+    private void processNewOrder(OrderDto order, OrderFoundEvent event) {
         FilledOrderDto filledOrder = executionHandler.executeOrder(order);
         if (filledOrder != null) {
             eventNotifier.notify(new OrderFilledEvent(
@@ -79,7 +74,6 @@ class OrderFoundListener implements PropertyChangeListener {
                     filledOrder
             ));
             orderHandler.updateOrderStatus(order.getId(), OrderDto.OrderStatus.EXECUTED);
-            processedOrders.add(order.getSymbol());
         } else {
             orderHandler.updateOrderStatus(order.getId(), OrderDto.OrderStatus.FAILED);
         }

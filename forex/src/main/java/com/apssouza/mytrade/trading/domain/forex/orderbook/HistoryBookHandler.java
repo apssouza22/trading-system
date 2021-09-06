@@ -1,4 +1,4 @@
-package com.apssouza.mytrade.trading.domain.forex.statistics;
+package com.apssouza.mytrade.trading.domain.forex.orderbook;
 
 import com.apssouza.mytrade.trading.domain.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.FilledOrderDto;
@@ -15,7 +15,7 @@ public class HistoryBookHandler {
     private final TransactionsExporter transactionsExporter;
     public List<CycleHistory> transactions = new ArrayList<>();
 
-    public HistoryBookHandler(TransactionsExporter transactionsExporter ) {
+    public HistoryBookHandler(TransactionsExporter transactionsExporter) {
         this.transactionsExporter = transactionsExporter;
     }
 

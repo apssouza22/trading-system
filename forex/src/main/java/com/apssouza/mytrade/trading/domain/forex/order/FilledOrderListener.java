@@ -1,28 +1,24 @@
 package com.apssouza.mytrade.trading.domain.forex.order;
 
+import com.apssouza.mytrade.trading.domain.forex.common.Event;
 import com.apssouza.mytrade.trading.domain.forex.common.TradingParams;
 import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeEvent;
 import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeListener;
-import com.apssouza.mytrade.trading.domain.forex.common.Event;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.FilledOrderDto;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioChangedEvent;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioModel;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.domain.forex.session.EventNotifier;
-import com.apssouza.mytrade.trading.domain.forex.session.TransactionDto;
-import com.apssouza.mytrade.trading.domain.forex.statistics.HistoryBookHandler;
 import static com.apssouza.mytrade.trading.domain.forex.portfolio.Position.PositionStatus.FILLED;
 
 
 class FilledOrderListener implements PropertyChangeListener {
 
     private final PortfolioModel portfolio;
-    private final HistoryBookHandler historyHandler;
     private final EventNotifier eventNotifier;
 
-    public FilledOrderListener(PortfolioModel portfolio, HistoryBookHandler historyHandler, EventNotifier eventNotifier) {
+    public FilledOrderListener(PortfolioModel portfolio, EventNotifier eventNotifier) {
         this.portfolio = portfolio;
-        this.historyHandler = historyHandler;
         this.eventNotifier = eventNotifier;
     }
 
@@ -34,7 +30,6 @@ class FilledOrderListener implements PropertyChangeListener {
         }
 
         OrderFilledEvent orderFilledEvent = (OrderFilledEvent) event;
-        this.historyHandler.addOrderFilled(orderFilledEvent.getFilledOrder());
 
         FilledOrderDto filledOrder = orderFilledEvent.getFilledOrder();
         if (!this.portfolio.getPositions().containsKey(filledOrder.getIdentifier())) {
@@ -49,7 +44,6 @@ class FilledOrderListener implements PropertyChangeListener {
             }
         }
         Position position = handleExistingPosition(filledOrder, ps);
-        this.historyHandler.addPosition(ps);
         emitEvent(orderFilledEvent, position);
     }
 
@@ -78,23 +72,20 @@ class FilledOrderListener implements PropertyChangeListener {
     private void handleSameDirection(FilledOrderDto filledOrder, Position ps) {
         if (filledOrder.getAction().equals(OrderDto.OrderAction.BUY) && ps.getPositionType().equals(Position.PositionType.LONG)) {
             this.portfolio.addPositionQtd(filledOrder.getIdentifier(), filledOrder.getQuantity(), filledOrder.getPriceWithSpread());
-            this.historyHandler.setState(TransactionDto.TransactionState.ADD_QTD, filledOrder.getIdentifier());
 
         }
         if (filledOrder.getAction().equals(OrderDto.OrderAction.SELL) && ps.getPositionType().equals(Position.PositionType.SHORT)) {
             this.portfolio.addPositionQtd(filledOrder.getIdentifier(), filledOrder.getQuantity(), filledOrder.getPriceWithSpread());
-            this.historyHandler.setState(TransactionDto.TransactionState.ADD_QTD, filledOrder.getIdentifier());
         }
     }
 
     private void handleOppositeDirection(FilledOrderDto filledOrder, Position ps) {
         if (filledOrder.getQuantity() == ps.getQuantity()) {
             this.portfolio.closePosition(filledOrder.getIdentifier());
-            this.historyHandler.setState(TransactionDto.TransactionState.EXIT, filledOrder.getIdentifier());
-        } else {
-            this.portfolio.removePositionQtd(filledOrder.getIdentifier(), filledOrder.getQuantity());
-            this.historyHandler.setState(TransactionDto.TransactionState.REMOVE_QTD, filledOrder.getIdentifier());
+            return;
         }
+            this.portfolio.removePositionQtd(filledOrder.getIdentifier(), filledOrder.getQuantity());
+
     }
 
     private Position createNewPosition(FilledOrderDto filledOrder) {
@@ -113,8 +104,6 @@ class FilledOrderListener implements PropertyChangeListener {
         );
 
         portfolio.addNewPosition(ps1);
-        historyHandler.setState(TransactionDto.TransactionState.ENTRY, ps1.getIdentifier());
-        historyHandler.addPosition(ps1);
         return ps1;
     }
 

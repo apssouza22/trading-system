@@ -3,7 +3,7 @@ package com.apssouza.mytrade.trading.domain.forex.session;
 import com.apssouza.mytrade.trading.domain.forex.feed.pricefeed.PriceChangedEvent;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioHandler;
 import com.apssouza.mytrade.trading.domain.forex.common.Event;
-import com.apssouza.mytrade.trading.domain.forex.statistics.HistoryBookHandler;
+import com.apssouza.mytrade.trading.domain.forex.orderbook.HistoryBookHandler;
 import com.apssouza.mytrade.trading.domain.forex.common.ForexException;
 
 import java.time.LocalDateTime;

@@ -1,10 +1,10 @@
-package com.apssouza.mytrade.trading.domain.forex.session;
+package com.apssouza.mytrade.trading.domain.forex.orderbook;
 
+import com.apssouza.mytrade.trading.domain.forex.common.Event;
 import com.apssouza.mytrade.trading.domain.forex.common.TradingParams;
 import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeEvent;
 import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeListener;
-import com.apssouza.mytrade.trading.domain.forex.common.Event;
-import com.apssouza.mytrade.trading.domain.forex.statistics.HistoryBookHandler;
+import com.apssouza.mytrade.trading.domain.forex.session.SessionFinishedEvent;
 
 import java.io.IOException;
 
@@ -23,7 +23,6 @@ class SessionFinishedListener implements PropertyChangeListener {
             return;
         }
 
-        SessionFinishedEvent finishedEvent = (SessionFinishedEvent) event;
         try {
             historyHandler.export(TradingParams.transaction_path);
         } catch (IOException e) {

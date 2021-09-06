@@ -1,4 +1,4 @@
-package com.apssouza.mytrade.trading.domain.forex.statistics;
+package com.apssouza.mytrade.trading.domain.forex.orderbook;
 
 import com.apssouza.mytrade.trading.domain.forex.portfolio.FilledOrderBuilder;
 import com.apssouza.mytrade.trading.domain.forex.order.OrderBuilder;

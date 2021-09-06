@@ -21,8 +21,8 @@ import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementFactory;
 import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementHandler;
 import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderConfigDto;
 import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderFactory;
-import com.apssouza.mytrade.trading.domain.forex.statistics.HistoryBookHandler;
-import com.apssouza.mytrade.trading.domain.forex.statistics.HistoryBookHandlerFactory;
+import com.apssouza.mytrade.trading.domain.forex.orderbook.HistoryBookHandler;
+import com.apssouza.mytrade.trading.domain.forex.orderbook.HistoryBookHandlerFactory;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -104,11 +104,11 @@ public class TradingSession {
     }
 
     private EventNotifier setListeners() {
-        var eventListeners = OrderListenerFactory.create(portfolio, historyHandler, orderHandler, riskManagementHandler, executionHandler, eventNotifier);
-        eventListeners.addAll(StopOrderFactory.createListeners(portfolio, historyHandler, eventNotifier));
+        var eventListeners = OrderListenerFactory.create(portfolio, orderHandler, riskManagementHandler, executionHandler, eventNotifier);
+        eventListeners.addAll(StopOrderFactory.createListeners(portfolio, eventNotifier));
         eventListeners.addAll(PortfolioFactory.createListeners(portfolioHandler));
-        eventListeners.add(new SessionFinishedListener(historyHandler));
         eventListeners.add(new EndedTradingDayListener(portfolioHandler));
+
         eventListeners.addAll(PriceStreamFactory.createListeners(
                 executionHandler,
                 portfolioHandler,
@@ -119,9 +119,9 @@ public class TradingSession {
         eventListeners.addAll(SignalFeedFactory.createListeners(
                 riskManagementHandler,
                 orderHandler,
-                eventNotifier,
-                historyHandler
+                eventNotifier
         ));
+        eventListeners.addAll(HistoryBookHandlerFactory.createListeners(historyHandler, riskManagementHandler));
         eventListeners.forEach(eventNotifier::addPropertyChangeListener);
         return eventNotifier;
     }

@@ -5,7 +5,6 @@ import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeL
 import com.apssouza.mytrade.trading.domain.forex.order.OrderHandler;
 import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementHandler;
 import com.apssouza.mytrade.trading.domain.forex.session.EventNotifier;
-import com.apssouza.mytrade.trading.domain.forex.statistics.HistoryBookHandler;
 
 import java.util.Collections;
 import java.util.List;
@@ -17,15 +16,14 @@ public class SignalFeedFactory {
     }
 
     public static List<PropertyChangeListener> createListeners(
-            final RiskManagementHandler riskManagementHandler, final OrderHandler orderHandler,
-            final EventNotifier eventNotifier,
-            final HistoryBookHandler historyHandler
-    ){
+            final RiskManagementHandler riskManagementHandler,
+            final OrderHandler orderHandler,
+            final EventNotifier eventNotifier
+    ) {
         return Collections.singletonList(new SignalCreatedListener(
                 riskManagementHandler,
                 orderHandler,
-                eventNotifier,
-                historyHandler
+                eventNotifier
         ));
     }
 }

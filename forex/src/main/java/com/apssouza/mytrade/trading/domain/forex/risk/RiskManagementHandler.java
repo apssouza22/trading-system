@@ -2,16 +2,16 @@ package com.apssouza.mytrade.trading.domain.forex.risk;
 
 import com.apssouza.mytrade.common.misc.helper.time.MarketTimeHelper;
 import com.apssouza.mytrade.feed.api.SignalDto;
+import com.apssouza.mytrade.trading.domain.forex.common.Event;
 import com.apssouza.mytrade.trading.domain.forex.common.TradingParams;
+import com.apssouza.mytrade.trading.domain.forex.feed.pricefeed.PriceChangedEvent;
+import com.apssouza.mytrade.trading.domain.forex.feed.signalfeed.SignalCreatedEvent;
 import com.apssouza.mytrade.trading.domain.forex.order.OrderDto;
-import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderDto;
-import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderDto.StopOrderType;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioModel;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderCreator;
-import com.apssouza.mytrade.trading.domain.forex.common.Event;
-import com.apssouza.mytrade.trading.domain.forex.feed.pricefeed.PriceChangedEvent;
-import com.apssouza.mytrade.trading.domain.forex.feed.signalfeed.SignalCreatedEvent;
+import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderDto;
+import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderDto.StopOrderType;
 
 import java.util.EnumMap;
 import java.util.List;
@@ -55,10 +55,10 @@ public class RiskManagementHandler {
     }
 
     public List<Position> processPositionExit(PriceChangedEvent event, List<SignalDto> signals) {
-        return exitHandler.process(event,signals);
+        return exitHandler.process(event, signals);
     }
 
-    private EnumMap<StopOrderType, StopOrderDto>  getMovingStops(Position position, Event event) {
+    private EnumMap<StopOrderType, StopOrderDto> getMovingStops(Position position, Event event) {
         EnumMap<StopOrderType, StopOrderDto> stop_orders = new EnumMap(StopOrderType.class);
         Consumer<StopOrderDto> consumer = (dto) -> stop_orders.put(dto.getType(), dto);
         if (TradingParams.entry_stop_loss_enabled) {
@@ -104,11 +104,11 @@ public class RiskManagementHandler {
 
     public boolean canCreateOrder(SignalCreatedEvent event) {
         Map<String, Position> positions = portfolio.getPositions();
-        if (TradingParams.trading_position_edit_enabled || TradingParams.trading_multi_position_enabled){
+        if (TradingParams.trading_position_edit_enabled || TradingParams.trading_multi_position_enabled) {
             return true;
         }
-        for (Map.Entry<String, Position> entry : positions.entrySet()){
-            if (entry.getValue().getSymbol().equals(event.getSignal().symbol().toUpperCase())){
+        for (Map.Entry<String, Position> entry : positions.entrySet()) {
+            if (entry.getValue().getSymbol().equals(event.getSignal().symbol().toUpperCase())) {
                 return false;
             }
         }
@@ -116,10 +116,10 @@ public class RiskManagementHandler {
     }
 
     public boolean canExecuteOrder(Event event, OrderDto order, List<String> processedOrders, List<String> exitedPositions) {
-        if (!MarketTimeHelper.isMarketOpened(event.getTimestamp())){
+        if (!MarketTimeHelper.isMarketOpened(event.getTimestamp())) {
             return false;
         }
-        if (isDuplicatedOrder(order,processedOrders, exitedPositions)){
+        if (isDuplicatedOrder(order, processedOrders, exitedPositions)) {
             return false;
         }
 
@@ -138,7 +138,7 @@ public class RiskManagementHandler {
                 return true;
             }
 
-//            Not process order coming from signal if( exists a exit for the currency
+            //            Not process order coming from signal if( exists a exit for the currency
             if (exitedPositions.contains(order.getSymbol())) {
                 return true;
             }
