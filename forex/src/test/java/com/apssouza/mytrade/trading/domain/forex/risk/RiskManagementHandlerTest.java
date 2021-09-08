@@ -148,7 +148,7 @@ public class RiskManagementHandlerTest extends TestCase {
         EnumMap<StopOrderDto.StopOrderType, StopOrderDto> stopOrders = risk.createStopOrders(position, loopEventBuilder.build());
         assertEquals(1, stopOrders.size());
         assertTrue(stopOrders.containsKey(StopOrderDto.StopOrderType.STOP_LOSS));
-        assertEquals(StopOrderDto.StopOrderType.ENTRY_STOP, stopOrders.get(StopOrderDto.StopOrderType.STOP_LOSS).getType());
+        assertEquals(StopOrderDto.StopOrderType.ENTRY_STOP, stopOrders.get(StopOrderDto.StopOrderType.STOP_LOSS).type());
     }
 
     @Test
@@ -173,7 +173,7 @@ public class RiskManagementHandlerTest extends TestCase {
         EnumMap<StopOrderDto.StopOrderType, StopOrderDto> stopOrders = risk.createStopOrders(position, loopEventBuilder.build());
         assertEquals(1, stopOrders.size());
         assertTrue(stopOrders.containsKey(StopOrderDto.StopOrderType.STOP_LOSS));
-        assertEquals(StopOrderDto.StopOrderType.TRAILLING_STOP, stopOrders.get(StopOrderDto.StopOrderType.STOP_LOSS).getType());
+        assertEquals(StopOrderDto.StopOrderType.TRAILLING_STOP, stopOrders.get(StopOrderDto.StopOrderType.STOP_LOSS).type());
     }
 
 }

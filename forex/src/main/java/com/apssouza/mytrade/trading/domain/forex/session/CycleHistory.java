@@ -37,11 +37,11 @@ public class CycleHistory {
     }
 
     public void addOrderFilled(FilledOrderDto order) {
-        getTransaction(order.getIdentifier()).setFilledOrder(order);
+        getTransaction(order.identifier()).setFilledOrder(order);
     }
 
     public void addOrder(OrderDto order) {
-        getTransaction(order.getIdentifier()).setOrder(order);
+        getTransaction(order.identifier()).setOrder(order);
     }
 
     public LocalDateTime getTime() {

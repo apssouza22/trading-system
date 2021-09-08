@@ -51,14 +51,14 @@ class OrderFoundListener implements PropertyChangeListener {
         log.info(orders.size() + " new orders");
         List<String> exitedPositions = new ArrayList<>();
         for (OrderDto order : orders) {
-            if (order.getOrigin() == EXITS) {
-                exitedPositions.add(order.getSymbol());
+            if (order.origin() == EXITS) {
+                exitedPositions.add(order.symbol());
             }
         }
 
         for (OrderDto order : orders) {
             if (!riskManagementHandler.canExecuteOrder(event, order, new ArrayList<>(), exitedPositions)) {
-                orderHandler.updateOrderStatus(order.getId(), OrderDto.OrderStatus.CANCELLED);
+                orderHandler.updateOrderStatus(order.id(), OrderDto.OrderStatus.CANCELLED);
                 continue;
             }
             processNewOrder(order, orderFoundEvent);
@@ -69,13 +69,13 @@ class OrderFoundListener implements PropertyChangeListener {
         FilledOrderDto filledOrder = executionHandler.executeOrder(order);
         if (filledOrder != null) {
             eventNotifier.notify(new OrderFilledEvent(
-                    filledOrder.getTime(),
+                    filledOrder.time(),
                     event.getPrice(),
                     filledOrder
             ));
-            orderHandler.updateOrderStatus(order.getId(), OrderDto.OrderStatus.EXECUTED);
+            orderHandler.updateOrderStatus(order.id(), OrderDto.OrderStatus.EXECUTED);
         } else {
-            orderHandler.updateOrderStatus(order.getId(), OrderDto.OrderStatus.FAILED);
+            orderHandler.updateOrderStatus(order.id(), OrderDto.OrderStatus.FAILED);
         }
     }
 

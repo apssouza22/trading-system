@@ -13,7 +13,6 @@ import com.apssouza.mytrade.trading.domain.forex.feed.signalfeed.SignalFeedFacto
 import com.apssouza.mytrade.trading.domain.forex.feed.signalfeed.SignalFeedHandler;
 import com.apssouza.mytrade.trading.domain.forex.order.OrderHandler;
 import com.apssouza.mytrade.trading.domain.forex.order.OrderHandlerFactory;
-import com.apssouza.mytrade.trading.domain.forex.order.OrderListenerFactory;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioFactory;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioHandler;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioModel;
@@ -104,7 +103,7 @@ public class TradingSession {
     }
 
     private EventNotifier setListeners() {
-        var eventListeners = OrderListenerFactory.create(portfolio, orderHandler, riskManagementHandler, executionHandler, eventNotifier);
+        var eventListeners = OrderHandlerFactory.createListeners(portfolio, orderHandler, riskManagementHandler, executionHandler, eventNotifier);
         eventListeners.addAll(StopOrderFactory.createListeners(portfolio, eventNotifier));
         eventListeners.addAll(PortfolioFactory.createListeners(portfolioHandler));
         eventListeners.add(new EndedTradingDayListener(portfolioHandler));

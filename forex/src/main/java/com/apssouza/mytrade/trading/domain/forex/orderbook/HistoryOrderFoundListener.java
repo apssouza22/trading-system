@@ -39,8 +39,8 @@ class HistoryOrderFoundListener implements PropertyChangeListener {
 
         List<String> exitedPositions = new ArrayList<>();
         for (OrderDto order : orders) {
-            if (order.getOrigin() == OrderDto.OrderOrigin.EXITS) {
-                exitedPositions.add(order.getSymbol());
+            if (order.origin() == OrderDto.OrderOrigin.EXITS) {
+                exitedPositions.add(order.symbol());
             }
         }
 

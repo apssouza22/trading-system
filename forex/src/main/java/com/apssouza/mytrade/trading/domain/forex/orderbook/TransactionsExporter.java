@@ -33,7 +33,7 @@ class TransactionsExporter {
                         trans.getValue().getPosition() != null ? toString(trans.getValue().getPosition().getInitPrice().multiply(BigDecimal.valueOf(trans.getValue().getPosition().getQuantity()))) : "",
                         trans.getValue().getPosition() != null ? toString(trans.getValue().getPosition().getCurrentPrice().multiply(BigDecimal.valueOf(trans.getValue().getPosition().getQuantity()))) : "",
                         trans.getValue().getPosition() != null ? toString(trans.getValue().getPosition().getCurrentPrice().subtract(trans.getValue().getPosition().getInitPrice())) : "",
-                        trans.getValue().getFilledOrder() != null ? toString(trans.getValue().getFilledOrder().getAction()) : "",
+                        trans.getValue().getFilledOrder() != null ? toString(trans.getValue().getFilledOrder().action()) : "",
                         trans.getValue().getPosition() != null ? toString(trans.getValue().getPosition().getTimestamp()) : "",
                         //trans.getValue().getPosition() != null ? trans.getValue().getPosition().getPlacedStopLoss().getPrice().toString(): "",
                         //trans.getValue().getPosition() != null ? trans.getValue().getPosition().getTakeProfitOrder().getPrice().toString(): "",

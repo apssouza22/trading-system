@@ -40,7 +40,7 @@ public class OrderHandlerShould extends TestCase {
         signalBuilder.addSignal(LocalDateTime.MIN, "Buy");
         SignalCreatedEvent event = new SignalCreatedEvent(LocalDateTime.MIN, Collections.emptyMap(), signalBuilder.build());
         OrderDto orderFromSignal = orderHandler.createOrderFromSignal(event);
-        assertEquals("BUY", orderFromSignal.getAction().name());
+        assertEquals("BUY", orderFromSignal.action().name());
     }
 
     @Test
@@ -52,8 +52,8 @@ public class OrderHandlerShould extends TestCase {
 
         OrderHandler orderHandler = OrderHandlerFactory.create(this.riskManagementHandler);
         OrderDto orderFromClosedPosition = orderHandler.createOrderFromClosedPosition(position, LocalDateTime.MIN);
-        assertEquals(EXITS, orderFromClosedPosition.getOrigin());
-        assertEquals(BUY, orderFromClosedPosition.getAction());
+        assertEquals(EXITS, orderFromClosedPosition.origin());
+        assertEquals(BUY, orderFromClosedPosition.action());
     }
 
     @Test
@@ -65,8 +65,8 @@ public class OrderHandlerShould extends TestCase {
 
         OrderHandler orderHandler = OrderHandlerFactory.create(this.riskManagementHandler);
         OrderDto orderFromClosedPosition = orderHandler.createOrderFromClosedPosition(position, LocalDateTime.MIN);
-        assertEquals(EXITS, orderFromClosedPosition.getOrigin());
-        assertEquals(OrderDto.OrderAction.SELL, orderFromClosedPosition.getAction());
+        assertEquals(EXITS, orderFromClosedPosition.origin());
+        assertEquals(OrderDto.OrderAction.SELL, orderFromClosedPosition.action());
     }
 
     @Test
@@ -82,9 +82,9 @@ public class OrderHandlerShould extends TestCase {
         OrderHandler orderHandler = OrderHandlerFactory.create(this.riskManagementHandler);
         var order = new OrderDto("AUDUSD", BUY, 10, STOP_ORDER, LocalDateTime.MIN, "123", CREATED);
         var createdOrder = orderHandler.persist(order);
-        orderHandler.updateOrderStatus(createdOrder.getId(), EXECUTED);
+        orderHandler.updateOrderStatus(createdOrder.id(), EXECUTED);
         List<OrderDto> orderByStatus = orderHandler.getOrderByStatus(EXECUTED);
-        assertEquals(createdOrder.getId(), orderByStatus.get(0).getId());
+        assertEquals(createdOrder.id(), orderByStatus.get(0).id());
     }
 
     @Test
@@ -93,6 +93,6 @@ public class OrderHandlerShould extends TestCase {
         var order = new OrderDto("AUDUSD", BUY, 10, STOP_ORDER, LocalDateTime.MIN, "123", CREATED);
         var createdOrder = orderHandler.persist(order);
         List<OrderDto> orderByStatus = orderHandler.getOrderByStatus(CREATED);
-        assertEquals(createdOrder.getId(), orderByStatus.get(0).getId());
+        assertEquals(createdOrder.id(), orderByStatus.get(0).id());
     }
 }

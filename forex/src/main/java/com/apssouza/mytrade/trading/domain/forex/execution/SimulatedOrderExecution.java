@@ -55,29 +55,29 @@ class SimulatedOrderExecution implements OrderExecution {
 
     @Override
     public FilledOrderDto executeOrder(OrderDto order) {
-        String currency_pair = order.getSymbol();
+        String currency_pair = order.symbol();
         String position_identifier = MultiPositionHandler.getIdentifierFromOrder(order);
-        OrderDto.OrderAction action = order.getAction();
-        int quantity = order.getQuantity();
+        OrderDto.OrderAction action = order.action();
+        int quantity = order.quantity();
 
         PriceDto fill_price = priceMap.get(currency_pair);
         BigDecimal close_price = NumberHelper.roundSymbolPrice(currency_pair, fill_price.close());
 
         FilledOrderDto filled_order = new FilledOrderDto(
                 this.currentTime,
-                order.getSymbol(),
+                order.symbol(),
                 action,
                 quantity,
                 close_price,
                 position_identifier,
-                order.getId()
+                order.id()
         );
         log.info("Executing order " + filled_order.toString());
 
-        if (this.positions.containsKey(order.getSymbol())) {
+        if (this.positions.containsKey(order.symbol())) {
             handleExistingPosition(order, action, quantity);
         } else {
-            this.positions.put(order.getSymbol(), filled_order);
+            this.positions.put(order.symbol(), filled_order);
         }
         return filled_order;
     }
@@ -99,13 +99,13 @@ class SimulatedOrderExecution implements OrderExecution {
 
     private void handleExistingPosition(OrderDto order, OrderDto.OrderAction action, int quantity) {
         if (TradingParams.trading_multi_position_enabled || TradingParams.trading_position_edit_enabled) {
-            this.multiPositionPerCPairHandler.handle(action, order.getSymbol(), quantity);
+            this.multiPositionPerCPairHandler.handle(action, order.symbol(), quantity);
         } else {
-            FilledOrderDto filledOrderDto = this.positions.get(order.getSymbol());
-            if (filledOrderDto.getAction().equals(order.getAction())) {
+            FilledOrderDto filledOrderDto = this.positions.get(order.symbol());
+            if (filledOrderDto.action().equals(order.action())) {
                 throw new RuntimeException("trading_position_edit_enabled is not enabled");
             }
-            this.positions.remove(order.getSymbol());
+            this.positions.remove(order.symbol());
         }
     }
 

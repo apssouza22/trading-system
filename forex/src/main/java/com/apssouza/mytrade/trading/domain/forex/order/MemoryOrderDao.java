@@ -36,9 +36,9 @@ class MemoryOrderDao implements  OrderDao {
     public List<OrderDto> getOrderByStatus(OrderDto.OrderStatus status) {
         List<OrderDto> orders = new ArrayList<>();
         for (Map.Entry<Integer, OrderDto> entry : MemoryOrderDao.ORDERS.entrySet()) {
-            if (entry.getValue().getStatus().equals(status)) {
+            if (entry.getValue().status().equals(status)) {
                 orders.add(new OrderDto(
-                        entry.getValue().getId(),
+                        entry.getValue().id(),
                         entry.getValue())
                 );
             }

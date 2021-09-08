@@ -70,13 +70,13 @@ public class PortfolioHandler {
             log.info("Created stop loss - " + stopLoss);
 
             StopOrderDto stopOrderLoss = this.executionHandler.placeStopOrder(stopLoss);
-            stopOrders.put(stopOrderLoss.getId(), stopOrderLoss);
+            stopOrders.put(stopOrderLoss.id(), stopOrderLoss);
             MultiPositionHandler.mapStopOrderToPosition(stopOrderLoss, position);
 
             if (TradingParams.take_profit_stop_enabled) {
                 var stopOrderProfit = this.executionHandler.placeStopOrder(stops.get(TAKE_PROFIT));
                 log.info("Created take profit stop - " + stopOrderProfit);
-                stopOrders.put(stopOrderProfit.getId(), stopOrderProfit);
+                stopOrders.put(stopOrderProfit.id(), stopOrderProfit);
                 MultiPositionHandler.mapStopOrderToPosition(stopOrderProfit, position);
             }
         }
@@ -112,7 +112,7 @@ public class PortfolioHandler {
 
         for (Map.Entry<Integer, StopOrderDto> entry : this.currentStopOrders.entrySet()) {
             StopOrderDto stopOrder = stopOrders.get(entry.getKey());
-            if (stopOrder.getStatus() == StopOrderDto.StopOrderStatus.FILLED) {
+            if (stopOrder.status() == StopOrderDto.StopOrderStatus.FILLED) {
                 filledStopLoss.add(stopOrder);
             }
         }

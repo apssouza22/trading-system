@@ -13,14 +13,14 @@ class StopOrderPriceMonitor {
         Set<StopOrderDto> filledOrders = new HashSet<>();
         for (Map.Entry<Integer, StopOrderDto> entry : allStopOrders.entrySet()) {
             StopOrderDto stopOrder = allStopOrders.get(entry.getKey());
-            if (filledOrders.contains(stopOrder.getIdentifier())) {
+            if (filledOrders.contains(stopOrder.identifier())) {
                 continue;
             }
 
-            if (!stopOrder.getStatus().equals(StopOrderDto.StopOrderStatus.SUBMITTED)) {
+            if (!stopOrder.status().equals(StopOrderDto.StopOrderStatus.SUBMITTED)) {
                 continue;
             }
-            PriceDto df_current_price = priceMap.get(stopOrder.getSymbol());
+            PriceDto df_current_price = priceMap.get(stopOrder.symbol());
             filledOrderCheck(filledOrders, stopOrder, df_current_price);
 
         }
@@ -31,13 +31,13 @@ class StopOrderPriceMonitor {
             Set<StopOrderDto> filledPositions,
             StopOrderDto stopOrder, PriceDto priceDto
     ) {
-        if (stopOrder.getAction().equals(OrderDto.OrderAction.BUY)) {
+        if (stopOrder.action().equals(OrderDto.OrderAction.BUY)) {
             if(hasFilledBuyOrder(stopOrder, priceDto)){
                 filledPositions.add(stopOrder);
             }
         }
 
-        if (stopOrder.getAction().equals(OrderDto.OrderAction.SELL)) {
+        if (stopOrder.action().equals(OrderDto.OrderAction.SELL)) {
             if(hasFilledSellOrder(stopOrder, priceDto)){
                 filledPositions.add(stopOrder);
             }
@@ -46,13 +46,13 @@ class StopOrderPriceMonitor {
 
 
     private boolean hasFilledSellOrder(StopOrderDto stopOrder, PriceDto priceDto) {
-        if (stopOrder.getType().equals(StopOrderDto.StopOrderType.TAKE_PROFIT)) {
-            if (priceDto.high().compareTo(stopOrder.getPrice()) >= 0) {
+        if (stopOrder.type().equals(StopOrderDto.StopOrderType.TAKE_PROFIT)) {
+            if (priceDto.high().compareTo(stopOrder.price()) >= 0) {
                return true;
             }
         }
-        if (stopOrder.getType().equals(StopOrderDto.StopOrderType.STOP_LOSS)) {
-            if (priceDto.high().compareTo(stopOrder.getPrice()) <= 0) {
+        if (stopOrder.type().equals(StopOrderDto.StopOrderType.STOP_LOSS)) {
+            if (priceDto.high().compareTo(stopOrder.price()) <= 0) {
                 return true;
             }
         }
@@ -60,13 +60,13 @@ class StopOrderPriceMonitor {
     }
 
     private boolean hasFilledBuyOrder( StopOrderDto stopOrder, PriceDto priceDto) {
-        if (stopOrder.getType().equals(StopOrderDto.StopOrderType.TAKE_PROFIT)) {
-            if (priceDto.low().compareTo(stopOrder.getPrice()) <= 0) {
+        if (stopOrder.type().equals(StopOrderDto.StopOrderType.TAKE_PROFIT)) {
+            if (priceDto.low().compareTo(stopOrder.price()) <= 0) {
                 return true;
             }
         }
-        if (stopOrder.getType().equals(StopOrderDto.StopOrderType.STOP_LOSS)) {
-            if (priceDto.high().compareTo(stopOrder.getPrice()) >= 0) {
+        if (stopOrder.type().equals(StopOrderDto.StopOrderType.STOP_LOSS)) {
+            if (priceDto.high().compareTo(stopOrder.price()) >= 0) {
                 return true;
             }
         }

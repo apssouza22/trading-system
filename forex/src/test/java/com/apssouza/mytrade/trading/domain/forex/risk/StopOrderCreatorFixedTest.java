@@ -37,10 +37,10 @@ public class StopOrderCreatorFixedTest extends TestCase {
         Position position = positionBuilder.build();
         obj.createContext(Position.PositionType.LONG);
         StopOrderDto hardStopLoss = obj.getHardStopLoss(position);
-        assertEquals(StopOrderDto.StopOrderStatus.CREATED, hardStopLoss.getStatus());
-        assertEquals(StopOrderDto.StopOrderType.HARD_STOP, hardStopLoss.getType());
-        assertEquals(OrderDto.OrderAction.SELL, hardStopLoss.getAction());
-        assertEquals(BigDecimal.valueOf(0.904), hardStopLoss.getPrice());
+        assertEquals(StopOrderDto.StopOrderStatus.CREATED, hardStopLoss.status());
+        assertEquals(StopOrderDto.StopOrderType.HARD_STOP, hardStopLoss.type());
+        assertEquals(OrderDto.OrderAction.SELL, hardStopLoss.action());
+        assertEquals(BigDecimal.valueOf(0.904), hardStopLoss.price());
     }
 
     @Test
@@ -52,10 +52,10 @@ public class StopOrderCreatorFixedTest extends TestCase {
         obj.createContext(Position.PositionType.SHORT);
 
         StopOrderDto hardStopLoss = obj.getHardStopLoss(position);
-        assertEquals(StopOrderDto.StopOrderStatus.CREATED, hardStopLoss.getStatus());
-        assertEquals(StopOrderDto.StopOrderType.HARD_STOP, hardStopLoss.getType());
-        assertEquals(OrderDto.OrderAction.BUY, hardStopLoss.getAction());
-        assertEquals(BigDecimal.valueOf(1.104), hardStopLoss.getPrice());
+        assertEquals(StopOrderDto.StopOrderStatus.CREATED, hardStopLoss.status());
+        assertEquals(StopOrderDto.StopOrderType.HARD_STOP, hardStopLoss.type());
+        assertEquals(OrderDto.OrderAction.BUY, hardStopLoss.action());
+        assertEquals(BigDecimal.valueOf(1.104), hardStopLoss.price());
     }
 
     @Test
@@ -66,10 +66,10 @@ public class StopOrderCreatorFixedTest extends TestCase {
         obj.createContext(Position.PositionType.SHORT);
 
         StopOrderDto hardStopLoss = obj.getProfitStopOrder(position);
-        assertEquals(StopOrderDto.StopOrderStatus.CREATED, hardStopLoss.getStatus());
-        assertEquals(StopOrderDto.StopOrderType.TAKE_PROFIT, hardStopLoss.getType());
-        assertEquals(OrderDto.OrderAction.BUY, hardStopLoss.getAction());
-        assertEquals(BigDecimal.valueOf(0.804), hardStopLoss.getPrice());
+        assertEquals(StopOrderDto.StopOrderStatus.CREATED, hardStopLoss.status());
+        assertEquals(StopOrderDto.StopOrderType.TAKE_PROFIT, hardStopLoss.type());
+        assertEquals(OrderDto.OrderAction.BUY, hardStopLoss.action());
+        assertEquals(BigDecimal.valueOf(0.804), hardStopLoss.price());
     }
 
 
@@ -83,10 +83,10 @@ public class StopOrderCreatorFixedTest extends TestCase {
         obj.createContext(Position.PositionType.LONG);
 
         StopOrderDto hardStopLoss = obj.getProfitStopOrder(position);
-        assertEquals(StopOrderDto.StopOrderStatus.CREATED, hardStopLoss.getStatus());
-        assertEquals(StopOrderDto.StopOrderType.TAKE_PROFIT, hardStopLoss.getType());
-        assertEquals(OrderDto.OrderAction.SELL, hardStopLoss.getAction());
-        assertEquals(BigDecimal.valueOf(1.204), hardStopLoss.getPrice());
+        assertEquals(StopOrderDto.StopOrderStatus.CREATED, hardStopLoss.status());
+        assertEquals(StopOrderDto.StopOrderType.TAKE_PROFIT, hardStopLoss.type());
+        assertEquals(OrderDto.OrderAction.SELL, hardStopLoss.action());
+        assertEquals(BigDecimal.valueOf(1.204), hardStopLoss.price());
     }
 
 
@@ -107,10 +107,10 @@ public class StopOrderCreatorFixedTest extends TestCase {
         PriceChangedEvent event = new PriceChangedEvent(now, priceMap);
         Optional<StopOrderDto> optional = obj.getEntryStopOrder(position, event);
         StopOrderDto hardStopLoss = optional.get();
-        assertEquals(StopOrderDto.StopOrderStatus.CREATED, hardStopLoss.getStatus());
-        assertEquals(StopOrderDto.StopOrderType.ENTRY_STOP, hardStopLoss.getType());
-        assertEquals(OrderDto.OrderAction.SELL, hardStopLoss.getAction());
-        assertEquals(BigDecimal.valueOf(1.004), hardStopLoss.getPrice());
+        assertEquals(StopOrderDto.StopOrderStatus.CREATED, hardStopLoss.status());
+        assertEquals(StopOrderDto.StopOrderType.ENTRY_STOP, hardStopLoss.type());
+        assertEquals(OrderDto.OrderAction.SELL, hardStopLoss.action());
+        assertEquals(BigDecimal.valueOf(1.004), hardStopLoss.price());
     }
 
     @Test
@@ -158,10 +158,10 @@ public class StopOrderCreatorFixedTest extends TestCase {
         PriceChangedEvent event = new PriceChangedEvent(now, priceMap);
         Optional<StopOrderDto> optional = obj.getEntryStopOrder(position, event);
         StopOrderDto hardStopLoss = optional.get();
-        assertEquals(StopOrderDto.StopOrderStatus.CREATED, hardStopLoss.getStatus());
-        assertEquals(StopOrderDto.StopOrderType.ENTRY_STOP, hardStopLoss.getType());
-        assertEquals(OrderDto.OrderAction.BUY, hardStopLoss.getAction());
-        assertEquals(BigDecimal.valueOf(1.004), hardStopLoss.getPrice());
+        assertEquals(StopOrderDto.StopOrderStatus.CREATED, hardStopLoss.status());
+        assertEquals(StopOrderDto.StopOrderType.ENTRY_STOP, hardStopLoss.type());
+        assertEquals(OrderDto.OrderAction.BUY, hardStopLoss.action());
+        assertEquals(BigDecimal.valueOf(1.004), hardStopLoss.price());
     }
 
     @Test

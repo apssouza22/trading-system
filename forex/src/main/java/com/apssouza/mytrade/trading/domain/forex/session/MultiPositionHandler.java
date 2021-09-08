@@ -17,10 +17,10 @@ public class MultiPositionHandler {
     private static Map<Integer, Position> positionToStopOrderMap = new ConcurrentHashMap<>();
 
     public static String getIdentifierFromOrder(OrderDto order) {
-        if (order.getIdentifier() == null || order.getIdentifier().isEmpty())
-            return order.getSymbol() + '_' + order.getId() + '_' + order.getTime().toEpochSecond(DateTimeHelper.ZONEOFFSET_UTC);
+        if (order.identifier() == null || order.identifier().isEmpty())
+            return order.symbol() + '_' + order.id() + '_' + order.time().toEpochSecond(DateTimeHelper.ZONEOFFSET_UTC);
 
-        return order.getIdentifier();
+        return order.identifier();
     }
 
     public static void deleteAllMaps() {
@@ -29,16 +29,16 @@ public class MultiPositionHandler {
 
 
     public static Position getPositionByStopOrder(StopOrderDto stopOrder) {
-        if (MultiPositionHandler.positionToStopOrderMap.containsKey(stopOrder.getId())) {
-            Position ps = MultiPositionHandler.positionToStopOrderMap.get(stopOrder.getId());
-            MultiPositionHandler.positionToStopOrderMap.remove(stopOrder.getId());
+        if (MultiPositionHandler.positionToStopOrderMap.containsKey(stopOrder.id())) {
+            Position ps = MultiPositionHandler.positionToStopOrderMap.get(stopOrder.id());
+            MultiPositionHandler.positionToStopOrderMap.remove(stopOrder.id());
             return ps;
         }
-        throw new RuntimeException("Not found position for the given stop order. id =  " + stopOrder.getId() + "pair = " + stopOrder.getSymbol());
+        throw new RuntimeException("Not found position for the given stop order. id =  " + stopOrder.id() + "pair = " + stopOrder.symbol());
     }
 
     public static void mapStopOrderToPosition(StopOrderDto stoporder, Position position) {
-        MultiPositionHandler.positionToStopOrderMap.putIfAbsent(stoporder.getId(), position);
+        MultiPositionHandler.positionToStopOrderMap.putIfAbsent(stoporder.id(), position);
     }
 
     public static Map<String, FilledOrderDto> getAggregatedPortfolio(List<Position> portfolio) {
@@ -61,7 +61,7 @@ public class MultiPositionHandler {
                     Math.abs(currencyPositions.get(entry.getKey())),
                     null,
                     "",
-                    null
+                    0
             ));
         }
 

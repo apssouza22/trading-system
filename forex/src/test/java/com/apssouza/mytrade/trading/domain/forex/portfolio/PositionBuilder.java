@@ -78,6 +78,6 @@ public class PositionBuilder {
 
 
     public void addStopOrder(StopOrderDto stopOrder) {
-        this.stopOrders.put(stopOrder.getType(), stopOrder);
+        this.stopOrders.put(stopOrder.type(), stopOrder);
     }
 }

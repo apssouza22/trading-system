@@ -17,7 +17,7 @@ class ShortPositionStrategy implements CreatorStrategy {
     @Override
     public BigDecimal getEntryStopPrice(Position position, BigDecimal priceClose) {
         BigDecimal stopPrice = null;
-        if (priceClose.compareTo(position.getInitPrice().subtract(distanceObject.getEntryStopDistance())) < 0) {
+        if (priceClose.compareTo(position.getInitPrice().subtract(distanceObject.entryStopDistance())) < 0) {
             stopPrice = position.getInitPrice();
         }
         return stopPrice;
@@ -25,29 +25,29 @@ class ShortPositionStrategy implements CreatorStrategy {
 
     @Override
     public BigDecimal getProfitStopPrice(Position position) {
-        return position.getInitPrice().subtract(distanceObject.getTakeProfitDistance());
+        return position.getInitPrice().subtract(distanceObject.takeProfitDistance());
     }
 
     @Override
     public BigDecimal getHardStopPrice(Position position) {
-        return position.getInitPrice().add(distanceObject.getHardStopDistance());
+        return position.getInitPrice().add(distanceObject.hardStopDistance());
     }
 
     @Override
     public Optional<BigDecimal> getTrailingStopPrice(Position position, BigDecimal last_close) {
         BigDecimal stopPrice;
-        BigDecimal tsPrice = position.getInitPrice().subtract(distanceObject.getTraillingStopDistance());
+        BigDecimal tsPrice = position.getInitPrice().subtract(distanceObject.traillingStopDistance());
         if (last_close.compareTo(tsPrice) < 0) {
             return Optional.empty();
         }
         if (position.getPlacedStopLoss() == null){
             return Optional.empty();
         }
-        if (!position.getPlacedStopLoss().getType().equals(StopOrderDto.StopOrderType.TRAILLING_STOP)) {
-            stopPrice = last_close.add(distanceObject.getTraillingStopDistance());
+        if (!position.getPlacedStopLoss().type().equals(StopOrderDto.StopOrderType.TRAILLING_STOP)) {
+            stopPrice = last_close.add(distanceObject.traillingStopDistance());
         } else {
-            stopPrice = position.getPlacedStopLoss().getPrice().subtract(distanceObject.getTraillingStopDistance());
-            stopPrice = position.getPlacedStopLoss().getPrice().compareTo(stopPrice) < 0 ? position.getPlacedStopLoss().getPrice() : stopPrice;
+            stopPrice = position.getPlacedStopLoss().price().subtract(distanceObject.traillingStopDistance());
+            stopPrice = position.getPlacedStopLoss().price().compareTo(stopPrice) < 0 ? position.getPlacedStopLoss().price() : stopPrice;
         }
         stopPrice = NumberHelper.roundSymbolPrice(position.getSymbol(), stopPrice);
         return Optional.of(stopPrice);

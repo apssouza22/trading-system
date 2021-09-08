@@ -29,12 +29,12 @@ class HistoryStopOrderFilledListener implements PropertyChangeListener {
 
         this.historyHandler.addOrderFilled(new FilledOrderDto(
                 time,
-                stopOrder.getSymbol(),
-                stopOrder.getAction(),
-                stopOrder.getQuantity(),
-                stopOrder.getFilledPrice(),
+                stopOrder.symbol(),
+                stopOrder.action(),
+                stopOrder.quantity(),
+                stopOrder.filledPrice(),
                 "",
-                stopOrder.getId()
+                stopOrder.id()
         ));
     }
 }

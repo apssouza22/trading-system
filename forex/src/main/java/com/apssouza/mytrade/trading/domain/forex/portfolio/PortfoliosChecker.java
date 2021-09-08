@@ -44,7 +44,7 @@ class PortfoliosChecker {
                 throw new ReconciliationException("Position key mismatch", localPositions, remotePositions);
             }
             OrderDto.OrderAction orderAction = entry.getValue().getPositionType().getOrderAction();
-            if (!remotePositions.get(symbol).getAction().equals(orderAction)) {
+            if (!remotePositions.get(symbol).action().equals(orderAction)) {
                 throw new ReconciliationException("Position action mismatch", localPositions, remotePositions);
             }
         }

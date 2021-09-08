@@ -32,14 +32,14 @@ class FilledOrderListener implements PropertyChangeListener {
         OrderFilledEvent orderFilledEvent = (OrderFilledEvent) event;
 
         FilledOrderDto filledOrder = orderFilledEvent.getFilledOrder();
-        if (!this.portfolio.getPositions().containsKey(filledOrder.getIdentifier())) {
+        if (!this.portfolio.getPositions().containsKey(filledOrder.identifier())) {
             Position newPosition = createNewPosition(filledOrder);
             emitEvent(orderFilledEvent, newPosition);
             return;
         }
-        Position ps = this.portfolio.getPosition(filledOrder.getIdentifier());
+        Position ps = this.portfolio.getPosition(filledOrder.identifier());
         if (!TradingParams.trading_position_edit_enabled) {
-            if (filledOrder.getQuantity() != ps.getQuantity()) {
+            if (filledOrder.quantity() != ps.getQuantity()) {
                 throw new RuntimeException("Not allowed units to be added/removed");
             }
         }
@@ -57,11 +57,11 @@ class FilledOrderListener implements PropertyChangeListener {
 
 
     private Position handleExistingPosition(FilledOrderDto filledOrder, Position ps) {
-        if (filledOrder.getAction().equals(OrderDto.OrderAction.SELL) && ps.getPositionType().equals(Position.PositionType.LONG)) {
+        if (filledOrder.action().equals(OrderDto.OrderAction.SELL) && ps.getPositionType().equals(Position.PositionType.LONG)) {
             handleOppositeDirection(filledOrder, ps);
             return ps;
         }
-        if (filledOrder.getAction().equals(OrderDto.OrderAction.BUY) && ps.getPositionType().equals(Position.PositionType.SHORT)) {
+        if (filledOrder.action().equals(OrderDto.OrderAction.BUY) && ps.getPositionType().equals(Position.PositionType.SHORT)) {
             handleOppositeDirection(filledOrder, ps);
             return ps;
         }
@@ -70,34 +70,34 @@ class FilledOrderListener implements PropertyChangeListener {
     }
 
     private void handleSameDirection(FilledOrderDto filledOrder, Position ps) {
-        if (filledOrder.getAction().equals(OrderDto.OrderAction.BUY) && ps.getPositionType().equals(Position.PositionType.LONG)) {
-            this.portfolio.addPositionQtd(filledOrder.getIdentifier(), filledOrder.getQuantity(), filledOrder.getPriceWithSpread());
+        if (filledOrder.action().equals(OrderDto.OrderAction.BUY) && ps.getPositionType().equals(Position.PositionType.LONG)) {
+            this.portfolio.addPositionQtd(filledOrder.identifier(), filledOrder.quantity(), filledOrder.priceWithSpread());
 
         }
-        if (filledOrder.getAction().equals(OrderDto.OrderAction.SELL) && ps.getPositionType().equals(Position.PositionType.SHORT)) {
-            this.portfolio.addPositionQtd(filledOrder.getIdentifier(), filledOrder.getQuantity(), filledOrder.getPriceWithSpread());
+        if (filledOrder.action().equals(OrderDto.OrderAction.SELL) && ps.getPositionType().equals(Position.PositionType.SHORT)) {
+            this.portfolio.addPositionQtd(filledOrder.identifier(), filledOrder.quantity(), filledOrder.priceWithSpread());
         }
     }
 
     private void handleOppositeDirection(FilledOrderDto filledOrder, Position ps) {
-        if (filledOrder.getQuantity() == ps.getQuantity()) {
-            this.portfolio.closePosition(filledOrder.getIdentifier());
+        if (filledOrder.quantity() == ps.getQuantity()) {
+            this.portfolio.closePosition(filledOrder.identifier());
             return;
         }
-            this.portfolio.removePositionQtd(filledOrder.getIdentifier(), filledOrder.getQuantity());
+            this.portfolio.removePositionQtd(filledOrder.identifier(), filledOrder.quantity());
 
     }
 
     private Position createNewPosition(FilledOrderDto filledOrder) {
-        Position.PositionType position_type = filledOrder.getAction().equals(OrderDto.OrderAction.BUY) ? Position.PositionType.LONG : Position.PositionType.SHORT;
+        Position.PositionType position_type = filledOrder.action().equals(OrderDto.OrderAction.BUY) ? Position.PositionType.LONG : Position.PositionType.SHORT;
 
         Position ps1 = new Position(
                 position_type,
-                filledOrder.getSymbol(),
-                filledOrder.getQuantity(),
-                filledOrder.getPriceWithSpread(),
-                filledOrder.getTime(),
-                filledOrder.getIdentifier(),
+                filledOrder.symbol(),
+                filledOrder.quantity(),
+                filledOrder.priceWithSpread(),
+                filledOrder.time(),
+                filledOrder.identifier(),
                 filledOrder,
                 null,
                 FILLED

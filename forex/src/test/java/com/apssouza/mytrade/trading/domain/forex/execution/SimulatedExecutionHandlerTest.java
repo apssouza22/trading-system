@@ -66,10 +66,10 @@ public class SimulatedExecutionHandlerTest extends TestCase {
         OrderBuilder orderBuilder = new OrderBuilder();
         OrderDto order = orderBuilder.build();
         FilledOrderDto filledOrderDto = simulatedExecutionHandler.executeOrder(order);
-        assertEquals(order.getSymbol(), filledOrderDto.getSymbol());
-        assertEquals(order.getIdentifier(), filledOrderDto.getIdentifier());
-        assertEquals(order.getAction(), filledOrderDto.getAction());
-        assertEquals(order.getQuantity(), filledOrderDto.getQuantity());
+        assertEquals(order.symbol(), filledOrderDto.symbol());
+        assertEquals(order.identifier(), filledOrderDto.identifier());
+        assertEquals(order.action(), filledOrderDto.action());
+        assertEquals(order.quantity(), filledOrderDto.quantity());
     }
 
     @Test(expected = RuntimeException.class)
@@ -90,14 +90,14 @@ public class SimulatedExecutionHandlerTest extends TestCase {
         OrderDto order2 = orderBuilder.build();
         FilledOrderDto filledOrderDto = simulatedExecutionHandler.executeOrder(order);
         FilledOrderDto filledOrderDto2 = simulatedExecutionHandler.executeOrder(order2);
-        assertEquals(order.getSymbol(), filledOrderDto2.getSymbol());
-        assertEquals(order.getIdentifier(), filledOrderDto2.getIdentifier());
-        assertEquals(order.getAction(), filledOrderDto2.getAction());
-        assertEquals(order.getQuantity(), filledOrderDto2.getQuantity());
+        assertEquals(order.symbol(), filledOrderDto2.symbol());
+        assertEquals(order.identifier(), filledOrderDto2.identifier());
+        assertEquals(order.action(), filledOrderDto2.action());
+        assertEquals(order.quantity(), filledOrderDto2.quantity());
 
         Map<String, FilledOrderDto> portfolio = simulatedExecutionHandler.getPortfolio();
         assertEquals(1, portfolio.size());
-        assertEquals(2 * order.getQuantity(), portfolio.get(filledOrderDto2.getIdentifier()).getQuantity());
+        assertEquals(2 * order.quantity(), portfolio.get(filledOrderDto2.identifier()).quantity());
     }
 
     @Test
@@ -108,14 +108,14 @@ public class SimulatedExecutionHandlerTest extends TestCase {
         OrderDto order2 = orderBuilder.build();
         FilledOrderDto filledOrderDto = simulatedExecutionHandler.executeOrder(order);
         FilledOrderDto filledOrderDto2 = simulatedExecutionHandler.executeOrder(order2);
-        assertEquals(order.getSymbol(), filledOrderDto2.getSymbol());
-        assertEquals(order.getIdentifier(), filledOrderDto2.getIdentifier());
-        assertEquals(order.getAction(), filledOrderDto2.getAction());
-        assertEquals(order.getQuantity(), filledOrderDto2.getQuantity());
+        assertEquals(order.symbol(), filledOrderDto2.symbol());
+        assertEquals(order.identifier(), filledOrderDto2.identifier());
+        assertEquals(order.action(), filledOrderDto2.action());
+        assertEquals(order.quantity(), filledOrderDto2.quantity());
 
         Map<String, FilledOrderDto> portfolio = simulatedExecutionHandler.getPortfolio();
         assertEquals(1, portfolio.size());
-        assertEquals(2 * order.getQuantity(), portfolio.get(filledOrderDto2.getIdentifier()).getQuantity());
+        assertEquals(2 * order.quantity(), portfolio.get(filledOrderDto2.identifier()).quantity());
     }
 
     @Test
@@ -143,7 +143,7 @@ public class SimulatedExecutionHandlerTest extends TestCase {
 
         Map<String, FilledOrderDto> portfolio = simulatedExecutionHandler.getPortfolio();
         assertEquals(1, portfolio.size());
-        assertEquals(900, portfolio.get(orderBuy.getSymbol()).getQuantity());
+        assertEquals(900, portfolio.get(orderBuy.symbol()).quantity());
 //        assertEquals(2 *  order.getQuantity(),  portfolio.get(filledOrderDto2.getIdentifier()).getQuantity());
     }
 
@@ -171,7 +171,7 @@ public class SimulatedExecutionHandlerTest extends TestCase {
 
         Map<String, FilledOrderDto> portfolio = simulatedExecutionHandler.getPortfolio();
         assertEquals(1, portfolio.size());
-        assertEquals(900, portfolio.get(orderBuy.getSymbol()).getQuantity());
+        assertEquals(900, portfolio.get(orderBuy.symbol()).quantity());
     }
 
     @Test
@@ -181,7 +181,7 @@ public class SimulatedExecutionHandlerTest extends TestCase {
         StopOrderDto order = stopOrderBuilder.build();
         StopOrderDto stopOrderDto = simulatedExecutionHandler.placeStopOrder(order);
         Map<Integer, StopOrderDto> stopLossOrders = simulatedExecutionHandler.getStopLossOrders();
-        assertEquals(stopOrderDto, stopLossOrders.get(stopOrderDto.getId()));
+        assertEquals(stopOrderDto, stopLossOrders.get(stopOrderDto.id()));
     }
 
     @Test
@@ -195,11 +195,11 @@ public class SimulatedExecutionHandlerTest extends TestCase {
         stopOrderBuilder.withType(StopOrderDto.StopOrderType.HARD_STOP);
         StopOrderDto order = stopOrderBuilder.build();
         StopOrderDto stopOrderDto = simulatedExecutionHandler.placeStopOrder(order);
-        assertEquals(order.getType(), stopOrderDto.getType());
-        assertEquals(order.getAction(), stopOrderDto.getAction());
-        assertEquals(order.getPrice(), stopOrderDto.getPrice());
-        assertEquals(order.getQuantity(), stopOrderDto.getQuantity());
-        assertTrue(order.getId() != null);
+        assertEquals(order.type(), stopOrderDto.type());
+        assertEquals(order.action(), stopOrderDto.action());
+        assertEquals(order.price(), stopOrderDto.price());
+        assertEquals(order.quantity(), stopOrderDto.quantity());
+        assertTrue(order.id() != null);
     }
 
     @Test
@@ -261,7 +261,7 @@ public class SimulatedExecutionHandlerTest extends TestCase {
         simulatedExecutionHandler.processStopOrders();
         Map<String, FilledOrderDto> portfolio = simulatedExecutionHandler.getPortfolio();
         assertEquals(1, portfolio.size());
-        assertEquals(900, portfolio.get(order.getIdentifier()).getQuantity());
+        assertEquals(900, portfolio.get(order.identifier()).quantity());
     }
 
     @Test
@@ -280,7 +280,7 @@ public class SimulatedExecutionHandlerTest extends TestCase {
         simulatedExecutionHandler.processStopOrders();
         Map<String, FilledOrderDto> portfolio = simulatedExecutionHandler.getPortfolio();
         assertEquals(1, portfolio.size());
-        assertEquals(2000, portfolio.get(order.getIdentifier()).getQuantity());
+        assertEquals(2000, portfolio.get(order.identifier()).quantity());
     }
 
 

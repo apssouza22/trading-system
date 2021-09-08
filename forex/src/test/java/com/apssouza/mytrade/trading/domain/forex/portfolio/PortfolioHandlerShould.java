@@ -90,7 +90,7 @@ public class PortfolioHandlerShould {
         var createStopOrdersArgCaptured = placeStopOrderArgCapture.getValue();
         var placeStopOrderArgCaptured = createStopOrdersArgCaptor.getValue();
 
-        assertEquals(StopOrderType.STOP_LOSS, createStopOrdersArgCaptured.getType());
+        assertEquals(StopOrderType.STOP_LOSS, createStopOrdersArgCaptured.type());
         assertEquals(model.getPosition("AUDUSD"), placeStopOrderArgCaptured);
     }
 
@@ -126,8 +126,8 @@ public class PortfolioHandlerShould {
         var createStopOrdersArgCaptured = placeStopOrderArgCapture.getAllValues();
         var placeStopOrderArgCaptured = createStopOrdersArgCaptor.getValue();
 
-        assertEquals(StopOrderType.STOP_LOSS, createStopOrdersArgCaptured.get(0).getType());
-        assertEquals(StopOrderType.TAKE_PROFIT, createStopOrdersArgCaptured.get(1).getType());
+        assertEquals(StopOrderType.STOP_LOSS, createStopOrdersArgCaptured.get(0).type());
+        assertEquals(StopOrderType.TAKE_PROFIT, createStopOrdersArgCaptured.get(1).type());
         assertEquals(model.getPosition("AUDUSD"), placeStopOrderArgCaptured);
     }
 
