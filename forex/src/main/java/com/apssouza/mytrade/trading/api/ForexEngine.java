@@ -1,6 +1,7 @@
 package com.apssouza.mytrade.trading.api;
 
 import com.apssouza.mytrade.feed.api.FeedBuilder;
+import com.apssouza.mytrade.trading.domain.forex.session.CycleHistory;
 import com.apssouza.mytrade.trading.domain.forex.session.TradingSession;
 import com.apssouza.mytrade.trading.domain.forex.common.ForexException;
 
@@ -10,6 +11,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
+import java.util.stream.Collectors;
 import static java.time.LocalDate.of;
 
 
@@ -34,8 +37,32 @@ public class ForexEngine {
         engine.start();
     }
 
+    private static CycleHistoryDto mapHistory(CycleHistory c) {
+        List<TransactionDto> transactions = c.getTransactions()
+                .entrySet()
+                .stream()
+                .map(e -> new TransactionDto(
+                        e.getValue().getTime(),
+                        e.getValue().getIdentifier(),
+                        e.getValue().getOrder(),
+                        e.getValue().getFilledOrder(),
+                        e.getValue().getPosition(),
+                        e.getValue().getState().name())
+                )
+                .collect(Collectors.toList());
+        return new CycleHistoryDto(c.getTime(), transactions);
+    }
+
     public void start() {
         tradingSession.start();
+    }
+
+    public List<CycleHistoryDto> getHistory() {
+        List<CycleHistoryDto> collect = tradingSession.getHistory()
+                .stream()
+                .map(ForexEngine::mapHistory)
+                .collect(Collectors.toList());
+        return collect;
     }
 
     public void setUp(ForexDto dto) {

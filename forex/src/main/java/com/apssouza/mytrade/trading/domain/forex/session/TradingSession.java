@@ -25,6 +25,7 @@ import com.apssouza.mytrade.trading.domain.forex.orderbook.HistoryBookHandlerFac
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.logging.Logger;
@@ -138,6 +139,10 @@ public class TradingSession {
                 priceStream.getPriceSymbolMapped(current)
         );
         eventNotifier.notify(event);
+    }
+
+    public List<CycleHistory> getHistory(){
+        return this.historyHandler.getTransactions();
     }
 
     protected void runSession() {
