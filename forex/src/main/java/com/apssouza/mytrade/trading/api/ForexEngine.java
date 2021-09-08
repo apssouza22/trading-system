@@ -41,14 +41,7 @@ public class ForexEngine {
         List<TransactionDto> transactions = c.getTransactions()
                 .entrySet()
                 .stream()
-                .map(e -> new TransactionDto(
-                        e.getValue().getTime(),
-                        e.getValue().getIdentifier(),
-                        e.getValue().getOrder(),
-                        e.getValue().getFilledOrder(),
-                        e.getValue().getPosition(),
-                        e.getValue().getState().name())
-                )
+                .map(e -> new TransactionDto(e.getValue()))
                 .collect(Collectors.toList());
         return new CycleHistoryDto(c.getTime(), transactions);
     }
