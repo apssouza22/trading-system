@@ -1,4 +1,4 @@
-package com.apssouza.mytrade.feed.signal;
+package com.apssouza.mytrade.feed.domain.signal;
 
 import com.apssouza.mytrade.feed.api.SignalDto;
 

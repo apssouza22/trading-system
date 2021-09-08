@@ -1,11 +1,11 @@
 package com.apssouza.mytrade.feed.api;
 
-import com.apssouza.mytrade.feed.price.MemoryPriceDao;
-import com.apssouza.mytrade.feed.price.PriceHandler;
-import com.apssouza.mytrade.feed.price.SqlPriceDao;
-import com.apssouza.mytrade.feed.signal.MemorySignalDao;
-import com.apssouza.mytrade.feed.signal.SignalHandler;
-import com.apssouza.mytrade.feed.signal.SqlSignalDao;
+import com.apssouza.mytrade.feed.domain.price.MemoryPriceDao;
+import com.apssouza.mytrade.feed.domain.price.PriceHandler;
+import com.apssouza.mytrade.feed.domain.price.SqlPriceDao;
+import com.apssouza.mytrade.feed.domain.signal.MemorySignalDao;
+import com.apssouza.mytrade.feed.domain.signal.SignalHandler;
+import com.apssouza.mytrade.feed.domain.signal.SqlSignalDao;
 
 import java.sql.Connection;
 import java.time.LocalDateTime;

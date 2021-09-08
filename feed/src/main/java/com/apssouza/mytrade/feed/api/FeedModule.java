@@ -1,7 +1,7 @@
 package com.apssouza.mytrade.feed.api;
 
-import com.apssouza.mytrade.feed.price.PriceHandler;
-import com.apssouza.mytrade.feed.signal.SignalHandler;
+import com.apssouza.mytrade.feed.domain.price.PriceHandler;
+import com.apssouza.mytrade.feed.domain.signal.SignalHandler;
 
 import java.time.LocalDateTime;
 import java.util.List;

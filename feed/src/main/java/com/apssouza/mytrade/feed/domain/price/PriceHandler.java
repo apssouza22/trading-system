@@ -1,4 +1,4 @@
-package com.apssouza.mytrade.feed.price;
+package com.apssouza.mytrade.feed.domain.price;
 
 import com.apssouza.mytrade.feed.api.PriceDto;
 
