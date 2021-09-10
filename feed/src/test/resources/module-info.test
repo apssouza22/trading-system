@@ -10,4 +10,4 @@
 
 // "requires org.mockito"
 --add-reads
-  com.apssouza.mytrade.trading.forex=org.mockito
+  com.apssouza.mytrade.feed=org.mockito

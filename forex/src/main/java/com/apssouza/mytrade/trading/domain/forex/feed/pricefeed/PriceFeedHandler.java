@@ -2,6 +2,7 @@ package com.apssouza.mytrade.trading.domain.forex.feed.pricefeed;
 
 import com.apssouza.mytrade.feed.api.FeedModule;
 import com.apssouza.mytrade.feed.api.PriceDto;
+import com.apssouza.mytrade.trading.domain.forex.feed.FeedService;
 
 import java.time.LocalDateTime;
 import java.util.Map;
@@ -11,9 +12,9 @@ import java.util.Map;
  */
 public class PriceFeedHandler {
 
-    private FeedModule feedModule;
+    private FeedService feedModule;
 
-    public PriceFeedHandler(FeedModule feedModule) {
+    public PriceFeedHandler(FeedService feedModule) {
         this.feedModule = feedModule;
     }
 

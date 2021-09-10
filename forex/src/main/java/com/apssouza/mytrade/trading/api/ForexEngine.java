@@ -1,6 +1,8 @@
 package com.apssouza.mytrade.trading.api;
 
 import com.apssouza.mytrade.feed.api.FeedBuilder;
+import com.apssouza.mytrade.trading.domain.forex.feed.FeedService;
+import com.apssouza.mytrade.trading.domain.forex.feed.TradingFeed;
 import com.apssouza.mytrade.trading.domain.forex.session.CycleHistory;
 import com.apssouza.mytrade.trading.domain.forex.session.TradingSession;
 import com.apssouza.mytrade.trading.domain.forex.common.ForexException;
@@ -18,23 +20,38 @@ import static java.time.LocalDate.of;
 
 public class ForexEngine {
 
-    private TradingSession tradingSession;
+    private final TradingSession tradingSession;
+
+    public ForexEngine(final TradingSession tradingSession){
+        this.tradingSession = tradingSession;
+    }
 
     public static void main(String[] args) {
         var date = of(2018, 9, 10);
 
         var systemName = "signal_test";
-        var dto = new ForexDto(
-                systemName,
-                LocalDateTime.of(date.minusDays(20), LocalTime.MIN),
-                LocalDateTime.of(date.plusDays(6), LocalTime.MIN),
-                BigDecimal.valueOf(100000L),
-                SessionType.BACK_TEST,
-                ExecutionType.SIMULATED
-        );
-        var engine = new ForexEngine();
-        engine.setUp(dto);
+
+        LocalDateTime start = LocalDateTime.of(date.minusDays(20), LocalTime.MIN);
+        LocalDateTime end = LocalDateTime.of(date.plusDays(6), LocalTime.MIN);
+
+        var feed = new FeedBuilder()
+                .withStartTime(start)
+                .withEndTime(end)
+                .withSignalName(systemName)
+                //                .withConnection(getConnection())
+                .build();
+
+        var engine =new ForexBuilder()
+                .withSystemName(systemName)
+                .withStartTime(start)
+                .withEndTime(end)
+                .withEquity(BigDecimal.valueOf(100000L))
+                .withSessionType(SessionType.BACK_TEST)
+                .withExecutionType(ExecutionType.SIMULATED)
+                .withFeed(new TradingFeed(feed))
+                .build();
         engine.start();
+        System.out.println("finished session");
     }
 
     private static CycleHistoryDto mapHistory(CycleHistory c) {
@@ -53,29 +70,12 @@ public class ForexEngine {
     public List<CycleHistoryDto> getHistory() {
         List<CycleHistoryDto> collect = tradingSession.getHistory()
                 .stream()
+                .filter(i -> i.getTransactions().size() > 0)
                 .map(ForexEngine::mapHistory)
                 .collect(Collectors.toList());
         return collect;
     }
 
-    public void setUp(ForexDto dto) {
-        var feed = new FeedBuilder()
-                .withStartTime(dto.startDay())
-                .withEndTime(dto.endDay())
-                .withSignalName(dto.systemName())
-                //                .withConnection(getConnection())
-                .build();
-
-        this.tradingSession = new ForexBuilder()
-                .withSystemName(dto.systemName())
-                .withStartTime(dto.startDay())
-                .withEndTime(dto.endDay())
-                .withEquity(dto.equity())
-                .withSessionType(dto.sessionType())
-                .withExecutionType(dto.executionType())
-                .withFeed(feed)
-                .build();
-    }
 
     private static Connection getConnection() throws ForexException {
         try {

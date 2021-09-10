@@ -8,12 +8,12 @@ import com.apssouza.mytrade.trading.domain.forex.session.TransactionDto;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class HistoryBookHandler {
     private final TransactionsExporter transactionsExporter;
-    public List<CycleHistory> transactions = new ArrayList<>();
+    public List<CycleHistory> transactions = new CopyOnWriteArrayList<>();
 
     public HistoryBookHandler(TransactionsExporter transactionsExporter) {
         this.transactionsExporter = transactionsExporter;

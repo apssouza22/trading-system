@@ -1,6 +1,9 @@
 package com.apssouza.mytrade.trading.api;
 
+import com.apssouza.mytrade.feed.api.FeedBuilder;
 import com.apssouza.mytrade.feed.api.FeedModule;
+import com.apssouza.mytrade.trading.domain.forex.feed.FeedService;
+import com.apssouza.mytrade.trading.domain.forex.feed.TradingFeed;
 import com.apssouza.mytrade.trading.domain.forex.feed.pricefeed.PriceFeedHandler;
 import com.apssouza.mytrade.trading.domain.forex.feed.signalfeed.SignalFeedFactory;
 import com.apssouza.mytrade.trading.domain.forex.feed.signalfeed.SignalFeedHandler;
@@ -11,7 +14,7 @@ import java.time.LocalDateTime;
 
 public class ForexBuilder {
 
-    private FeedModule feed;
+    private FeedService feed;
     private String systemName;
     private LocalDateTime start;
     private LocalDateTime end;
@@ -19,7 +22,7 @@ public class ForexBuilder {
     private ExecutionType executionType;
     private BigDecimal equity;
 
-    public ForexBuilder withFeed(FeedModule feed) {
+    public ForexBuilder withFeed(FeedService feed) {
         this.feed = feed;
         return this;
     }
@@ -48,12 +51,22 @@ public class ForexBuilder {
         this.executionType = executionType;
         return this;
     }
+
     public ForexBuilder withEquity(BigDecimal equity) {
         this.equity = equity;
         return this;
     }
 
-    public TradingSession build() {
+    public ForexEngine build() {
+        FeedModule feedModule = new FeedBuilder()
+                .withStartTime(start)
+                .withEndTime(end)
+                .withSignalName(systemName)
+                .build();
+
+        if (feed == null){
+            this.feed = new TradingFeed(feedModule);
+        }
         var tradingSession = new TradingSession(
                 equity,
                 start,
@@ -64,7 +77,7 @@ public class ForexBuilder {
                 feed
         );
         registerShutDownListener(tradingSession);
-        return tradingSession;
+        return new ForexEngine(tradingSession);
     }
 
     private static void registerShutDownListener(TradingSession tradingSession) {

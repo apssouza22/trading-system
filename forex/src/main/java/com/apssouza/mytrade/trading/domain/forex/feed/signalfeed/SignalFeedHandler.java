@@ -2,6 +2,7 @@ package com.apssouza.mytrade.trading.domain.forex.feed.signalfeed;
 
 import com.apssouza.mytrade.feed.api.FeedModule;
 import com.apssouza.mytrade.feed.api.SignalDto;
+import com.apssouza.mytrade.trading.domain.forex.feed.FeedService;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -11,9 +12,9 @@ import java.util.List;
  */
 public class SignalFeedHandler {
 
-    private FeedModule feedModule;
+    private FeedService feedModule;
 
-    public SignalFeedHandler(FeedModule feedModule) {
+    public SignalFeedHandler(FeedService feedModule) {
         this.feedModule = feedModule;
     }
 

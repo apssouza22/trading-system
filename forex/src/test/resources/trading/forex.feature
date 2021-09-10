@@ -5,8 +5,5 @@ Feature: Get trade signals
     Given 2 buy signals and 1 sell signal
     When retrieving session history
     Then return a history with 3 transactions
+    Then history should contain 2 buys and 1 sell orders
 
-  Scenario: Test get history when not exists transactions
-    Given that no signal are given
-    When retrieving session history.
-    Then return a history with no transactions

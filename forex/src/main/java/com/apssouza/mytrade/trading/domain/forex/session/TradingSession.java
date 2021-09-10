@@ -7,6 +7,7 @@ import com.apssouza.mytrade.trading.domain.forex.common.Event;
 import com.apssouza.mytrade.trading.domain.forex.common.TradingParams;
 import com.apssouza.mytrade.trading.domain.forex.execution.OrderExecution;
 import com.apssouza.mytrade.trading.domain.forex.execution.OrderExecutionFactory;
+import com.apssouza.mytrade.trading.domain.forex.feed.FeedService;
 import com.apssouza.mytrade.trading.domain.forex.feed.pricefeed.PriceStream;
 import com.apssouza.mytrade.trading.domain.forex.feed.pricefeed.PriceStreamFactory;
 import com.apssouza.mytrade.trading.domain.forex.feed.signalfeed.SignalFeedFactory;
@@ -40,7 +41,7 @@ public class TradingSession {
     protected final ExecutionType executionType;
 
     protected SignalFeedHandler signalFeedHandler;
-    private final FeedModule feedModule;
+    private final FeedService feedModule;
     protected OrderExecution executionHandler;
     protected PortfolioModel portfolio;
     protected OrderHandler orderHandler;
@@ -61,7 +62,7 @@ public class TradingSession {
             SessionType sessionType,
             String systemName,
             ExecutionType executionType,
-            FeedModule feedModule
+            FeedService feedModule
     ) {
         this.equity = equity;
         this.startDate = startDate;
