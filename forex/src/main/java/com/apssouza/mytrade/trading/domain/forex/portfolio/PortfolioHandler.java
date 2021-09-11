@@ -134,8 +134,8 @@ public class PortfolioHandler {
         if (portfolio.getPositions().isEmpty()) {
             return;
         }
-        List<Position> exitedPositionss = this.riskManagementHandler.processPositionExit(event, signals);
-        this.createOrderFromClosedPosition(exitedPositionss, event);
+        List<Position> exitedPositions = this.riskManagementHandler.processPositionExit(event, signals);
+        this.createOrderFromClosedPosition(exitedPositions, event);
     }
 
     private void createOrderFromClosedPosition(List<Position> positions, Event event) {

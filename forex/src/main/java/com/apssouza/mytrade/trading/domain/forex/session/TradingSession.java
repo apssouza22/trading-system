@@ -105,19 +105,13 @@ public class TradingSession {
 
     private EventNotifier setListeners() {
         var eventListeners = OrderHandlerFactory.createListeners(portfolio, orderHandler, riskManagementHandler, executionHandler, eventNotifier);
-        eventListeners.addAll(StopOrderFactory.createListeners(portfolio, eventNotifier));
-        eventListeners.addAll(PortfolioFactory.createListeners(portfolioHandler));
+        eventListeners.addAll(PortfolioFactory.createListeners(portfolioHandler, portfolio, eventNotifier));
         eventListeners.add(new EndedTradingDayListener(portfolioHandler));
 
-        eventListeners.addAll(PriceStreamFactory.createListeners(
+        eventListeners.add(new PriceChangedListener(
                 executionHandler,
                 portfolioHandler,
                 signalFeedHandler,
-                orderHandler,
-                eventNotifier
-        ));
-        eventListeners.addAll(SignalFeedFactory.createListeners(
-                riskManagementHandler,
                 orderHandler,
                 eventNotifier
         ));
@@ -141,7 +135,7 @@ public class TradingSession {
         eventNotifier.notify(event);
     }
 
-    public List<CycleHistory> getHistory(){
+    public List<CycleHistory> getHistory() {
         return this.historyHandler.getTransactions();
     }
 

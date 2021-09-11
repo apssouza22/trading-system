@@ -1,9 +1,11 @@
-package com.apssouza.mytrade.trading.domain.forex.order;
+package com.apssouza.mytrade.trading.domain.forex.portfolio;
 
 import com.apssouza.mytrade.trading.domain.forex.common.Event;
 import com.apssouza.mytrade.trading.domain.forex.common.TradingParams;
 import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeEvent;
 import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeListener;
+import com.apssouza.mytrade.trading.domain.forex.order.OrderDto;
+import com.apssouza.mytrade.trading.domain.forex.order.OrderFilledEvent;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.FilledOrderDto;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioChangedEvent;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioModel;
@@ -15,11 +17,11 @@ import static com.apssouza.mytrade.trading.domain.forex.portfolio.Position.Posit
 class FilledOrderListener implements PropertyChangeListener {
 
     private final PortfolioModel portfolio;
-    private final EventNotifier eventNotifier;
+    private final PortfolioHandler portfolioHandler;
 
-    public FilledOrderListener(PortfolioModel portfolio, EventNotifier eventNotifier) {
+    public FilledOrderListener(PortfolioModel portfolio,PortfolioHandler portfolioHandler) {
         this.portfolio = portfolio;
-        this.eventNotifier = eventNotifier;
+        this.portfolioHandler = portfolioHandler;
     }
 
     @Override
@@ -34,7 +36,7 @@ class FilledOrderListener implements PropertyChangeListener {
         FilledOrderDto filledOrder = orderFilledEvent.getFilledOrder();
         if (!this.portfolio.getPositions().containsKey(filledOrder.identifier())) {
             Position newPosition = createNewPosition(filledOrder);
-            emitEvent(orderFilledEvent, newPosition);
+            portfolioHandler.processReconciliation(orderFilledEvent);
             return;
         }
         Position ps = this.portfolio.getPosition(filledOrder.identifier());
@@ -43,16 +45,8 @@ class FilledOrderListener implements PropertyChangeListener {
                 throw new RuntimeException("Not allowed units to be added/removed");
             }
         }
-        Position position = handleExistingPosition(filledOrder, ps);
-        emitEvent(orderFilledEvent, position);
-    }
-
-    private void emitEvent(OrderFilledEvent orderFilledEvent, Position position) {
-            eventNotifier.notify(new PortfolioChangedEvent(
-                    orderFilledEvent.getTimestamp(),
-                    orderFilledEvent.getPrice(),
-                    position
-            ));
+        handleExistingPosition(filledOrder, ps);
+        portfolioHandler.processReconciliation(orderFilledEvent);
     }
 
 

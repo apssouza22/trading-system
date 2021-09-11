@@ -5,6 +5,8 @@ import com.apssouza.mytrade.trading.domain.forex.order.StopOrderBuilder;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioModel;
 import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementFactory;
 import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementHandler;
+import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderConfigDto;
+import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderCreatorFixed;
 
 import org.mockito.Mockito;
 

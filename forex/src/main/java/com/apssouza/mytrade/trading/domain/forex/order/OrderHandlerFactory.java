@@ -27,13 +27,17 @@ public class OrderHandlerFactory {
             EventNotifier eventNotifier
     ) {
         var listeners = new ArrayList<PropertyChangeListener>();
-        listeners.add(new FilledOrderListener(portfolio, eventNotifier));
         listeners.add(new OrderCreatedListener(orderHandler));
         listeners.add(new OrderFoundListener(
                 executionHandler,
                 orderHandler,
                 eventNotifier,
                 riskManagementHandler
+        ));
+        listeners.add(new SignalCreatedListener(
+                riskManagementHandler,
+                orderHandler,
+                eventNotifier
         ));
         return listeners;
     }

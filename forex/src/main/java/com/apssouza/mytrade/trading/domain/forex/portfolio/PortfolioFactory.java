@@ -6,7 +6,7 @@ import com.apssouza.mytrade.trading.domain.forex.order.OrderHandler;
 import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementHandler;
 import com.apssouza.mytrade.trading.domain.forex.session.EventNotifier;
 
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 
 public class PortfolioFactory {
@@ -29,7 +29,14 @@ public class PortfolioFactory {
         );
     }
 
-    public static List<PropertyChangeListener> createListeners(PortfolioHandler portfolioHandler){
-        return Collections.singletonList(new PortfolioChangedListener(portfolioHandler));
+    public static List<PropertyChangeListener> createListeners(
+            PortfolioHandler portfolioHandler,
+            PortfolioModel portfolio,
+            EventNotifier eventNotifier
+    ) {
+        return Arrays.asList(
+                new FilledOrderListener(portfolio, portfolioHandler),
+                new StopOrderFilledListener(portfolio, portfolioHandler,eventNotifier)
+        );
     }
 }
