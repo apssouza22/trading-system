@@ -31,8 +31,8 @@ public class ForexEngine {
 
         var systemName = "signal_test";
 
-        LocalDateTime start = LocalDateTime.of(date.minusDays(20), LocalTime.MIN);
-        LocalDateTime end = LocalDateTime.of(date.plusDays(6), LocalTime.MIN);
+        LocalDateTime start = LocalDateTime.of(date.minusDays(1), LocalTime.MIN);
+        LocalDateTime end = LocalDateTime.of(date.plusDays(1), LocalTime.MIN);
 
         var feed = new FeedBuilder()
                 .withStartTime(start)

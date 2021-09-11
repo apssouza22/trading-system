@@ -62,9 +62,9 @@ public class HistoryWithTransactions {
 
     @Then("^history should contain 2 buys and 1 sell orders$")
     public void countOrders() {
-        Assert.assertEquals(OrderDto.OrderAction.BUY, sessionHistory.get(0).transactions().get(0).transaction().getOrder().action());
-        Assert.assertEquals(OrderDto.OrderAction.SELL, sessionHistory.get(1).transactions().get(0).transaction().getOrder().action());
-        Assert.assertEquals(OrderDto.OrderAction.BUY, sessionHistory.get(2).transactions().get(0).transaction().getOrder().action());
+        Assert.assertEquals(OrderDto.OrderAction.BUY, sessionHistory.get(0).events().get(0).event().getOrder().action());
+        Assert.assertEquals(OrderDto.OrderAction.SELL, sessionHistory.get(1).events().get(0).event().getOrder().action());
+        Assert.assertEquals(OrderDto.OrderAction.BUY, sessionHistory.get(2).events().get(0).event().getOrder().action());
     }
 
 }
