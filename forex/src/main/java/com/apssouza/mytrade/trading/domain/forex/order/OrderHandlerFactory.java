@@ -27,7 +27,7 @@ public class OrderHandlerFactory {
             EventNotifier eventNotifier
     ) {
         var listeners = new ArrayList<PropertyChangeListener>();
-        listeners.add(new OrderCreatedListener(orderHandler));
+        listeners.add(new PositionClosedListener(orderHandler));
         listeners.add(new OrderFoundListener(
                 executionHandler,
                 orderHandler,

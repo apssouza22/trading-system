@@ -13,13 +13,12 @@ public class BookHistoryHandlerFactory {
     }
 
     public static List<PropertyChangeListener> createListeners(
-            BookHistoryHandler bookHandler,
-            RiskManagementHandler riskManager
+            BookHistoryHandler bookHandler
     ) {
         var listeners = new ArrayList<PropertyChangeListener>();
         listeners.add(new HistoryStopOrderFilledListener(bookHandler));
         listeners.add(new HistoryFilledOrderListener(bookHandler));
-        listeners.add(new HistoryOrderFoundListener(bookHandler, riskManager));
+        listeners.add(new OrderCreatedListener(bookHandler));
         listeners.add(new SessionFinishedListener(bookHandler));
         listeners.add(new HistoryPortfolioChangedListener(bookHandler));
         return listeners;

@@ -1,18 +1,17 @@
 package com.apssouza.mytrade.trading.domain.forex.portfolio;
 
 import com.apssouza.mytrade.feed.api.SignalDto;
+import com.apssouza.mytrade.trading.domain.forex.common.Event;
 import com.apssouza.mytrade.trading.domain.forex.common.TradingParams;
 import com.apssouza.mytrade.trading.domain.forex.execution.OrderExecution;
+import com.apssouza.mytrade.trading.domain.forex.feed.pricefeed.PriceChangedEvent;
 import com.apssouza.mytrade.trading.domain.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.domain.forex.order.OrderHandler;
-import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderDto;
 import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementHandler;
+import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderDto;
+import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderFilledEvent;
 import com.apssouza.mytrade.trading.domain.forex.session.EventNotifier;
 import com.apssouza.mytrade.trading.domain.forex.session.MultiPositionHandler;
-import com.apssouza.mytrade.trading.domain.forex.common.Event;
-import com.apssouza.mytrade.trading.domain.forex.order.OrderCreatedEvent;
-import com.apssouza.mytrade.trading.domain.forex.feed.pricefeed.PriceChangedEvent;
-import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderFilledEvent;
 import static com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderDto.StopOrderType.STOP_LOSS;
 import static com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderDto.StopOrderType.TAKE_PROFIT;
 
@@ -144,7 +143,7 @@ public class PortfolioHandler {
                 continue;
             }
             OrderDto order = this.orderHandler.createOrderFromClosedPosition(position, event.getTimestamp());
-            eventNotifier.notify(new OrderCreatedEvent(
+            eventNotifier.notify(new PositionClosedEvent(
                     event.getTimestamp(),
                     event.getPrice(),
                     order

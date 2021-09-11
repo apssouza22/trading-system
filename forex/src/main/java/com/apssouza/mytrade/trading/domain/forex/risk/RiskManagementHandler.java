@@ -7,6 +7,7 @@ import com.apssouza.mytrade.trading.domain.forex.common.TradingParams;
 import com.apssouza.mytrade.trading.domain.forex.feed.pricefeed.PriceChangedEvent;
 import com.apssouza.mytrade.trading.domain.forex.feed.signalfeed.SignalCreatedEvent;
 import com.apssouza.mytrade.trading.domain.forex.order.OrderDto;
+import com.apssouza.mytrade.trading.domain.forex.portfolio.FilledOrderDto;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioModel;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderCreator;
@@ -103,13 +104,14 @@ public class RiskManagementHandler {
         return stop_orders;
     }
 
-    public boolean canCreateOrder(SignalCreatedEvent event) {
+    public boolean canCreateOrder(OrderDto order) {
         Map<String, Position> positions = portfolio.getPositions();
         if (TradingParams.trading_position_edit_enabled || TradingParams.trading_multi_position_enabled) {
             return true;
         }
         for (Map.Entry<String, Position> entry : positions.entrySet()) {
-            if (entry.getValue().getSymbol().equals(event.getSignal().symbol().toUpperCase())) {
+            FilledOrderDto filledOrder = entry.getValue().getFilledOrder();
+            if (filledOrder.symbol().equals(order.symbol()) && filledOrder.action().equals(order.action())) {
                 return false;
             }
         }

@@ -58,7 +58,6 @@ public class OrderHandler {
                 "",
                 OrderDto.OrderStatus.CREATED
         );
-        log.info("Created order: " + order);
         return order;
     }
 

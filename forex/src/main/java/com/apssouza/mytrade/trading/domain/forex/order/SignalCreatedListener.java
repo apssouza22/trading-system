@@ -34,8 +34,10 @@ class SignalCreatedListener implements PropertyChangeListener {
         }
         SignalCreatedEvent event = (SignalCreatedEvent) e;
         log.info("Processing  new signal...");
-        if (riskManagementHandler.canCreateOrder(event)) {
-            OrderDto order = this.orderHandler.createOrderFromSignal(event);
+        OrderDto order = this.orderHandler.createOrderFromSignal(event);
+        if (riskManagementHandler.canCreateOrder(order)) {
+            this.orderHandler.persist(order);
+            log.info("Created order: " + order);
             eventNotifier.notify(new OrderCreatedEvent(
                     event.getTimestamp(),
                     event.getPrice(),
