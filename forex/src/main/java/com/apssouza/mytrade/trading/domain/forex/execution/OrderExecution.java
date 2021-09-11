@@ -88,4 +88,6 @@ public interface OrderExecution {
      * @return return a list of open position
      */
     Map<String, FilledOrderDto> getPositions();
+
+    Map<String, FilledOrderDto> getPortfolio();
 }

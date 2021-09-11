@@ -22,7 +22,7 @@ class SimulatedOrderExecution implements OrderExecution {
 
     private static final Logger log = Logger.getLogger(SimulatedOrderExecution.class.getSimpleName());
     private final MultiPositionPerCPairHandler multiPositionPerCPairHandler;
-    private final StopOrderExecutionHandler stopOrderHandler;
+    private final StopOrderHelper stopOrderHandler;
     private Map<Integer, StopOrderDto> limitOrders = new LinkedHashMap<>();
     private LocalDateTime currentTime;
     private Map<String, PriceDto> priceMap = new LinkedHashMap<>();
@@ -31,9 +31,10 @@ class SimulatedOrderExecution implements OrderExecution {
 
     public SimulatedOrderExecution() {
         multiPositionPerCPairHandler = new MultiPositionPerCPairHandler(this.positions);
-        stopOrderHandler = new StopOrderExecutionHandler(positions);
+        stopOrderHandler = new StopOrderHelper(positions);
     }
 
+    @Override
     public Map<String, FilledOrderDto> getPortfolio() {
         return this.positions;
     }
@@ -109,18 +110,22 @@ class SimulatedOrderExecution implements OrderExecution {
         }
     }
 
+    @Override
     public Integer cancelOpenStopOrders() {
         return stopOrderHandler.cancelOpenStopOrders();
     }
 
+    @Override
     public Integer cancelOpenLimitOrders() {
         return 0;
     }
 
+    @Override
     public void deleteStopOrders() {
         stopOrderHandler.deleteStopOrders();
     }
 
+    @Override
     public void processStopOrders() {
         stopOrderHandler.processStopOrders(this.currentTime, this.priceMap);
     }

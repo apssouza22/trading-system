@@ -6,14 +6,14 @@ import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementHandler;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HistoryBookHandlerFactory {
+public class BookHistoryHandlerFactory {
 
-    public static HistoryBookHandler create() {
-        return new HistoryBookHandler(new TransactionsExporter());
+    public static BookHistoryHandler create() {
+        return new BookHistoryHandler(new TransactionsExporter());
     }
 
     public static List<PropertyChangeListener> createListeners(
-            HistoryBookHandler bookHandler,
+            BookHistoryHandler bookHandler,
             RiskManagementHandler riskManager
     ) {
         var listeners = new ArrayList<PropertyChangeListener>();

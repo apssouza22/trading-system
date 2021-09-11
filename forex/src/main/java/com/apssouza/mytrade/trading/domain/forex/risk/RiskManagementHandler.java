@@ -90,7 +90,8 @@ public class RiskManagementHandler {
         if (stop_losses.containsKey(StopOrderType.TRAILLING_STOP)) {
             stopOrderDto = stop_losses.get(StopOrderType.TRAILLING_STOP);
 
-        } else if (stop_losses.containsKey(StopOrderType.ENTRY_STOP)) {
+        }
+        if (stop_losses.containsKey(StopOrderType.ENTRY_STOP)) {
             stopOrderDto = stop_losses.get(StopOrderType.ENTRY_STOP);
         }
 
@@ -138,7 +139,7 @@ public class RiskManagementHandler {
                 return true;
             }
 
-            //            Not process order coming from signal if( exists a exit for the currency
+            // Not process order coming from signal if( exists a exit for the currency
             if (exitedPositions.contains(order.symbol())) {
                 return true;
             }

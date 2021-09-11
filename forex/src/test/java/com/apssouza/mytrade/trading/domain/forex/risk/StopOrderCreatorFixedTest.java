@@ -1,24 +1,26 @@
 package com.apssouza.mytrade.trading.domain.forex.risk;
 
 import com.apssouza.mytrade.feed.api.PriceDto;
-import com.apssouza.mytrade.trading.domain.forex.portfolio.PositionBuilder;
-import com.apssouza.mytrade.trading.domain.forex.order.*;
+import com.apssouza.mytrade.trading.domain.forex.feed.pricefeed.PriceChangedEvent;
+import com.apssouza.mytrade.trading.domain.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.Position;
-import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderCreator;
+import com.apssouza.mytrade.trading.domain.forex.portfolio.PositionBuilder;
 import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderConfigDto;
+import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderCreator;
 import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderDto;
 import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderFactory;
-import com.apssouza.mytrade.trading.domain.forex.feed.pricefeed.PriceChangedEvent;
-import junit.framework.TestCase;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Optional;
+
+import junit.framework.TestCase;
 
 @RunWith(MockitoJUnitRunner.class)
 public class StopOrderCreatorFixedTest extends TestCase {
@@ -27,16 +29,17 @@ public class StopOrderCreatorFixedTest extends TestCase {
 
     @Before
     public void setUp() throws Exception {
-        this.obj = StopOrderFactory.factory(new StopOrderConfigDto( .1, .2, .2, .2));
+        this.obj = StopOrderFactory.factory(new StopOrderConfigDto(.1, .2, .2, .2));
     }
 
     @Test
-    public void getHardStopLossWhenLongPosition() {
+    public void getHardStopLoss_WhenLongPosition() {
         PositionBuilder positionBuilder = new PositionBuilder();
         positionBuilder.withType(Position.PositionType.LONG);
         Position position = positionBuilder.build();
         obj.createContext(Position.PositionType.LONG);
         StopOrderDto hardStopLoss = obj.getHardStopLoss(position);
+
         assertEquals(StopOrderDto.StopOrderStatus.CREATED, hardStopLoss.status());
         assertEquals(StopOrderDto.StopOrderType.HARD_STOP, hardStopLoss.type());
         assertEquals(OrderDto.OrderAction.SELL, hardStopLoss.action());
@@ -44,7 +47,7 @@ public class StopOrderCreatorFixedTest extends TestCase {
     }
 
     @Test
-    public void getHardStopLossWhenShortPosition() {
+    public void getHardStopLoss_WhenShortPosition() {
         PositionBuilder positionBuilder = new PositionBuilder();
         positionBuilder.withType(Position.PositionType.SHORT);
         positionBuilder.withPrice(BigDecimal.valueOf(1.004));
@@ -59,7 +62,7 @@ public class StopOrderCreatorFixedTest extends TestCase {
     }
 
     @Test
-    public void getTakeProfitWhenShortPosition() {
+    public void getTakeProfit_WhenShortPosition() {
         PositionBuilder positionBuilder = new PositionBuilder();
         positionBuilder.withType(Position.PositionType.SHORT);
         Position position = positionBuilder.build();
@@ -74,7 +77,7 @@ public class StopOrderCreatorFixedTest extends TestCase {
 
 
     @Test
-    public void getTakeProfitWhenLongPosition() {
+    public void getTakeProfit_WhenLongPosition() {
         PositionBuilder positionBuilder = new PositionBuilder();
         positionBuilder.withType(Position.PositionType.LONG);
         positionBuilder.withPrice(BigDecimal.valueOf(1.004));
@@ -91,7 +94,7 @@ public class StopOrderCreatorFixedTest extends TestCase {
 
 
     @Test
-    public void getEntryStopLossWhenLongPosition() {
+    public void getEntryStopLoss_WhenLongPosition() {
         PositionBuilder positionBuilder = new PositionBuilder();
         positionBuilder.withType(Position.PositionType.LONG);
         positionBuilder.withPrice(BigDecimal.valueOf(1.004));
@@ -114,7 +117,7 @@ public class StopOrderCreatorFixedTest extends TestCase {
     }
 
     @Test
-    public void getEntryStopLossWhenLongPositionAndPriceNotReachedEntryDistance() {
+    public void getEntryStopLoss_WhenLongPositionAndPriceNotReachedEntryDistance() {
         Position position = new Position(
                 Position.PositionType.LONG,
                 "AUDUSD",

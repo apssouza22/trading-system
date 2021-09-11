@@ -13,89 +13,92 @@ import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.atMostOnce;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @RunWith(MockitoJUnitRunner.class)
-public class HistoryBookHandlerTest extends TestCase {
+public class BookHistoryHandlerShould extends TestCase {
 
-    private HistoryBookHandler historyBookHandler;
+    private BookHistoryHandler bookHistoryHandler;
+    private TransactionsExporter transactionsExporter;
 
-    @Mock
-    TransactionsExporter transactionsExporter;
 
     @Before
     public  void setUp(){
-//        Mockito.when(transactionsExporter.exportCsv(Mockito.anyList(), Mockito.anyString()))
-        this.historyBookHandler = new HistoryBookHandler(transactionsExporter);
+        this.transactionsExporter = mock(TransactionsExporter.class);
+        this.bookHistoryHandler = new BookHistoryHandler(transactionsExporter);
     }
 
     @Test
     public void getTransactions() {
-        List<CycleHistory> transactions = historyBookHandler.getTransactions();
+        List<CycleHistory> transactions = bookHistoryHandler.getTransactions();
         assertTrue(transactions.isEmpty());
     }
 
     @Test
     public void startCycle() {
-        historyBookHandler.startCycle(LocalDateTime.MIN);
-        historyBookHandler.endCycle();
-        List<CycleHistory> transactions = historyBookHandler.getTransactions();
+        bookHistoryHandler.startCycle(LocalDateTime.MIN);
+        bookHistoryHandler.endCycle();
+        List<CycleHistory> transactions = bookHistoryHandler.getTransactions();
         CycleHistory cycleHistory = transactions.get(0);
         assertEquals(LocalDateTime.MIN, cycleHistory.getTime());
     }
 
     @Test
     public void endCycle() {
-        historyBookHandler.endCycle();
-        List<CycleHistory> transactions = historyBookHandler.getTransactions();
+        bookHistoryHandler.endCycle();
+        List<CycleHistory> transactions = bookHistoryHandler.getTransactions();
         assertEquals(1, transactions.size());
     }
 
     @Test
     public void setState() {
-        historyBookHandler.startCycle(LocalDateTime.MIN);
-        historyBookHandler.setState(TransactionDto.TransactionState.EXIT,"AUDUSD");
-        historyBookHandler.endCycle();
-        List<CycleHistory> transactions = historyBookHandler.getTransactions();
+        bookHistoryHandler.startCycle(LocalDateTime.MIN);
+        bookHistoryHandler.setState(TransactionDto.TransactionState.EXIT,"AUDUSD");
+        bookHistoryHandler.endCycle();
+        List<CycleHistory> transactions = bookHistoryHandler.getTransactions();
         CycleHistory cycleHistory = transactions.get(0);
         assertEquals(TransactionDto.TransactionState.EXIT, cycleHistory.getTransactions().get("AUDUSD").getState());
     }
 
     @Test
     public void addPosition() {
-        historyBookHandler.startCycle(LocalDateTime.MIN);
+        bookHistoryHandler.startCycle(LocalDateTime.MIN);
         PositionBuilder positionBuilder = new PositionBuilder();
         Position position = positionBuilder.build();
-        historyBookHandler.addPosition(position);
-        historyBookHandler.endCycle();
-        List<CycleHistory> transactions = historyBookHandler.getTransactions();
+        bookHistoryHandler.addPosition(position);
+        bookHistoryHandler.endCycle();
+        List<CycleHistory> transactions = bookHistoryHandler.getTransactions();
         CycleHistory cycleHistory = transactions.get(0);
         assertEquals(position, cycleHistory.getTransactions().get("AUDUSD").getPosition());
     }
 
     @Test
     public void addOrderFilled() {
-        historyBookHandler.startCycle(LocalDateTime.MIN);
+        bookHistoryHandler.startCycle(LocalDateTime.MIN);
         FilledOrderDto orderDto =  new FilledOrderBuilder().build();
-        historyBookHandler.addOrderFilled(orderDto);
-        historyBookHandler.endCycle();
-        List<CycleHistory> transactions = historyBookHandler.getTransactions();
+        bookHistoryHandler.addOrderFilled(orderDto);
+        bookHistoryHandler.endCycle();
+        List<CycleHistory> transactions = bookHistoryHandler.getTransactions();
         CycleHistory cycleHistory = transactions.get(0);
         assertEquals(orderDto, cycleHistory.getTransactions().get("AUDUSD").getFilledOrder());
     }
 
     @Test
     public void addOrder() {
-        historyBookHandler.startCycle(LocalDateTime.MIN);
+        bookHistoryHandler.startCycle(LocalDateTime.MIN);
         OrderDto orderDto =  new OrderBuilder().build();
-        historyBookHandler.addOrder(orderDto);
-        historyBookHandler.endCycle();
-        List<CycleHistory> transactions = historyBookHandler.getTransactions();
+        bookHistoryHandler.addOrder(orderDto);
+        bookHistoryHandler.endCycle();
+        List<CycleHistory> transactions = bookHistoryHandler.getTransactions();
         CycleHistory cycleHistory = transactions.get(0);
         assertEquals(orderDto, cycleHistory.getTransactions().get("AUDUSD").getOrder());
     }
@@ -103,14 +106,14 @@ public class HistoryBookHandlerTest extends TestCase {
 
     @Test
     public void addOrderToDifferentCpair() {
-        historyBookHandler.startCycle(LocalDateTime.MIN);
+        bookHistoryHandler.startCycle(LocalDateTime.MIN);
         OrderBuilder orderBuilder = new OrderBuilder();
         OrderDto orderDto =  orderBuilder.build();
         OrderDto orderDto2 =  orderBuilder.withIdentifier("EURUSD").withSymbol("EURUSD").build();
-        historyBookHandler.addOrder(orderDto);
-        historyBookHandler.addOrder(orderDto2);
-        historyBookHandler.endCycle();
-        List<CycleHistory> transactions = historyBookHandler.getTransactions();
+        bookHistoryHandler.addOrder(orderDto);
+        bookHistoryHandler.addOrder(orderDto2);
+        bookHistoryHandler.endCycle();
+        List<CycleHistory> transactions = bookHistoryHandler.getTransactions();
         CycleHistory cycleHistory = transactions.get(0);
         assertEquals(orderDto, cycleHistory.getTransactions().get("AUDUSD").getOrder());
         assertEquals(orderDto2, cycleHistory.getTransactions().get("EURUSD").getOrder());
@@ -118,6 +121,7 @@ public class HistoryBookHandlerTest extends TestCase {
 
     @Test
     public void export() throws IOException {
-        historyBookHandler.export("files/test.csv");
+        bookHistoryHandler.export("files/test.csv");
+        verify(transactionsExporter,atMostOnce()).exportCsv(any(), any());
     }
 }

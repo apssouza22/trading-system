@@ -1,22 +1,27 @@
 package com.apssouza.mytrade.trading.domain.forex.risk;
 
-import com.apssouza.mytrade.trading.domain.forex.session.LoopEventBuilder;
-import com.apssouza.mytrade.trading.domain.forex.portfolio.PositionBuilder;
-import com.apssouza.mytrade.trading.domain.forex.order.StopOrderBuilder;
-import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderDto;
-import com.apssouza.mytrade.trading.domain.forex.portfolio.Position;
-import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.RiskManagementBuilder;
 import com.apssouza.mytrade.trading.domain.forex.common.TradingParams;
-import junit.framework.TestCase;
+import com.apssouza.mytrade.trading.domain.forex.order.StopOrderBuilder;
+import com.apssouza.mytrade.trading.domain.forex.portfolio.Position;
+import com.apssouza.mytrade.trading.domain.forex.portfolio.PositionBuilder;
+import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.RiskManagementBuilder;
+import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderDto;
+import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderDto.StopOrderType;
+import com.apssouza.mytrade.trading.domain.forex.session.LoopEventBuilder;
+import static com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderDto.StopOrderType.ENTRY_STOP;
+import static com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderDto.StopOrderType.STOP_LOSS;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import java.math.BigDecimal;
 import java.util.EnumMap;
 
+import junit.framework.TestCase;
+
 @RunWith(MockitoJUnitRunner.class)
-public class RiskManagementHandlerTest extends TestCase {
+public class RiskManagementHandlerShould extends TestCase {
 
     @Test
     public void checkOrders() {
@@ -25,73 +30,69 @@ public class RiskManagementHandlerTest extends TestCase {
 
 
     @Test
-    public void createStopOrdersWithStopOrderDisable() {
+    public void createStopOrders_WithStopOrderDisable() {
         TradingParams.hard_stop_loss_enabled = false;
         TradingParams.entry_stop_loss_enabled = false;
         TradingParams.trailing_stop_loss_enabled = false;
         TradingParams.take_profit_stop_enabled = false;
 
-        RiskManagementBuilder riskManagementBuilder = new RiskManagementBuilder();
-        RiskManagementHandler risk = riskManagementBuilder.build();
+        RiskManagementHandler risk = new RiskManagementBuilder().build();
 
         PositionBuilder positionBuilder = new PositionBuilder();
         Position position = positionBuilder.build();
         LoopEventBuilder loopEventBuilder = new LoopEventBuilder();
         loopEventBuilder.withPriceMap(BigDecimal.TEN);
-        EnumMap<StopOrderDto.StopOrderType, StopOrderDto> stopOrders = risk.createStopOrders(position, loopEventBuilder.build());
+        var stopOrders = risk.createStopOrders(position, loopEventBuilder.build());
         assertEquals(0, stopOrders.size());
 
     }
 
     @Test
-    public void createStopOrdersWithHardAndProfitStopOrderEnabled() {
+    public void createStopOrders_WithHardAndProfitStopOrderEnabled() {
         TradingParams.hard_stop_loss_enabled = true;
         TradingParams.entry_stop_loss_enabled = false;
         TradingParams.trailing_stop_loss_enabled = false;
         TradingParams.take_profit_stop_enabled = true;
 
-        RiskManagementBuilder riskManagementBuilder = new RiskManagementBuilder();
-        RiskManagementHandler risk = riskManagementBuilder.build();
+        RiskManagementHandler risk = new RiskManagementBuilder().build();
 
         PositionBuilder positionBuilder = new PositionBuilder();
         Position position = positionBuilder.build();
         LoopEventBuilder loopEventBuilder = new LoopEventBuilder();
         loopEventBuilder.withPriceMap(BigDecimal.TEN);
-        EnumMap<StopOrderDto.StopOrderType, StopOrderDto> stopOrders = risk.createStopOrders(position, loopEventBuilder.build());
+        var stopOrders = risk.createStopOrders(position, loopEventBuilder.build());
         assertEquals(2, stopOrders.size());
-        assertTrue(stopOrders.containsKey(StopOrderDto.StopOrderType.TAKE_PROFIT));
-        assertTrue(stopOrders.containsKey(StopOrderDto.StopOrderType.STOP_LOSS));
+        assertTrue(stopOrders.containsKey(StopOrderType.TAKE_PROFIT));
+        assertTrue(stopOrders.containsKey(STOP_LOSS));
 
     }
 
     @Test
-    public void createStopOrdersWithOnlyHardStopOrderEnabled() {
+    public void createStopOrders_WithOnlyHardStopOrderEnabled() {
         TradingParams.hard_stop_loss_enabled = true;
         TradingParams.entry_stop_loss_enabled = false;
         TradingParams.trailing_stop_loss_enabled = false;
         TradingParams.take_profit_stop_enabled = false;
 
-        RiskManagementBuilder riskManagementBuilder = new RiskManagementBuilder();
-        RiskManagementHandler risk = riskManagementBuilder.build();
+        RiskManagementHandler risk = new RiskManagementBuilder().build();
 
         PositionBuilder positionBuilder = new PositionBuilder();
         Position position = positionBuilder.build();
         LoopEventBuilder loopEventBuilder = new LoopEventBuilder();
         loopEventBuilder.withPriceMap(BigDecimal.TEN);
-        EnumMap<StopOrderDto.StopOrderType, StopOrderDto> stopOrders = risk.createStopOrders(position, loopEventBuilder.build());
+        var stopOrders = risk.createStopOrders(position, loopEventBuilder.build());
         assertEquals(1, stopOrders.size());
-        assertTrue(stopOrders.containsKey(StopOrderDto.StopOrderType.STOP_LOSS));
+        assertTrue(stopOrders.containsKey(STOP_LOSS));
     }
 
     @Test
-    public void createStopOrdersWithAllStopOrderEnabled() {
+    public void createStopOrders_WithAllStopOrderEnabled() {
         TradingParams.hard_stop_loss_enabled = true;
         TradingParams.entry_stop_loss_enabled = true;
         TradingParams.trailing_stop_loss_enabled = true;
         TradingParams.take_profit_stop_enabled = true;
 
-        RiskManagementBuilder riskManagementBuilder = new RiskManagementBuilder();
-        RiskManagementHandler risk = riskManagementBuilder.build();
+        RiskManagementHandler risk = new RiskManagementBuilder().build();
 
         PositionBuilder positionBuilder = new PositionBuilder();
         Position position = positionBuilder.build();
@@ -99,21 +100,20 @@ public class RiskManagementHandlerTest extends TestCase {
         LoopEventBuilder loopEventBuilder = new LoopEventBuilder();
         loopEventBuilder.withPriceMap(BigDecimal.TEN);
 
-        EnumMap<StopOrderDto.StopOrderType, StopOrderDto> stopOrders = risk.createStopOrders(position, loopEventBuilder.build());
+        var stopOrders = risk.createStopOrders(position, loopEventBuilder.build());
         assertEquals(2, stopOrders.size());
-        assertTrue(stopOrders.containsKey(StopOrderDto.StopOrderType.TAKE_PROFIT));
-        assertTrue(stopOrders.containsKey(StopOrderDto.StopOrderType.STOP_LOSS));
+        assertTrue(stopOrders.containsKey(StopOrderType.TAKE_PROFIT));
+        assertTrue(stopOrders.containsKey(STOP_LOSS));
     }
 
     @Test
-    public void createStopOrdersWithoutProfitStopOrderEnabled() {
+    public void createStopOrders_WithoutProfitStopOrderEnabled() {
         TradingParams.hard_stop_loss_enabled = true;
         TradingParams.entry_stop_loss_enabled = true;
         TradingParams.trailing_stop_loss_enabled = true;
         TradingParams.take_profit_stop_enabled = false;
 
-        RiskManagementBuilder riskManagementBuilder = new RiskManagementBuilder();
-        RiskManagementHandler risk = riskManagementBuilder.build();
+        RiskManagementHandler risk = new RiskManagementBuilder().build();
 
         PositionBuilder positionBuilder = new PositionBuilder();
         Position position = positionBuilder.build();
@@ -121,20 +121,19 @@ public class RiskManagementHandlerTest extends TestCase {
         LoopEventBuilder loopEventBuilder = new LoopEventBuilder();
         loopEventBuilder.withPriceMap(BigDecimal.TEN);
 
-        EnumMap<StopOrderDto.StopOrderType, StopOrderDto> stopOrders = risk.createStopOrders(position, loopEventBuilder.build());
+        var stopOrders = risk.createStopOrders(position, loopEventBuilder.build());
         assertEquals(1, stopOrders.size());
-        assertTrue(stopOrders.containsKey(StopOrderDto.StopOrderType.STOP_LOSS));
+        assertTrue(stopOrders.containsKey(STOP_LOSS));
     }
 
     @Test
-    public void createStopOrdersChoosingEntryStop() {
+    public void createStopOrders_ChoosingEntryStop() {
         TradingParams.hard_stop_loss_enabled = true;
         TradingParams.entry_stop_loss_enabled = true;
         TradingParams.trailing_stop_loss_enabled = false;
         TradingParams.take_profit_stop_enabled = false;
 
-        RiskManagementBuilder riskManagementBuilder = new RiskManagementBuilder();
-        RiskManagementHandler risk = riskManagementBuilder.build();
+        RiskManagementHandler risk = new RiskManagementBuilder().build();
 
         StopOrderBuilder stopOrderBuilder = new StopOrderBuilder();
         PositionBuilder positionBuilder = new PositionBuilder();
@@ -145,21 +144,20 @@ public class RiskManagementHandlerTest extends TestCase {
         LoopEventBuilder loopEventBuilder = new LoopEventBuilder();
         loopEventBuilder.withPriceMap(BigDecimal.TEN);
 
-        EnumMap<StopOrderDto.StopOrderType, StopOrderDto> stopOrders = risk.createStopOrders(position, loopEventBuilder.build());
+        var stopOrders = risk.createStopOrders(position, loopEventBuilder.build());
         assertEquals(1, stopOrders.size());
-        assertTrue(stopOrders.containsKey(StopOrderDto.StopOrderType.STOP_LOSS));
-        assertEquals(StopOrderDto.StopOrderType.ENTRY_STOP, stopOrders.get(StopOrderDto.StopOrderType.STOP_LOSS).type());
+        assertTrue(stopOrders.containsKey(STOP_LOSS));
+        assertEquals(ENTRY_STOP, stopOrders.get(STOP_LOSS).type());
     }
 
     @Test
-    public void createStopOrdersChoosingTrailingStopRatherThenEntryStop() {
+    public void createStopOrders_ChoosingTrailingStopRatherThenEntryStop() {
         TradingParams.hard_stop_loss_enabled = true;
         TradingParams.entry_stop_loss_enabled = true;
         TradingParams.trailing_stop_loss_enabled = true;
         TradingParams.take_profit_stop_enabled = false;
 
-        RiskManagementBuilder riskManagementBuilder = new RiskManagementBuilder();
-        RiskManagementHandler risk = riskManagementBuilder.build();
+        RiskManagementHandler risk = new RiskManagementBuilder().build();
 
         StopOrderBuilder stopOrderBuilder = new StopOrderBuilder();
         PositionBuilder positionBuilder = new PositionBuilder();
@@ -170,10 +168,10 @@ public class RiskManagementHandlerTest extends TestCase {
         LoopEventBuilder loopEventBuilder = new LoopEventBuilder();
         loopEventBuilder.withPriceMap(BigDecimal.TEN);
 
-        EnumMap<StopOrderDto.StopOrderType, StopOrderDto> stopOrders = risk.createStopOrders(position, loopEventBuilder.build());
+        var stopOrders = risk.createStopOrders(position, loopEventBuilder.build());
         assertEquals(1, stopOrders.size());
-        assertTrue(stopOrders.containsKey(StopOrderDto.StopOrderType.STOP_LOSS));
-        assertEquals(StopOrderDto.StopOrderType.TRAILLING_STOP, stopOrders.get(StopOrderDto.StopOrderType.STOP_LOSS).type());
+        assertTrue(stopOrders.containsKey(STOP_LOSS));
+        assertEquals(ENTRY_STOP, stopOrders.get(STOP_LOSS).type());
     }
 
 }

@@ -23,8 +23,8 @@ public class HistoryWithTransactions {
     private ForexEngine engine;
     private List<CycleHistoryDto> sessionHistory;
 
-    @Given("^(\\d+) buy signals and (\\d+) sell signal$")
-    public void startRunningTheEngine(int buys, int sells) {
+    @Given("^2 buy signals and 1 sell signal$")
+    public void startRunningTheEngine() {
         var date = LocalDateTime.of(2021, 9, 10, 10, 0, 0);
 
         var systemName = "signal_test";

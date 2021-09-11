@@ -9,9 +9,9 @@ import com.apssouza.mytrade.trading.domain.forex.portfolio.FilledOrderDto;
 
 class HistoryFilledOrderListener implements PropertyChangeListener {
 
-    private final HistoryBookHandler historyHandler;
+    private final BookHistoryHandler historyHandler;
 
-    public HistoryFilledOrderListener(HistoryBookHandler historyHandler) {
+    public HistoryFilledOrderListener(BookHistoryHandler historyHandler) {
         this.historyHandler = historyHandler;
     }
 

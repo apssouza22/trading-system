@@ -1,6 +1,5 @@
 package com.apssouza.mytrade.trading.domain.forex.session;
 
-import com.apssouza.mytrade.feed.api.FeedModule;
 import com.apssouza.mytrade.trading.api.ExecutionType;
 import com.apssouza.mytrade.trading.api.SessionType;
 import com.apssouza.mytrade.trading.domain.forex.common.Event;
@@ -21,8 +20,8 @@ import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementFactory;
 import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementHandler;
 import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderConfigDto;
 import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderFactory;
-import com.apssouza.mytrade.trading.domain.forex.orderbook.HistoryBookHandler;
-import com.apssouza.mytrade.trading.domain.forex.orderbook.HistoryBookHandlerFactory;
+import com.apssouza.mytrade.trading.domain.forex.orderbook.BookHistoryHandler;
+import com.apssouza.mytrade.trading.domain.forex.orderbook.BookHistoryHandlerFactory;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -45,7 +44,7 @@ public class TradingSession {
     protected OrderExecution executionHandler;
     protected PortfolioModel portfolio;
     protected OrderHandler orderHandler;
-    protected HistoryBookHandler historyHandler;
+    protected BookHistoryHandler historyHandler;
     protected PriceStream priceStream;
     protected PortfolioHandler portfolioHandler;
     protected boolean processedEndDay;
@@ -79,7 +78,7 @@ public class TradingSession {
         this.signalFeedHandler = SignalFeedFactory.create(feedModule);
         this.executionHandler = OrderExecutionFactory.factory(this.executionType);
         this.portfolio = new PortfolioModel(this.equity);
-        this.historyHandler = HistoryBookHandlerFactory.create();
+        this.historyHandler = BookHistoryHandlerFactory.create();
         this.riskManagementHandler = RiskManagementFactory.create(
                 this.portfolio,
                 StopOrderFactory.factory(new StopOrderConfigDto(
@@ -122,7 +121,7 @@ public class TradingSession {
                 orderHandler,
                 eventNotifier
         ));
-        eventListeners.addAll(HistoryBookHandlerFactory.createListeners(historyHandler, riskManagementHandler));
+        eventListeners.addAll(BookHistoryHandlerFactory.createListeners(historyHandler, riskManagementHandler));
         eventListeners.forEach(eventNotifier::addPropertyChangeListener);
         return eventNotifier;
     }

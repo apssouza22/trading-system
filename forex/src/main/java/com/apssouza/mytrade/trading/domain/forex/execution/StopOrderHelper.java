@@ -14,14 +14,14 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * Handle different orders(Stop loss, limit profit, buy, sell)
  */
-class StopOrderExecutionHandler {
+class StopOrderHelper {
     private final Map<String, FilledOrderDto> positions;
     private final StopOrderPriceMonitor stopOrderPriceMonitor;
     private ConcurrentHashMap<Integer, StopOrderDto> allStopOrders = new ConcurrentHashMap<>();
 
     private static AtomicInteger stopOrderId = new AtomicInteger();
 
-    public StopOrderExecutionHandler(Map<String, FilledOrderDto> positions) {
+    public StopOrderHelper(Map<String, FilledOrderDto> positions) {
         this.positions = positions;
         this.stopOrderPriceMonitor = new StopOrderPriceMonitor();
     }
@@ -33,7 +33,7 @@ class StopOrderExecutionHandler {
      * @return filled stop order info
      */
     public StopOrderDto placeStopOrder(StopOrderDto stop) {
-        int id = StopOrderExecutionHandler.stopOrderId.incrementAndGet();
+        int id = StopOrderHelper.stopOrderId.incrementAndGet();
 
         StopOrderDto.StopOrderStatus status = StopOrderDto.StopOrderStatus.SUBMITTED;
         StopOrderDto stopOrderDto = new StopOrderDto(

@@ -14,12 +14,12 @@ import java.util.logging.Logger;
 class HistoryOrderFoundListener implements PropertyChangeListener {
 
     private static Logger log = Logger.getLogger(HistoryOrderFoundListener.class.getSimpleName());
-    private final HistoryBookHandler historyHandler;
+    private final BookHistoryHandler historyHandler;
 
     private final RiskManagementHandler riskManagementHandler;
 
     public HistoryOrderFoundListener(
-            HistoryBookHandler historyHandler,
+            BookHistoryHandler historyHandler,
             RiskManagementHandler riskManagementHandler
     ) {
 

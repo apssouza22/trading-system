@@ -10,9 +10,9 @@ import java.io.IOException;
 
 class SessionFinishedListener implements PropertyChangeListener {
 
-    private final HistoryBookHandler historyHandler;
+    private final BookHistoryHandler historyHandler;
 
-    public SessionFinishedListener(HistoryBookHandler historyHandler) {
+    public SessionFinishedListener(BookHistoryHandler historyHandler) {
         this.historyHandler = historyHandler;
     }
 

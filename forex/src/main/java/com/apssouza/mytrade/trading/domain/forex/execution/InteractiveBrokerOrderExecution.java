@@ -6,6 +6,7 @@ import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderDto;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.FilledOrderDto;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -36,6 +37,11 @@ class InteractiveBrokerOrderExecution implements OrderExecution {
     @Override
     public Integer cancelOpenStopOrders() {
         return 0;
+    }
+
+    @Override
+    public Map<String, FilledOrderDto> getPortfolio() {
+        return new HashMap<>();
     }
 
     @Override
