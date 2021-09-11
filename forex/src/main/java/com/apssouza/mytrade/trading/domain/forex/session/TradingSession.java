@@ -13,6 +13,8 @@ import com.apssouza.mytrade.trading.domain.forex.feed.signalfeed.SignalFeedFacto
 import com.apssouza.mytrade.trading.domain.forex.feed.signalfeed.SignalFeedHandler;
 import com.apssouza.mytrade.trading.domain.forex.order.OrderHandler;
 import com.apssouza.mytrade.trading.domain.forex.order.OrderHandlerFactory;
+import com.apssouza.mytrade.trading.domain.forex.orderbook.BookHistoryHandler;
+import com.apssouza.mytrade.trading.domain.forex.orderbook.BookHistoryHandlerFactory;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioFactory;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioHandler;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioModel;
@@ -20,8 +22,6 @@ import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementFactory;
 import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementHandler;
 import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderConfigDto;
 import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderFactory;
-import com.apssouza.mytrade.trading.domain.forex.orderbook.BookHistoryHandler;
-import com.apssouza.mytrade.trading.domain.forex.orderbook.BookHistoryHandlerFactory;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -106,7 +106,6 @@ public class TradingSession {
     private EventNotifier setListeners() {
         var eventListeners = OrderHandlerFactory.createListeners(portfolio, orderHandler, riskManagementHandler, executionHandler, eventNotifier);
         eventListeners.addAll(PortfolioFactory.createListeners(portfolioHandler, portfolio, eventNotifier));
-        eventListeners.add(new EndedTradingDayListener(portfolioHandler));
 
         eventListeners.add(new PriceChangedListener(
                 executionHandler,
@@ -159,7 +158,6 @@ public class TradingSession {
         QueueConsumer queueConsumer = new QueueConsumer(
                 eventQueue,
                 historyHandler,
-                portfolioHandler,
                 eventNotifier,
                 endDate
         );

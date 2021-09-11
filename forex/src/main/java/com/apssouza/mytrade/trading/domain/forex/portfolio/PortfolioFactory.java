@@ -36,7 +36,8 @@ public class PortfolioFactory {
     ) {
         return Arrays.asList(
                 new FilledOrderListener(portfolio, portfolioHandler),
-                new StopOrderFilledListener(portfolio, portfolioHandler,eventNotifier)
+                new StopOrderFilledListener(portfolio, portfolioHandler,eventNotifier),
+                new EndedTradingDayListener(portfolioHandler)
         );
     }
 }

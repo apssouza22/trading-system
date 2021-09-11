@@ -1,10 +1,8 @@
 package com.apssouza.mytrade.trading.domain.forex.session;
 
-import com.apssouza.mytrade.trading.domain.forex.feed.pricefeed.PriceChangedEvent;
-import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioHandler;
 import com.apssouza.mytrade.trading.domain.forex.common.Event;
-import com.apssouza.mytrade.trading.domain.forex.orderbook.BookHistoryHandler;
 import com.apssouza.mytrade.trading.domain.forex.common.ForexException;
+import com.apssouza.mytrade.trading.domain.forex.orderbook.BookHistoryHandler;
 
 import java.time.LocalDateTime;
 import java.util.concurrent.BlockingQueue;
@@ -13,7 +11,6 @@ import java.util.logging.Logger;
 public class QueueConsumer extends Thread {
     private final BlockingQueue<Event> eventQueue;
     private final BookHistoryHandler historyHandler;
-    private final PortfolioHandler portfolioHandler;
     private final EventNotifier notifier;
     private final LocalDateTime endDate;
 
@@ -22,16 +19,13 @@ public class QueueConsumer extends Thread {
     public QueueConsumer(
             BlockingQueue<Event> eventQueue,
             BookHistoryHandler historyHandler,
-            PortfolioHandler portfolioHandler,
             EventNotifier notifier,
             LocalDateTime endDate
 
     ) {
         super();
-
         this.eventQueue = eventQueue;
         this.historyHandler = historyHandler;
-        this.portfolioHandler = portfolioHandler;
         this.notifier = notifier;
         this.endDate = endDate;
     }
@@ -51,11 +45,6 @@ public class QueueConsumer extends Thread {
                 historyHandler.startCycle(event.getTimestamp());
 
                 notifier.notify(event);
-                if (event instanceof PriceChangedEvent) {
-                    this.portfolioHandler.createStopOrder(event);
-                }
-
-                portfolioHandler.getPortfolio().printPortfolio();
 
                 historyHandler.endCycle();
                 if (event instanceof SessionFinishedEvent) {

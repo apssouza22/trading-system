@@ -56,10 +56,12 @@ class PriceChangedListener implements PropertyChangeListener {
 
     private void process(PriceChangedEvent event) throws InterruptedException {
         LocalDateTime currentTime = event.getTimestamp();
-        this.executionHandler.setCurrentTime(currentTime);
-        this.executionHandler.setPriceMap(event.getPrice());
-        this.portfolioHandler.updatePositionsPrices(event);
-        this.portfolioHandler.handleStopOrder(event);
+        portfolioHandler.getPortfolio().printPortfolio();
+        portfolioHandler.createStopOrder(event);
+        executionHandler.setCurrentTime(currentTime);
+        executionHandler.setPriceMap(event.getPrice());
+        portfolioHandler.updatePositionsPrices(event);
+        portfolioHandler.handleStopOrder(event);
 
         List<SignalDto> signals = processSignals(event, currentTime);
         portfolioHandler.processExits(event, signals);
