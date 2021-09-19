@@ -1,4 +1,4 @@
-package component;
+package moduletest;
 
 
 import com.apssouza.mytrade.trading.api.CycleHistoryDto;

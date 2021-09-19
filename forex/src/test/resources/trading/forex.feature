@@ -1,5 +1,5 @@
-Feature: Get trade signals
-  Test the ability to retrieve trade signals by date time
+Feature: Get session history
+  Test the ability to retrieve the trade session history
 
   Scenario: Test get history when exists transactions
     Given 2 buy signals and 1 sell signal

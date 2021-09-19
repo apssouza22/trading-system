@@ -1,4 +1,4 @@
-package component;
+package moduletest;
 
 import com.apssouza.mytrade.feed.api.PriceDto;
 import com.apssouza.mytrade.feed.api.SignalDto;
