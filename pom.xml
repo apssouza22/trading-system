@@ -40,7 +40,7 @@
     <mockito-core.version>3.12.4</mockito-core.version>
     <mytrade.version>1.0-SNAPSHOT</mytrade.version>
     <sonar.organization>apssouza22-github</sonar.organization>
-    <sonar.projectKey>apssouza22_trading-system-course</sonar.projectKey>
+    <sonar.projectKey>apssouza22_trading-system</sonar.projectKey>
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     <sonar.moduleKey>${project.groupId}:${project.artifactId}</sonar.moduleKey>
   </properties>

@@ -14,6 +14,11 @@ import java.util.stream.Collectors;
 public class MemoryPriceDao implements PriceDao {
 
     private List<PriceDto> prices;
+    private static final Random RANDOM = new Random();
+
+    static {
+        RANDOM.setSeed(1);
+    }
 
     public MemoryPriceDao(LocalDateTime start, LocalDateTime end) {
         this.prices = getPrices(start, end);
@@ -23,7 +28,7 @@ public class MemoryPriceDao implements PriceDao {
     @Override
     public List<PriceDto> getPriceInterval(LocalDateTime start, LocalDateTime end) {
         return prices.parallelStream()
-                .filter( i -> i.timestamp().compareTo(start) >= 0 && i.timestamp().compareTo(end) <= 0 )
+                .filter(i -> i.timestamp().compareTo(start) >= 0 && i.timestamp().compareTo(end) <= 0)
                 .collect(Collectors.toList());
     }
 
@@ -43,10 +48,9 @@ public class MemoryPriceDao implements PriceDao {
     public static List<PriceDto> getPrices(LocalDateTime start, LocalDateTime end) {
         LocalDateTime current = start;
         List<PriceDto> prices = new ArrayList<>();
-        Random r = new Random();
-        r.setSeed(1);
+
         while (current.compareTo(end) <= 0) {
-            BigDecimal close = BigDecimal.valueOf(getRandomPrice(r));
+            BigDecimal close = BigDecimal.valueOf(getRandomPrice(RANDOM));
             prices.add(new PriceDto(
                     current,
                     close,

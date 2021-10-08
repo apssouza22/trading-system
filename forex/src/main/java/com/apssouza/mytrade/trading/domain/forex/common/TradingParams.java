@@ -25,8 +25,7 @@ public class TradingParams {
     public static String transaction_path = "book-history.csv";
 
     static {
-        currency_pair_significant_digits_in_price = new HashMap<>() {{
-            put("AUDUSD", 4);
-        }};
+        currency_pair_significant_digits_in_price = new HashMap<>();
+        currency_pair_significant_digits_in_price.put("AUDUSD", 4);
     }
 }

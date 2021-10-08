@@ -18,9 +18,10 @@ public class SqlSignalDao implements SignalDao {
 
     private List<SignalDto> getList(String query) {
         ArrayList<SignalDto> signals = new ArrayList<>();
-        try {
-            Statement sta = this.connection.createStatement();
-            ResultSet resultSet = sta.executeQuery(query);
+
+        ResultSet resultSet;
+        try (Statement sta = this.connection.createStatement()) {
+            resultSet = sta.executeQuery(query);
             while (resultSet.next()) {
                 signals.add(bindResultToDto(resultSet));
             }

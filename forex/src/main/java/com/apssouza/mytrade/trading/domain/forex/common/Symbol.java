@@ -90,9 +90,9 @@ public enum Symbol {
     ZARJPY(Currency.ZAR, Currency.JPY, 0.0001, 4);
 
 
-    public static final Set<Symbol> G3 = EnumSet.of(Symbol.USDJPY, Symbol.EURUSD, Symbol.EURJPY);
+    protected static final Set<Symbol> G3 = EnumSet.of(Symbol.USDJPY, Symbol.EURUSD, Symbol.EURJPY);
 
-    public static final Set<Symbol> G7 =
+    protected static final Set<Symbol> G7 =
             EnumSet.of(
                     Symbol.USDJPY, Symbol.EURJPY, Symbol.EURUSD,
                     Symbol.GBPUSD, Symbol.AUDUSD, Symbol.USDCAD, Symbol.USDCHF,
@@ -203,7 +203,7 @@ public enum Symbol {
      * @return
      */
     public double roundPips(double price) {
-        BigDecimal bigDecimal = new BigDecimal(price);
+        BigDecimal bigDecimal = BigDecimal.valueOf(price);
         return bigDecimal.setScale(pipScale, RoundingMode.HALF_UP).doubleValue();
     }
 

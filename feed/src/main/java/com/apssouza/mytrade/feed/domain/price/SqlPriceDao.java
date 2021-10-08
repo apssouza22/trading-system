@@ -19,9 +19,9 @@ public class SqlPriceDao implements PriceDao {
 
     private List<PriceDto> getList(String query) {
         ArrayList<PriceDto> prices = new ArrayList<>();
-        try {
-            Statement sta = this.connection.createStatement();
-            ResultSet resultSet = sta.executeQuery(query);
+        ResultSet resultSet;
+        try (Statement sta = this.connection.createStatement()) {
+            resultSet = sta.executeQuery(query);
             while (resultSet.next()) {
                 prices.add(bindResultToDto(resultSet));
             }

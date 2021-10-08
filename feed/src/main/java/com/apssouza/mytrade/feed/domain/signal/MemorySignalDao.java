@@ -10,20 +10,24 @@ import java.util.stream.Collectors;
 
 public class MemorySignalDao implements SignalDao {
     private final List<SignalDto> signals;
+    private static final Random RANDOM = new Random();
 
-    public MemorySignalDao(LocalDateTime start, LocalDateTime end, String signalName) {
-        this.signals = loadSignals( start,  end,  signalName);
+    static {
+        RANDOM.setSeed(1);
     }
 
-    public static List<SignalDto>  loadSignals(LocalDateTime start, LocalDateTime end, String signalName) {
+    public MemorySignalDao(LocalDateTime start, LocalDateTime end, String signalName) {
+        this.signals = loadSignals(start, end, signalName);
+    }
+
+    public static List<SignalDto> loadSignals(LocalDateTime start, LocalDateTime end, String signalName) {
         LocalDateTime current = start;
         List<SignalDto> signals = new ArrayList<>();
-        Random r = new Random();
-        r.setSeed(1);
+
         while (current.compareTo(end) <= 0) {
             current = current.plusMinutes(1L);
-            int hasSignal = getRandomNumberInRange(0, 1, r);
-            int signalAction = getRandomNumberInRange(0, 1, r);
+            int hasSignal = getRandomNumberInRange(0, 1, RANDOM);
+            int signalAction = getRandomNumberInRange(0, 1, RANDOM);
             if (hasSignal > 0) {
                 signals.add(new SignalDto(
                         current,

@@ -13,7 +13,7 @@ class StopOrderPriceMonitor {
         Set<StopOrderDto> filledOrders = new HashSet<>();
         for (Map.Entry<Integer, StopOrderDto> entry : allStopOrders.entrySet()) {
             StopOrderDto stopOrder = allStopOrders.get(entry.getKey());
-            if (filledOrders.contains(stopOrder.identifier())) {
+            if (filledOrders.contains(stopOrder)) {
                 continue;
             }
 
