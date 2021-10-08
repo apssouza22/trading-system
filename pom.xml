@@ -25,7 +25,6 @@
     <module>forex</module>
     <module>runner</module>
   </modules>
-
   <properties>
     <java.version>16</java.version>
     <maven.compiler.source>16</maven.compiler.source>
@@ -40,6 +39,10 @@
     <h2.version>1.4.197</h2.version>
     <mockito-core.version>3.12.4</mockito-core.version>
     <mytrade.version>1.0-SNAPSHOT</mytrade.version>
+    <sonar.organization>apssouza22-github</sonar.organization>
+    <sonar.projectKey>apssouza22_trading-system-course</sonar.projectKey>
+    <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+    <sonar.moduleKey>${project.groupId}:${project.artifactId}</sonar.moduleKey>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -106,11 +109,11 @@
   </dependencies>
   <build>
     <plugins>
-        <plugin>
-          <groupId>org.sonarsource.scanner.maven</groupId>
-          <artifactId>sonar-maven-plugin</artifactId>
-          <version>3.9.0.2155</version>
-        </plugin>
+      <plugin>
+        <groupId>org.sonarsource.scanner.maven</groupId>
+        <artifactId>sonar-maven-plugin</artifactId>
+        <version>3.9.0.2155</version>
+      </plugin>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
@@ -125,6 +128,15 @@
         <version>3.0.0-M5</version>
       </plugin>
     </plugins>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.sonarsource.scanner.maven</groupId>
+          <artifactId>sonar-maven-plugin</artifactId>
+          <version>3.9.0.2155</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
   </build>
   <distributionManagement>
     <repository>

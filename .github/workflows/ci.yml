@@ -11,6 +11,15 @@ jobs:
           distribution: 'zulu'
           java-version: '16'
 
+      - name: Run sonar scanner
+        run: mvn sonar:sonar  -Dsonar.java.binaries=. -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_ORGANIZATION: apssouza22-github
+          SONAR_HOST_URL: https://sonarcloud.io
+          SONAR_PROJECTKEY: apssouza22_trading-system
+
       - name: Build with Maven
         run: mvn verify
 
