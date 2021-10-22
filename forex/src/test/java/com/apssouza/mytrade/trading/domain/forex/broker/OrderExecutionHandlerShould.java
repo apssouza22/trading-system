@@ -24,7 +24,7 @@ import static com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrder
 
 @RunWith(MockitoJUnitRunner.class)
 public class OrderExecutionHandlerShould extends TestCase {
-    OrderExecution simulatedExecutionHandler;
+    BrokerHandler simulatedExecutionHandler;
     private PriceDto price;
     private HashMap<String, PriceDto> priceDtoMap = new HashMap<>();
 

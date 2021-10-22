@@ -5,7 +5,7 @@ import com.apssouza.mytrade.trading.domain.forex.common.TradingParams;
 import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeEvent;
 import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeListener;
 import com.apssouza.mytrade.trading.domain.forex.common.Event;
-import com.apssouza.mytrade.trading.domain.forex.broker.OrderExecution;
+import com.apssouza.mytrade.trading.domain.forex.broker.BrokerHandler;
 import com.apssouza.mytrade.trading.domain.forex.feed.pricefeed.PriceChangedEvent;
 import com.apssouza.mytrade.trading.domain.forex.feed.signalfeed.SignalCreatedEvent;
 import com.apssouza.mytrade.trading.domain.forex.feed.signalfeed.SignalFeedHandler;
@@ -19,14 +19,14 @@ import java.util.List;
 
 class PriceChangedListener implements PropertyChangeListener {
 
-    private final OrderExecution executionHandler;
+    private final BrokerHandler executionHandler;
     private final PortfolioHandler portfolioHandler;
     private final SignalFeedHandler signalFeedHandler;
     private final OrderHandler orderHandler;
     private final EventNotifier eventNotifier;
 
     public PriceChangedListener(
-            OrderExecution executionHandler,
+            BrokerHandler executionHandler,
             PortfolioHandler portfolioHandler,
             SignalFeedHandler signalFeedHandler,
             OrderHandler orderHandler,

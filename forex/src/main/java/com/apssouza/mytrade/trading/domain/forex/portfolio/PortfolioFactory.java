@@ -1,7 +1,7 @@
 package com.apssouza.mytrade.trading.domain.forex.portfolio;
 
 import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeListener;
-import com.apssouza.mytrade.trading.domain.forex.broker.OrderExecution;
+import com.apssouza.mytrade.trading.domain.forex.broker.BrokerHandler;
 import com.apssouza.mytrade.trading.domain.forex.order.OrderHandler;
 import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementHandler;
 import com.apssouza.mytrade.trading.domain.forex.session.EventNotifier;
@@ -13,7 +13,7 @@ public class PortfolioFactory {
 
     public static PortfolioHandler create(
             OrderHandler orderHandler,
-            OrderExecution executionHandler,
+            BrokerHandler executionHandler,
             PortfolioModel portfolio,
             RiskManagementHandler riskManagementHandler,
             EventNotifier eventNotifier

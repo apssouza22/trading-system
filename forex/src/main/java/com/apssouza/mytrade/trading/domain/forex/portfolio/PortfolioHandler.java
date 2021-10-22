@@ -3,7 +3,7 @@ package com.apssouza.mytrade.trading.domain.forex.portfolio;
 import com.apssouza.mytrade.feed.api.SignalDto;
 import com.apssouza.mytrade.trading.domain.forex.common.Event;
 import com.apssouza.mytrade.trading.domain.forex.common.TradingParams;
-import com.apssouza.mytrade.trading.domain.forex.broker.OrderExecution;
+import com.apssouza.mytrade.trading.domain.forex.broker.BrokerHandler;
 import com.apssouza.mytrade.trading.domain.forex.feed.pricefeed.PriceChangedEvent;
 import com.apssouza.mytrade.trading.domain.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.domain.forex.order.OrderHandler;
@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 public class PortfolioHandler {
 
     private final OrderHandler orderHandler;
-    private final OrderExecution executionHandler;
+    private final BrokerHandler executionHandler;
     private final PortfolioModel portfolio;
     private final PortfoliosChecker portfolioBrokerChecker;
     private final RiskManagementHandler riskManagementHandler;
@@ -34,7 +34,7 @@ public class PortfolioHandler {
 
     public PortfolioHandler(
             OrderHandler orderHandler,
-            OrderExecution executionHandler,
+            BrokerHandler executionHandler,
             PortfolioModel portfolio,
             PortfoliosChecker portfolioBrokerChecker,
             RiskManagementHandler riskManagementHandler,

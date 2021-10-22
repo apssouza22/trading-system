@@ -3,7 +3,7 @@ package com.apssouza.mytrade.trading.domain.forex.order;
 import com.apssouza.mytrade.trading.domain.forex.common.Event;
 import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeEvent;
 import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeListener;
-import com.apssouza.mytrade.trading.domain.forex.broker.OrderExecution;
+import com.apssouza.mytrade.trading.domain.forex.broker.BrokerHandler;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.FilledOrderDto;
 import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementHandler;
 import com.apssouza.mytrade.trading.domain.forex.session.EventNotifier;
@@ -16,13 +16,13 @@ import java.util.logging.Logger;
 class OrderFoundListener implements PropertyChangeListener {
 
     private static Logger log = Logger.getLogger(OrderFoundListener.class.getSimpleName());
-    private final OrderExecution executionHandler;
+    private final BrokerHandler executionHandler;
     private final OrderHandler orderHandler;
     private final EventNotifier eventNotifier;
     private final RiskManagementHandler riskManagementHandler;
 
     public OrderFoundListener(
-            OrderExecution executionHandler,
+            BrokerHandler executionHandler,
             OrderHandler orderHandler,
             EventNotifier eventNotifier,
             RiskManagementHandler riskManagementHandler

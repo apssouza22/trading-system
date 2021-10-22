@@ -1,6 +1,6 @@
 package com.apssouza.mytrade.trading.domain.forex.portfolio;
 
-import com.apssouza.mytrade.trading.domain.forex.broker.OrderExecution;
+import com.apssouza.mytrade.trading.domain.forex.broker.BrokerHandler;
 import com.apssouza.mytrade.trading.domain.forex.order.OrderDto;
 
 import java.util.Map;
@@ -8,9 +8,9 @@ import java.util.Map;
 
 class PortfoliosChecker {
     private final PortfolioModel portfolio;
-    private final OrderExecution executionHandler;
+    private final BrokerHandler executionHandler;
 
-    public PortfoliosChecker(PortfolioModel portfolio, OrderExecution executionHandler) {
+    public PortfoliosChecker(PortfolioModel portfolio, BrokerHandler executionHandler) {
         this.portfolio = portfolio;
         this.executionHandler = executionHandler;
     }

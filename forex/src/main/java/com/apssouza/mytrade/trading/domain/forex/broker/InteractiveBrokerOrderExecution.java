@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * Implementation to execute orders against the Broker called interactive broker
  */
-class InteractiveBrokerOrderExecution implements OrderExecution {
+class InteractiveBrokerOrderExecution implements BrokerHandler {
 
     private final String brokerHost;
     private final String brokerPort;

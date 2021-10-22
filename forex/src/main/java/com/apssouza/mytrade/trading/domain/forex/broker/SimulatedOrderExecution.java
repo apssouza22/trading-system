@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 /**
  * Simulated order execution simulates interactions with a broker
  */
-class SimulatedOrderExecution implements OrderExecution {
+class SimulatedOrderExecution implements BrokerHandler {
 
     private static final Logger log = Logger.getLogger(SimulatedOrderExecution.class.getSimpleName());
     private final MultiPositionPerCPairHandler multiPositionPerCPairHandler;
@@ -73,7 +73,7 @@ class SimulatedOrderExecution implements OrderExecution {
                 position_identifier,
                 order.id()
         );
-        log.info("Executing order " + filled_order.toString());
+        log.info("Executing order " + filled_order);
 
         if (this.positions.containsKey(order.symbol())) {
             handleExistingPosition(order, action, quantity);

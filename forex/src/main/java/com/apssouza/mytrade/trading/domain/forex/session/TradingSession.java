@@ -4,7 +4,7 @@ import com.apssouza.mytrade.trading.api.ExecutionType;
 import com.apssouza.mytrade.trading.api.SessionType;
 import com.apssouza.mytrade.trading.domain.forex.common.Event;
 import com.apssouza.mytrade.trading.domain.forex.common.TradingParams;
-import com.apssouza.mytrade.trading.domain.forex.broker.OrderExecution;
+import com.apssouza.mytrade.trading.domain.forex.broker.BrokerHandler;
 import com.apssouza.mytrade.trading.domain.forex.broker.OrderExecutionFactory;
 import com.apssouza.mytrade.trading.domain.forex.feed.FeedService;
 import com.apssouza.mytrade.trading.domain.forex.feed.pricefeed.PriceStream;
@@ -41,7 +41,7 @@ public class TradingSession {
 
     protected SignalFeedHandler signalFeedHandler;
     private final FeedService feedModule;
-    protected OrderExecution executionHandler;
+    protected BrokerHandler executionHandler;
     protected PortfolioModel portfolio;
     protected OrderHandler orderHandler;
     protected BookHistoryHandler historyHandler;

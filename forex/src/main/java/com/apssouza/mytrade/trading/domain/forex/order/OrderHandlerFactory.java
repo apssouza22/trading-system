@@ -1,7 +1,7 @@
 package com.apssouza.mytrade.trading.domain.forex.order;
 
 import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeListener;
-import com.apssouza.mytrade.trading.domain.forex.broker.OrderExecution;
+import com.apssouza.mytrade.trading.domain.forex.broker.BrokerHandler;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioModel;
 import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementHandler;
 import com.apssouza.mytrade.trading.domain.forex.session.EventNotifier;
@@ -23,7 +23,7 @@ public class OrderHandlerFactory {
             PortfolioModel portfolio,
             OrderHandler orderHandler,
             RiskManagementHandler riskManagementHandler,
-            OrderExecution executionHandler,
+            BrokerHandler executionHandler,
             EventNotifier eventNotifier
     ) {
         var listeners = new ArrayList<PropertyChangeListener>();
