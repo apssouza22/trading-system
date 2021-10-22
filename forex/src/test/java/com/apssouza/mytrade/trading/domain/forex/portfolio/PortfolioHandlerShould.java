@@ -80,7 +80,7 @@ public class PortfolioHandlerShould {
         assert_createStopOrder_withoutTakeProfitStopOrder(builder, model);
     }
 
-    private void assert_createStopOrder_withoutTakeProfitStopOrder(final PortfolioHandlerBuilder builder, final PortfolioModel model) {
+    private void assert_createStopOrder_withoutTakeProfitStopOrder(PortfolioHandlerBuilder builder, PortfolioModel model) {
         ArgumentCaptor<StopOrderDto> placeStopOrderArgCapture = ArgumentCaptor.forClass(StopOrderDto.class);
         ArgumentCaptor<Position> createStopOrdersArgCaptor = ArgumentCaptor.forClass(Position.class);
 
@@ -116,7 +116,7 @@ public class PortfolioHandlerShould {
         assert_createStopOrder_withTakeProfitStopOrder(builder, model);
     }
 
-    private void assert_createStopOrder_withTakeProfitStopOrder(final PortfolioHandlerBuilder builder, final PortfolioModel model) {
+    private void assert_createStopOrder_withTakeProfitStopOrder(PortfolioHandlerBuilder builder, PortfolioModel model) {
         ArgumentCaptor<StopOrderDto> placeStopOrderArgCapture = ArgumentCaptor.forClass(StopOrderDto.class);
         ArgumentCaptor<Position> createStopOrdersArgCaptor = ArgumentCaptor.forClass(Position.class);
 

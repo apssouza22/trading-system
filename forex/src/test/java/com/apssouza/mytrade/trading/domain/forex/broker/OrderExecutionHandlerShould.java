@@ -1,4 +1,4 @@
-package com.apssouza.mytrade.trading.domain.forex.execution;
+package com.apssouza.mytrade.trading.domain.forex.broker;
 
 import com.apssouza.mytrade.feed.api.PriceDto;
 import com.apssouza.mytrade.trading.api.ExecutionType;

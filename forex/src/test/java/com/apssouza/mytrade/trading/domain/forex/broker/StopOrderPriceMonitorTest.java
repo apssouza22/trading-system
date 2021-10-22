@@ -1,4 +1,4 @@
-package com.apssouza.mytrade.trading.domain.forex.execution;
+package com.apssouza.mytrade.trading.domain.forex.broker;
 
 import com.apssouza.mytrade.feed.api.PriceDto;
 import com.apssouza.mytrade.trading.domain.forex.order.StopOrderBuilder;
@@ -11,8 +11,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;

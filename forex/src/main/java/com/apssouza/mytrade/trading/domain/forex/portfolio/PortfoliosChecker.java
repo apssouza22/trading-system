@@ -1,6 +1,6 @@
 package com.apssouza.mytrade.trading.domain.forex.portfolio;
 
-import com.apssouza.mytrade.trading.domain.forex.execution.OrderExecution;
+import com.apssouza.mytrade.trading.domain.forex.broker.OrderExecution;
 import com.apssouza.mytrade.trading.domain.forex.order.OrderDto;
 
 import java.util.Map;
