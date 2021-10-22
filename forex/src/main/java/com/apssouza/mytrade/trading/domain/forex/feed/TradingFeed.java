@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
-public class TradingFeed implements FeedService {
+class TradingFeed implements FeedService {
     private FeedModule feed;
 
     public TradingFeed(FeedModule feed) {

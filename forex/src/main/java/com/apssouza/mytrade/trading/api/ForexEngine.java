@@ -1,11 +1,10 @@
 package com.apssouza.mytrade.trading.api;
 
 import com.apssouza.mytrade.feed.api.FeedBuilder;
-import com.apssouza.mytrade.trading.domain.forex.feed.FeedService;
-import com.apssouza.mytrade.trading.domain.forex.feed.TradingFeed;
+import com.apssouza.mytrade.trading.domain.forex.common.ForexException;
+import com.apssouza.mytrade.trading.domain.forex.feed.FeedServiceFactory;
 import com.apssouza.mytrade.trading.domain.forex.session.CycleHistory;
 import com.apssouza.mytrade.trading.domain.forex.session.TradingSession;
-import com.apssouza.mytrade.trading.domain.forex.common.ForexException;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -48,7 +47,7 @@ public class ForexEngine {
                 .withEquity(BigDecimal.valueOf(100000L))
                 .withSessionType(SessionType.BACK_TEST)
                 .withExecutionType(ExecutionType.SIMULATED)
-                .withFeed(new TradingFeed(feed))
+                .withFeed(FeedServiceFactory.create(feed))
                 .build();
         engine.start();
         System.out.println("finished session");

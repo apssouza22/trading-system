@@ -2,7 +2,7 @@ package moduletest;
 
 import com.apssouza.mytrade.feed.api.PriceDto;
 import com.apssouza.mytrade.feed.api.SignalDto;
-import com.apssouza.mytrade.trading.domain.forex.feed.TradingFeed;
+import com.apssouza.mytrade.trading.domain.forex.feed.FeedService;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -15,7 +15,7 @@ import java.util.HashMap;
 import static java.util.Collections.singletonList;
 
 public class FeedMockBuilder {
-    TradingFeed feed = mock(TradingFeed.class);
+    FeedService feed = mock(FeedService.class);
     HashMap<String, PriceDto> priceDtoHashMap = new HashMap<>();
 
     public FeedMockBuilder withPrice(LocalDateTime time) {
@@ -39,7 +39,7 @@ public class FeedMockBuilder {
         return this;
     }
 
-    public TradingFeed build() {
+    public FeedService build() {
         when(feed.getPriceSymbolMapped(any())).thenReturn(priceDtoHashMap);
         return feed;
     }

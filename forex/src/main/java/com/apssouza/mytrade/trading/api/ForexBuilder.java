@@ -3,10 +3,7 @@ package com.apssouza.mytrade.trading.api;
 import com.apssouza.mytrade.feed.api.FeedBuilder;
 import com.apssouza.mytrade.feed.api.FeedModule;
 import com.apssouza.mytrade.trading.domain.forex.feed.FeedService;
-import com.apssouza.mytrade.trading.domain.forex.feed.TradingFeed;
-import com.apssouza.mytrade.trading.domain.forex.feed.pricefeed.PriceFeedHandler;
-import com.apssouza.mytrade.trading.domain.forex.feed.signalfeed.SignalFeedFactory;
-import com.apssouza.mytrade.trading.domain.forex.feed.signalfeed.SignalFeedHandler;
+import com.apssouza.mytrade.trading.domain.forex.feed.FeedServiceFactory;
 import com.apssouza.mytrade.trading.domain.forex.session.TradingSession;
 
 import java.math.BigDecimal;
@@ -65,7 +62,7 @@ public class ForexBuilder {
                 .build();
 
         if (feed == null){
-            this.feed = new TradingFeed(feedModule);
+            this.feed = FeedServiceFactory.create(feedModule);
         }
         var tradingSession = new TradingSession(
                 equity,
