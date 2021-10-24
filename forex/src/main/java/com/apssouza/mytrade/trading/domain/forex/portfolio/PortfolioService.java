@@ -1,6 +1,5 @@
 package com.apssouza.mytrade.trading.domain.forex.portfolio;
 
-import com.apssouza.mytrade.feed.api.PriceDto;
 import com.apssouza.mytrade.feed.api.SignalDto;
 import com.apssouza.mytrade.trading.domain.forex.common.Event;
 import com.apssouza.mytrade.trading.domain.forex.common.TradingParams;
@@ -49,8 +48,8 @@ public class PortfolioService {
         this.eventNotifier = eventNotifier;
     }
 
-    public void updatePositionsPrices(Map<String, PriceDto> price) {
-        this.portfolio.updatePortfolioBalance(price);
+    public void updatePositionsPrices(Event event) {
+        this.portfolio.updatePortfolioBalance(event);
     }
 
     public void createStopOrder(Event event) {
@@ -157,11 +156,12 @@ public class PortfolioService {
         List<Position> exitedPositions = new ArrayList<>();
         for (Map.Entry<String, Position> entry : this.portfolio.getPositions().entrySet()) {
             Position position = entry.getValue();
-            if (!position.isPositionAlive()) {
+            if (position.getStatus() == Position.PositionStatus.CLOSED) {
                 continue;
             }
             log.info("Exiting position for(" + position.getSymbol() + " Reason " + reason);
-            portfolio.closePosition(position.getIdentifier(), reason);
+            position = position.closePosition(reason);
+            this.portfolio.addNewPosition(position);
             exitedPositions.add(position);
         }
         this.createOrderFromClosedPosition(exitedPositions, event);

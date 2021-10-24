@@ -9,7 +9,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.EnumMap;
-import static java.math.BigDecimal.valueOf;
 
 public class Position {
 
@@ -20,13 +19,13 @@ public class Position {
     private final LocalDateTime timestamp;
     private final String identifier;
     private final FilledOrderDto filledOrder;
-    private BigDecimal avgPrice;
     private ExitReason exitReason;
     private PositionStatus status;
     private BigDecimal currentPrice;
+    private BigDecimal avgPrice;
     private int id = 0;
 
-    private EnumMap<StopOrderDto.StopOrderType, StopOrderDto> stopOrders;
+    EnumMap<StopOrderDto.StopOrderType, StopOrderDto> stopOrders = new EnumMap<>(StopOrderDto.StopOrderType.class);
 
     public Position(
             PositionType positionType,
@@ -40,6 +39,7 @@ public class Position {
             PositionStatus status
     ) {
         this.positionType = positionType;
+
         this.symbol = symbol;
         this.quantity = quantity;
         this.initPrice = initPrice;
@@ -48,9 +48,8 @@ public class Position {
         this.filledOrder = filledOrder;
         this.exitReason = exitReason;
         this.status = status;
-        this.currentPrice = NumberHelper.roundSymbolPrice(symbol, initPrice);
+        this.currentPrice = initPrice;
         this.avgPrice = initPrice;
-        this.stopOrders = new EnumMap<>(StopOrderDto.StopOrderType.class);
     }
 
 
@@ -69,27 +68,41 @@ public class Position {
         this.stopOrders = stopOrders;
     }
 
+    public StopOrderDto getTakeProfitOrder() {
+        if (this.stopOrders.containsKey(StopOrderDto.StopOrderType.TAKE_PROFIT)) {
+            return this.stopOrders.get(StopOrderDto.StopOrderType.TAKE_PROFIT);
+        }
+        return null;
+    }
 
-    public Position(Position position, int qtd, BigDecimal price, BigDecimal avgPrice) {
-        this(
-                position.getPositionType(),
-                position.getSymbol(),
-                position.getQuantity(),
-                price,
-                position.getTimestamp(),
-                position.getIdentifier(),
-                position.getFilledOrder(),
-                position.getExitReason(),
-                position.getStatus()
-        );
-        this.stopOrders = position.stopOrders;
-        this.avgPrice = avgPrice;
+    public void updatePositionPrice(BigDecimal price) {
+        this.currentPrice = NumberHelper.roundSymbolPrice(symbol, price);
+    }
+
+    public void addQuantity(int qtd, BigDecimal price) {
+        int newQuantity = this.quantity + qtd;
+        BigDecimal newCost = this.currentPrice
+                .multiply(BigDecimal.valueOf(qtd));
+
+        BigDecimal oldCost = this.avgPrice.multiply(BigDecimal.valueOf(this.quantity));
+        BigDecimal newTotalCost = oldCost.add(newCost);
+        int pipScale = Symbol.valueOf(this.symbol).getPipScale();
+        this.avgPrice = newTotalCost.divide(BigDecimal.valueOf(newQuantity), pipScale, RoundingMode.HALF_UP);
+        this.quantity = newQuantity;
+        this.updatePositionPrice(price);
+    }
+
+    public void removeUnits(int qtd) {
+        int dec_units = qtd;
+        this.quantity -= dec_units;
     }
 
     public Position closePosition(ExitReason exit_reason) {
         Position position = new Position(this, stopOrders);
         position.status = PositionStatus.CLOSED;
-        position.exitReason = exit_reason;
+        if (exit_reason != null) {
+            position.exitReason = exit_reason;
+        }
         return position;
     }
 
@@ -125,10 +138,6 @@ public class Position {
         return status;
     }
 
-    public boolean isPositionAlive() {
-        return status == Position.PositionStatus.OPEN || status == Position.PositionStatus.FILLED;
-    }
-
     public BigDecimal getCurrentPrice() {
         return currentPrice;
     }
@@ -146,7 +155,10 @@ public class Position {
     }
 
     public StopOrderDto getPlacedStopLoss() {
-        return stopOrders.get(StopOrderDto.StopOrderType.STOP_LOSS);
+        if (stopOrders.containsKey(StopOrderDto.StopOrderType.STOP_LOSS)) {
+            return stopOrders.get(StopOrderDto.StopOrderType.STOP_LOSS);
+        }
+        return null;
     }
 
     public PositionType getPositionType() {
@@ -166,8 +178,8 @@ public class Position {
     public enum PositionType {
         LONG, SHORT;
 
-        public OrderDto.OrderAction getOrderAction() {
-            if (this == LONG) {
+        public OrderDto.OrderAction getOrderAction(){
+            if (this == LONG){
                 return OrderDto.OrderAction.BUY;
             }
             return OrderDto.OrderAction.SELL;
@@ -179,6 +191,6 @@ public class Position {
     }
 
     public enum ExitReason {
-        STOP_ORDER_FILLED, COUNTER_SIGNAL, RECONCILIATION_FAILED, END_OF_DAY, PORTFOLIO_EXCEPTION;
+        STOP_ORDER_FILLED, COUNTER_SIGNAL, RECONCILIATION_FAILED, END_OF_DAY
     }
 }

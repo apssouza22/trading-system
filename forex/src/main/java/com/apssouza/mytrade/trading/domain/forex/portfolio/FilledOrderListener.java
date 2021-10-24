@@ -5,6 +5,8 @@ import com.apssouza.mytrade.trading.domain.forex.common.TradingParams;
 import com.apssouza.mytrade.trading.domain.forex.common.observerinfra.Observer;
 import com.apssouza.mytrade.trading.domain.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.domain.forex.order.OrderFilledEvent;
+import com.apssouza.mytrade.trading.domain.forex.order.OrderFoundEvent;
+import static com.apssouza.mytrade.trading.domain.forex.portfolio.Position.PositionStatus.FILLED;
 
 
 class FilledOrderListener implements Observer {
@@ -19,14 +21,14 @@ class FilledOrderListener implements Observer {
 
     @Override
     public void update(final Event e) {
-        if (!(e instanceof OrderFilledEvent event)) {
+        if (!(e instanceof OrderFilledEvent orderFilledEvent)) {
             return;
         }
 
-        FilledOrderDto filledOrder = event.getFilledOrder();
+        FilledOrderDto filledOrder = orderFilledEvent.getFilledOrder();
         if (!this.portfolio.getPositions().containsKey(filledOrder.identifier())) {
-            createNewPosition(filledOrder);
-            portfolioService.processReconciliation(event);
+            Position newPosition = createNewPosition(filledOrder);
+            portfolioService.processReconciliation(orderFilledEvent);
             return;
         }
         Position ps = this.portfolio.getPosition(filledOrder.identifier());
@@ -39,10 +41,9 @@ class FilledOrderListener implements Observer {
         try {
             handleExistingPosition(filledOrder, ps);
         } catch (PortfolioException ex) {
-            portfolioService.closeAllPositions(Position.ExitReason.PORTFOLIO_EXCEPTION, e);
-            return;
+            ex.printStackTrace();
         }
-        portfolioService.processReconciliation(event);
+        portfolioService.processReconciliation(orderFilledEvent);
 
     }
 
@@ -63,15 +64,16 @@ class FilledOrderListener implements Observer {
     private void handleSameDirection(FilledOrderDto filledOrder, Position ps) throws PortfolioException {
         if (filledOrder.action().equals(OrderDto.OrderAction.BUY) && ps.getPositionType().equals(Position.PositionType.LONG)) {
             this.portfolio.addPositionQtd(filledOrder.identifier(), filledOrder.quantity(), filledOrder.priceWithSpread());
+
         }
         if (filledOrder.action().equals(OrderDto.OrderAction.SELL) && ps.getPositionType().equals(Position.PositionType.SHORT)) {
             this.portfolio.addPositionQtd(filledOrder.identifier(), filledOrder.quantity(), filledOrder.priceWithSpread());
         }
     }
 
-    private void handleOppositeDirection(FilledOrderDto filledOrder, Position ps) throws PortfolioException {
+    private void handleOppositeDirection(FilledOrderDto filledOrder, Position ps) {
         if (filledOrder.quantity() == ps.getQuantity()) {
-            this.portfolio.closePosition(filledOrder.identifier(), Position.ExitReason.STOP_ORDER_FILLED);
+            this.portfolio.closePosition(filledOrder.identifier());
             return;
         }
         this.portfolio.removePositionQtd(filledOrder.identifier(), filledOrder.quantity());
@@ -90,7 +92,7 @@ class FilledOrderListener implements Observer {
                 filledOrder.identifier(),
                 filledOrder,
                 null,
-                Position.PositionStatus.FILLED
+                FILLED
         );
 
         portfolio.addNewPosition(ps1);

@@ -37,7 +37,8 @@ class PositionExitHandler {
             }
             if (exit_reason != null) {
                 log.info("Exiting position for(" + position.getSymbol() + " Reason " + exit_reason);
-                portfolio.closePosition(position.getIdentifier(), exit_reason);
+                position = position.closePosition(exit_reason);
+                portfolio.getPositions().put(position.getIdentifier(), position);
                 exitedPositions.add(position);
             }
         }

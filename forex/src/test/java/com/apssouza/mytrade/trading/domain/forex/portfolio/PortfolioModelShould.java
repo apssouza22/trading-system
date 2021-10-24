@@ -24,7 +24,7 @@ public class PortfolioModelShould extends TestCase {
         loopEventBuilder.withPriceMap(BigDecimal.valueOf(10));
         PriceChangedEvent loopEvent = loopEventBuilder.build();
         portfolio.addNewPosition(ps);
-        portfolio.updatePortfolioBalance(loopEvent.getPrice());
+        portfolio.updatePortfolioBalance(loopEvent);
 
         Map<String, Position> positions = portfolio.getPositions();
 
@@ -78,7 +78,7 @@ public class PortfolioModelShould extends TestCase {
 
 
     @Test
-    public void removePositionQtd() throws PortfolioException {
+    public void removePositionQtd() {
         PortfolioModel portfolio = new PortfolioModel(BigDecimal.valueOf(10000));
         PositionBuilder positionBuilder = new PositionBuilder();
         Position ps = positionBuilder.build();
@@ -92,7 +92,7 @@ public class PortfolioModelShould extends TestCase {
     }
 
     @Test
-    public void removePositionHalfQtd() throws PortfolioException {
+    public void removePositionHalfQtd() {
         PortfolioModel portfolio = new PortfolioModel(BigDecimal.valueOf(10000));
         PositionBuilder positionBuilder = new PositionBuilder();
         Position ps = positionBuilder.build();
@@ -105,7 +105,7 @@ public class PortfolioModelShould extends TestCase {
     }
 
     @Test(expected = RuntimeException.class)
-    public void notRemovePosition_withoutPosition() throws PortfolioException {
+    public void notRemovePosition_withoutPosition() {
         PortfolioModel portfolio = new PortfolioModel(BigDecimal.valueOf(10000));
         PositionBuilder positionBuilder = new PositionBuilder();
         Position ps = positionBuilder.build();
@@ -121,7 +121,7 @@ public class PortfolioModelShould extends TestCase {
         PositionBuilder positionBuilder = new PositionBuilder();
         Position ps = positionBuilder.build();
         portfolio.addNewPosition(ps);
-        portfolio.closePosition(ps.getIdentifier(), Position.ExitReason.STOP_ORDER_FILLED);
+        portfolio.closePosition(ps.getIdentifier());
 
         Map<String, Position> positions = portfolio.getPositions();
 
@@ -134,7 +134,7 @@ public class PortfolioModelShould extends TestCase {
         PortfolioModel portfolio = new PortfolioModel(BigDecimal.valueOf(10000));
         PositionBuilder positionBuilder = new PositionBuilder();
         Position ps = positionBuilder.build();
-        portfolio.closePosition(ps.getIdentifier(), Position.ExitReason.STOP_ORDER_FILLED);
+        portfolio.closePosition(ps.getIdentifier());
     }
 
     @Test
