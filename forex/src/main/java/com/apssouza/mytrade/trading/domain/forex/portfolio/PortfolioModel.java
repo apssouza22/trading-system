@@ -1,13 +1,15 @@
 package com.apssouza.mytrade.trading.domain.forex.portfolio;
 
 import com.apssouza.mytrade.feed.api.PriceDto;
-import com.apssouza.mytrade.trading.domain.forex.common.Event;
+import com.apssouza.mytrade.trading.domain.forex.common.Symbol;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
+import java.math.RoundingMode;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
+import static java.math.BigDecimal.valueOf;
 
 public class PortfolioModel {
     private final BigDecimal equity;
@@ -18,11 +20,11 @@ public class PortfolioModel {
         this.equity = equity;
     }
 
-    public void updatePortfolioBalance(Event event) {
+    public void updatePortfolioBalance(Map<String, PriceDto> price) {
         for (Map.Entry<String, Position> entry : this.positions.entrySet()) {
             Position ps = entry.getValue();
-            PriceDto priceDto = event.getPrice().get(ps.getSymbol());
-            ps.updatePositionPrice(priceDto.close());
+            PriceDto priceDto = price.get(ps.getSymbol());
+            entry.setValue(new Position(ps, ps.getQuantity(), priceDto.close(), ps.getAvgPrice()));
         }
     }
 
@@ -31,14 +33,10 @@ public class PortfolioModel {
     }
 
     public Map<String, Position> getOpenPositions() {
-        Map<String, Position> openPositions = new HashMap<>();
-        for (Map.Entry<String, Position> entry : positions.entrySet()) {
-            if (entry.getValue().getStatus() == Position.PositionStatus.OPEN ||
-                    entry.getValue().getStatus() == Position.PositionStatus.FILLED) {
-                openPositions.put(entry.getKey(), entry.getValue());
-            }
-        }
-        return openPositions;
+        return positions.entrySet()
+                .stream()
+                .filter(entry -> entry.getValue().isPositionAlive())
+                .collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue()));
     }
 
     public void addNewPosition(Position ps) {
@@ -46,32 +44,40 @@ public class PortfolioModel {
     }
 
 
-    public boolean addPositionQtd(String identifier, int qtd, BigDecimal price) throws PortfolioException {
+    public Position addPositionQtd(String identifier, int qtd, BigDecimal price) throws PortfolioException {
         if (!this.positions.containsKey(identifier)) {
             throw new PortfolioException("Position not found");
         }
-        Position ps = this.positions.get(identifier);
-        ps.addQuantity(qtd, price);
-        return true;
-
+        var ps = this.positions.get(identifier);
+        var newQuantity = ps.getQuantity() + qtd;
+        var newCost = ps.getCurrentPrice().multiply(valueOf(qtd));
+        var newTotalCost = ps.getAvgPrice().add(newCost);
+        int pipScale = Symbol.valueOf(ps.getSymbol()).getPipScale();
+        var avgPrice = newTotalCost.divide(valueOf(newQuantity), pipScale, RoundingMode.HALF_UP);
+        var newPosition = new Position(ps, newQuantity, price, avgPrice);
+        this.positions.put(identifier, newPosition);
+        return newPosition;
     }
 
-    public boolean removePositionQtd(String identfier, int qtd) {
+    public boolean removePositionQtd(String identfier, int qtd) throws PortfolioException {
         if (!this.positions.containsKey(identfier)) {
             throw new RuntimeException("Position not found");
         }
         Position ps = this.positions.get(identfier);
-        ps.removeUnits(qtd);
+        var position = addPositionQtd(identfier, -qtd, ps.getAvgPrice());
+        if (position.getQuantity() == 0) {
+            closePosition(position.getIdentifier(), Position.ExitReason.STOP_ORDER_FILLED);
+        }
         return true;
 
     }
 
-    public boolean closePosition(String identifier) {
+    public boolean closePosition(String identifier, Position.ExitReason reason) {
         if (!this.positions.containsKey(identifier)) {
             throw new RuntimeException("Position not found");
         }
         Position ps = this.positions.get(identifier);
-        this.positions.remove(identifier);
+        ps.closePosition(reason);
         log.info(String.format("Position closed - %s %s  ", ps.getIdentifier(), ps.getQuantity()));
         return true;
     }

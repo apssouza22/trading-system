@@ -56,7 +56,7 @@ class PriceChangedListener implements Observer {
         portfolioService.createStopOrder(event);
         executionHandler.setCurrentTime(currentTime);
         executionHandler.setPriceMap(event.getPrice());
-        portfolioService.updatePositionsPrices(event);
+        portfolioService.updatePositionsPrices(event.getPrice());
         portfolioService.handleStopOrder(event);
 
         List<SignalDto> signals = processSignals(event, currentTime);
