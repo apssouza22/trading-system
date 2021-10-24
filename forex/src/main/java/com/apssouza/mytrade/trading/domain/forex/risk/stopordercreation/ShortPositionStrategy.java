@@ -1,6 +1,6 @@
 package com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation;
 
-import com.apssouza.mytrade.trading.domain.forex.portfolio.Position;
+import com.apssouza.mytrade.trading.domain.forex.portfolio.PositionDto;
 import com.apssouza.mytrade.trading.domain.forex.common.NumberHelper;
 
 import java.math.BigDecimal;
@@ -15,28 +15,28 @@ class ShortPositionStrategy implements CreatorStrategy {
     }
 
     @Override
-    public BigDecimal getEntryStopPrice(Position position, BigDecimal priceClose) {
+    public BigDecimal getEntryStopPrice(PositionDto position, BigDecimal priceClose) {
         BigDecimal stopPrice = null;
-        if (priceClose.compareTo(position.getInitPrice().subtract(distanceObject.entryStopDistance())) < 0) {
-            stopPrice = position.getInitPrice();
+        if (priceClose.compareTo(position.initPrice().subtract(distanceObject.entryStopDistance())) < 0) {
+            stopPrice = position.initPrice();
         }
         return stopPrice;
     }
 
     @Override
-    public BigDecimal getProfitStopPrice(Position position) {
-        return position.getInitPrice().subtract(distanceObject.takeProfitDistance());
+    public BigDecimal getProfitStopPrice(PositionDto position) {
+        return position.initPrice().subtract(distanceObject.takeProfitDistance());
     }
 
     @Override
-    public BigDecimal getHardStopPrice(Position position) {
-        return position.getInitPrice().add(distanceObject.hardStopDistance());
+    public BigDecimal getHardStopPrice(PositionDto position) {
+        return position.initPrice().add(distanceObject.hardStopDistance());
     }
 
     @Override
-    public Optional<BigDecimal> getTrailingStopPrice(Position position, BigDecimal last_close) {
+    public Optional<BigDecimal> getTrailingStopPrice(PositionDto position, BigDecimal last_close) {
         BigDecimal stopPrice;
-        BigDecimal tsPrice = position.getInitPrice().subtract(distanceObject.traillingStopDistance());
+        BigDecimal tsPrice = position.initPrice().subtract(distanceObject.traillingStopDistance());
         if (last_close.compareTo(tsPrice) < 0) {
             return Optional.empty();
         }
@@ -49,7 +49,7 @@ class ShortPositionStrategy implements CreatorStrategy {
             stopPrice = position.getPlacedStopLoss().price().subtract(distanceObject.traillingStopDistance());
             stopPrice = position.getPlacedStopLoss().price().compareTo(stopPrice) < 0 ? position.getPlacedStopLoss().price() : stopPrice;
         }
-        stopPrice = NumberHelper.roundSymbolPrice(position.getSymbol(), stopPrice);
+        stopPrice = NumberHelper.roundSymbolPrice(position.symbol(), stopPrice);
         return Optional.of(stopPrice);
     }
 }

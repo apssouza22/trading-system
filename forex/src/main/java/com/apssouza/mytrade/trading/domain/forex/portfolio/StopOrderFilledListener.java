@@ -6,7 +6,7 @@ import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrde
 import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderFilledEvent;
 import com.apssouza.mytrade.trading.domain.forex.session.EventNotifier;
 import com.apssouza.mytrade.trading.domain.forex.session.MultiPositionHandler;
-import static com.apssouza.mytrade.trading.domain.forex.portfolio.Position.ExitReason;
+import static com.apssouza.mytrade.trading.domain.forex.portfolio.PositionDto.ExitReason;
 
 class StopOrderFilledListener implements Observer {
 
@@ -30,9 +30,9 @@ class StopOrderFilledListener implements Observer {
             return;
         }
         StopOrderDto stopOrder = event.getStopOrder();
-        Position ps = MultiPositionHandler.getPositionByStopOrder(stopOrder);
+        PositionDto ps = MultiPositionHandler.getPositionByStopOrder(stopOrder);
 
-        portfolio.closePosition(ps.getIdentifier(), ExitReason.STOP_ORDER_FILLED);
+        portfolio.closePosition(ps.identifier(), ExitReason.STOP_ORDER_FILLED);
         portfolioService.processReconciliation(e);
         eventNotifier.notify(new PortfolioChangedEvent(
                 e.getTimestamp(),

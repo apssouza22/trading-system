@@ -1,7 +1,7 @@
 package com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation;
 
 import com.apssouza.mytrade.feed.api.PriceDto;
-import com.apssouza.mytrade.trading.domain.forex.portfolio.Position;
+import com.apssouza.mytrade.trading.domain.forex.portfolio.PositionDto;
 import com.apssouza.mytrade.trading.domain.forex.common.Event;
 
 import java.math.BigDecimal;
@@ -17,8 +17,8 @@ class StopOrderCreatorFixed implements StopOrderCreator {
     }
 
     @Override
-    public void createContext(Position.PositionType type) {
-        if (type == Position.PositionType.LONG) {
+    public void createContext(PositionDto.PositionType type) {
+        if (type == PositionDto.PositionType.LONG) {
             this.creatorContext = new CreatorContext(new LongPositionStrategy(priceDistance));
             return;
         }
@@ -27,26 +27,26 @@ class StopOrderCreatorFixed implements StopOrderCreator {
     }
 
     @Override
-    public StopOrderDto getHardStopLoss(Position position) {
+    public StopOrderDto getHardStopLoss(PositionDto position) {
         return creatorContext.getHardStopLoss(position);
     }
 
     @Override
-    public StopOrderDto getProfitStopOrder(Position position) {
+    public StopOrderDto getProfitStopOrder(PositionDto position) {
         return creatorContext.getProfitStopOrder(position);
     }
 
     @Override
-    public Optional<StopOrderDto> getEntryStopOrder(Position position, Event event) {
+    public Optional<StopOrderDto> getEntryStopOrder(PositionDto position, Event event) {
         Map<String, PriceDto> price = event.getPrice();
-        BigDecimal priceClose = price.get(position.getSymbol()).close();
+        BigDecimal priceClose = price.get(position.symbol()).close();
         return creatorContext.getEntryStopOrder(position, priceClose);
     }
 
     @Override
-    public Optional<StopOrderDto> getTrailingStopOrder(Position position, Event event) {
+    public Optional<StopOrderDto> getTrailingStopOrder(PositionDto position, Event event) {
         Map<String, PriceDto> price = event.getPrice();
-        BigDecimal priceClose = price.get(position.getSymbol()).close();
+        BigDecimal priceClose = price.get(position.symbol()).close();
         return creatorContext.getTrailingStopOrder(position, priceClose);
     }
 

@@ -1,7 +1,7 @@
 package com.apssouza.mytrade.trading.domain.forex.common;
 
 import com.apssouza.mytrade.trading.domain.forex.order.OrderDto;
-import com.apssouza.mytrade.trading.domain.forex.portfolio.Position;
+import com.apssouza.mytrade.trading.domain.forex.portfolio.PositionDto;
 import com.apssouza.mytrade.common.misc.helper.time.DayHelper;
 
 import java.time.LocalDateTime;
@@ -27,9 +27,9 @@ public class TradingHelper {
 
 
 
-    public static OrderDto.OrderAction getExitOrderActionFromPosition(Position position) {
+    public static OrderDto.OrderAction getExitOrderActionFromPosition(PositionDto position) {
         OrderDto.OrderAction action = OrderDto.OrderAction.BUY;
-        if (position.getPositionType() == Position.PositionType.LONG) {
+        if (position.positionType() == PositionDto.PositionType.LONG) {
             action = OrderDto.OrderAction.SELL;
         }
         return action;

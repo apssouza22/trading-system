@@ -2,7 +2,7 @@ package com.apssouza.mytrade.trading.domain.forex.session;
 
 import com.apssouza.mytrade.trading.domain.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.FilledOrderDto;
-import com.apssouza.mytrade.trading.domain.forex.portfolio.Position;
+import com.apssouza.mytrade.trading.domain.forex.portfolio.PositionDto;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -11,7 +11,7 @@ public class TransactionDto {
     private final LocalDateTime time;
     private final String identifier;
     private OrderDto order;
-    private Position position;
+    private PositionDto position;
     private FilledOrderDto filledOrder;
     private TransactionState state;
 
@@ -32,7 +32,7 @@ public class TransactionDto {
         return this.order;
     }
 
-    public Position getPosition() {
+    public PositionDto getPosition() {
         return this.position;
     }
 
@@ -48,7 +48,7 @@ public class TransactionDto {
         this.order = order;
     }
 
-    public void setPosition(Position position) {
+    public void setPosition(PositionDto position) {
         this.position = position;
     }
 

@@ -1,7 +1,7 @@
 package com.apssouza.mytrade.trading.domain.forex.order;
 
 import com.apssouza.mytrade.feed.api.SignalDto;
-import com.apssouza.mytrade.trading.domain.forex.portfolio.Position;
+import com.apssouza.mytrade.trading.domain.forex.portfolio.PositionDto;
 import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementService;
 import com.apssouza.mytrade.trading.domain.forex.feed.signalfeed.SignalCreatedEvent;
 
@@ -23,14 +23,14 @@ public class OrderService {
         this.riskManagementService = riskManagementService;
     }
 
-    public OrderDto createOrderFromClosedPosition(Position position, LocalDateTime time) {
-        OrderDto.OrderAction action = position.getPositionType().equals(Position.PositionType.LONG) ? OrderDto.OrderAction.SELL : OrderDto.OrderAction.BUY;
+    public OrderDto createOrderFromClosedPosition(PositionDto position, LocalDateTime time) {
+        OrderDto.OrderAction action = position.positionType().equals(PositionDto.PositionType.LONG) ? OrderDto.OrderAction.SELL : OrderDto.OrderAction.BUY;
         return new OrderDto(
-                position.getSymbol(),
-                action, position.getQuantity(),
+                position.symbol(),
+                action, position.quantity(),
                 OrderDto.OrderOrigin.EXITS,
                 time,
-                position.getIdentifier(),
+                position.identifier(),
                 OrderDto.OrderStatus.CREATED
         );
     }

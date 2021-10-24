@@ -2,7 +2,6 @@ package com.apssouza.mytrade.trading.domain.forex.portfolio;
 
 import com.apssouza.mytrade.trading.domain.forex.common.Event;
 import com.apssouza.mytrade.trading.domain.forex.common.observerinfra.Observer;
-import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderFilledEvent;
 import com.apssouza.mytrade.trading.domain.forex.session.EndedTradingDayEvent;
 
 import java.util.List;
@@ -24,7 +23,7 @@ class EndedTradingDayListener implements Observer {
             return;
         }
 
-        List<Position> positions = portfolioService.closeAllPositions(Position.ExitReason.END_OF_DAY, event);
+        List<PositionDto> positions = portfolioService.closeAllPositions(PositionDto.ExitReason.END_OF_DAY, event);
         log.info(positions.size() + " positions closed");
     }
 

@@ -27,17 +27,17 @@ class TransactionsExporter {
             for (Map.Entry<String, TransactionDto> trans : item.getTransactions().entrySet()) {
                 List<String> line = Arrays.asList(
                         trans.getValue().getIdentifier(),
-                        trans.getValue().getPosition() != null ? toString(trans.getValue().getPosition().getInitPrice()) : "",
-                        trans.getValue().getPosition() != null ? toString(trans.getValue().getPosition().getCurrentPrice()) : "",
-                        trans.getValue().getPosition() != null ? toString(trans.getValue().getPosition().getQuantity()) : "",
-                        trans.getValue().getPosition() != null ? toString(trans.getValue().getPosition().getInitPrice().multiply(BigDecimal.valueOf(trans.getValue().getPosition().getQuantity()))) : "",
-                        trans.getValue().getPosition() != null ? toString(trans.getValue().getPosition().getCurrentPrice().multiply(BigDecimal.valueOf(trans.getValue().getPosition().getQuantity()))) : "",
-                        trans.getValue().getPosition() != null ? toString(trans.getValue().getPosition().getCurrentPrice().subtract(trans.getValue().getPosition().getInitPrice())) : "",
+                        trans.getValue().getPosition() != null ? toString(trans.getValue().getPosition().initPrice()) : "",
+                        trans.getValue().getPosition() != null ? toString(trans.getValue().getPosition().currentPrice()) : "",
+                        trans.getValue().getPosition() != null ? toString(trans.getValue().getPosition().quantity()) : "",
+                        trans.getValue().getPosition() != null ? toString(trans.getValue().getPosition().initPrice().multiply(BigDecimal.valueOf(trans.getValue().getPosition().quantity()))) : "",
+                        trans.getValue().getPosition() != null ? toString(trans.getValue().getPosition().currentPrice().multiply(BigDecimal.valueOf(trans.getValue().getPosition().quantity()))) : "",
+                        trans.getValue().getPosition() != null ? toString(trans.getValue().getPosition().currentPrice().subtract(trans.getValue().getPosition().initPrice())) : "",
                         trans.getValue().getFilledOrder() != null ? toString(trans.getValue().getFilledOrder().action()) : "",
-                        trans.getValue().getPosition() != null ? toString(trans.getValue().getPosition().getTimestamp()) : "",
+                        trans.getValue().getPosition() != null ? toString(trans.getValue().getPosition().timestamp()) : "",
                         //trans.getValue().getPosition() != null ? trans.getValue().getPosition().getPlacedStopLoss().getPrice().toString(): "",
                         //trans.getValue().getPosition() != null ? trans.getValue().getPosition().getTakeProfitOrder().getPrice().toString(): "",
-                        trans.getValue().getPosition() != null ? toString(trans.getValue().getPosition().getExitReason()) : "",
+                        trans.getValue().getPosition() != null ? toString(trans.getValue().getPosition().exitReason()) : "",
                         trans.getValue().getState() != null ? toString(trans.getValue().getState()) : "",
                         ""
                 );

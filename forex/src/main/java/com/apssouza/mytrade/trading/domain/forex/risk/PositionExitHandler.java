@@ -4,7 +4,7 @@ import com.apssouza.mytrade.common.misc.helper.time.MarketTimeHelper;
 import com.apssouza.mytrade.feed.api.SignalDto;
 import com.apssouza.mytrade.trading.domain.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioModel;
-import com.apssouza.mytrade.trading.domain.forex.portfolio.Position;
+import com.apssouza.mytrade.trading.domain.forex.portfolio.PositionDto;
 import com.apssouza.mytrade.trading.domain.forex.feed.pricefeed.PriceChangedEvent;
 
 import java.time.LocalDateTime;
@@ -22,22 +22,22 @@ class PositionExitHandler {
         this.portfolio = portfolio;
     }
 
-    public List<Position> process(PriceChangedEvent event, List<SignalDto> signals) {
+    public List<PositionDto> process(PriceChangedEvent event, List<SignalDto> signals) {
         if (this.portfolio.getPositions().isEmpty()){
             return Collections.emptyList();
         }
         log.info("Processing exits...");
-        List<Position> exitedPositions = new ArrayList<>();
-        for (Map.Entry<String, Position> entry : this.portfolio.getPositions().entrySet()) {
-            Position position = entry.getValue();
-            Position.ExitReason exit_reason = null;
+        List<PositionDto> exitedPositions = new ArrayList<>();
+        for (Map.Entry<String, PositionDto> entry : this.portfolio.getPositions().entrySet()) {
+            PositionDto position = entry.getValue();
+            PositionDto.ExitReason exit_reason = null;
 
             if (this.hasCounterSignal(position, signals)) {
-                exit_reason = Position.ExitReason.COUNTER_SIGNAL;
+                exit_reason = PositionDto.ExitReason.COUNTER_SIGNAL;
             }
             if (exit_reason != null) {
-                log.info("Exiting position for(" + position.getSymbol() + " Reason " + exit_reason);
-                portfolio.closePosition(position.getIdentifier(), exit_reason);
+                log.info("Exiting position for(" + position.symbol() + " Reason " + exit_reason);
+                portfolio.closePosition(position.identifier(), exit_reason);
                 exitedPositions.add(position);
             }
         }
@@ -58,14 +58,14 @@ class PositionExitHandler {
     }
 
 
-    private boolean hasCounterSignal(Position position, List<SignalDto> signals) {
-        SignalDto signal = getSignalBySymbol(position.getSymbol(), signals);
+    private boolean hasCounterSignal(PositionDto position, List<SignalDto> signals) {
+        SignalDto signal = getSignalBySymbol(position.symbol(), signals);
         if (signal == null) {
             return false;
         }
 
         OrderDto.OrderAction exit_direction = null;
-        if (position.getPositionType() == Position.PositionType.LONG) {
+        if (position.positionType() == PositionDto.PositionType.LONG) {
             exit_direction = OrderDto.OrderAction.SELL;
         } else {
             exit_direction = OrderDto.OrderAction.BUY;
