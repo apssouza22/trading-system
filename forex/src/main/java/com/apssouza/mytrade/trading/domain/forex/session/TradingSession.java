@@ -115,7 +115,7 @@ public class TradingSession {
                 eventNotifier
         ));
         eventListeners.addAll(BookHistoryHandlerFactory.createListeners(historyHandler));
-        eventListeners.forEach(eventNotifier::addPropertyChangeListener);
+        eventListeners.forEach(eventNotifier::attach);
         return eventNotifier;
     }
 

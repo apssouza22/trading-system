@@ -2,28 +2,27 @@ package com.apssouza.mytrade.trading.domain.forex.session;
 
 import com.apssouza.mytrade.trading.domain.forex.common.Event;
 
-import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeListener;
-import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeSupport;
+import com.apssouza.mytrade.trading.domain.forex.common.observerinfra.Observer;
+import com.apssouza.mytrade.trading.domain.forex.common.observerinfra.Publisher;
 
 public class EventNotifier {
     private Event event;
 
-    private PropertyChangeSupport support;
+    private Publisher support;
 
     public EventNotifier() {
-        support = new PropertyChangeSupport(this);
+        support = new Publisher();
     }
 
-    public void addPropertyChangeListener(PropertyChangeListener pcl) {
-        support.addPropertyChangeListener(pcl);
+    public void attach(Observer pcl) {
+        support.attach(pcl);
     }
 
-    public void removePropertyChangeListener(PropertyChangeListener pcl) {
-        support.removePropertyChangeListener(pcl);
+    public void detach(Observer pcl) {
+        support.detach(pcl);
     }
 
     public void notify(Event event) {
-        support.firePropertyChange("event", this.event, event);
-        this.event = event;
+        support.notify(event);
     }
 }

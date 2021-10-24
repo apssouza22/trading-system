@@ -1,11 +1,10 @@
 package com.apssouza.mytrade.trading.domain.forex.orderbook;
 
 import com.apssouza.mytrade.trading.domain.forex.common.Event;
-import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeEvent;
-import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeListener;
+import com.apssouza.mytrade.trading.domain.forex.common.observerinfra.Observer;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioChangedEvent;
 
-class HistoryPortfolioChangedListener implements PropertyChangeListener {
+class HistoryPortfolioChangedListener implements Observer {
 
     private final BookHistoryService bookHandler;
 
@@ -14,11 +13,10 @@ class HistoryPortfolioChangedListener implements PropertyChangeListener {
     }
 
     @Override
-    public void propertyChange(PropertyChangeEvent evt) {
-        Event e = (Event) evt.getNewValue();
-        if (!(e instanceof PortfolioChangedEvent)) {
+    public void update(final Event e) {
+        if (!(e instanceof PortfolioChangedEvent event)) {
             return;
         }
-        bookHandler.addPosition(((PortfolioChangedEvent) e).getPosition());
+        bookHandler.addPosition(event.getPosition());
     }
 }

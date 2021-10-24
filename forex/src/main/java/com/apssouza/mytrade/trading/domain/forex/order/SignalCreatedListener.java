@@ -1,15 +1,14 @@
 package com.apssouza.mytrade.trading.domain.forex.order;
 
 import com.apssouza.mytrade.trading.domain.forex.common.Event;
-import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeEvent;
-import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeListener;
+import com.apssouza.mytrade.trading.domain.forex.common.observerinfra.Observer;
 import com.apssouza.mytrade.trading.domain.forex.feed.signalfeed.SignalCreatedEvent;
 import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementService;
 import com.apssouza.mytrade.trading.domain.forex.session.EventNotifier;
 
 import java.util.logging.Logger;
 
-class SignalCreatedListener implements PropertyChangeListener {
+class SignalCreatedListener implements Observer {
     private static Logger log = Logger.getLogger(SignalCreatedListener.class.getName());
     private final RiskManagementService riskManagementService;
     private final OrderService orderService;
@@ -27,12 +26,10 @@ class SignalCreatedListener implements PropertyChangeListener {
 
 
     @Override
-    public void propertyChange(PropertyChangeEvent evt) {
-        Event e = (Event) evt.getNewValue();
-        if (!(e instanceof SignalCreatedEvent)) {
+    public void update(final Event e) {
+        if (!(e instanceof SignalCreatedEvent event)) {
             return;
         }
-        SignalCreatedEvent event = (SignalCreatedEvent) e;
         log.info("Processing  new signal...");
         OrderDto order = this.orderService.createOrderFromSignal(event);
         if (riskManagementService.canCreateOrder(order)) {

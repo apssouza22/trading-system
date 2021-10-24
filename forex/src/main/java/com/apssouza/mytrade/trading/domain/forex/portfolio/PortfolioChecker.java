@@ -6,11 +6,11 @@ import com.apssouza.mytrade.trading.domain.forex.order.OrderDto;
 import java.util.Map;
 
 
-class PortfoliosChecker {
+class PortfolioChecker {
     private final PortfolioModel portfolio;
     private final BrokerService executionHandler;
 
-    public PortfoliosChecker(PortfolioModel portfolio, BrokerService executionHandler) {
+    public PortfolioChecker(PortfolioModel portfolio, BrokerService executionHandler) {
         this.portfolio = portfolio;
         this.executionHandler = executionHandler;
     }

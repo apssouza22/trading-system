@@ -1,10 +1,10 @@
 package com.apssouza.mytrade.trading.domain.forex.order;
 
-import com.apssouza.mytrade.trading.domain.forex.common.Event;
-import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeEvent;
-import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeListener;
 import com.apssouza.mytrade.trading.domain.forex.broker.BrokerService;
+import com.apssouza.mytrade.trading.domain.forex.common.Event;
+import com.apssouza.mytrade.trading.domain.forex.common.observerinfra.Observer;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.FilledOrderDto;
+import com.apssouza.mytrade.trading.domain.forex.portfolio.PositionClosedEvent;
 import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementService;
 import com.apssouza.mytrade.trading.domain.forex.session.EventNotifier;
 import static com.apssouza.mytrade.trading.domain.forex.order.OrderDto.OrderOrigin.EXITS;
@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-class OrderFoundListener implements PropertyChangeListener {
+class OrderFoundListener implements Observer {
 
     private static Logger log = Logger.getLogger(OrderFoundListener.class.getSimpleName());
     private final BrokerService executionHandler;
@@ -35,14 +35,12 @@ class OrderFoundListener implements PropertyChangeListener {
     }
 
     @Override
-    public void propertyChange(PropertyChangeEvent evt) {
-        Event event = (Event) evt.getNewValue();
-        if (!(event instanceof OrderFoundEvent)) {
+    public void update(final Event e) {
+        if (!(e instanceof OrderFoundEvent event)) {
             return;
         }
-        OrderFoundEvent orderFoundEvent = (OrderFoundEvent) event;
 
-        List<OrderDto> orders = orderFoundEvent.getOrders();
+        List<OrderDto> orders = event.getOrders();
         if (orders.isEmpty()) {
             log.info("No orders");
             return;
@@ -57,11 +55,11 @@ class OrderFoundListener implements PropertyChangeListener {
         }
 
         for (OrderDto order : orders) {
-            if (!riskManagementService.canExecuteOrder(event, order, new ArrayList<>(), exitedPositions)) {
+            if (!riskManagementService.canExecuteOrder(e, order, new ArrayList<>(), exitedPositions)) {
                 orderService.updateOrderStatus(order.id(), OrderDto.OrderStatus.CANCELLED);
                 continue;
             }
-            processNewOrder(order, orderFoundEvent);
+            processNewOrder(order, event);
         }
     }
 

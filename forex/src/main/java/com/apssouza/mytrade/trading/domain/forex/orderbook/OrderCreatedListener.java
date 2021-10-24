@@ -1,11 +1,12 @@
 package com.apssouza.mytrade.trading.domain.forex.orderbook;
 
 import com.apssouza.mytrade.trading.domain.forex.common.Event;
-import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeEvent;
-import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeListener;
+import com.apssouza.mytrade.trading.domain.forex.common.observerinfra.Observer;
 import com.apssouza.mytrade.trading.domain.forex.order.OrderCreatedEvent;
+import com.apssouza.mytrade.trading.domain.forex.order.OrderFilledEvent;
+import com.apssouza.mytrade.trading.domain.forex.portfolio.PositionClosedEvent;
 
-class OrderCreatedListener implements PropertyChangeListener {
+class OrderCreatedListener implements Observer {
     private final BookHistoryService historyHandler;
 
     public OrderCreatedListener(BookHistoryService historyHandler) {
@@ -13,13 +14,11 @@ class OrderCreatedListener implements PropertyChangeListener {
     }
 
     @Override
-    public void propertyChange(PropertyChangeEvent evt) {
-        var event = (Event) evt.getNewValue();
-        if (!(event instanceof OrderCreatedEvent)) {
+    public void update(final Event e) {
+        if (!(e instanceof OrderCreatedEvent event)) {
             return;
         }
-        var orderCreatedEvent = (OrderCreatedEvent) event;
-        var order = orderCreatedEvent.getOrder();
+        var order = event.getOrder();
         this.historyHandler.addOrder(order);
 
     }

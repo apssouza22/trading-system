@@ -26,7 +26,7 @@ public class PortfolioService {
     private final OrderService orderService;
     private final BrokerService executionHandler;
     private final PortfolioModel portfolio;
-    private final PortfoliosChecker portfolioBrokerChecker;
+    private final PortfolioChecker portfolioBrokerChecker;
     private final RiskManagementService riskManagementService;
     private final EventNotifier eventNotifier;
     private static Logger log = Logger.getLogger(PortfolioService.class.getName());
@@ -36,7 +36,7 @@ public class PortfolioService {
             OrderService orderService,
             BrokerService executionHandler,
             PortfolioModel portfolio,
-            PortfoliosChecker portfolioBrokerChecker,
+            PortfolioChecker portfolioBrokerChecker,
             RiskManagementService riskManagementService,
             EventNotifier eventNotifier
     ) {

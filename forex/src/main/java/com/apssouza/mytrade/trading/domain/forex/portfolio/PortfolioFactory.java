@@ -1,7 +1,7 @@
 package com.apssouza.mytrade.trading.domain.forex.portfolio;
 
-import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeListener;
 import com.apssouza.mytrade.trading.domain.forex.broker.BrokerService;
+import com.apssouza.mytrade.trading.domain.forex.common.observerinfra.Observer;
 import com.apssouza.mytrade.trading.domain.forex.order.OrderService;
 import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementService;
 import com.apssouza.mytrade.trading.domain.forex.session.EventNotifier;
@@ -18,7 +18,7 @@ public class PortfolioFactory {
             RiskManagementService riskManagementService,
             EventNotifier eventNotifier
     ) {
-        var reconciliationHandler = new PortfoliosChecker(portfolio, executionHandler);
+        var reconciliationHandler = new PortfolioChecker(portfolio, executionHandler);
         return new PortfolioService(
                 orderService,
                 executionHandler,
@@ -29,7 +29,7 @@ public class PortfolioFactory {
         );
     }
 
-    public static List<PropertyChangeListener> createListeners(
+    public static List<Observer> createListeners(
             PortfolioService portfolioService,
             PortfolioModel portfolio,
             EventNotifier eventNotifier

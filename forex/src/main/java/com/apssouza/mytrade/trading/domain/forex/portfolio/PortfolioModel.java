@@ -46,9 +46,9 @@ public class PortfolioModel {
     }
 
 
-    public boolean addPositionQtd(String identifier, int qtd, BigDecimal price) {
+    public boolean addPositionQtd(String identifier, int qtd, BigDecimal price) throws PortfolioException {
         if (!this.positions.containsKey(identifier)) {
-            throw new RuntimeException("Position not found");
+            throw new PortfolioException("Position not found");
         }
         Position ps = this.positions.get(identifier);
         ps.addQuantity(qtd, price);

@@ -52,7 +52,7 @@ public class PortfolioModelShould extends TestCase {
     }
 
     @Test
-    public void addPositionQtd() {
+    public void addPositionQtd() throws PortfolioException {
         PortfolioModel portfolio = new PortfolioModel(BigDecimal.valueOf(10000));
         PositionBuilder positionBuilder = new PositionBuilder();
         Position ps = positionBuilder.build();
@@ -67,7 +67,7 @@ public class PortfolioModelShould extends TestCase {
     }
 
     @Test(expected = RuntimeException.class)
-    public void notAddPositionQtd_withoutPosition() {
+    public void notAddPositionQtd_withoutPosition() throws PortfolioException {
         PortfolioModel portfolio = new PortfolioModel(BigDecimal.valueOf(10000));
         PositionBuilder positionBuilder = new PositionBuilder();
         Position ps = positionBuilder.build();

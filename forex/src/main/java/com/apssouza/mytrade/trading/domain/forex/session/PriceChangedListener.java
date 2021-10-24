@@ -1,11 +1,10 @@
 package com.apssouza.mytrade.trading.domain.forex.session;
 
 import com.apssouza.mytrade.feed.api.SignalDto;
-import com.apssouza.mytrade.trading.domain.forex.common.TradingParams;
-import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeEvent;
-import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeListener;
-import com.apssouza.mytrade.trading.domain.forex.common.Event;
 import com.apssouza.mytrade.trading.domain.forex.broker.BrokerService;
+import com.apssouza.mytrade.trading.domain.forex.common.Event;
+import com.apssouza.mytrade.trading.domain.forex.common.TradingParams;
+import com.apssouza.mytrade.trading.domain.forex.common.observerinfra.Observer;
 import com.apssouza.mytrade.trading.domain.forex.feed.pricefeed.PriceChangedEvent;
 import com.apssouza.mytrade.trading.domain.forex.feed.signalfeed.SignalCreatedEvent;
 import com.apssouza.mytrade.trading.domain.forex.feed.signalfeed.SignalFeedHandler;
@@ -17,7 +16,7 @@ import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioService;
 import java.time.LocalDateTime;
 import java.util.List;
 
-class PriceChangedListener implements PropertyChangeListener {
+class PriceChangedListener implements Observer {
 
     private final BrokerService executionHandler;
     private final PortfolioService portfolioService;
@@ -40,8 +39,7 @@ class PriceChangedListener implements PropertyChangeListener {
     }
 
     @Override
-    public void propertyChange(PropertyChangeEvent evt) {
-        Event e = (Event) evt.getNewValue();
+    public void update(final Event e) {
         if (!(e instanceof PriceChangedEvent event)) {
             return;
         }

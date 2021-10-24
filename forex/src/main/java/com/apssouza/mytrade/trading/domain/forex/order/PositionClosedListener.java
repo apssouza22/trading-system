@@ -1,12 +1,12 @@
 package com.apssouza.mytrade.trading.domain.forex.order;
 
 import com.apssouza.mytrade.trading.domain.forex.common.Event;
-import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeEvent;
-import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeListener;
+import com.apssouza.mytrade.trading.domain.forex.common.observerinfra.Observer;
+import com.apssouza.mytrade.trading.domain.forex.feed.pricefeed.PriceChangedEvent;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PositionClosedEvent;
 
 
-class PositionClosedListener implements PropertyChangeListener {
+class PositionClosedListener implements Observer {
 
     private final OrderService orderService;
 
@@ -15,13 +15,11 @@ class PositionClosedListener implements PropertyChangeListener {
     }
 
     @Override
-    public void propertyChange(PropertyChangeEvent evt) {
-        Event e = (Event) evt.getNewValue();
-        if (!(e instanceof PositionClosedEvent)) {
+    public void update(final Event e) {
+        if (!(e instanceof PositionClosedEvent event)) {
             return;
         }
-
-        PositionClosedEvent event = (PositionClosedEvent) e;
         this.orderService.persist(event.getOrder());
     }
+
 }
