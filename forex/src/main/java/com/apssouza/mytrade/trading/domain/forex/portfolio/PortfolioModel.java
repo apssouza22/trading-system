@@ -78,6 +78,7 @@ public class PortfolioModel {
         }
         Position ps = this.positions.get(identifier);
         ps.closePosition(reason);
+        this.positions.remove(identifier);
         log.info(String.format("Position closed - %s %s  ", ps.getIdentifier(), ps.getQuantity()));
         return true;
     }
