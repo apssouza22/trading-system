@@ -29,9 +29,9 @@ class FilledOrderListener implements Observer {
             portfolioService.processReconciliation(event);
             return;
         }
-        Position ps = this.portfolio.getPosition(filledOrder.identifier());
+        PositionDto ps = this.portfolio.getPosition(filledOrder.identifier());
         if (!TradingParams.trading_position_edit_enabled) {
-            if (filledOrder.quantity() != ps.getQuantity()) {
+            if (filledOrder.quantity() != ps.quantity()) {
                 throw new RuntimeException("Not allowed units to be added/removed");
             }
         }
@@ -39,7 +39,7 @@ class FilledOrderListener implements Observer {
         try {
             handleExistingPosition(filledOrder, ps);
         } catch (PortfolioException ex) {
-            portfolioService.closeAllPositions(Position.ExitReason.PORTFOLIO_EXCEPTION, e);
+            portfolioService.closeAllPositions(PositionDto.ExitReason.PORTFOLIO_EXCEPTION, e);
             return;
         }
         portfolioService.processReconciliation(event);
@@ -47,12 +47,12 @@ class FilledOrderListener implements Observer {
     }
 
 
-    private Position handleExistingPosition(FilledOrderDto filledOrder, Position ps) throws PortfolioException {
-        if (filledOrder.action().equals(OrderDto.OrderAction.SELL) && ps.getPositionType().equals(Position.PositionType.LONG)) {
+    private PositionDto handleExistingPosition(FilledOrderDto filledOrder, PositionDto ps) throws PortfolioException {
+        if (filledOrder.action().equals(OrderDto.OrderAction.SELL) && ps.positionType().equals(PositionDto.PositionType.LONG)) {
             handleOppositeDirection(filledOrder, ps);
             return ps;
         }
-        if (filledOrder.action().equals(OrderDto.OrderAction.BUY) && ps.getPositionType().equals(Position.PositionType.SHORT)) {
+        if (filledOrder.action().equals(OrderDto.OrderAction.BUY) && ps.positionType().equals(PositionDto.PositionType.SHORT)) {
             handleOppositeDirection(filledOrder, ps);
             return ps;
         }
@@ -60,41 +60,27 @@ class FilledOrderListener implements Observer {
         return ps;
     }
 
-    private void handleSameDirection(FilledOrderDto filledOrder, Position ps) throws PortfolioException {
-        if (filledOrder.action().equals(OrderDto.OrderAction.BUY) && ps.getPositionType().equals(Position.PositionType.LONG)) {
+    private void handleSameDirection(FilledOrderDto filledOrder, PositionDto ps) throws PortfolioException {
+        if (filledOrder.action().equals(OrderDto.OrderAction.BUY) && ps.positionType().equals(PositionDto.PositionType.LONG)) {
             this.portfolio.addPositionQtd(filledOrder.identifier(), filledOrder.quantity(), filledOrder.priceWithSpread());
         }
-        if (filledOrder.action().equals(OrderDto.OrderAction.SELL) && ps.getPositionType().equals(Position.PositionType.SHORT)) {
+        if (filledOrder.action().equals(OrderDto.OrderAction.SELL) && ps.positionType().equals(PositionDto.PositionType.SHORT)) {
             this.portfolio.addPositionQtd(filledOrder.identifier(), filledOrder.quantity(), filledOrder.priceWithSpread());
         }
     }
 
-    private void handleOppositeDirection(FilledOrderDto filledOrder, Position ps) throws PortfolioException {
-        if (filledOrder.quantity() == ps.getQuantity()) {
-            this.portfolio.closePosition(filledOrder.identifier(), Position.ExitReason.STOP_ORDER_FILLED);
+    private void handleOppositeDirection(FilledOrderDto filledOrder, PositionDto ps) throws PortfolioException {
+        if (filledOrder.quantity() == ps.quantity()) {
+            this.portfolio.closePosition(filledOrder.identifier(), PositionDto.ExitReason.STOP_ORDER_FILLED);
             return;
         }
         this.portfolio.removePositionQtd(filledOrder.identifier(), filledOrder.quantity());
 
     }
 
-    private Position createNewPosition(FilledOrderDto filledOrder) {
-        Position.PositionType position_type = filledOrder.action().equals(OrderDto.OrderAction.BUY) ? Position.PositionType.LONG : Position.PositionType.SHORT;
-
-        Position ps1 = new Position(
-                position_type,
-                filledOrder.symbol(),
-                filledOrder.quantity(),
-                filledOrder.priceWithSpread(),
-                filledOrder.time(),
-                filledOrder.identifier(),
-                filledOrder,
-                null,
-                Position.PositionStatus.FILLED
-        );
-
-        portfolio.addNewPosition(ps1);
-        return ps1;
+    private PositionDto createNewPosition(FilledOrderDto filledOrder) {
+        PositionDto.PositionType position_type = filledOrder.action().equals(OrderDto.OrderAction.BUY) ? PositionDto.PositionType.LONG : PositionDto.PositionType.SHORT;
+        return portfolio.addNewPosition(position_type, filledOrder);
     }
 
 }

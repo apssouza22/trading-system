@@ -62,10 +62,10 @@ public class PortfolioService {
         MultiPositionHandler.deleteAllMaps();
 
         Map<Integer, StopOrderDto> stopOrders = new HashMap<>();
-        for (Map.Entry<String, Position> entry : this.portfolio.getPositions().entrySet()) {
-            Position position = entry.getValue();
+        for (Map.Entry<String, PositionDto> entry : this.portfolio.getPositions().entrySet()) {
+            PositionDto position = entry.getValue();
             var stops = riskManagementService.createStopOrders(position, event);
-            position = new Position(position, stops);
+            position = new PositionDto(position, stops);
             var stopLoss = stops.get(STOP_LOSS);
             log.info("Created stop loss - " + stopLoss);
 
@@ -134,13 +134,13 @@ public class PortfolioService {
         if (portfolio.getPositions().isEmpty()) {
             return;
         }
-        List<Position> exitedPositions = this.riskManagementService.processPositionExit(event, signals);
+        List<PositionDto> exitedPositions = this.riskManagementService.processPositionExit(event, signals);
         this.createOrderFromClosedPosition(exitedPositions, event);
     }
 
-    private void createOrderFromClosedPosition(List<Position> positions, Event event) {
-        for (Position position : positions) {
-            if (position.getStatus() != Position.PositionStatus.CLOSED) {
+    private void createOrderFromClosedPosition(List<PositionDto> positions, Event event) {
+        for (PositionDto position : positions) {
+            if (position.status() != PositionDto.PositionStatus.CLOSED) {
                 continue;
             }
             OrderDto order = this.orderService.createOrderFromClosedPosition(position, event.getTimestamp());
@@ -153,15 +153,15 @@ public class PortfolioService {
 
     }
 
-    public List<Position> closeAllPositions(Position.ExitReason reason, Event event) {
-        List<Position> exitedPositions = new ArrayList<>();
-        for (Map.Entry<String, Position> entry : this.portfolio.getPositions().entrySet()) {
-            Position position = entry.getValue();
+    public List<PositionDto> closeAllPositions(PositionDto.ExitReason reason, Event event) {
+        List<PositionDto> exitedPositions = new ArrayList<>();
+        for (Map.Entry<String, PositionDto> entry : this.portfolio.getPositions().entrySet()) {
+            PositionDto position = entry.getValue();
             if (!position.isPositionAlive()) {
                 continue;
             }
-            log.info("Exiting position for(" + position.getSymbol() + " Reason " + reason);
-            portfolio.closePosition(position.getIdentifier(), reason);
+            log.info("Exiting position for(" + position.symbol() + " Reason " + reason);
+            portfolio.closePosition(position.identifier(), reason);
             exitedPositions.add(position);
         }
         this.createOrderFromClosedPosition(exitedPositions, event);
@@ -179,7 +179,7 @@ public class PortfolioService {
         try {
             portfolioBrokerChecker.process();
         } catch (ReconciliationException reconciliationException) {
-            closeAllPositions(Position.ExitReason.RECONCILIATION_FAILED, e);
+            closeAllPositions(PositionDto.ExitReason.RECONCILIATION_FAILED, e);
             log.warning(reconciliationException.getMessage());
         }
     }

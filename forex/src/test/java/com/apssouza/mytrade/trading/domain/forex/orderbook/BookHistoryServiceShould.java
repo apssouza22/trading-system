@@ -5,7 +5,7 @@ import com.apssouza.mytrade.trading.domain.forex.order.OrderBuilder;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PositionBuilder;
 import com.apssouza.mytrade.trading.domain.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.FilledOrderDto;
-import com.apssouza.mytrade.trading.domain.forex.portfolio.Position;
+import com.apssouza.mytrade.trading.domain.forex.portfolio.PositionDto;
 import com.apssouza.mytrade.trading.domain.forex.session.CycleHistory;
 import com.apssouza.mytrade.trading.domain.forex.session.TransactionDto;
 
@@ -73,7 +73,7 @@ public class BookHistoryServiceShould extends TestCase {
     public void addPosition() {
         bookHistoryService.startCycle(LocalDateTime.MIN);
         PositionBuilder positionBuilder = new PositionBuilder();
-        Position position = positionBuilder.build();
+        PositionDto position = positionBuilder.build();
         bookHistoryService.addPosition(position);
         bookHistoryService.endCycle();
         List<CycleHistory> transactions = bookHistoryService.getTransactions();

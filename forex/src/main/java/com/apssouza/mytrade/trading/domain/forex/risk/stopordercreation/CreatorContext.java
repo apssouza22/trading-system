@@ -1,7 +1,7 @@
 package com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation;
 
 import com.apssouza.mytrade.trading.domain.forex.order.OrderDto;
-import com.apssouza.mytrade.trading.domain.forex.portfolio.Position;
+import com.apssouza.mytrade.trading.domain.forex.portfolio.PositionDto;
 import com.apssouza.mytrade.trading.domain.forex.common.NumberHelper;
 import com.apssouza.mytrade.trading.domain.forex.common.TradingHelper;
 
@@ -17,7 +17,7 @@ class CreatorContext {
     }
 
 
-    public StopOrderDto getHardStopLoss(Position position) {
+    public StopOrderDto getHardStopLoss(PositionDto position) {
         OrderDto.OrderAction action = TradingHelper.getExitOrderActionFromPosition(position);
         BigDecimal stopPrice = strategy.getHardStopPrice(position);
         return new StopOrderDto(
@@ -25,15 +25,15 @@ class CreatorContext {
                 null,
                 StopOrderDto.StopOrderStatus.CREATED,
                 action,
-                NumberHelper.roundSymbolPrice(position.getSymbol(), stopPrice),
+                NumberHelper.roundSymbolPrice(position.symbol(), stopPrice),
                 null,
-                position.getSymbol(),
-                position.getQuantity(),
-                position.getIdentifier()
+                position.symbol(),
+                position.quantity(),
+                position.identifier()
         );
     }
 
-    public Optional<StopOrderDto> getTrailingStopOrder(Position position, BigDecimal priceClose) {
+    public Optional<StopOrderDto> getTrailingStopOrder(PositionDto position, BigDecimal priceClose) {
         OrderDto.OrderAction action = TradingHelper.getExitOrderActionFromPosition(position);
         Optional<BigDecimal> stopPrice = strategy.getTrailingStopPrice(position, priceClose);
 
@@ -48,13 +48,13 @@ class CreatorContext {
                 action,
                 stopPrice.get(),
                 null,
-                position.getSymbol(),
-                position.getQuantity(),
-                position.getIdentifier()
+                position.symbol(),
+                position.quantity(),
+                position.identifier()
         ));
     }
 
-    public Optional<StopOrderDto> getEntryStopOrder(Position position, BigDecimal priceClose) {
+    public Optional<StopOrderDto> getEntryStopOrder(PositionDto position, BigDecimal priceClose) {
         OrderDto.OrderAction action = TradingHelper.getExitOrderActionFromPosition(position);
         BigDecimal stopPrice = strategy.getEntryStopPrice(position, priceClose);
 
@@ -67,20 +67,20 @@ class CreatorContext {
                 null,
                 StopOrderDto.StopOrderStatus.CREATED,
                 action,
-                NumberHelper.roundSymbolPrice(position.getSymbol(), stopPrice),
+                NumberHelper.roundSymbolPrice(position.symbol(), stopPrice),
                 null,
-                position.getSymbol(),
-                position.getQuantity(),
-                position.getIdentifier()
+                position.symbol(),
+                position.quantity(),
+                position.identifier()
         ));
 
     }
 
 
-    public StopOrderDto getProfitStopOrder(Position position) {
+    public StopOrderDto getProfitStopOrder(PositionDto position) {
         BigDecimal stopPrice = strategy.getProfitStopPrice(position);
         OrderDto.OrderAction action = TradingHelper.getExitOrderActionFromPosition(position);
-        stopPrice = NumberHelper.roundSymbolPrice(position.getSymbol(), stopPrice);
+        stopPrice = NumberHelper.roundSymbolPrice(position.symbol(), stopPrice);
         return new StopOrderDto(
                 StopOrderDto.StopOrderType.TAKE_PROFIT,
                 null,
@@ -88,9 +88,9 @@ class CreatorContext {
                 action,
                 stopPrice,
                 null,
-                position.getSymbol(),
-                position.getQuantity(),
-                position.getIdentifier()
+                position.symbol(),
+                position.quantity(),
+                position.identifier()
         );
     }
 }
