@@ -2,7 +2,7 @@ package com.apssouza.mytrade.trading.domain.forex.portfolio;
 
 import com.apssouza.mytrade.trading.domain.forex.common.Symbol;
 import com.apssouza.mytrade.trading.domain.forex.order.OrderDto;
-import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderDto;
+import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderDto;
 import com.apssouza.mytrade.trading.domain.forex.common.NumberHelper;
 
 import java.math.BigDecimal;

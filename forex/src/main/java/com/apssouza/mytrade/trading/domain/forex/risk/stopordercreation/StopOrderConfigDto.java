@@ -1,4 +1,4 @@
-package com.apssouza.mytrade.trading.domain.forex.risk.stoporder;
+package com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation;
 
 import java.math.BigDecimal;
 

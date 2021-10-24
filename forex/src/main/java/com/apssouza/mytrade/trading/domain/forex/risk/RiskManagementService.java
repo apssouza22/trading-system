@@ -5,14 +5,13 @@ import com.apssouza.mytrade.feed.api.SignalDto;
 import com.apssouza.mytrade.trading.domain.forex.common.Event;
 import com.apssouza.mytrade.trading.domain.forex.common.TradingParams;
 import com.apssouza.mytrade.trading.domain.forex.feed.pricefeed.PriceChangedEvent;
-import com.apssouza.mytrade.trading.domain.forex.feed.signalfeed.SignalCreatedEvent;
 import com.apssouza.mytrade.trading.domain.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.FilledOrderDto;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioModel;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.Position;
-import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderCreator;
-import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderDto;
-import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderDto.StopOrderType;
+import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderCreator;
+import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderDto;
+import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderDto.StopOrderType;
 
 import java.util.EnumMap;
 import java.util.List;

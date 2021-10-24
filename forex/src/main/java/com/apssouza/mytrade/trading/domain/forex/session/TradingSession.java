@@ -20,8 +20,8 @@ import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioService;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioModel;
 import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementFactory;
 import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementService;
-import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderConfigDto;
-import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderFactory;
+import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderConfigDto;
+import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderFactory;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

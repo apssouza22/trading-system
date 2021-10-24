@@ -8,12 +8,12 @@ import com.apssouza.mytrade.trading.domain.forex.feed.pricefeed.PriceChangedEven
 import com.apssouza.mytrade.trading.domain.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.domain.forex.order.OrderService;
 import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementService;
-import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderDto;
-import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderFilledEvent;
+import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderDto;
+import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderFilledEvent;
 import com.apssouza.mytrade.trading.domain.forex.session.EventNotifier;
 import com.apssouza.mytrade.trading.domain.forex.session.MultiPositionHandler;
-import static com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderDto.StopOrderType.STOP_LOSS;
-import static com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderDto.StopOrderType.TAKE_PROFIT;
+import static com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderDto.StopOrderType.STOP_LOSS;
+import static com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderDto.StopOrderType.TAKE_PROFIT;
 
 import java.util.ArrayList;
 import java.util.HashMap;

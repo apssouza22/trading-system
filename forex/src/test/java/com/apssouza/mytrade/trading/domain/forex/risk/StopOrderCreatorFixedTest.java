@@ -5,10 +5,10 @@ import com.apssouza.mytrade.trading.domain.forex.feed.pricefeed.PriceChangedEven
 import com.apssouza.mytrade.trading.domain.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PositionBuilder;
-import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderConfigDto;
-import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderCreator;
-import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderDto;
-import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderFactory;
+import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderConfigDto;
+import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderCreator;
+import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderDto;
+import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderFactory;
 
 import org.junit.Before;
 import org.junit.Test;

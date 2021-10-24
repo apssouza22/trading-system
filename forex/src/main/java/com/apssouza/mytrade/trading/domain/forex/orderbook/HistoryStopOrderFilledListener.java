@@ -4,8 +4,8 @@ import com.apssouza.mytrade.trading.domain.forex.common.Event;
 import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeEvent;
 import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeListener;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.FilledOrderDto;
-import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderDto;
-import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderFilledEvent;
+import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderDto;
+import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderFilledEvent;
 
 import java.time.LocalDateTime;
 

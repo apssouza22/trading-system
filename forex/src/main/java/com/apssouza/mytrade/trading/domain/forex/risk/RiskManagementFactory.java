@@ -1,7 +1,7 @@
 package com.apssouza.mytrade.trading.domain.forex.risk;
 
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioModel;
-import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderCreator;
+import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderCreator;
 
 public class RiskManagementFactory {
 

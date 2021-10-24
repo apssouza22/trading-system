@@ -1,7 +1,7 @@
 package com.apssouza.mytrade.trading.domain.forex.session;
 
 import com.apssouza.mytrade.trading.domain.forex.order.OrderDto;
-import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderDto;
+import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderDto;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.FilledOrderDto;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.Position;
 import com.apssouza.mytrade.common.misc.helper.time.DateTimeHelper;

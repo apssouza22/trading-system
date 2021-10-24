@@ -4,11 +4,11 @@ import com.apssouza.mytrade.trading.domain.forex.common.TradingParams;
 import com.apssouza.mytrade.trading.domain.forex.order.StopOrderBuilder;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PositionBuilder;
-import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.RiskManagementBuilder;
-import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderDto.StopOrderType;
+import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.RiskManagementBuilder;
+import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderDto.StopOrderType;
 import com.apssouza.mytrade.trading.domain.forex.session.LoopEventBuilder;
-import static com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderDto.StopOrderType.ENTRY_STOP;
-import static com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderDto.StopOrderType.STOP_LOSS;
+import static com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderDto.StopOrderType.ENTRY_STOP;
+import static com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderDto.StopOrderType.STOP_LOSS;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
