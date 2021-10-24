@@ -31,9 +31,8 @@ class StopOrderFilledListener implements Observer {
         }
         StopOrderDto stopOrder = event.getStopOrder();
         Position ps = MultiPositionHandler.getPositionByStopOrder(stopOrder);
-        ps = ps.closePosition(ExitReason.STOP_ORDER_FILLED);
 
-        portfolio.closePosition(ps.getIdentifier());
+        portfolio.closePosition(ps.getIdentifier(), ExitReason.STOP_ORDER_FILLED);
         portfolioService.processReconciliation(e);
         eventNotifier.notify(new PortfolioChangedEvent(
                 e.getTimestamp(),

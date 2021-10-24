@@ -51,7 +51,7 @@ public class PortfolioServiceShould {
         var newPrice = BigDecimal.valueOf(2);
         var priceMap = new PriceBuilder().withPrice("AUDUSD", newPrice).builderMap();
 
-        portfolio.updatePositionsPrices(new PriceChangedEvent(LocalDateTime.now(), priceMap));
+        portfolio.updatePositionsPrices(priceMap);
 
         var modelPosition = model.getPosition(position.getIdentifier());
         assertEquals(newPrice, modelPosition.getCurrentPrice());
