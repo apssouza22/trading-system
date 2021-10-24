@@ -12,7 +12,7 @@ jobs:
           java-version: '16'
 
       - name: Run sonar scanner
-        run: mvn sonar:sonar  -Dsonar.java.binaries=. -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+        run: mvn verify sonar:sonar  -Dsonar.java.binaries=. -Dsonar.login=${{ secrets.SONAR_TOKEN }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
