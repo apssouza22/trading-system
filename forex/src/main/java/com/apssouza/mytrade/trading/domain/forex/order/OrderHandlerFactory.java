@@ -1,9 +1,9 @@
 package com.apssouza.mytrade.trading.domain.forex.order;
 
 import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeListener;
-import com.apssouza.mytrade.trading.domain.forex.broker.BrokerHandler;
+import com.apssouza.mytrade.trading.domain.forex.broker.BrokerService;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioModel;
-import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementHandler;
+import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementService;
 import com.apssouza.mytrade.trading.domain.forex.session.EventNotifier;
 
 import java.util.ArrayList;
@@ -11,32 +11,32 @@ import java.util.List;
 
 public class OrderHandlerFactory {
 
-    public static OrderHandler create(RiskManagementHandler riskManagementHandler){
-        return create(riskManagementHandler, new MemoryOrderDao());
+    public static OrderService create(RiskManagementService riskManagementService){
+        return create(riskManagementService, new MemoryOrderDao());
     }
 
-    public static OrderHandler create(RiskManagementHandler riskManagementHandler, OrderDao orderDao){
-        return new OrderHandler(orderDao, riskManagementHandler);
+    public static OrderService create(RiskManagementService riskManagementService, OrderDao orderDao){
+        return new OrderService(orderDao, riskManagementService);
     }
 
     public static List<PropertyChangeListener> createListeners(
             PortfolioModel portfolio,
-            OrderHandler orderHandler,
-            RiskManagementHandler riskManagementHandler,
-            BrokerHandler executionHandler,
+            OrderService orderService,
+            RiskManagementService riskManagementService,
+            BrokerService executionHandler,
             EventNotifier eventNotifier
     ) {
         var listeners = new ArrayList<PropertyChangeListener>();
-        listeners.add(new PositionClosedListener(orderHandler));
+        listeners.add(new PositionClosedListener(orderService));
         listeners.add(new OrderFoundListener(
                 executionHandler,
-                orderHandler,
+                orderService,
                 eventNotifier,
-                riskManagementHandler
+                riskManagementService
         ));
         listeners.add(new SignalCreatedListener(
-                riskManagementHandler,
-                orderHandler,
+                riskManagementService,
+                orderService,
                 eventNotifier
         ));
         return listeners;

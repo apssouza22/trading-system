@@ -11,11 +11,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class BookHistoryHandler {
+public class BookHistoryService {
     private final TransactionsExporter transactionsExporter;
     public List<CycleHistory> transactions = new CopyOnWriteArrayList<>();
 
-    public BookHistoryHandler(TransactionsExporter transactionsExporter) {
+    public BookHistoryService(TransactionsExporter transactionsExporter) {
         this.transactionsExporter = transactionsExporter;
     }
 

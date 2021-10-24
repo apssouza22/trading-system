@@ -3,9 +3,9 @@ package com.apssouza.mytrade.trading.domain.forex.order;
 import com.apssouza.mytrade.trading.domain.forex.common.Event;
 import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeEvent;
 import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeListener;
-import com.apssouza.mytrade.trading.domain.forex.broker.BrokerHandler;
+import com.apssouza.mytrade.trading.domain.forex.broker.BrokerService;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.FilledOrderDto;
-import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementHandler;
+import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementService;
 import com.apssouza.mytrade.trading.domain.forex.session.EventNotifier;
 import static com.apssouza.mytrade.trading.domain.forex.order.OrderDto.OrderOrigin.EXITS;
 
@@ -16,22 +16,22 @@ import java.util.logging.Logger;
 class OrderFoundListener implements PropertyChangeListener {
 
     private static Logger log = Logger.getLogger(OrderFoundListener.class.getSimpleName());
-    private final BrokerHandler executionHandler;
-    private final OrderHandler orderHandler;
+    private final BrokerService executionHandler;
+    private final OrderService orderService;
     private final EventNotifier eventNotifier;
-    private final RiskManagementHandler riskManagementHandler;
+    private final RiskManagementService riskManagementService;
 
     public OrderFoundListener(
-            BrokerHandler executionHandler,
-            OrderHandler orderHandler,
+            BrokerService executionHandler,
+            OrderService orderService,
             EventNotifier eventNotifier,
-            RiskManagementHandler riskManagementHandler
+            RiskManagementService riskManagementService
     ) {
 
         this.executionHandler = executionHandler;
-        this.orderHandler = orderHandler;
+        this.orderService = orderService;
         this.eventNotifier = eventNotifier;
-        this.riskManagementHandler = riskManagementHandler;
+        this.riskManagementService = riskManagementService;
     }
 
     @Override
@@ -57,8 +57,8 @@ class OrderFoundListener implements PropertyChangeListener {
         }
 
         for (OrderDto order : orders) {
-            if (!riskManagementHandler.canExecuteOrder(event, order, new ArrayList<>(), exitedPositions)) {
-                orderHandler.updateOrderStatus(order.id(), OrderDto.OrderStatus.CANCELLED);
+            if (!riskManagementService.canExecuteOrder(event, order, new ArrayList<>(), exitedPositions)) {
+                orderService.updateOrderStatus(order.id(), OrderDto.OrderStatus.CANCELLED);
                 continue;
             }
             processNewOrder(order, orderFoundEvent);
@@ -73,9 +73,9 @@ class OrderFoundListener implements PropertyChangeListener {
                     event.getPrice(),
                     filledOrder
             ));
-            orderHandler.updateOrderStatus(order.id(), OrderDto.OrderStatus.EXECUTED);
+            orderService.updateOrderStatus(order.id(), OrderDto.OrderStatus.EXECUTED);
         } else {
-            orderHandler.updateOrderStatus(order.id(), OrderDto.OrderStatus.FAILED);
+            orderService.updateOrderStatus(order.id(), OrderDto.OrderStatus.FAILED);
         }
     }
 

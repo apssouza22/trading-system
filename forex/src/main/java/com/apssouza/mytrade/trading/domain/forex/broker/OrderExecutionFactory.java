@@ -5,7 +5,7 @@ import com.apssouza.mytrade.trading.domain.forex.common.TradingParams;
 
 public class OrderExecutionFactory {
 
-    public static BrokerHandler factory(ExecutionType executionType){
+    public static BrokerService factory(ExecutionType executionType){
         if (executionType == ExecutionType.BROKER) {
             return new InteractiveBrokerOrderExecution(
                     TradingParams.brokerHost,

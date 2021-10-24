@@ -7,9 +7,9 @@ import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioChangedEvent
 
 class HistoryPortfolioChangedListener implements PropertyChangeListener {
 
-    private final BookHistoryHandler bookHandler;
+    private final BookHistoryService bookHandler;
 
-    public HistoryPortfolioChangedListener(BookHistoryHandler bookHandler) {
+    public HistoryPortfolioChangedListener(BookHistoryService bookHandler) {
         this.bookHandler = bookHandler;
     }
 

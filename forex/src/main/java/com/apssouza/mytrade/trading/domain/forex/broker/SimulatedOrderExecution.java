@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 /**
  * Simulated order execution simulates interactions with a broker
  */
-class SimulatedOrderExecution implements BrokerHandler {
+class SimulatedOrderExecution implements BrokerService {
 
     private static final Logger log = Logger.getLogger(SimulatedOrderExecution.class.getSimpleName());
     private final MultiPositionPerCPairHandler multiPositionPerCPairHandler;

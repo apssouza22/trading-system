@@ -3,11 +3,11 @@ package com.apssouza.mytrade.trading.domain.forex.portfolio;
 import com.apssouza.mytrade.feed.api.SignalDto;
 import com.apssouza.mytrade.trading.domain.forex.common.Event;
 import com.apssouza.mytrade.trading.domain.forex.common.TradingParams;
-import com.apssouza.mytrade.trading.domain.forex.broker.BrokerHandler;
+import com.apssouza.mytrade.trading.domain.forex.broker.BrokerService;
 import com.apssouza.mytrade.trading.domain.forex.feed.pricefeed.PriceChangedEvent;
 import com.apssouza.mytrade.trading.domain.forex.order.OrderDto;
-import com.apssouza.mytrade.trading.domain.forex.order.OrderHandler;
-import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementHandler;
+import com.apssouza.mytrade.trading.domain.forex.order.OrderService;
+import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementService;
 import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderDto;
 import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderFilledEvent;
 import com.apssouza.mytrade.trading.domain.forex.session.EventNotifier;
@@ -21,30 +21,30 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
-public class PortfolioHandler {
+public class PortfolioService {
 
-    private final OrderHandler orderHandler;
-    private final BrokerHandler executionHandler;
+    private final OrderService orderService;
+    private final BrokerService executionHandler;
     private final PortfolioModel portfolio;
     private final PortfoliosChecker portfolioBrokerChecker;
-    private final RiskManagementHandler riskManagementHandler;
+    private final RiskManagementService riskManagementService;
     private final EventNotifier eventNotifier;
-    private static Logger log = Logger.getLogger(PortfolioHandler.class.getName());
+    private static Logger log = Logger.getLogger(PortfolioService.class.getName());
     private Map<Integer, StopOrderDto> currentStopOrders = new HashMap<>();
 
-    public PortfolioHandler(
-            OrderHandler orderHandler,
-            BrokerHandler executionHandler,
+    public PortfolioService(
+            OrderService orderService,
+            BrokerService executionHandler,
             PortfolioModel portfolio,
             PortfoliosChecker portfolioBrokerChecker,
-            RiskManagementHandler riskManagementHandler,
+            RiskManagementService riskManagementService,
             EventNotifier eventNotifier
     ) {
-        this.orderHandler = orderHandler;
+        this.orderService = orderService;
         this.executionHandler = executionHandler;
         this.portfolio = portfolio;
         this.portfolioBrokerChecker = portfolioBrokerChecker;
-        this.riskManagementHandler = riskManagementHandler;
+        this.riskManagementService = riskManagementService;
         this.eventNotifier = eventNotifier;
     }
 
@@ -63,7 +63,7 @@ public class PortfolioHandler {
         Map<Integer, StopOrderDto> stopOrders = new HashMap<>();
         for (Map.Entry<String, Position> entry : this.portfolio.getPositions().entrySet()) {
             Position position = entry.getValue();
-            var stops = riskManagementHandler.createStopOrders(position, event);
+            var stops = riskManagementService.createStopOrders(position, event);
             position = new Position(position, stops);
             var stopLoss = stops.get(STOP_LOSS);
             log.info("Created stop loss - " + stopLoss);
@@ -133,7 +133,7 @@ public class PortfolioHandler {
         if (portfolio.getPositions().isEmpty()) {
             return;
         }
-        List<Position> exitedPositions = this.riskManagementHandler.processPositionExit(event, signals);
+        List<Position> exitedPositions = this.riskManagementService.processPositionExit(event, signals);
         this.createOrderFromClosedPosition(exitedPositions, event);
     }
 
@@ -142,7 +142,7 @@ public class PortfolioHandler {
             if (position.getStatus() != Position.PositionStatus.CLOSED) {
                 continue;
             }
-            OrderDto order = this.orderHandler.createOrderFromClosedPosition(position, event.getTimestamp());
+            OrderDto order = this.orderService.createOrderFromClosedPosition(position, event.getTimestamp());
             eventNotifier.notify(new PositionClosedEvent(
                     event.getTimestamp(),
                     event.getPrice(),

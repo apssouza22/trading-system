@@ -4,22 +4,22 @@ import com.apssouza.mytrade.trading.api.ExecutionType;
 import com.apssouza.mytrade.trading.api.SessionType;
 import com.apssouza.mytrade.trading.domain.forex.common.Event;
 import com.apssouza.mytrade.trading.domain.forex.common.TradingParams;
-import com.apssouza.mytrade.trading.domain.forex.broker.BrokerHandler;
+import com.apssouza.mytrade.trading.domain.forex.broker.BrokerService;
 import com.apssouza.mytrade.trading.domain.forex.broker.OrderExecutionFactory;
 import com.apssouza.mytrade.trading.domain.forex.feed.FeedService;
 import com.apssouza.mytrade.trading.domain.forex.feed.pricefeed.PriceStream;
 import com.apssouza.mytrade.trading.domain.forex.feed.pricefeed.PriceStreamFactory;
 import com.apssouza.mytrade.trading.domain.forex.feed.signalfeed.SignalFeedFactory;
 import com.apssouza.mytrade.trading.domain.forex.feed.signalfeed.SignalFeedHandler;
-import com.apssouza.mytrade.trading.domain.forex.order.OrderHandler;
+import com.apssouza.mytrade.trading.domain.forex.order.OrderService;
 import com.apssouza.mytrade.trading.domain.forex.order.OrderHandlerFactory;
-import com.apssouza.mytrade.trading.domain.forex.orderbook.BookHistoryHandler;
+import com.apssouza.mytrade.trading.domain.forex.orderbook.BookHistoryService;
 import com.apssouza.mytrade.trading.domain.forex.orderbook.BookHistoryHandlerFactory;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioFactory;
-import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioHandler;
+import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioService;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioModel;
 import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementFactory;
-import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementHandler;
+import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementService;
 import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderConfigDto;
 import com.apssouza.mytrade.trading.domain.forex.risk.stoporder.StopOrderFactory;
 
@@ -41,18 +41,18 @@ public class TradingSession {
 
     protected SignalFeedHandler signalFeedHandler;
     private final FeedService feedModule;
-    protected BrokerHandler executionHandler;
+    protected BrokerService executionHandler;
     protected PortfolioModel portfolio;
-    protected OrderHandler orderHandler;
-    protected BookHistoryHandler historyHandler;
+    protected OrderService orderService;
+    protected BookHistoryService historyHandler;
     protected PriceStream priceStream;
-    protected PortfolioHandler portfolioHandler;
+    protected PortfolioService portfolioService;
     protected boolean processedEndDay;
-    protected RiskManagementHandler riskManagementHandler;
+    protected RiskManagementService riskManagementService;
     protected final BlockingQueue<Event> eventQueue;
     protected EventNotifier eventNotifier;
 
-    private static Logger log = Logger.getLogger(PortfolioHandler.class.getSimpleName());
+    private static Logger log = Logger.getLogger(PortfolioService.class.getSimpleName());
 
     public TradingSession(
             BigDecimal equity,
@@ -79,7 +79,7 @@ public class TradingSession {
         this.executionHandler = OrderExecutionFactory.factory(this.executionType);
         this.portfolio = new PortfolioModel(this.equity);
         this.historyHandler = BookHistoryHandlerFactory.create();
-        this.riskManagementHandler = RiskManagementFactory.create(
+        this.riskManagementService = RiskManagementFactory.create(
                 this.portfolio,
                 StopOrderFactory.factory(new StopOrderConfigDto(
                         TradingParams.hard_stop_loss_distance,
@@ -88,14 +88,14 @@ public class TradingSession {
                         TradingParams.trailing_stop_loss_distance
                 ))
         );
-        this.orderHandler = OrderHandlerFactory.create(this.riskManagementHandler);
+        this.orderService = OrderHandlerFactory.create(this.riskManagementService);
 
         eventNotifier = new EventNotifier();
-        this.portfolioHandler = PortfolioFactory.create(
-                this.orderHandler,
+        this.portfolioService = PortfolioFactory.create(
+                this.orderService,
                 this.executionHandler,
                 this.portfolio,
-                this.riskManagementHandler,
+                this.riskManagementService,
                 eventNotifier
         );
         this.eventNotifier = setListeners();
@@ -104,14 +104,14 @@ public class TradingSession {
     }
 
     private EventNotifier setListeners() {
-        var eventListeners = OrderHandlerFactory.createListeners(portfolio, orderHandler, riskManagementHandler, executionHandler, eventNotifier);
-        eventListeners.addAll(PortfolioFactory.createListeners(portfolioHandler, portfolio, eventNotifier));
+        var eventListeners = OrderHandlerFactory.createListeners(portfolio, orderService, riskManagementService, executionHandler, eventNotifier);
+        eventListeners.addAll(PortfolioFactory.createListeners(portfolioService, portfolio, eventNotifier));
 
         eventListeners.add(new PriceChangedListener(
                 executionHandler,
-                portfolioHandler,
+                portfolioService,
                 signalFeedHandler,
-                orderHandler,
+                orderService,
                 eventNotifier
         ));
         eventListeners.addAll(BookHistoryHandlerFactory.createListeners(historyHandler));

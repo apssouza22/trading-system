@@ -5,37 +5,37 @@ import com.apssouza.mytrade.trading.domain.forex.common.TradingParams;
 import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeEvent;
 import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeListener;
 import com.apssouza.mytrade.trading.domain.forex.common.Event;
-import com.apssouza.mytrade.trading.domain.forex.broker.BrokerHandler;
+import com.apssouza.mytrade.trading.domain.forex.broker.BrokerService;
 import com.apssouza.mytrade.trading.domain.forex.feed.pricefeed.PriceChangedEvent;
 import com.apssouza.mytrade.trading.domain.forex.feed.signalfeed.SignalCreatedEvent;
 import com.apssouza.mytrade.trading.domain.forex.feed.signalfeed.SignalFeedHandler;
 import com.apssouza.mytrade.trading.domain.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.domain.forex.order.OrderFoundEvent;
-import com.apssouza.mytrade.trading.domain.forex.order.OrderHandler;
-import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioHandler;
+import com.apssouza.mytrade.trading.domain.forex.order.OrderService;
+import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioService;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 class PriceChangedListener implements PropertyChangeListener {
 
-    private final BrokerHandler executionHandler;
-    private final PortfolioHandler portfolioHandler;
+    private final BrokerService executionHandler;
+    private final PortfolioService portfolioService;
     private final SignalFeedHandler signalFeedHandler;
-    private final OrderHandler orderHandler;
+    private final OrderService orderService;
     private final EventNotifier eventNotifier;
 
     public PriceChangedListener(
-            BrokerHandler executionHandler,
-            PortfolioHandler portfolioHandler,
+            BrokerService executionHandler,
+            PortfolioService portfolioService,
             SignalFeedHandler signalFeedHandler,
-            OrderHandler orderHandler,
+            OrderService orderService,
             EventNotifier eventNotifier
     ) {
         this.executionHandler = executionHandler;
-        this.portfolioHandler = portfolioHandler;
+        this.portfolioService = portfolioService;
         this.signalFeedHandler = signalFeedHandler;
-        this.orderHandler = orderHandler;
+        this.orderService = orderService;
         this.eventNotifier = eventNotifier;
     }
 
@@ -54,15 +54,15 @@ class PriceChangedListener implements PropertyChangeListener {
 
     private void process(PriceChangedEvent event) throws InterruptedException {
         LocalDateTime currentTime = event.getTimestamp();
-        portfolioHandler.getPortfolio().printPortfolio();
-        portfolioHandler.createStopOrder(event);
+        portfolioService.getPortfolio().printPortfolio();
+        portfolioService.createStopOrder(event);
         executionHandler.setCurrentTime(currentTime);
         executionHandler.setPriceMap(event.getPrice());
-        portfolioHandler.updatePositionsPrices(event);
-        portfolioHandler.handleStopOrder(event);
+        portfolioService.updatePositionsPrices(event);
+        portfolioService.handleStopOrder(event);
 
         List<SignalDto> signals = processSignals(event, currentTime);
-        portfolioHandler.processExits(event, signals);
+        portfolioService.processExits(event, signals);
         processOrders(event, currentTime);
     }
 
@@ -80,7 +80,7 @@ class PriceChangedListener implements PropertyChangeListener {
     }
 
     private void processOrders(PriceChangedEvent event, LocalDateTime currentTime) {
-        List<OrderDto> orders = this.orderHandler.getOrderByStatus(OrderDto.OrderStatus.CREATED);
+        List<OrderDto> orders = this.orderService.getOrderByStatus(OrderDto.OrderStatus.CREATED);
         List<OrderDto> orderList = MultiPositionHandler.createPositionIdentifier(orders);
 
         if (orderList.isEmpty()) {

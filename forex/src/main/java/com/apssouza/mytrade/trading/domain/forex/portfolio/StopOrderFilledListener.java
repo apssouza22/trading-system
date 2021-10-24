@@ -12,16 +12,16 @@ import static com.apssouza.mytrade.trading.domain.forex.portfolio.Position.ExitR
 class StopOrderFilledListener implements PropertyChangeListener {
 
     private final PortfolioModel portfolio;
-    private final PortfolioHandler portfolioHandler;
+    private final PortfolioService portfolioService;
     private final EventNotifier eventNotifier;
 
     public StopOrderFilledListener(
             PortfolioModel portfolio,
-            PortfolioHandler portfolioHandler,
+            PortfolioService portfolioService,
             EventNotifier eventNotifier
     ) {
         this.portfolio = portfolio;
-        this.portfolioHandler = portfolioHandler;
+        this.portfolioService = portfolioService;
         this.eventNotifier = eventNotifier;
     }
 
@@ -37,7 +37,7 @@ class StopOrderFilledListener implements PropertyChangeListener {
         ps = ps.closePosition(ExitReason.STOP_ORDER_FILLED);
 
         portfolio.closePosition(ps.getIdentifier());
-        portfolioHandler.processReconciliation(event);
+        portfolioService.processReconciliation(event);
         eventNotifier.notify(new PortfolioChangedEvent(
                 event.getTimestamp(),
                 event.getPrice(),

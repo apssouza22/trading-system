@@ -11,9 +11,9 @@ import java.time.LocalDateTime;
 
 class HistoryStopOrderFilledListener implements PropertyChangeListener {
 
-    private final BookHistoryHandler historyHandler;
+    private final BookHistoryService historyHandler;
 
-    public HistoryStopOrderFilledListener(BookHistoryHandler historyHandler) {
+    public HistoryStopOrderFilledListener(BookHistoryService historyHandler) {
         this.historyHandler = historyHandler;
     }
 

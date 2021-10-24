@@ -20,13 +20,13 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-public class RiskManagementHandler {
+public class RiskManagementService {
 
     private final PortfolioModel portfolio;
     private PositionExitHandler exitHandler;
     private final StopOrderCreator stopOrderCreator;
 
-    public RiskManagementHandler(PortfolioModel portfolio, PositionExitHandler exitHandler, StopOrderCreator stopOrderCreator) {
+    public RiskManagementService(PortfolioModel portfolio, PositionExitHandler exitHandler, StopOrderCreator stopOrderCreator) {
         this.portfolio = portfolio;
         this.exitHandler = exitHandler;
         this.stopOrderCreator = stopOrderCreator;

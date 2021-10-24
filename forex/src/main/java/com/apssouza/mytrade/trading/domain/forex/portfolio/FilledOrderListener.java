@@ -6,22 +6,17 @@ import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeE
 import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeListener;
 import com.apssouza.mytrade.trading.domain.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.domain.forex.order.OrderFilledEvent;
-import com.apssouza.mytrade.trading.domain.forex.portfolio.FilledOrderDto;
-import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioChangedEvent;
-import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioModel;
-import com.apssouza.mytrade.trading.domain.forex.portfolio.Position;
-import com.apssouza.mytrade.trading.domain.forex.session.EventNotifier;
 import static com.apssouza.mytrade.trading.domain.forex.portfolio.Position.PositionStatus.FILLED;
 
 
 class FilledOrderListener implements PropertyChangeListener {
 
     private final PortfolioModel portfolio;
-    private final PortfolioHandler portfolioHandler;
+    private final PortfolioService portfolioService;
 
-    public FilledOrderListener(PortfolioModel portfolio,PortfolioHandler portfolioHandler) {
+    public FilledOrderListener(PortfolioModel portfolio, PortfolioService portfolioService) {
         this.portfolio = portfolio;
-        this.portfolioHandler = portfolioHandler;
+        this.portfolioService = portfolioService;
     }
 
     @Override
@@ -36,7 +31,7 @@ class FilledOrderListener implements PropertyChangeListener {
         FilledOrderDto filledOrder = orderFilledEvent.getFilledOrder();
         if (!this.portfolio.getPositions().containsKey(filledOrder.identifier())) {
             Position newPosition = createNewPosition(filledOrder);
-            portfolioHandler.processReconciliation(orderFilledEvent);
+            portfolioService.processReconciliation(orderFilledEvent);
             return;
         }
         Position ps = this.portfolio.getPosition(filledOrder.identifier());
@@ -46,7 +41,7 @@ class FilledOrderListener implements PropertyChangeListener {
             }
         }
         handleExistingPosition(filledOrder, ps);
-        portfolioHandler.processReconciliation(orderFilledEvent);
+        portfolioService.processReconciliation(orderFilledEvent);
     }
 
 

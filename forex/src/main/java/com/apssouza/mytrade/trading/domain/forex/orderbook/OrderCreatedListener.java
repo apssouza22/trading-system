@@ -4,12 +4,11 @@ import com.apssouza.mytrade.trading.domain.forex.common.Event;
 import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeEvent;
 import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeListener;
 import com.apssouza.mytrade.trading.domain.forex.order.OrderCreatedEvent;
-import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementHandler;
 
 class OrderCreatedListener implements PropertyChangeListener {
-    private final BookHistoryHandler historyHandler;
+    private final BookHistoryService historyHandler;
 
-    public OrderCreatedListener(BookHistoryHandler historyHandler) {
+    public OrderCreatedListener(BookHistoryService historyHandler) {
         this.historyHandler = historyHandler;
     }
 

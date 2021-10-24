@@ -10,12 +10,12 @@ import java.util.logging.Logger;
 
 class EndedTradingDayListener implements PropertyChangeListener {
 
-    private final PortfolioHandler portfolioHandler;
+    private final PortfolioService portfolioService;
 
     private static Logger log = Logger.getLogger(EndedTradingDayListener.class.getSimpleName());
 
-    public EndedTradingDayListener(PortfolioHandler portfolioHandler) {
-        this.portfolioHandler = portfolioHandler;
+    public EndedTradingDayListener(PortfolioService portfolioService) {
+        this.portfolioService = portfolioService;
     }
 
     @Override
@@ -26,7 +26,7 @@ class EndedTradingDayListener implements PropertyChangeListener {
         }
 
         EndedTradingDayEvent finishedEvent = (EndedTradingDayEvent) event;
-        List<Position> positions = portfolioHandler.closeAllPositions(Position.ExitReason.END_OF_DAY, finishedEvent);
+        List<Position> positions = portfolioService.closeAllPositions(Position.ExitReason.END_OF_DAY, finishedEvent);
         log.info(positions.size() + " positions closed");
     }
 

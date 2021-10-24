@@ -2,25 +2,25 @@ package com.apssouza.mytrade.trading.domain.forex.order;
 
 import com.apssouza.mytrade.feed.api.SignalDto;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.Position;
-import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementHandler;
+import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementService;
 import com.apssouza.mytrade.trading.domain.forex.feed.signalfeed.SignalCreatedEvent;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.logging.Logger;
 
-public class OrderHandler {
+public class OrderService {
     private final OrderDao orderDao;
-    private final RiskManagementHandler riskManagementHandler;
+    private final RiskManagementService riskManagementService;
 
-    private static Logger log = Logger.getLogger(OrderHandler.class.getName());
+    private static Logger log = Logger.getLogger(OrderService.class.getName());
 
-    public OrderHandler(
+    public OrderService(
             OrderDao orderDao,
-            RiskManagementHandler riskManagementHandler
+            RiskManagementService riskManagementService
     ) {
         this.orderDao = orderDao;
-        this.riskManagementHandler = riskManagementHandler;
+        this.riskManagementService = riskManagementService;
     }
 
     public OrderDto createOrderFromClosedPosition(Position position, LocalDateTime time) {
@@ -52,7 +52,7 @@ public class OrderHandler {
         OrderDto order = new OrderDto(
                 signal.symbol(),
                 OrderDto.OrderAction.valueOf(action.toUpperCase()),
-                riskManagementHandler.getPositionSize(),
+                riskManagementService.getPositionSize(),
                 OrderDto.OrderOrigin.SIGNAL,
                 time,
                 "",

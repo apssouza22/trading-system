@@ -11,7 +11,7 @@ import java.util.Map;
 /**
  * Execute orders. This the interface communication with Brokers
  */
-public interface BrokerHandler {
+public interface BrokerService {
     /**
      * Close all open positions
      */

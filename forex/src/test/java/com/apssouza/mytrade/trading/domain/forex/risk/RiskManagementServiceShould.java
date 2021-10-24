@@ -19,7 +19,7 @@ import java.math.BigDecimal;
 import junit.framework.TestCase;
 
 @RunWith(MockitoJUnitRunner.class)
-public class RiskManagementHandlerShould extends TestCase {
+public class RiskManagementServiceShould extends TestCase {
 
     @Test
     public void checkOrders() {
@@ -34,7 +34,7 @@ public class RiskManagementHandlerShould extends TestCase {
         TradingParams.trailing_stop_loss_enabled = false;
         TradingParams.take_profit_stop_enabled = false;
 
-        RiskManagementHandler risk = new RiskManagementBuilder().build();
+        RiskManagementService risk = new RiskManagementBuilder().build();
 
         PositionBuilder positionBuilder = new PositionBuilder();
         Position position = positionBuilder.build();
@@ -52,7 +52,7 @@ public class RiskManagementHandlerShould extends TestCase {
         TradingParams.trailing_stop_loss_enabled = false;
         TradingParams.take_profit_stop_enabled = true;
 
-        RiskManagementHandler risk = new RiskManagementBuilder().build();
+        RiskManagementService risk = new RiskManagementBuilder().build();
 
         PositionBuilder positionBuilder = new PositionBuilder();
         Position position = positionBuilder.build();
@@ -72,7 +72,7 @@ public class RiskManagementHandlerShould extends TestCase {
         TradingParams.trailing_stop_loss_enabled = false;
         TradingParams.take_profit_stop_enabled = false;
 
-        RiskManagementHandler risk = new RiskManagementBuilder().build();
+        RiskManagementService risk = new RiskManagementBuilder().build();
 
         PositionBuilder positionBuilder = new PositionBuilder();
         Position position = positionBuilder.build();
@@ -90,7 +90,7 @@ public class RiskManagementHandlerShould extends TestCase {
         TradingParams.trailing_stop_loss_enabled = true;
         TradingParams.take_profit_stop_enabled = true;
 
-        RiskManagementHandler risk = new RiskManagementBuilder().build();
+        RiskManagementService risk = new RiskManagementBuilder().build();
 
         PositionBuilder positionBuilder = new PositionBuilder();
         Position position = positionBuilder.build();
@@ -111,7 +111,7 @@ public class RiskManagementHandlerShould extends TestCase {
         TradingParams.trailing_stop_loss_enabled = true;
         TradingParams.take_profit_stop_enabled = false;
 
-        RiskManagementHandler risk = new RiskManagementBuilder().build();
+        RiskManagementService risk = new RiskManagementBuilder().build();
 
         PositionBuilder positionBuilder = new PositionBuilder();
         Position position = positionBuilder.build();
@@ -131,7 +131,7 @@ public class RiskManagementHandlerShould extends TestCase {
         TradingParams.trailing_stop_loss_enabled = false;
         TradingParams.take_profit_stop_enabled = false;
 
-        RiskManagementHandler risk = new RiskManagementBuilder().build();
+        RiskManagementService risk = new RiskManagementBuilder().build();
 
         StopOrderBuilder stopOrderBuilder = new StopOrderBuilder();
         PositionBuilder positionBuilder = new PositionBuilder();
@@ -155,7 +155,7 @@ public class RiskManagementHandlerShould extends TestCase {
         TradingParams.trailing_stop_loss_enabled = true;
         TradingParams.take_profit_stop_enabled = false;
 
-        RiskManagementHandler risk = new RiskManagementBuilder().build();
+        RiskManagementService risk = new RiskManagementBuilder().build();
 
         StopOrderBuilder stopOrderBuilder = new StopOrderBuilder();
         PositionBuilder positionBuilder = new PositionBuilder();

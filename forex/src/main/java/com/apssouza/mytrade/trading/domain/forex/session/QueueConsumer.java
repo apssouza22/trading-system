@@ -2,7 +2,7 @@ package com.apssouza.mytrade.trading.domain.forex.session;
 
 import com.apssouza.mytrade.trading.domain.forex.common.Event;
 import com.apssouza.mytrade.trading.domain.forex.common.ForexException;
-import com.apssouza.mytrade.trading.domain.forex.orderbook.BookHistoryHandler;
+import com.apssouza.mytrade.trading.domain.forex.orderbook.BookHistoryService;
 
 import java.time.LocalDateTime;
 import java.util.concurrent.BlockingQueue;
@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 
 public class QueueConsumer extends Thread {
     private final BlockingQueue<Event> eventQueue;
-    private final BookHistoryHandler historyHandler;
+    private final BookHistoryService historyHandler;
     private final EventNotifier notifier;
     private final LocalDateTime endDate;
 
@@ -18,7 +18,7 @@ public class QueueConsumer extends Thread {
 
     public QueueConsumer(
             BlockingQueue<Event> eventQueue,
-            BookHistoryHandler historyHandler,
+            BookHistoryService historyHandler,
             EventNotifier notifier,
             LocalDateTime endDate
 

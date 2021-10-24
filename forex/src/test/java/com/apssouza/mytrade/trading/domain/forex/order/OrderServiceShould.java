@@ -3,7 +3,7 @@ package com.apssouza.mytrade.trading.domain.forex.order;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PositionBuilder;
 import com.apssouza.mytrade.trading.domain.forex.feed.SignalBuilder;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.Position;
-import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementHandler;
+import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementService;
 import com.apssouza.mytrade.trading.domain.forex.feed.signalfeed.SignalCreatedEvent;
 import static com.apssouza.mytrade.trading.domain.forex.order.OrderDto.OrderAction.BUY;
 import static com.apssouza.mytrade.trading.domain.forex.order.OrderDto.OrderOrigin.EXITS;
@@ -24,22 +24,22 @@ import java.util.List;
 import junit.framework.TestCase;
 
 @RunWith(MockitoJUnitRunner.class)
-public class OrderHandlerShould extends TestCase {
+public class OrderServiceShould extends TestCase {
 
-    private RiskManagementHandler riskManagementHandler;
+    private RiskManagementService riskManagementService;
 
     @Before
     public void setUp() {
-        this.riskManagementHandler = mock(RiskManagementHandler.class);
+        this.riskManagementService = mock(RiskManagementService.class);
     }
 
     @Test
     public void createOrderFromSignal() {
-        OrderHandler orderHandler = OrderHandlerFactory.create(this.riskManagementHandler);
+        OrderService orderService = OrderHandlerFactory.create(this.riskManagementService);
         SignalBuilder signalBuilder = new SignalBuilder();
         signalBuilder.addSignal(LocalDateTime.MIN, "Buy");
         SignalCreatedEvent event = new SignalCreatedEvent(LocalDateTime.MIN, Collections.emptyMap(), signalBuilder.build());
-        OrderDto orderFromSignal = orderHandler.createOrderFromSignal(event);
+        OrderDto orderFromSignal = orderService.createOrderFromSignal(event);
         assertEquals("BUY", orderFromSignal.action().name());
     }
 
@@ -50,8 +50,8 @@ public class OrderHandlerShould extends TestCase {
         positionBuilder.withType(Position.PositionType.SHORT);
         Position position = positionBuilder.build();
 
-        OrderHandler orderHandler = OrderHandlerFactory.create(this.riskManagementHandler);
-        OrderDto orderFromClosedPosition = orderHandler.createOrderFromClosedPosition(position, LocalDateTime.MIN);
+        OrderService orderService = OrderHandlerFactory.create(this.riskManagementService);
+        OrderDto orderFromClosedPosition = orderService.createOrderFromClosedPosition(position, LocalDateTime.MIN);
         assertEquals(EXITS, orderFromClosedPosition.origin());
         assertEquals(BUY, orderFromClosedPosition.action());
     }
@@ -63,36 +63,36 @@ public class OrderHandlerShould extends TestCase {
         positionBuilder.withType(Position.PositionType.LONG);
         Position position = positionBuilder.build();
 
-        OrderHandler orderHandler = OrderHandlerFactory.create(this.riskManagementHandler);
-        OrderDto orderFromClosedPosition = orderHandler.createOrderFromClosedPosition(position, LocalDateTime.MIN);
+        OrderService orderService = OrderHandlerFactory.create(this.riskManagementService);
+        OrderDto orderFromClosedPosition = orderService.createOrderFromClosedPosition(position, LocalDateTime.MIN);
         assertEquals(EXITS, orderFromClosedPosition.origin());
         assertEquals(OrderDto.OrderAction.SELL, orderFromClosedPosition.action());
     }
 
     @Test
     public void persistOrder() {
-        OrderHandler orderHandler = OrderHandlerFactory.create(riskManagementHandler);
-        orderHandler.persist(new OrderBuilder().build());
-        List<OrderDto> ordersByStatus = orderHandler.getOrderByStatus(CREATED);
+        OrderService orderService = OrderHandlerFactory.create(riskManagementService);
+        orderService.persist(new OrderBuilder().build());
+        List<OrderDto> ordersByStatus = orderService.getOrderByStatus(CREATED);
         assertNotNull(ordersByStatus.get(0));
     }
 
     @Test
     public void updateOrderStatus() {
-        OrderHandler orderHandler = OrderHandlerFactory.create(this.riskManagementHandler);
+        OrderService orderService = OrderHandlerFactory.create(this.riskManagementService);
         var order = new OrderDto("AUDUSD", BUY, 10, STOP_ORDER, LocalDateTime.MIN, "123", CREATED);
-        var createdOrder = orderHandler.persist(order);
-        orderHandler.updateOrderStatus(createdOrder.id(), EXECUTED);
-        List<OrderDto> orderByStatus = orderHandler.getOrderByStatus(EXECUTED);
+        var createdOrder = orderService.persist(order);
+        orderService.updateOrderStatus(createdOrder.id(), EXECUTED);
+        List<OrderDto> orderByStatus = orderService.getOrderByStatus(EXECUTED);
         assertEquals(createdOrder.id(), orderByStatus.get(0).id());
     }
 
     @Test
     public void returnOrdersByStatus() {
-        OrderHandler orderHandler = OrderHandlerFactory.create(this.riskManagementHandler);
+        OrderService orderService = OrderHandlerFactory.create(this.riskManagementService);
         var order = new OrderDto("AUDUSD", BUY, 10, STOP_ORDER, LocalDateTime.MIN, "123", CREATED);
-        var createdOrder = orderHandler.persist(order);
-        List<OrderDto> orderByStatus = orderHandler.getOrderByStatus(CREATED);
+        var createdOrder = orderService.persist(order);
+        List<OrderDto> orderByStatus = orderService.getOrderByStatus(CREATED);
         assertEquals(createdOrder.id(), orderByStatus.get(0).id());
     }
 }

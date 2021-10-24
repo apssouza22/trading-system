@@ -36,7 +36,7 @@ import static java.math.BigDecimal.ONE;
 import static java.util.Collections.emptyList;
 
 @RunWith(MockitoJUnitRunner.class)
-public class PortfolioHandlerShould {
+public class PortfolioServiceShould {
 
 
     @Test
@@ -69,8 +69,8 @@ public class PortfolioHandlerShould {
         var stopOrders = new EnumMap<StopOrderType, StopOrderDto>(StopOrderType.class);
         stopOrders.put(StopOrderType.STOP_LOSS, stopLossOrder);
 
-        when(builder.riskManagementHandler.createStopOrders(any(), any())).thenReturn(stopOrders);
-        when(builder.executionHandler.placeStopOrder(any()))
+        when(builder.riskManagementService.createStopOrders(any(), any())).thenReturn(stopOrders);
+        when(builder.brokerService.placeStopOrder(any()))
                 .thenReturn(new StopOrderDto(FILLED, stopLossOrder))
                 .thenReturn(takeProfitOrder);
         TradingParams.take_profit_stop_enabled = false;
@@ -84,8 +84,8 @@ public class PortfolioHandlerShould {
         ArgumentCaptor<StopOrderDto> placeStopOrderArgCapture = ArgumentCaptor.forClass(StopOrderDto.class);
         ArgumentCaptor<Position> createStopOrdersArgCaptor = ArgumentCaptor.forClass(Position.class);
 
-        verify(builder.riskManagementHandler, times(1)).createStopOrders(createStopOrdersArgCaptor.capture(), any());
-        verify(builder.executionHandler, times(1)).placeStopOrder(placeStopOrderArgCapture.capture());
+        verify(builder.riskManagementService, times(1)).createStopOrders(createStopOrdersArgCaptor.capture(), any());
+        verify(builder.brokerService, times(1)).placeStopOrder(placeStopOrderArgCapture.capture());
 
         var createStopOrdersArgCaptured = placeStopOrderArgCapture.getValue();
         var placeStopOrderArgCaptured = createStopOrdersArgCaptor.getValue();
@@ -107,8 +107,8 @@ public class PortfolioHandlerShould {
         stopOrders.put(StopOrderType.STOP_LOSS, stopLossOrder);
         stopOrders.put(StopOrderType.TAKE_PROFIT, takeProfitOrder);
 
-        when(builder.riskManagementHandler.createStopOrders(any(), any())).thenReturn(stopOrders);
-        when(builder.executionHandler.placeStopOrder(any()))
+        when(builder.riskManagementService.createStopOrders(any(), any())).thenReturn(stopOrders);
+        when(builder.brokerService.placeStopOrder(any()))
                 .thenReturn(new StopOrderDto(FILLED, stopLossOrder))
                 .thenReturn(takeProfitOrder);
 
@@ -120,8 +120,8 @@ public class PortfolioHandlerShould {
         ArgumentCaptor<StopOrderDto> placeStopOrderArgCapture = ArgumentCaptor.forClass(StopOrderDto.class);
         ArgumentCaptor<Position> createStopOrdersArgCaptor = ArgumentCaptor.forClass(Position.class);
 
-        verify(builder.riskManagementHandler, times(1)).createStopOrders(createStopOrdersArgCaptor.capture(), any());
-        verify(builder.executionHandler, times(2)).placeStopOrder(placeStopOrderArgCapture.capture());
+        verify(builder.riskManagementService, times(1)).createStopOrders(createStopOrdersArgCaptor.capture(), any());
+        verify(builder.brokerService, times(2)).placeStopOrder(placeStopOrderArgCapture.capture());
 
         var createStopOrdersArgCaptured = placeStopOrderArgCapture.getAllValues();
         var placeStopOrderArgCaptured = createStopOrdersArgCaptor.getValue();
@@ -144,9 +144,9 @@ public class PortfolioHandlerShould {
         var stopOrders = new EnumMap<StopOrderType, StopOrderDto>(StopOrderType.class);
         stopOrders.put(StopOrderType.STOP_LOSS, stopOrderDtoMap.get(0));
 
-        when(builder.executionHandler.getStopLossOrders()).thenReturn(stopOrderDtoMap);
-        when(builder.riskManagementHandler.createStopOrders(any(), any())).thenReturn(stopOrders);
-        when(builder.executionHandler.placeStopOrder(any())).thenReturn(
+        when(builder.brokerService.getStopLossOrders()).thenReturn(stopOrderDtoMap);
+        when(builder.riskManagementService.createStopOrders(any(), any())).thenReturn(stopOrders);
+        when(builder.brokerService.placeStopOrder(any())).thenReturn(
                 new StopOrderDto(FILLED, stopOrders.get(StopOrderType.STOP_LOSS))
         );
 
@@ -166,7 +166,7 @@ public class PortfolioHandlerShould {
                 .withPositionStatus(CLOSED)
                 .build();
 
-        when(builder.riskManagementHandler.processPositionExit(any(), any()))
+        when(builder.riskManagementService.processPositionExit(any(), any()))
                 .thenReturn(Arrays.asList(cancelledPosition));
 
         var model = portfolio.getPortfolio();
@@ -175,8 +175,8 @@ public class PortfolioHandlerShould {
 
         portfolio.processExits(event, emptyList());
 
-        verify(builder.riskManagementHandler, times(1)).processPositionExit(any(), any());
-        verify(builder.orderHandler, times(1)).createOrderFromClosedPosition(any(), any());
+        verify(builder.riskManagementService, times(1)).processPositionExit(any(), any());
+        verify(builder.orderService, times(1)).createOrderFromClosedPosition(any(), any());
         verify(builder.eventNotifier, times(1)).notify(any());
     }
 
@@ -206,7 +206,7 @@ public class PortfolioHandlerShould {
         var closedPositions = portfolio.closeAllPositions(END_OF_DAY, event);
 
         assertEquals(CLOSED, closedPositions.get(0).getStatus());
-        verify(builder.orderHandler, times(1)).createOrderFromClosedPosition(any(), any());
+        verify(builder.orderService, times(1)).createOrderFromClosedPosition(any(), any());
         verify(builder.eventNotifier, times(1)).notify(any());
     }
 
@@ -230,7 +230,7 @@ public class PortfolioHandlerShould {
         model.addNewPosition(position);
 
         var filledOrderDtoMap = new HashMap<String, FilledOrderDto>();
-        when(builder.executionHandler.getPositions()).thenReturn(filledOrderDtoMap);
+        when(builder.brokerService.getPositions()).thenReturn(filledOrderDtoMap);
 
         portfolio.processReconciliation(event);
 
@@ -252,7 +252,7 @@ public class PortfolioHandlerShould {
         var filledOrderBuilder = new FilledOrderBuilder();
         filledOrderBuilder.withSymbol(position.getSymbol());
         filledOrderDtoMap.put(position.getSymbol(), filledOrderBuilder.build());
-        when(builder.executionHandler.getPositions()).thenReturn(filledOrderDtoMap);
+        when(builder.brokerService.getPositions()).thenReturn(filledOrderDtoMap);
 
         portfolio.processReconciliation(event);
 

@@ -8,10 +8,10 @@ import com.apssouza.mytrade.trading.domain.forex.portfolio.PositionClosedEvent;
 
 class PositionClosedListener implements PropertyChangeListener {
 
-    private final OrderHandler orderHandler;
+    private final OrderService orderService;
 
-    public PositionClosedListener(OrderHandler orderHandler) {
-        this.orderHandler = orderHandler;
+    public PositionClosedListener(OrderService orderService) {
+        this.orderService = orderService;
     }
 
     @Override
@@ -22,6 +22,6 @@ class PositionClosedListener implements PropertyChangeListener {
         }
 
         PositionClosedEvent event = (PositionClosedEvent) e;
-        this.orderHandler.persist(event.getOrder());
+        this.orderService.persist(event.getOrder());
     }
 }

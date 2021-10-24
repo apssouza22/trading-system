@@ -1,8 +1,8 @@
 package com.apssouza.mytrade.trading.domain.forex.portfolio;
 
-import com.apssouza.mytrade.trading.domain.forex.broker.BrokerHandler;
-import com.apssouza.mytrade.trading.domain.forex.order.OrderHandler;
-import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementHandler;
+import com.apssouza.mytrade.trading.domain.forex.broker.BrokerService;
+import com.apssouza.mytrade.trading.domain.forex.order.OrderService;
+import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementService;
 import com.apssouza.mytrade.trading.domain.forex.session.EventNotifier;
 
 import static org.mockito.Mockito.mock;
@@ -10,19 +10,19 @@ import static org.mockito.Mockito.mock;
 import java.math.BigDecimal;
 
 public class PortfolioHandlerBuilder {
-    OrderHandler orderHandler = mock(OrderHandler.class);
-    BrokerHandler executionHandler = mock(BrokerHandler.class);
+    OrderService orderService = mock(OrderService.class);
+    BrokerService brokerService = mock(BrokerService.class);
     PortfolioModel portfolio = new PortfolioModel(BigDecimal.valueOf(10000));
-    RiskManagementHandler riskManagementHandler = mock(RiskManagementHandler.class);
+    RiskManagementService riskManagementService = mock(RiskManagementService.class);
 
     EventNotifier eventNotifier = mock(EventNotifier.class);
 
-    public PortfolioHandler build() {
+    public PortfolioService build() {
         return PortfolioFactory.create(
-                orderHandler,
-                executionHandler,
+                orderService,
+                brokerService,
                 portfolio,
-                riskManagementHandler,
+                riskManagementService,
                 eventNotifier
         );
     }

@@ -1,9 +1,9 @@
 package com.apssouza.mytrade.trading.domain.forex.portfolio;
 
 import com.apssouza.mytrade.trading.domain.forex.common.observer.PropertyChangeListener;
-import com.apssouza.mytrade.trading.domain.forex.broker.BrokerHandler;
-import com.apssouza.mytrade.trading.domain.forex.order.OrderHandler;
-import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementHandler;
+import com.apssouza.mytrade.trading.domain.forex.broker.BrokerService;
+import com.apssouza.mytrade.trading.domain.forex.order.OrderService;
+import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementService;
 import com.apssouza.mytrade.trading.domain.forex.session.EventNotifier;
 
 import java.util.Arrays;
@@ -11,33 +11,33 @@ import java.util.List;
 
 public class PortfolioFactory {
 
-    public static PortfolioHandler create(
-            OrderHandler orderHandler,
-            BrokerHandler executionHandler,
+    public static PortfolioService create(
+            OrderService orderService,
+            BrokerService executionHandler,
             PortfolioModel portfolio,
-            RiskManagementHandler riskManagementHandler,
+            RiskManagementService riskManagementService,
             EventNotifier eventNotifier
     ) {
         var reconciliationHandler = new PortfoliosChecker(portfolio, executionHandler);
-        return new PortfolioHandler(
-                orderHandler,
+        return new PortfolioService(
+                orderService,
                 executionHandler,
                 portfolio,
                 reconciliationHandler,
-                riskManagementHandler,
+                riskManagementService,
                 eventNotifier
         );
     }
 
     public static List<PropertyChangeListener> createListeners(
-            PortfolioHandler portfolioHandler,
+            PortfolioService portfolioService,
             PortfolioModel portfolio,
             EventNotifier eventNotifier
     ) {
         return Arrays.asList(
-                new FilledOrderListener(portfolio, portfolioHandler),
-                new StopOrderFilledListener(portfolio, portfolioHandler,eventNotifier),
-                new EndedTradingDayListener(portfolioHandler)
+                new FilledOrderListener(portfolio, portfolioService),
+                new StopOrderFilledListener(portfolio, portfolioService,eventNotifier),
+                new EndedTradingDayListener(portfolioService)
         );
     }
 }
