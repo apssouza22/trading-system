@@ -2,7 +2,7 @@ package com.apssouza.mytrade.trading.domain.forex.session;
 
 import com.apssouza.mytrade.trading.domain.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.FilledOrderDto;
-import com.apssouza.mytrade.trading.domain.forex.portfolio.PositionDto;
+import com.apssouza.mytrade.trading.domain.forex.portfolio.Position;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -32,8 +32,8 @@ public class CycleHistory {
 
     }
 
-    public void addPosition(PositionDto ps) {
-        getTransaction(ps.identifier()).setPosition(ps);
+    public void addPosition(Position ps) {
+        getTransaction(ps.getIdentifier()).setPosition(ps);
     }
 
     public void addOrderFilled(FilledOrderDto order) {

@@ -8,18 +8,18 @@ import java.util.EnumMap;
 
 public class PositionBuilder {
 
-    PositionDto.PositionType type = PositionDto.PositionType.LONG;
+    Position.PositionType type = Position.PositionType.LONG;
     String symbol = "AUDUSD";
     Integer qtd = 1000;
     BigDecimal price = BigDecimal.valueOf(1.004);
     LocalDateTime timestamp = LocalDateTime.MIN;
     String identifier = "AUDUSD";
-    PositionDto.ExitReason exitReason = null;
+    Position.ExitReason exitReason = null;
     FilledOrderDto filledOrder = null;
-    PositionDto.PositionStatus positionStatus = PositionDto.PositionStatus.FILLED;
+    Position.PositionStatus positionStatus = Position.PositionStatus.FILLED;
     private EnumMap<StopOrderDto.StopOrderType, StopOrderDto> stopOrders = new EnumMap(StopOrderDto.StopOrderType.class);
 
-    public void withType(PositionDto.PositionType type) {
+    public void withType(Position.PositionType type) {
         this.type = type;
     }
 
@@ -43,7 +43,7 @@ public class PositionBuilder {
         this.identifier = identifier;
     }
 
-    public void withExitReason(PositionDto.ExitReason exitReason) {
+    public void withExitReason(Position.ExitReason exitReason) {
         this.exitReason = exitReason;
     }
 
@@ -51,14 +51,14 @@ public class PositionBuilder {
         this.filledOrder = filledOrder;
     }
 
-    public PositionBuilder withPositionStatus(PositionDto.PositionStatus positionStatus) {
+    public PositionBuilder withPositionStatus(Position.PositionStatus positionStatus) {
         this.positionStatus = positionStatus;
         return this;
     }
 
-    public PositionDto build() {
+    public Position build() {
 
-        PositionDto position = new PositionDto(
+        Position position = new Position(
                 type,
                 symbol,
                 qtd,
@@ -67,16 +67,13 @@ public class PositionBuilder {
                 identifier,
                 filledOrder,
                 exitReason,
-                positionStatus,
-                price,
-                price,
-                null
+                positionStatus
         );
 
         if (stopOrders.isEmpty()) {
             return position;
         }
-        return new PositionDto(position, stopOrders);
+        return new Position(position, stopOrders);
     }
 
 

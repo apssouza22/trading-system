@@ -8,7 +8,7 @@ import com.apssouza.mytrade.trading.domain.forex.feed.pricefeed.PriceChangedEven
 import com.apssouza.mytrade.trading.domain.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.FilledOrderDto;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioModel;
-import com.apssouza.mytrade.trading.domain.forex.portfolio.PositionDto;
+import com.apssouza.mytrade.trading.domain.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderCreator;
 import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderDto;
 import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderDto.StopOrderType;
@@ -32,17 +32,17 @@ public class RiskManagementService {
     }
 
 
-    public EnumMap<StopOrderType, StopOrderDto> createStopOrders(PositionDto position, Event event) {
-        stopOrderCreator.createContext(position.positionType());
+    public EnumMap<StopOrderType, StopOrderDto> createStopOrders(Position position, Event event) {
+        stopOrderCreator.createContext(position.getPositionType());
         var orders = new EnumMap<StopOrderType, StopOrderDto>(StopOrderType.class);
         if (!hasStop()) {
             return new EnumMap(StopOrderType.class);
         }
 
-        var stopOrders = position.stopOrders();
+        var stopOrders = position.getStopOrders();
         boolean changed_units = false;
         if (!stopOrders.isEmpty()) {
-            changed_units = stopOrders.get(StopOrderType.HARD_STOP).quantity() != position.quantity();
+            changed_units = stopOrders.get(StopOrderType.HARD_STOP).quantity() != position.getQuantity();
         }
 
         if (stopOrders.isEmpty() || changed_units) {
@@ -54,11 +54,11 @@ public class RiskManagementService {
         return chooseStopOrders(orders);
     }
 
-    public List<PositionDto> processPositionExit(PriceChangedEvent event, List<SignalDto> signals) {
+    public List<Position> processPositionExit(PriceChangedEvent event, List<SignalDto> signals) {
         return exitHandler.process(event, signals);
     }
 
-    private EnumMap<StopOrderType, StopOrderDto> getMovingStops(PositionDto position, Event event) {
+    private EnumMap<StopOrderType, StopOrderDto> getMovingStops(Position position, Event event) {
         EnumMap<StopOrderType, StopOrderDto> stop_orders = new EnumMap(StopOrderType.class);
         Consumer<StopOrderDto> consumer = (dto) -> stop_orders.put(dto.type(), dto);
         if (TradingParams.entry_stop_loss_enabled) {
@@ -104,12 +104,12 @@ public class RiskManagementService {
     }
 
     public boolean canCreateOrder(OrderDto order) {
-        Map<String, PositionDto> positions = portfolio.getPositions();
+        Map<String, Position> positions = portfolio.getPositions();
         if (TradingParams.trading_position_edit_enabled || TradingParams.trading_multi_position_enabled) {
             return true;
         }
-        for (Map.Entry<String, PositionDto> entry : positions.entrySet()) {
-            FilledOrderDto filledOrder = entry.getValue().filledOrder();
+        for (Map.Entry<String, Position> entry : positions.entrySet()) {
+            FilledOrderDto filledOrder = entry.getValue().getFilledOrder();
             if (filledOrder.symbol().equals(order.symbol()) && filledOrder.action().equals(order.action())) {
                 return false;
             }

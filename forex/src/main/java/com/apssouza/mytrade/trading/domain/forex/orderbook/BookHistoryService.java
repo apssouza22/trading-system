@@ -2,7 +2,7 @@ package com.apssouza.mytrade.trading.domain.forex.orderbook;
 
 import com.apssouza.mytrade.trading.domain.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.FilledOrderDto;
-import com.apssouza.mytrade.trading.domain.forex.portfolio.PositionDto;
+import com.apssouza.mytrade.trading.domain.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.domain.forex.session.CycleHistory;
 import com.apssouza.mytrade.trading.domain.forex.session.TransactionDto;
 
@@ -37,7 +37,7 @@ public class BookHistoryService {
         this.cycle.setState(exit, identifier);
     }
 
-    public void addPosition(PositionDto ps) {
+    public void addPosition(Position ps) {
         this.cycle.addPosition(ps);
     }
 

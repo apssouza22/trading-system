@@ -2,7 +2,7 @@ package com.apssouza.mytrade.trading.domain.forex.order;
 
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PositionBuilder;
 import com.apssouza.mytrade.trading.domain.forex.feed.SignalBuilder;
-import com.apssouza.mytrade.trading.domain.forex.portfolio.PositionDto;
+import com.apssouza.mytrade.trading.domain.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementService;
 import com.apssouza.mytrade.trading.domain.forex.feed.signalfeed.SignalCreatedEvent;
 import static com.apssouza.mytrade.trading.domain.forex.order.OrderDto.OrderAction.BUY;
@@ -46,9 +46,9 @@ public class OrderServiceShould extends TestCase {
     @Test
     public void createOrderFromClosedPosition_ofShortType() {
         PositionBuilder positionBuilder = new PositionBuilder();
-        positionBuilder.withPositionStatus(PositionDto.PositionStatus.CLOSED);
-        positionBuilder.withType(PositionDto.PositionType.SHORT);
-        PositionDto position = positionBuilder.build();
+        positionBuilder.withPositionStatus(Position.PositionStatus.CLOSED);
+        positionBuilder.withType(Position.PositionType.SHORT);
+        Position position = positionBuilder.build();
 
         OrderService orderService = OrderHandlerFactory.create(this.riskManagementService);
         OrderDto orderFromClosedPosition = orderService.createOrderFromClosedPosition(position, LocalDateTime.MIN);
@@ -59,9 +59,9 @@ public class OrderServiceShould extends TestCase {
     @Test
     public void createOrderFromClosedPosition_ofLongType() {
         PositionBuilder positionBuilder = new PositionBuilder();
-        positionBuilder.withPositionStatus(PositionDto.PositionStatus.CLOSED);
-        positionBuilder.withType(PositionDto.PositionType.LONG);
-        PositionDto position = positionBuilder.build();
+        positionBuilder.withPositionStatus(Position.PositionStatus.CLOSED);
+        positionBuilder.withType(Position.PositionType.LONG);
+        Position position = positionBuilder.build();
 
         OrderService orderService = OrderHandlerFactory.create(this.riskManagementService);
         OrderDto orderFromClosedPosition = orderService.createOrderFromClosedPosition(position, LocalDateTime.MIN);

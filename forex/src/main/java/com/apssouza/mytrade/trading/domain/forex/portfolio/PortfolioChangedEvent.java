@@ -7,18 +7,18 @@ import java.time.LocalDateTime;
 import java.util.Map;
 
 public class PortfolioChangedEvent extends AbstractEvent {
-    private final PositionDto position;
+    private final Position position;
 
     public PortfolioChangedEvent(
             LocalDateTime timestamp,
             Map<String, PriceDto> price,
-            PositionDto position
+            Position position
     ) {
         super(timestamp, price);
         this.position = position;
     }
 
-    public PositionDto getPosition() {
+    public Position getPosition() {
         return position;
     }
 }

@@ -2,7 +2,7 @@ package com.apssouza.mytrade.trading.domain.forex.risk;
 
 import com.apssouza.mytrade.trading.domain.forex.common.TradingParams;
 import com.apssouza.mytrade.trading.domain.forex.order.StopOrderBuilder;
-import com.apssouza.mytrade.trading.domain.forex.portfolio.PositionDto;
+import com.apssouza.mytrade.trading.domain.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PositionBuilder;
 import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.RiskManagementBuilder;
 import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderDto.StopOrderType;
@@ -37,7 +37,7 @@ public class RiskManagementServiceShould extends TestCase {
         RiskManagementService risk = new RiskManagementBuilder().build();
 
         PositionBuilder positionBuilder = new PositionBuilder();
-        PositionDto position = positionBuilder.build();
+        Position position = positionBuilder.build();
         LoopEventBuilder loopEventBuilder = new LoopEventBuilder();
         loopEventBuilder.withPriceMap(BigDecimal.TEN);
         var stopOrders = risk.createStopOrders(position, loopEventBuilder.build());
@@ -55,7 +55,7 @@ public class RiskManagementServiceShould extends TestCase {
         RiskManagementService risk = new RiskManagementBuilder().build();
 
         PositionBuilder positionBuilder = new PositionBuilder();
-        PositionDto position = positionBuilder.build();
+        Position position = positionBuilder.build();
         LoopEventBuilder loopEventBuilder = new LoopEventBuilder();
         loopEventBuilder.withPriceMap(BigDecimal.TEN);
         var stopOrders = risk.createStopOrders(position, loopEventBuilder.build());
@@ -75,7 +75,7 @@ public class RiskManagementServiceShould extends TestCase {
         RiskManagementService risk = new RiskManagementBuilder().build();
 
         PositionBuilder positionBuilder = new PositionBuilder();
-        PositionDto position = positionBuilder.build();
+        Position position = positionBuilder.build();
         LoopEventBuilder loopEventBuilder = new LoopEventBuilder();
         loopEventBuilder.withPriceMap(BigDecimal.TEN);
         var stopOrders = risk.createStopOrders(position, loopEventBuilder.build());
@@ -93,7 +93,7 @@ public class RiskManagementServiceShould extends TestCase {
         RiskManagementService risk = new RiskManagementBuilder().build();
 
         PositionBuilder positionBuilder = new PositionBuilder();
-        PositionDto position = positionBuilder.build();
+        Position position = positionBuilder.build();
 
         LoopEventBuilder loopEventBuilder = new LoopEventBuilder();
         loopEventBuilder.withPriceMap(BigDecimal.TEN);
@@ -114,7 +114,7 @@ public class RiskManagementServiceShould extends TestCase {
         RiskManagementService risk = new RiskManagementBuilder().build();
 
         PositionBuilder positionBuilder = new PositionBuilder();
-        PositionDto position = positionBuilder.build();
+        Position position = positionBuilder.build();
 
         LoopEventBuilder loopEventBuilder = new LoopEventBuilder();
         loopEventBuilder.withPriceMap(BigDecimal.TEN);
@@ -137,7 +137,7 @@ public class RiskManagementServiceShould extends TestCase {
         PositionBuilder positionBuilder = new PositionBuilder();
         positionBuilder.addStopOrder(stopOrderBuilder.build());
 
-        PositionDto position = positionBuilder.build();
+        Position position = positionBuilder.build();
 
         LoopEventBuilder loopEventBuilder = new LoopEventBuilder();
         loopEventBuilder.withPriceMap(BigDecimal.TEN);
@@ -161,7 +161,7 @@ public class RiskManagementServiceShould extends TestCase {
         PositionBuilder positionBuilder = new PositionBuilder();
         positionBuilder.addStopOrder(stopOrderBuilder.build());
 
-        PositionDto position = positionBuilder.build();
+        Position position = positionBuilder.build();
 
         LoopEventBuilder loopEventBuilder = new LoopEventBuilder();
         loopEventBuilder.withPriceMap(BigDecimal.TEN);

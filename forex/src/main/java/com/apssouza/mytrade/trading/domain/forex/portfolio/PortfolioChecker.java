@@ -19,7 +19,7 @@ class PortfolioChecker {
      * Check if the local portfolio is in sync with the portfolio on the broker
      */
     public void process() throws ReconciliationException {
-        Map<String, PositionDto> localPositions = portfolio.getPositions();
+        Map<String, Position> localPositions = portfolio.getPositions();
         Map<String, FilledOrderDto> remotePositions = executionHandler.getPositions();
 
         if (localPositions.isEmpty() && remotePositions.isEmpty()) {
@@ -35,15 +35,15 @@ class PortfolioChecker {
         }
     }
 
-    private void checkEveryPosition(Map<String, PositionDto> localPositions,
+    private void checkEveryPosition(Map<String, Position> localPositions,
             Map<String, FilledOrderDto> remotePositions
     ) throws ReconciliationException {
-        for (Map.Entry<String, PositionDto> entry : localPositions.entrySet()) {
-            String symbol = entry.getValue().symbol();
+        for (Map.Entry<String, Position> entry : localPositions.entrySet()) {
+            String symbol = entry.getValue().getSymbol();
             if (!remotePositions.containsKey(symbol)) {
                 throw new ReconciliationException("Position key mismatch", localPositions, remotePositions);
             }
-            OrderDto.OrderAction orderAction = entry.getValue().positionType().getOrderAction();
+            OrderDto.OrderAction orderAction = entry.getValue().getPositionType().getOrderAction();
             if (!remotePositions.get(symbol).action().equals(orderAction)) {
                 throw new ReconciliationException("Position action mismatch", localPositions, remotePositions);
             }

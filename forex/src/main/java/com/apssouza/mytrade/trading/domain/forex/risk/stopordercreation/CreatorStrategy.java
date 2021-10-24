@@ -1,18 +1,18 @@
 package com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation;
 
-import com.apssouza.mytrade.trading.domain.forex.portfolio.PositionDto;
+import com.apssouza.mytrade.trading.domain.forex.portfolio.Position;
 
 import java.math.BigDecimal;
 import java.util.Optional;
 
 interface CreatorStrategy {
 
-    BigDecimal getEntryStopPrice(PositionDto position, BigDecimal priceClose);
+    BigDecimal getEntryStopPrice(Position position, BigDecimal priceClose);
 
-    BigDecimal getHardStopPrice(PositionDto position);
+    BigDecimal getHardStopPrice(Position position);
 
-    Optional<BigDecimal> getTrailingStopPrice(PositionDto position, BigDecimal last_close);
+    Optional<BigDecimal> getTrailingStopPrice(Position position, BigDecimal last_close);
 
-    BigDecimal getProfitStopPrice(PositionDto position);
+    BigDecimal getProfitStopPrice(Position position);
 
 }

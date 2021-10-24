@@ -3,7 +3,7 @@ package com.apssouza.mytrade.trading.domain.forex.risk;
 import com.apssouza.mytrade.feed.api.PriceDto;
 import com.apssouza.mytrade.trading.domain.forex.feed.pricefeed.PriceChangedEvent;
 import com.apssouza.mytrade.trading.domain.forex.order.OrderDto;
-import com.apssouza.mytrade.trading.domain.forex.portfolio.PositionDto;
+import com.apssouza.mytrade.trading.domain.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PositionBuilder;
 import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderConfigDto;
 import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderCreator;
@@ -35,9 +35,9 @@ public class StopOrderCreatorFixedTest extends TestCase {
     @Test
     public void getHardStopLoss_WhenLongPosition() {
         PositionBuilder positionBuilder = new PositionBuilder();
-        positionBuilder.withType(PositionDto.PositionType.LONG);
-        PositionDto position = positionBuilder.build();
-        obj.createContext(PositionDto.PositionType.LONG);
+        positionBuilder.withType(Position.PositionType.LONG);
+        Position position = positionBuilder.build();
+        obj.createContext(Position.PositionType.LONG);
         StopOrderDto hardStopLoss = obj.getHardStopLoss(position);
 
         assertEquals(StopOrderDto.StopOrderStatus.CREATED, hardStopLoss.status());
@@ -49,10 +49,10 @@ public class StopOrderCreatorFixedTest extends TestCase {
     @Test
     public void getHardStopLoss_WhenShortPosition() {
         PositionBuilder positionBuilder = new PositionBuilder();
-        positionBuilder.withType(PositionDto.PositionType.SHORT);
+        positionBuilder.withType(Position.PositionType.SHORT);
         positionBuilder.withPrice(BigDecimal.valueOf(1.004));
-        PositionDto position = positionBuilder.build();
-        obj.createContext(PositionDto.PositionType.SHORT);
+        Position position = positionBuilder.build();
+        obj.createContext(Position.PositionType.SHORT);
 
         StopOrderDto hardStopLoss = obj.getHardStopLoss(position);
         assertEquals(StopOrderDto.StopOrderStatus.CREATED, hardStopLoss.status());
@@ -64,9 +64,9 @@ public class StopOrderCreatorFixedTest extends TestCase {
     @Test
     public void getTakeProfit_WhenShortPosition() {
         PositionBuilder positionBuilder = new PositionBuilder();
-        positionBuilder.withType(PositionDto.PositionType.SHORT);
-        PositionDto position = positionBuilder.build();
-        obj.createContext(PositionDto.PositionType.SHORT);
+        positionBuilder.withType(Position.PositionType.SHORT);
+        Position position = positionBuilder.build();
+        obj.createContext(Position.PositionType.SHORT);
 
         StopOrderDto hardStopLoss = obj.getProfitStopOrder(position);
         assertEquals(StopOrderDto.StopOrderStatus.CREATED, hardStopLoss.status());
@@ -79,11 +79,11 @@ public class StopOrderCreatorFixedTest extends TestCase {
     @Test
     public void getTakeProfit_WhenLongPosition() {
         PositionBuilder positionBuilder = new PositionBuilder();
-        positionBuilder.withType(PositionDto.PositionType.LONG);
+        positionBuilder.withType(Position.PositionType.LONG);
         positionBuilder.withPrice(BigDecimal.valueOf(1.004));
-        PositionDto position = positionBuilder.build();
+        Position position = positionBuilder.build();
 
-        obj.createContext(PositionDto.PositionType.LONG);
+        obj.createContext(Position.PositionType.LONG);
 
         StopOrderDto hardStopLoss = obj.getProfitStopOrder(position);
         assertEquals(StopOrderDto.StopOrderStatus.CREATED, hardStopLoss.status());
@@ -96,11 +96,11 @@ public class StopOrderCreatorFixedTest extends TestCase {
     @Test
     public void getEntryStopLoss_WhenLongPosition() {
         PositionBuilder positionBuilder = new PositionBuilder();
-        positionBuilder.withType(PositionDto.PositionType.LONG);
+        positionBuilder.withType(Position.PositionType.LONG);
         positionBuilder.withPrice(BigDecimal.valueOf(1.004));
-        PositionDto position = positionBuilder.build();
+        Position position = positionBuilder.build();
 
-        obj.createContext(PositionDto.PositionType.LONG);
+        obj.createContext(Position.PositionType.LONG);
 
         HashMap<String, PriceDto> priceMap = new HashMap<>();
         LocalDateTime now = LocalDateTime.now();
@@ -118,20 +118,17 @@ public class StopOrderCreatorFixedTest extends TestCase {
 
     @Test
     public void getEntryStopLoss_WhenLongPositionAndPriceNotReachedEntryDistance() {
-        PositionDto position = new PositionDto(
-                PositionDto.PositionType.LONG,
+        Position position = new Position(
+                Position.PositionType.LONG,
                 "AUDUSD",
                 1000,
                 BigDecimal.valueOf(1.004),
                 LocalDateTime.now(), "AUDUSD",
                 null,
                 null,
-                PositionDto.PositionStatus.FILLED,
-                null,
-                null,
-                null
+                Position.PositionStatus.FILLED
         );
-        obj.createContext(PositionDto.PositionType.LONG);
+        obj.createContext(Position.PositionType.LONG);
         HashMap<String, PriceDto> priceMap = new HashMap<>();
         LocalDateTime now = LocalDateTime.now();
         BigDecimal close = BigDecimal.valueOf(1.105);
@@ -145,20 +142,17 @@ public class StopOrderCreatorFixedTest extends TestCase {
 
     @Test
     public void getEntryStopLossWhenShortPosition() {
-        PositionDto position = new PositionDto(
-                PositionDto.PositionType.SHORT,
+        Position position = new Position(
+                Position.PositionType.SHORT,
                 "AUDUSD",
                 1000,
                 BigDecimal.valueOf(1.004),
                 LocalDateTime.now(), "AUDUSD",
                 null,
                 null,
-                PositionDto.PositionStatus.FILLED,
-                null,
-                null,
-                null
+                Position.PositionStatus.FILLED
         );
-        obj.createContext(PositionDto.PositionType.SHORT);
+        obj.createContext(Position.PositionType.SHORT);
         HashMap<String, PriceDto> priceMap = new HashMap<>();
         LocalDateTime now = LocalDateTime.now();
         BigDecimal close = BigDecimal.valueOf(0.803);
@@ -175,20 +169,17 @@ public class StopOrderCreatorFixedTest extends TestCase {
 
     @Test
     public void getEntryStopLossWhenShortPositionAndPriceNotReachedEntryDistance() {
-        PositionDto position = new PositionDto(
-                PositionDto.PositionType.SHORT,
+        Position position = new Position(
+                Position.PositionType.SHORT,
                 "AUDUSD",
                 1000,
                 BigDecimal.valueOf(1.004),
                 LocalDateTime.now(), "AUDUSD",
                 null,
                 null,
-                PositionDto.PositionStatus.FILLED,
-                null,
-                null,
-                null
+                Position.PositionStatus.FILLED
         );
-        obj.createContext(PositionDto.PositionType.SHORT);
+        obj.createContext(Position.PositionType.SHORT);
         HashMap<String, PriceDto> priceMap = new HashMap<>();
         LocalDateTime now = LocalDateTime.now();
         BigDecimal close = BigDecimal.valueOf(1.105);

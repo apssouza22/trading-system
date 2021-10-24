@@ -1,19 +1,19 @@
 package com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation;
 
-import com.apssouza.mytrade.trading.domain.forex.portfolio.PositionDto;
+import com.apssouza.mytrade.trading.domain.forex.portfolio.Position;
 import com.apssouza.mytrade.trading.domain.forex.common.Event;
 
 import java.util.Optional;
 
 public interface StopOrderCreator {
 
-    void createContext(PositionDto.PositionType type);
+    void createContext(Position.PositionType type);
 
-    StopOrderDto getHardStopLoss(PositionDto position);
+    StopOrderDto getHardStopLoss(Position position);
 
-    StopOrderDto getProfitStopOrder(PositionDto position);
+    StopOrderDto getProfitStopOrder(Position position);
 
-    Optional<StopOrderDto> getEntryStopOrder(PositionDto position, Event event);
+    Optional<StopOrderDto> getEntryStopOrder(Position position, Event event);
 
-    Optional<StopOrderDto> getTrailingStopOrder(PositionDto position, Event event);
+    Optional<StopOrderDto> getTrailingStopOrder(Position position, Event event);
 }

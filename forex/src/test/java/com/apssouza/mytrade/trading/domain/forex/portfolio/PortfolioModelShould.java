@@ -19,26 +19,25 @@ public class PortfolioModelShould extends TestCase {
     public void updatePortfolioValue() {
         PortfolioModel portfolio = new PortfolioModel(BigDecimal.valueOf(10000));
         PositionBuilder positionBuilder = new PositionBuilder();
-        PositionDto ps = positionBuilder.build();
+        Position ps = positionBuilder.build();
         LoopEventBuilder loopEventBuilder = new LoopEventBuilder();
         loopEventBuilder.withPriceMap(BigDecimal.valueOf(10));
         PriceChangedEvent loopEvent = loopEventBuilder.build();
-        portfolio.addNewPosition(ps.positionType(), ps.filledOrder());
+        portfolio.addNewPosition(ps);
         portfolio.updatePortfolioBalance(loopEvent.getPrice());
 
-        Map<String, PositionDto> positions = portfolio.getPositions();
+        Map<String, Position> positions = portfolio.getPositions();
 
-        BigDecimal currentPrice = positions.get(ps.identifier()).currentPrice();
-        assertFalse(ps.initPrice().equals(currentPrice));
+        BigDecimal currentPrice = positions.get(ps.getIdentifier()).getCurrentPrice();
+        assertFalse(ps.getInitPrice().equals(currentPrice));
     }
 
 
     @Test
     public void returnPositions() {
         PortfolioModel portfolio = new PortfolioModel(BigDecimal.valueOf(10000));
-        PositionDto ps = new PositionBuilder().build();
-        portfolio.addNewPosition(ps.positionType(), ps.filledOrder());
-        Map<String, PositionDto> positions = portfolio.getPositions();
+        portfolio.addNewPosition(new PositionBuilder().build());
+        Map<String, Position> positions = portfolio.getPositions();
         assertEquals(1, positions.size());
     }
 
@@ -46,34 +45,34 @@ public class PortfolioModelShould extends TestCase {
     public void addNewPosition() {
         PortfolioModel portfolio = new PortfolioModel(BigDecimal.valueOf(10000));
         PositionBuilder positionBuilder = new PositionBuilder();
-        PositionDto ps = positionBuilder.build();
-        portfolio.addNewPosition(ps.positionType(), ps.filledOrder());
-        Map<String, PositionDto> positions = portfolio.getPositions();
-        assertEquals(ps, positions.get(ps.identifier()));
+        Position ps = positionBuilder.build();
+        portfolio.addNewPosition(ps);
+        Map<String, Position> positions = portfolio.getPositions();
+        assertEquals(ps, positions.get(ps.getIdentifier()));
     }
 
     @Test
     public void addPositionQtd() throws PortfolioException {
         PortfolioModel portfolio = new PortfolioModel(BigDecimal.valueOf(10000));
         PositionBuilder positionBuilder = new PositionBuilder();
-        PositionDto ps = positionBuilder.build();
+        Position ps = positionBuilder.build();
 
-        int qtd = ps.quantity();
-        portfolio.addNewPosition(ps.positionType(), ps.filledOrder());
-        portfolio.addPositionQtd(ps.identifier(), 100, BigDecimal.ONE);
-        Map<String, PositionDto> positions = portfolio.getPositions();
+        int qtd = ps.getQuantity();
+        portfolio.addNewPosition(ps);
+        portfolio.addPositionQtd(ps.getIdentifier(), 100, BigDecimal.ONE);
+        Map<String, Position> positions = portfolio.getPositions();
 
-        assertTrue(positions.get(ps.identifier()).quantity() == qtd + 100);
-        assertEquals(BigDecimal.valueOf(1.0040).setScale(4), positions.get(ps.identifier()).avgPrice());
+        assertTrue(positions.get(ps.getIdentifier()).getQuantity() == qtd + 100);
+        assertEquals(BigDecimal.valueOf(1.0040).setScale(4), positions.get(ps.getIdentifier()).getAvgPrice());
     }
 
     @Test(expected = RuntimeException.class)
     public void notAddPositionQtd_withoutPosition() throws PortfolioException {
         PortfolioModel portfolio = new PortfolioModel(BigDecimal.valueOf(10000));
         PositionBuilder positionBuilder = new PositionBuilder();
-        PositionDto ps = positionBuilder.build();
+        Position ps = positionBuilder.build();
 
-        portfolio.addNewPosition(ps.positionType(), ps.filledOrder());
+        portfolio.addNewPosition(ps);
         portfolio.addPositionQtd("ddd", 100, BigDecimal.ONE);
     }
 
@@ -82,36 +81,36 @@ public class PortfolioModelShould extends TestCase {
     public void removePositionQtd() throws PortfolioException {
         PortfolioModel portfolio = new PortfolioModel(BigDecimal.valueOf(10000));
         PositionBuilder positionBuilder = new PositionBuilder();
-        PositionDto ps = positionBuilder.build();
+        Position ps = positionBuilder.build();
 
-        int qtd = ps.quantity();
-        portfolio.addNewPosition(ps.positionType(), ps.filledOrder());
-        portfolio.removePositionQtd(ps.identifier(), qtd);
-        Map<String, PositionDto> positions = portfolio.getPositions();
+        int qtd = ps.getQuantity();
+        portfolio.addNewPosition(ps);
+        portfolio.removePositionQtd(ps.getIdentifier(), qtd);
+        Map<String, Position> positions = portfolio.getPositions();
 
-        assertTrue(positions.get(ps.identifier()).quantity() == 0);
+        assertTrue(positions.get(ps.getIdentifier()).getQuantity() == 0);
     }
 
     @Test
     public void removePositionHalfQtd() throws PortfolioException {
         PortfolioModel portfolio = new PortfolioModel(BigDecimal.valueOf(10000));
         PositionBuilder positionBuilder = new PositionBuilder();
-        PositionDto ps = positionBuilder.build();
+        Position ps = positionBuilder.build();
 
-        portfolio.addNewPosition(ps.positionType(), ps.filledOrder());
-        portfolio.removePositionQtd(ps.identifier(), 50);
-        Map<String, PositionDto> positions = portfolio.getPositions();
+        portfolio.addNewPosition(ps);
+        portfolio.removePositionQtd(ps.getIdentifier(), 50);
+        Map<String, Position> positions = portfolio.getPositions();
 
-        assertTrue(positions.get(ps.identifier()).quantity() == 950);
+        assertTrue(positions.get(ps.getIdentifier()).getQuantity() == 950);
     }
 
     @Test(expected = RuntimeException.class)
     public void notRemovePosition_withoutPosition() throws PortfolioException {
         PortfolioModel portfolio = new PortfolioModel(BigDecimal.valueOf(10000));
         PositionBuilder positionBuilder = new PositionBuilder();
-        PositionDto ps = positionBuilder.build();
+        Position ps = positionBuilder.build();
 
-        portfolio.addNewPosition(ps.positionType(), ps.filledOrder());
+        portfolio.addNewPosition(ps);
         portfolio.removePositionQtd("dsds", 50);
 
     }
@@ -120,11 +119,11 @@ public class PortfolioModelShould extends TestCase {
     public void closePosition() {
         PortfolioModel portfolio = new PortfolioModel(BigDecimal.valueOf(10000));
         PositionBuilder positionBuilder = new PositionBuilder();
-        PositionDto ps = positionBuilder.build();
-        portfolio.addNewPosition(ps.positionType(), ps.filledOrder());
-        portfolio.closePosition(ps.identifier(), PositionDto.ExitReason.STOP_ORDER_FILLED);
+        Position ps = positionBuilder.build();
+        portfolio.addNewPosition(ps);
+        portfolio.closePosition(ps.getIdentifier(), Position.ExitReason.STOP_ORDER_FILLED);
 
-        Map<String, PositionDto> positions = portfolio.getPositions();
+        Map<String, Position> positions = portfolio.getPositions();
 
         assertEquals(0, positions.size());
     }
@@ -134,17 +133,17 @@ public class PortfolioModelShould extends TestCase {
     public void notClosePosition_WithoutPosition() {
         PortfolioModel portfolio = new PortfolioModel(BigDecimal.valueOf(10000));
         PositionBuilder positionBuilder = new PositionBuilder();
-        PositionDto ps = positionBuilder.build();
-        portfolio.closePosition(ps.identifier(), PositionDto.ExitReason.STOP_ORDER_FILLED);
+        Position ps = positionBuilder.build();
+        portfolio.closePosition(ps.getIdentifier(), Position.ExitReason.STOP_ORDER_FILLED);
     }
 
     @Test
     public void returnPosition() {
         PortfolioModel portfolio = new PortfolioModel(BigDecimal.valueOf(10000));
         PositionBuilder positionBuilder = new PositionBuilder();
-        PositionDto ps = positionBuilder.build();
-        portfolio.addNewPosition(ps.positionType(), ps.filledOrder());
-        PositionDto position = portfolio.getPosition(ps.identifier());
+        Position ps = positionBuilder.build();
+        portfolio.addNewPosition(ps);
+        Position position = portfolio.getPosition(ps.getIdentifier());
         assertEquals(ps, position);
     }
 
@@ -152,7 +151,7 @@ public class PortfolioModelShould extends TestCase {
     public void notReturnPosition_NotExists() {
         PortfolioModel portfolio = new PortfolioModel(BigDecimal.valueOf(10000));
         PositionBuilder positionBuilder = new PositionBuilder();
-        PositionDto ps = positionBuilder.build();
-        portfolio.getPosition(ps.identifier());
+        Position ps = positionBuilder.build();
+        portfolio.getPosition(ps.getIdentifier());
     }
 }
