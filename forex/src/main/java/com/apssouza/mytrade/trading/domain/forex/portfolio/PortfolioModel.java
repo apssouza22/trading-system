@@ -5,9 +5,9 @@ import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrde
 
 import java.math.BigDecimal;
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
-import static java.math.BigDecimal.valueOf;
 
 public class PortfolioModel {
     private final BigDecimal equity;
@@ -25,8 +25,8 @@ public class PortfolioModel {
         });
     }
 
-    public Map<String, PositionDto> getPositions() {
-        return positions.getPositions();
+    public PositionCollection getPositionCollection() {
+        return positions;
     }
 
     public Map<String, PositionDto> getOpenPositions() {
@@ -34,7 +34,7 @@ public class PortfolioModel {
     }
 
     public PositionDto addPositionQtd(String identifier, int qtd, BigDecimal price) throws PortfolioException {
-        if (!this.positions.getPositions().containsKey(identifier)) {
+        if (!this.positions.contains(identifier)) {
             throw new PortfolioException("Position not found");
         }
         var ps = this.positions.get(identifier);
@@ -61,23 +61,8 @@ public class PortfolioModel {
         if (!this.positions.contains(identifier)) {
             throw new RuntimeException("Position not found");
         }
-        PositionDto position = this.positions.get(identifier);
-        var ps = new PositionDto(
-                position.positionType(),
-                position.symbol(),
-                position.quantity(),
-                position.initPrice(),
-                position.timestamp(),
-                position.identifier(),
-                position.filledOrder(),
-                reason,
-                PositionDto.PositionStatus.CLOSED,
-                position.currentPrice(),
-                position.avgPrice(),
-                position.stopOrders()
-        );
         this.positions.remove(identifier);
-        log.info(String.format("Position closed - %s %s  ", ps.identifier(), ps.quantity()));
+        log.info(String.format("Position closed - %s %s  ", identifier, reason));
         return true;
     }
 
@@ -110,5 +95,17 @@ public class PortfolioModel {
         );
         this.positions.add(ps);
         return ps;
+    }
+
+    public boolean contains(final String identifier) {
+        return positions.contains(identifier);
+    }
+
+    public List<PositionDto> getPositions() {
+        return positions.getPositions();
+    }
+
+    public boolean isEmpty() {
+        return positions.isEmpty();
     }
 }

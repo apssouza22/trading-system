@@ -3,8 +3,6 @@ package com.apssouza.mytrade.trading.domain.forex.orderbook;
 import com.apssouza.mytrade.trading.domain.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.FilledOrderDto;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PositionDto;
-import com.apssouza.mytrade.trading.domain.forex.session.CycleHistory;
-import com.apssouza.mytrade.trading.domain.forex.session.TransactionDto;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -13,20 +11,20 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class BookHistoryService {
     private final TransactionsExporter transactionsExporter;
-    public List<CycleHistory> transactions = new CopyOnWriteArrayList<>();
+    public List<CycleHistoryDto> transactions = new CopyOnWriteArrayList<>();
 
     public BookHistoryService(TransactionsExporter transactionsExporter) {
         this.transactionsExporter = transactionsExporter;
     }
 
-    private CycleHistory cycle;
+    private CycleHistoryDto cycle;
 
-    public List<CycleHistory> getTransactions() {
+    public List<CycleHistoryDto> getTransactions() {
         return this.transactions;
     }
 
     public void startCycle(LocalDateTime time) {
-        this.cycle = new CycleHistory(time);
+        this.cycle = new CycleHistoryDto(time);
     }
 
     public void endCycle() {

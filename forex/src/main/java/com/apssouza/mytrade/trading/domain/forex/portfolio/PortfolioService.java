@@ -13,7 +13,7 @@ import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementService;
 import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderDto;
 import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderFilledEvent;
 import com.apssouza.mytrade.trading.domain.forex.common.observerinfra.EventNotifier;
-import com.apssouza.mytrade.trading.domain.forex.session.MultiPositionHandler;
+import com.apssouza.mytrade.trading.domain.forex.common.MultiPositionHandler;
 import static com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderDto.StopOrderType.STOP_LOSS;
 import static com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderDto.StopOrderType.TAKE_PROFIT;
 
@@ -55,7 +55,7 @@ public class PortfolioService {
     }
 
     public void createStopOrder(Event event) {
-        if (portfolio.getPositions().isEmpty()) {
+        if (portfolio.getPositionCollection().isEmpty()) {
             return;
         }
         log.info("Creating stop loss...");
@@ -63,8 +63,7 @@ public class PortfolioService {
         MultiPositionHandler.deleteAllMaps();
 
         Map<Integer, StopOrderDto> stopOrders = new HashMap<>();
-        for (Map.Entry<String, PositionDto> entry : this.portfolio.getPositions().entrySet()) {
-            PositionDto position = entry.getValue();
+        for (PositionDto position : this.portfolio.getPositionCollection().getPositions()) {
             var stops = riskManagementService.createStopOrders(position, event);
             position = new PositionDto(position, stops);
             var stopLoss = stops.get(STOP_LOSS);
@@ -85,7 +84,7 @@ public class PortfolioService {
     }
 
     public void handleStopOrder(Event event) {
-        if (portfolio.getPositions().isEmpty()) {
+        if (portfolio.getPositionCollection().isEmpty()) {
             return;
         }
         this.executionHandler.processStopOrders();
@@ -132,7 +131,7 @@ public class PortfolioService {
     }
 
     public synchronized void processExits(PriceChangedEvent event, List<SignalDto> signals) {
-        if (portfolio.getPositions().isEmpty()) {
+        if (portfolio.getPositionCollection().isEmpty()) {
             return;
         }
         List<PositionDto> exitedPositions = this.riskManagementService.processPositionExit(event, signals);
@@ -151,13 +150,11 @@ public class PortfolioService {
                     order
             ));
         }
-
     }
 
     public List<PositionDto> closeAllPositions(PositionDto.ExitReason reason, Event event) {
         List<PositionDto> exitedPositions = new ArrayList<>();
-        for (Map.Entry<String, PositionDto> entry : this.portfolio.getPositions().entrySet()) {
-            PositionDto position = entry.getValue();
+        for (PositionDto position  : this.portfolio.getPositionCollection().getPositions()) {
             if (!position.isPositionAlive()) {
                 continue;
             }

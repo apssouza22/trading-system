@@ -1,4 +1,4 @@
-package com.apssouza.mytrade.trading.domain.forex.session;
+package com.apssouza.mytrade.trading.domain.forex.orderbook;
 
 import com.apssouza.mytrade.trading.domain.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.FilledOrderDto;
@@ -8,13 +8,13 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CycleHistory {
+public class CycleHistoryDto {
 
     private final LocalDateTime time;
 
     private Map<String, TransactionDto> transactions = new HashMap<>();
 
-    public CycleHistory(LocalDateTime time) {
+    public CycleHistoryDto(LocalDateTime time) {
         this.time = time;
     }
 

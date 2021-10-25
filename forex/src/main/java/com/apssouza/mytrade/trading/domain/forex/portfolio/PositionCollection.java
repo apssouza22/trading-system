@@ -1,5 +1,6 @@
 package com.apssouza.mytrade.trading.domain.forex.portfolio;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
@@ -28,8 +29,12 @@ class PositionCollection {
         positions.remove(identifier);
     }
 
-    public Map<String, PositionDto> getPositions() {
-        return new ConcurrentHashMap<>(positions);
+    public List<PositionDto> getPositions() {
+        return positions
+                .entrySet()
+                .stream()
+                .map(Map.Entry::getValue).
+                collect(Collectors.toList());
     }
 
     public PositionDto get(String identifier) {
@@ -45,5 +50,13 @@ class PositionCollection {
 
     public boolean contains(String identifier) {
         return positions.containsKey(identifier);
+    }
+
+    public boolean isEmpty() {
+        return positions.isEmpty();
+    }
+
+    public int size() {
+        return positions.size();
     }
 }

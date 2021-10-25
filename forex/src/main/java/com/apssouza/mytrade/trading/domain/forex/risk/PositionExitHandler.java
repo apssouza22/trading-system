@@ -23,13 +23,12 @@ class PositionExitHandler {
     }
 
     public List<PositionDto> process(PriceChangedEvent event, List<SignalDto> signals) {
-        if (this.portfolio.getPositions().isEmpty()){
+        if (this.portfolio.isEmpty()){
             return Collections.emptyList();
         }
         log.info("Processing exits...");
         List<PositionDto> exitedPositions = new ArrayList<>();
-        for (Map.Entry<String, PositionDto> entry : this.portfolio.getPositions().entrySet()) {
-            PositionDto position = entry.getValue();
+        for (PositionDto position  : this.portfolio.getPositions()) {
             PositionDto.ExitReason exit_reason = null;
 
             if (this.hasCounterSignal(position, signals)) {

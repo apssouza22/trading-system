@@ -3,7 +3,7 @@ package com.apssouza.mytrade.trading.api;
 import com.apssouza.mytrade.feed.api.FeedBuilder;
 import com.apssouza.mytrade.trading.domain.forex.common.ForexException;
 import com.apssouza.mytrade.trading.domain.forex.feed.FeedServiceFactory;
-import com.apssouza.mytrade.trading.domain.forex.session.CycleHistory;
+import com.apssouza.mytrade.trading.domain.forex.orderbook.CycleHistoryDto;
 import com.apssouza.mytrade.trading.domain.forex.session.TradingSession;
 
 import java.math.BigDecimal;
@@ -53,21 +53,21 @@ public class ForexEngine {
         System.out.println("finished session");
     }
 
-    private static CycleHistoryDto mapHistory(CycleHistory c) {
+    private static com.apssouza.mytrade.trading.api.CycleHistoryDto mapHistory(CycleHistoryDto c) {
         List<TransactionDto> transactions = c.getTransactions()
                 .entrySet()
                 .stream()
                 .map(e -> new TransactionDto(e.getValue()))
                 .collect(Collectors.toList());
-        return new CycleHistoryDto(c.getTime(), transactions);
+        return new com.apssouza.mytrade.trading.api.CycleHistoryDto(c.getTime(), transactions);
     }
 
     public void start() {
         tradingSession.start();
     }
 
-    public List<CycleHistoryDto> getHistory() {
-        List<CycleHistoryDto> collect = tradingSession.getHistory()
+    public List<com.apssouza.mytrade.trading.api.CycleHistoryDto> getHistory() {
+        List<com.apssouza.mytrade.trading.api.CycleHistoryDto> collect = tradingSession.getHistory()
                 .stream()
                 .filter(i -> i.getTransactions().size() > 0)
                 .map(ForexEngine::mapHistory)

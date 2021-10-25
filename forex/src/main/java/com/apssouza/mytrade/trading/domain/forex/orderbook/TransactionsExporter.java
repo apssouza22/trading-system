@@ -1,7 +1,5 @@
 package com.apssouza.mytrade.trading.domain.forex.orderbook;
 
-import com.apssouza.mytrade.trading.domain.forex.session.CycleHistory;
-import com.apssouza.mytrade.trading.domain.forex.session.TransactionDto;
 import com.apssouza.mytrade.common.misc.helper.file.WriteFileHelper;
 
 import java.io.File;
@@ -16,14 +14,14 @@ import java.util.Map;
 
 class TransactionsExporter {
 
-    public void exportCsv(List<CycleHistory> transactions, String filepath) throws IOException {
+    public void exportCsv(List<CycleHistoryDto> transactions, String filepath) throws IOException {
         Path path = Paths.get(filepath);
         if (!Files.exists(path)){
             File file = new File(filepath);
             file.createNewFile();
         }
         WriteFileHelper.write(filepath, getHeader() + "\n");
-        for (CycleHistory item : transactions) {
+        for (CycleHistoryDto item : transactions) {
             for (Map.Entry<String, TransactionDto> trans : item.getTransactions().entrySet()) {
                 List<String> line = Arrays.asList(
                         trans.getValue().getIdentifier(),

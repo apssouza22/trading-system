@@ -2,6 +2,7 @@ package com.apssouza.mytrade.trading.domain.forex.session;
 
 import com.apssouza.mytrade.feed.api.SignalDto;
 import com.apssouza.mytrade.trading.domain.forex.broker.BrokerService;
+import com.apssouza.mytrade.trading.domain.forex.common.MultiPositionHandler;
 import com.apssouza.mytrade.trading.domain.forex.common.events.Event;
 import com.apssouza.mytrade.trading.domain.forex.common.TradingParams;
 import com.apssouza.mytrade.trading.domain.forex.common.observerinfra.EventNotifier;

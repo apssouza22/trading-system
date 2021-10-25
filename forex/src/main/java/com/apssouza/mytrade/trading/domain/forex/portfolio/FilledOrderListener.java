@@ -24,7 +24,7 @@ class FilledOrderListener implements Observer {
         }
 
         FilledOrderDto filledOrder = event.getFilledOrder();
-        if (!this.portfolio.getPositions().containsKey(filledOrder.identifier())) {
+        if (!this.portfolio.contains(filledOrder.identifier())) {
             createNewPosition(filledOrder);
             portfolioService.processReconciliation(event);
             return;

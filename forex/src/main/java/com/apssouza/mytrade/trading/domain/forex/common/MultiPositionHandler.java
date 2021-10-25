@@ -1,4 +1,4 @@
-package com.apssouza.mytrade.trading.domain.forex.session;
+package com.apssouza.mytrade.trading.domain.forex.common;
 
 import com.apssouza.mytrade.trading.domain.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderDto;

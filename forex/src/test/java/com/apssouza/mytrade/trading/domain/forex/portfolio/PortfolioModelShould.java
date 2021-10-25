@@ -26,7 +26,7 @@ public class PortfolioModelShould extends TestCase {
         portfolio.addNewPosition(ps.positionType(), ps.filledOrder());
         portfolio.updatePortfolioBalance(loopEvent.getPrice());
 
-        Map<String, PositionDto> positions = portfolio.getPositions();
+        var positions = portfolio.getPositionCollection();
 
         BigDecimal currentPrice = positions.get(ps.identifier()).currentPrice();
         assertFalse(ps.initPrice().equals(currentPrice));
@@ -38,7 +38,7 @@ public class PortfolioModelShould extends TestCase {
         PortfolioModel portfolio = new PortfolioModel(BigDecimal.valueOf(10000));
         PositionDto ps = new PositionBuilder().build();
         portfolio.addNewPosition(ps.positionType(), ps.filledOrder());
-        Map<String, PositionDto> positions = portfolio.getPositions();
+        var positions = portfolio.getPositionCollection();
         assertEquals(1, positions.size());
     }
 
@@ -48,7 +48,7 @@ public class PortfolioModelShould extends TestCase {
         PositionBuilder positionBuilder = new PositionBuilder();
         PositionDto ps = positionBuilder.build();
         portfolio.addNewPosition(ps.positionType(), ps.filledOrder());
-        Map<String, PositionDto> positions = portfolio.getPositions();
+        var positions = portfolio.getPositionCollection();
         assertEquals(ps, positions.get(ps.identifier()));
     }
 
@@ -61,7 +61,7 @@ public class PortfolioModelShould extends TestCase {
         int qtd = ps.quantity();
         portfolio.addNewPosition(ps.positionType(), ps.filledOrder());
         portfolio.addPositionQtd(ps.identifier(), 100, BigDecimal.ONE);
-        Map<String, PositionDto> positions = portfolio.getPositions();
+        var positions = portfolio.getPositionCollection();
 
         assertTrue(positions.get(ps.identifier()).quantity() == qtd + 100);
         assertEquals(BigDecimal.valueOf(1.0040).setScale(4), positions.get(ps.identifier()).avgPrice());
@@ -87,7 +87,7 @@ public class PortfolioModelShould extends TestCase {
         int qtd = ps.quantity();
         portfolio.addNewPosition(ps.positionType(), ps.filledOrder());
         portfolio.removePositionQtd(ps.identifier(), qtd);
-        Map<String, PositionDto> positions = portfolio.getPositions();
+        var positions = portfolio.getPositionCollection();
 
         assertTrue(positions.get(ps.identifier()).quantity() == 0);
     }
@@ -100,7 +100,7 @@ public class PortfolioModelShould extends TestCase {
 
         portfolio.addNewPosition(ps.positionType(), ps.filledOrder());
         portfolio.removePositionQtd(ps.identifier(), 50);
-        Map<String, PositionDto> positions = portfolio.getPositions();
+        var positions = portfolio.getPositionCollection();
 
         assertTrue(positions.get(ps.identifier()).quantity() == 950);
     }
@@ -124,7 +124,7 @@ public class PortfolioModelShould extends TestCase {
         portfolio.addNewPosition(ps.positionType(), ps.filledOrder());
         portfolio.closePosition(ps.identifier(), PositionDto.ExitReason.STOP_ORDER_FILLED);
 
-        Map<String, PositionDto> positions = portfolio.getPositions();
+        var positions = portfolio.getPositionCollection();
 
         assertEquals(0, positions.size());
     }

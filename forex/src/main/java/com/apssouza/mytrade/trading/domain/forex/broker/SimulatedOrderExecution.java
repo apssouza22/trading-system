@@ -4,7 +4,7 @@ import com.apssouza.mytrade.feed.api.PriceDto;
 import com.apssouza.mytrade.trading.domain.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderDto;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.FilledOrderDto;
-import com.apssouza.mytrade.trading.domain.forex.session.MultiPositionHandler;
+import com.apssouza.mytrade.trading.domain.forex.common.MultiPositionHandler;
 import com.apssouza.mytrade.trading.domain.forex.common.NumberHelper;
 import com.apssouza.mytrade.trading.domain.forex.common.TradingParams;
 

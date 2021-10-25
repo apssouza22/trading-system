@@ -17,6 +17,7 @@ import com.apssouza.mytrade.trading.domain.forex.order.OrderService;
 import com.apssouza.mytrade.trading.domain.forex.order.OrderHandlerFactory;
 import com.apssouza.mytrade.trading.domain.forex.orderbook.BookHistoryService;
 import com.apssouza.mytrade.trading.domain.forex.orderbook.BookHistoryHandlerFactory;
+import com.apssouza.mytrade.trading.domain.forex.orderbook.CycleHistoryDto;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioFactory;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioService;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioModel;
@@ -136,7 +137,7 @@ public class TradingSession {
         eventNotifier.notify(event);
     }
 
-    public List<CycleHistory> getHistory() {
+    public List<CycleHistoryDto> getHistory() {
         return this.historyHandler.getTransactions();
     }
 

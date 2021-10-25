@@ -4,7 +4,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
-public record TransactionDto(com.apssouza.mytrade.trading.domain.forex.session.TransactionDto event
+public record TransactionDto(com.apssouza.mytrade.trading.domain.forex.orderbook.TransactionDto event
 ) {
     public Map<String, String> getTransactionTable() {
         var table = new HashMap<String, String>();

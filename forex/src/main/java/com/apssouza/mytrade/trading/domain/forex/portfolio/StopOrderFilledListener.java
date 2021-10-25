@@ -6,7 +6,7 @@ import com.apssouza.mytrade.trading.domain.forex.common.observerinfra.Observer;
 import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderDto;
 import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderFilledEvent;
 import com.apssouza.mytrade.trading.domain.forex.common.observerinfra.EventNotifier;
-import com.apssouza.mytrade.trading.domain.forex.session.MultiPositionHandler;
+import com.apssouza.mytrade.trading.domain.forex.common.MultiPositionHandler;
 import static com.apssouza.mytrade.trading.domain.forex.portfolio.PositionDto.ExitReason;
 
 class StopOrderFilledListener implements Observer {

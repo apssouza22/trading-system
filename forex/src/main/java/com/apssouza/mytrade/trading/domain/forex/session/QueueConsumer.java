@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.concurrent.BlockingQueue;
 import java.util.logging.Logger;
 
-public class QueueConsumer extends Thread {
+class QueueConsumer extends Thread {
     private final BlockingQueue<Event> eventQueue;
     private final BookHistoryService historyHandler;
     private final EventNotifier notifier;

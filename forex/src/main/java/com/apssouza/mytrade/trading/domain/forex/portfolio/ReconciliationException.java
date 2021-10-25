@@ -1,15 +1,16 @@
 package com.apssouza.mytrade.trading.domain.forex.portfolio;
 
+import java.util.List;
 import java.util.Map;
 
 class ReconciliationException extends Exception {
 
-    private final Map<String, PositionDto> localPositions;
+    private final List<PositionDto> localPositions;
     private final Map<String, FilledOrderDto> remotePositions;
 
     public ReconciliationException(
             String msg,
-            Map<String, PositionDto> localPositions,
+            List<PositionDto> localPositions,
             Map<String, FilledOrderDto> remotePositions
     ) {
         super(msg);
@@ -17,7 +18,7 @@ class ReconciliationException extends Exception {
         this.remotePositions = remotePositions;
     }
 
-    public Map<String, PositionDto> getLocalPositions() {
+    public List<PositionDto> getLocalPositions() {
         return localPositions;
     }
 

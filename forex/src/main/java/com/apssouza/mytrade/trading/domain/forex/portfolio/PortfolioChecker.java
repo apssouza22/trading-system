@@ -3,6 +3,7 @@ package com.apssouza.mytrade.trading.domain.forex.portfolio;
 import com.apssouza.mytrade.trading.domain.forex.broker.BrokerService;
 import com.apssouza.mytrade.trading.domain.forex.order.OrderDto;
 
+import java.util.List;
 import java.util.Map;
 
 
@@ -19,7 +20,7 @@ class PortfolioChecker {
      * Check if the local portfolio is in sync with the portfolio on the broker
      */
     public void process() throws ReconciliationException {
-        Map<String, PositionDto> localPositions = portfolio.getPositions();
+        List<PositionDto> localPositions = portfolio.getPositionCollection().getPositions();
         Map<String, FilledOrderDto> remotePositions = executionHandler.getPositions();
 
         if (localPositions.isEmpty() && remotePositions.isEmpty()) {
@@ -35,15 +36,16 @@ class PortfolioChecker {
         }
     }
 
-    private void checkEveryPosition(Map<String, PositionDto> localPositions,
+    private void checkEveryPosition(
+            List<PositionDto> localPositions,
             Map<String, FilledOrderDto> remotePositions
     ) throws ReconciliationException {
-        for (Map.Entry<String, PositionDto> entry : localPositions.entrySet()) {
-            String symbol = entry.getValue().symbol();
+        for (PositionDto position : localPositions) {
+            String symbol = position.symbol();
             if (!remotePositions.containsKey(symbol)) {
                 throw new ReconciliationException("Position key mismatch", localPositions, remotePositions);
             }
-            OrderDto.OrderAction orderAction = entry.getValue().positionType().getOrderAction();
+            OrderDto.OrderAction orderAction = position.positionType().getOrderAction();
             if (!remotePositions.get(symbol).action().equals(orderAction)) {
                 throw new ReconciliationException("Position action mismatch", localPositions, remotePositions);
             }

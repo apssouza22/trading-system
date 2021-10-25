@@ -104,12 +104,11 @@ public class RiskManagementService {
     }
 
     public boolean canCreateOrder(OrderDto order) {
-        Map<String, PositionDto> positions = portfolio.getPositions();
         if (TradingParams.trading_position_edit_enabled || TradingParams.trading_multi_position_enabled) {
             return true;
         }
-        for (Map.Entry<String, PositionDto> entry : positions.entrySet()) {
-            FilledOrderDto filledOrder = entry.getValue().filledOrder();
+        for (PositionDto position : portfolio.getPositions()) {
+            FilledOrderDto filledOrder = position.filledOrder();
             if (filledOrder.symbol().equals(order.symbol()) && filledOrder.action().equals(order.action())) {
                 return false;
             }

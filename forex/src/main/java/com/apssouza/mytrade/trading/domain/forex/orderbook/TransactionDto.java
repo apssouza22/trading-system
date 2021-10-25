@@ -1,4 +1,4 @@
-package com.apssouza.mytrade.trading.domain.forex.session;
+package com.apssouza.mytrade.trading.domain.forex.orderbook;
 
 import com.apssouza.mytrade.trading.domain.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.FilledOrderDto;

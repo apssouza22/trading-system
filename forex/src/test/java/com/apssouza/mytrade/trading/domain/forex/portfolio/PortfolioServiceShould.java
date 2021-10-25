@@ -194,7 +194,7 @@ public class PortfolioServiceShould {
 
         var model = portfolio.getPortfolio();
         model.addNewPosition(position.positionType(), position.filledOrder());
-        assertEquals(1, portfolio.getPortfolio().getPositions().size());
+        assertEquals(1, portfolio.getPortfolio().getPositionCollection().size());
 
         var priceMap = new HashMap<String, PriceDto>();
         priceMap.put("AUDUSD", new PriceDto(
@@ -220,7 +220,7 @@ public class PortfolioServiceShould {
         var model = portfolio.getPortfolio();
         var position = new PositionBuilder().build();
         model.addNewPosition(position.positionType(), position.filledOrder());
-        assertEquals(1, portfolio.getPortfolio().getPositions().size());
+        assertEquals(1, portfolio.getPortfolio().getPositionCollection().size());
     }
 
     @Test
