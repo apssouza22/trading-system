@@ -1,12 +1,15 @@
 package com.apssouza.mytrade.trading.domain.forex.portfolio;
 
 import com.apssouza.mytrade.trading.domain.forex.common.NumberHelper;
+import com.apssouza.mytrade.trading.domain.forex.common.Symbol;
 import com.apssouza.mytrade.trading.domain.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderDto;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.EnumMap;
+import static java.math.BigDecimal.valueOf;
 
 public record PositionDto(
         PositionType positionType,
@@ -24,7 +27,7 @@ public record PositionDto(
 ) {
 
     public PositionDto {
-       currentPrice = NumberHelper.roundSymbolPrice(symbol, initPrice);
+        currentPrice = NumberHelper.roundSymbolPrice(symbol, initPrice);
     }
 
 
@@ -61,6 +64,18 @@ public record PositionDto(
                 avgPrice,
                 position.stopOrders()
         );
+
+    }
+
+    public BigDecimal getNewAveragePrice(int qtd, BigDecimal price) {
+        if (avgPrice() == null){
+            return price;
+        }
+        var newQuantity = quantity() + qtd;
+        var newCost = currentPrice().multiply(valueOf(qtd));
+        var newTotalCost = avgPrice().add(newCost);
+        int pipScale = Symbol.valueOf(symbol()).getPipScale();
+        return newTotalCost.divide(valueOf(newQuantity), pipScale, RoundingMode.HALF_UP);
     }
 
     public boolean isPositionAlive() {

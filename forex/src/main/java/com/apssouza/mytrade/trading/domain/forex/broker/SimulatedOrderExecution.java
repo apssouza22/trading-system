@@ -23,9 +23,9 @@ class SimulatedOrderExecution implements BrokerService {
     private static final Logger log = Logger.getLogger(SimulatedOrderExecution.class.getSimpleName());
     private final MultiPositionPerCPairHandler multiPositionPerCPairHandler;
     private final StopOrderHelper stopOrderHandler;
-    private Map<Integer, StopOrderDto> limitOrders = new LinkedHashMap<>();
     private LocalDateTime currentTime;
     private Map<String, PriceDto> priceMap = new LinkedHashMap<>();
+    private Map<Integer, StopOrderDto> limitOrders = new LinkedHashMap<>();
     private Map<String, FilledOrderDto> positions = new ConcurrentHashMap<>();
 
 
