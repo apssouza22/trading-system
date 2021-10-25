@@ -2,12 +2,10 @@ package com.apssouza.mytrade.trading.domain.forex.risk;
 
 import com.apssouza.mytrade.common.misc.helper.time.MarketTimeHelper;
 import com.apssouza.mytrade.feed.api.SignalDto;
-import com.apssouza.mytrade.trading.domain.forex.common.events.Event;
 import com.apssouza.mytrade.trading.domain.forex.common.TradingParams;
-import com.apssouza.mytrade.trading.domain.forex.common.events.PriceChangedEvent;
+import com.apssouza.mytrade.trading.domain.forex.common.events.Event;
 import com.apssouza.mytrade.trading.domain.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.FilledOrderDto;
-import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioModel;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PositionDto;
 import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderCreator;
 import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderDto;
@@ -15,18 +13,16 @@ import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrde
 
 import java.util.EnumMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
 
 public class RiskManagementService {
 
-    private final PortfolioModel portfolio;
-    private PositionExitHandler exitHandler;
+    private final PositionExitChecker exitHandler;
     private final StopOrderCreator stopOrderCreator;
 
-    public RiskManagementService(PortfolioModel portfolio, PositionExitHandler exitHandler, StopOrderCreator stopOrderCreator) {
-        this.portfolio = portfolio;
+    public RiskManagementService(PositionExitChecker exitHandler, StopOrderCreator stopOrderCreator) {
+
         this.exitHandler = exitHandler;
         this.stopOrderCreator = stopOrderCreator;
     }
@@ -54,8 +50,8 @@ public class RiskManagementService {
         return chooseStopOrders(orders);
     }
 
-    public List<PositionDto> processPositionExit(PriceChangedEvent event, List<SignalDto> signals) {
-        return exitHandler.process(event, signals);
+    public List<PositionDto> getExitPositions(List<PositionDto> positions, List<SignalDto> signals) {
+        return exitHandler.check(positions, signals);
     }
 
     private EnumMap<StopOrderType, StopOrderDto> getMovingStops(PositionDto position, Event event) {
@@ -103,11 +99,11 @@ public class RiskManagementService {
         return stop_orders;
     }
 
-    public boolean canCreateOrder(OrderDto order) {
+    public boolean canCreateOrder(OrderDto order, List<PositionDto> openPositions) {
         if (TradingParams.trading_position_edit_enabled || TradingParams.trading_multi_position_enabled) {
             return true;
         }
-        for (PositionDto position : portfolio.getPositions()) {
+        for (PositionDto position : openPositions) {
             FilledOrderDto filledOrder = position.filledOrder();
             if (filledOrder.symbol().equals(order.symbol()) && filledOrder.action().equals(order.action())) {
                 return false;

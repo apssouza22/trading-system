@@ -12,7 +12,6 @@ import java.math.BigDecimal;
 public class PortfolioHandlerBuilder {
     OrderService orderService = mock(OrderService.class);
     BrokerService brokerService = mock(BrokerService.class);
-    PortfolioModel portfolio = new PortfolioModel(BigDecimal.valueOf(10000));
     RiskManagementService riskManagementService = mock(RiskManagementService.class);
 
     EventNotifier eventNotifier = mock(EventNotifier.class);
@@ -21,7 +20,6 @@ public class PortfolioHandlerBuilder {
         return PortfolioFactory.create(
                 orderService,
                 brokerService,
-                portfolio,
                 riskManagementService,
                 eventNotifier
         );

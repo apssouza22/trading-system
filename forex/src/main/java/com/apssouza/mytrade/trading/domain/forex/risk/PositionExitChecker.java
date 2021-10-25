@@ -3,40 +3,34 @@ package com.apssouza.mytrade.trading.domain.forex.risk;
 import com.apssouza.mytrade.common.misc.helper.time.MarketTimeHelper;
 import com.apssouza.mytrade.feed.api.SignalDto;
 import com.apssouza.mytrade.trading.domain.forex.order.OrderDto;
-import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioModel;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PositionDto;
-import com.apssouza.mytrade.trading.domain.forex.common.events.PriceChangedEvent;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Logger;
 
-class PositionExitHandler {
-    private final PortfolioModel portfolio;
-    private static Logger log = Logger.getLogger(PositionExitHandler.class.getSimpleName());
+class PositionExitChecker {
+    private static Logger log = Logger.getLogger(PositionExitChecker.class.getSimpleName());
 
-    public PositionExitHandler(PortfolioModel portfolio) {
-        this.portfolio = portfolio;
+    public PositionExitChecker() {
+
     }
 
-    public List<PositionDto> process(PriceChangedEvent event, List<SignalDto> signals) {
-        if (this.portfolio.isEmpty()){
+    public List<PositionDto> check(List<PositionDto> positions, List<SignalDto> signals) {
+        if (positions.isEmpty()){
             return Collections.emptyList();
         }
         log.info("Processing exits...");
         List<PositionDto> exitedPositions = new ArrayList<>();
-        for (PositionDto position  : this.portfolio.getPositions()) {
+        for (PositionDto position  : positions) {
             PositionDto.ExitReason exit_reason = null;
-
             if (this.hasCounterSignal(position, signals)) {
                 exit_reason = PositionDto.ExitReason.COUNTER_SIGNAL;
             }
             if (exit_reason != null) {
                 log.info("Exiting position for(" + position.symbol() + " Reason " + exit_reason);
-                portfolio.closePosition(position.identifier(), exit_reason);
                 exitedPositions.add(position);
             }
         }

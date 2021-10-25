@@ -14,15 +14,13 @@ public class PortfolioFactory {
     public static PortfolioService create(
             OrderService orderService,
             BrokerService executionHandler,
-            PortfolioModel portfolio,
             RiskManagementService riskManagementService,
             EventNotifier eventNotifier
     ) {
-        var reconciliationHandler = new PortfolioChecker(portfolio, executionHandler);
+        var reconciliationHandler = new PortfolioChecker(executionHandler);
         return new PortfolioService(
                 orderService,
                 executionHandler,
-                portfolio,
                 reconciliationHandler,
                 riskManagementService,
                 eventNotifier
@@ -31,12 +29,11 @@ public class PortfolioFactory {
 
     public static List<Observer> createListeners(
             PortfolioService portfolioService,
-            PortfolioModel portfolio,
             EventNotifier eventNotifier
     ) {
         return Arrays.asList(
-                new FilledOrderListener(portfolio, portfolioService),
-                new StopOrderFilledListener(portfolio, portfolioService,eventNotifier),
+                new FilledOrderListener(portfolioService),
+                new StopOrderFilledListener(portfolioService,eventNotifier),
                 new EndedTradingDayListener(portfolioService)
         );
     }

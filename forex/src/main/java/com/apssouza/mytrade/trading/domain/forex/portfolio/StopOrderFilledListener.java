@@ -1,26 +1,23 @@
 package com.apssouza.mytrade.trading.domain.forex.portfolio;
 
+import com.apssouza.mytrade.trading.domain.forex.common.MultiPositionHandler;
 import com.apssouza.mytrade.trading.domain.forex.common.events.Event;
 import com.apssouza.mytrade.trading.domain.forex.common.events.PortfolioChangedEvent;
+import com.apssouza.mytrade.trading.domain.forex.common.observerinfra.EventNotifier;
 import com.apssouza.mytrade.trading.domain.forex.common.observerinfra.Observer;
 import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderDto;
 import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderFilledEvent;
-import com.apssouza.mytrade.trading.domain.forex.common.observerinfra.EventNotifier;
-import com.apssouza.mytrade.trading.domain.forex.common.MultiPositionHandler;
 import static com.apssouza.mytrade.trading.domain.forex.portfolio.PositionDto.ExitReason;
 
 class StopOrderFilledListener implements Observer {
 
-    private final PortfolioModel portfolio;
     private final PortfolioService portfolioService;
     private final EventNotifier eventNotifier;
 
     public StopOrderFilledListener(
-            PortfolioModel portfolio,
             PortfolioService portfolioService,
             EventNotifier eventNotifier
     ) {
-        this.portfolio = portfolio;
         this.portfolioService = portfolioService;
         this.eventNotifier = eventNotifier;
     }
@@ -33,7 +30,7 @@ class StopOrderFilledListener implements Observer {
         StopOrderDto stopOrder = event.getStopOrder();
         PositionDto ps = MultiPositionHandler.getPositionByStopOrder(stopOrder);
 
-        portfolio.closePosition(ps.identifier(), ExitReason.STOP_ORDER_FILLED);
+        portfolioService.closePosition(ps.identifier(), ExitReason.STOP_ORDER_FILLED);
         portfolioService.processReconciliation(e);
         eventNotifier.notify(new PortfolioChangedEvent(
                 e.getTimestamp(),

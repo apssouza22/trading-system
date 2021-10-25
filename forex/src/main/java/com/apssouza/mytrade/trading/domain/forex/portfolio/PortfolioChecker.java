@@ -8,19 +8,16 @@ import java.util.Map;
 
 
 class PortfolioChecker {
-    private final PortfolioModel portfolio;
     private final BrokerService executionHandler;
 
-    public PortfolioChecker(PortfolioModel portfolio, BrokerService executionHandler) {
-        this.portfolio = portfolio;
+    public PortfolioChecker(BrokerService executionHandler) {
         this.executionHandler = executionHandler;
     }
 
     /**
      * Check if the local portfolio is in sync with the portfolio on the broker
      */
-    public void process() throws ReconciliationException {
-        List<PositionDto> localPositions = portfolio.getPositionCollection().getPositions();
+    public void process(List<PositionDto> localPositions) throws ReconciliationException {
         Map<String, FilledOrderDto> remotePositions = executionHandler.getPositions();
 
         if (localPositions.isEmpty() && remotePositions.isEmpty()) {

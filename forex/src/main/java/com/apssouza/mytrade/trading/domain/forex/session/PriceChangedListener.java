@@ -54,7 +54,7 @@ class PriceChangedListener implements Observer {
 
     private void process(PriceChangedEvent event) throws InterruptedException {
         LocalDateTime currentTime = event.getTimestamp();
-        portfolioService.getPortfolio().printPortfolio();
+        portfolioService.printPortfolio();
         portfolioService.createStopOrder(event);
         executionHandler.setCurrentTime(currentTime);
         executionHandler.setPriceMap(event.getPrice());

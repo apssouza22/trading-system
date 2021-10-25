@@ -1,10 +1,10 @@
 package com.apssouza.mytrade.trading.domain.forex.order;
 
 import com.apssouza.mytrade.trading.domain.forex.broker.BrokerService;
-import com.apssouza.mytrade.trading.domain.forex.common.observerinfra.Observer;
-import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioModel;
-import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementService;
 import com.apssouza.mytrade.trading.domain.forex.common.observerinfra.EventNotifier;
+import com.apssouza.mytrade.trading.domain.forex.common.observerinfra.Observer;
+import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioService;
+import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,11 +20,11 @@ public class OrderHandlerFactory {
     }
 
     public static List<Observer> createListeners(
-            PortfolioModel portfolio,
             OrderService orderService,
             RiskManagementService riskManagementService,
             BrokerService executionHandler,
-            EventNotifier eventNotifier
+            EventNotifier eventNotifier,
+            PortfolioService portfolioService
     ) {
         var listeners = new ArrayList<Observer>();
         listeners.add(new PositionClosedListener(orderService));
@@ -37,7 +37,8 @@ public class OrderHandlerFactory {
         listeners.add(new SignalCreatedListener(
                 riskManagementService,
                 orderService,
-                eventNotifier
+                eventNotifier,
+                portfolioService
         ));
         return listeners;
     }

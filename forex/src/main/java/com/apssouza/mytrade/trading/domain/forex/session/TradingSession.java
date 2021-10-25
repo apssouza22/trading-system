@@ -2,25 +2,24 @@ package com.apssouza.mytrade.trading.domain.forex.session;
 
 import com.apssouza.mytrade.trading.api.ExecutionType;
 import com.apssouza.mytrade.trading.api.SessionType;
-import com.apssouza.mytrade.trading.domain.forex.common.events.EndedTradingDayEvent;
-import com.apssouza.mytrade.trading.domain.forex.common.events.Event;
-import com.apssouza.mytrade.trading.domain.forex.common.TradingParams;
 import com.apssouza.mytrade.trading.domain.forex.broker.BrokerService;
 import com.apssouza.mytrade.trading.domain.forex.broker.OrderExecutionFactory;
+import com.apssouza.mytrade.trading.domain.forex.common.TradingParams;
+import com.apssouza.mytrade.trading.domain.forex.common.events.EndedTradingDayEvent;
+import com.apssouza.mytrade.trading.domain.forex.common.events.Event;
 import com.apssouza.mytrade.trading.domain.forex.common.observerinfra.EventNotifier;
 import com.apssouza.mytrade.trading.domain.forex.feed.FeedService;
 import com.apssouza.mytrade.trading.domain.forex.feed.pricefeed.PriceStream;
 import com.apssouza.mytrade.trading.domain.forex.feed.pricefeed.PriceStreamFactory;
 import com.apssouza.mytrade.trading.domain.forex.feed.signalfeed.SignalFeedFactory;
 import com.apssouza.mytrade.trading.domain.forex.feed.signalfeed.SignalFeedHandler;
-import com.apssouza.mytrade.trading.domain.forex.order.OrderService;
 import com.apssouza.mytrade.trading.domain.forex.order.OrderHandlerFactory;
-import com.apssouza.mytrade.trading.domain.forex.orderbook.BookHistoryService;
+import com.apssouza.mytrade.trading.domain.forex.order.OrderService;
 import com.apssouza.mytrade.trading.domain.forex.orderbook.BookHistoryHandlerFactory;
+import com.apssouza.mytrade.trading.domain.forex.orderbook.BookHistoryService;
 import com.apssouza.mytrade.trading.domain.forex.orderbook.CycleHistoryDto;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioFactory;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioService;
-import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioModel;
 import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementFactory;
 import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementService;
 import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderConfigDto;
@@ -45,7 +44,6 @@ public class TradingSession {
     protected SignalFeedHandler signalFeedHandler;
     private final FeedService feedModule;
     protected BrokerService executionHandler;
-    protected PortfolioModel portfolio;
     protected OrderService orderService;
     protected BookHistoryService historyHandler;
     protected PriceStream priceStream;
@@ -80,10 +78,8 @@ public class TradingSession {
     private void configSession() {
         this.signalFeedHandler = SignalFeedFactory.create(feedModule);
         this.executionHandler = OrderExecutionFactory.factory(this.executionType);
-        this.portfolio = new PortfolioModel(this.equity);
         this.historyHandler = BookHistoryHandlerFactory.create();
         this.riskManagementService = RiskManagementFactory.create(
-                this.portfolio,
                 StopOrderFactory.factory(new StopOrderConfigDto(
                         TradingParams.hard_stop_loss_distance,
                         TradingParams.take_profit_distance_fixed,
@@ -97,7 +93,6 @@ public class TradingSession {
         this.portfolioService = PortfolioFactory.create(
                 this.orderService,
                 this.executionHandler,
-                this.portfolio,
                 this.riskManagementService,
                 eventNotifier
         );
@@ -107,8 +102,14 @@ public class TradingSession {
     }
 
     private EventNotifier setListeners() {
-        var eventListeners = OrderHandlerFactory.createListeners(portfolio, orderService, riskManagementService, executionHandler, eventNotifier);
-        eventListeners.addAll(PortfolioFactory.createListeners(portfolioService, portfolio, eventNotifier));
+        var eventListeners = OrderHandlerFactory.createListeners(
+                orderService,
+                riskManagementService,
+                executionHandler,
+                eventNotifier,
+                portfolioService
+        );
+        eventListeners.addAll(PortfolioFactory.createListeners(portfolioService, eventNotifier));
 
         eventListeners.add(new PriceChangedListener(
                 executionHandler,

@@ -45,15 +45,14 @@ public class PortfolioServiceShould {
         var portfolio = builder.build();
         var position = new PositionBuilder().build();
 
-        var model = portfolio.getPortfolio();
-        model.addNewPosition(position.positionType(), position.filledOrder());
+        portfolio.addNewPosition(position.positionType(), position.filledOrder());
 
         var newPrice = BigDecimal.valueOf(2);
         var priceMap = new PriceBuilder().withPrice("AUDUSD", newPrice).builderMap();
 
         portfolio.updatePositionsPrices(priceMap);
 
-        var modelPosition = model.getPosition(position.identifier());
+        var modelPosition = portfolio.getPosition(position.identifier());
         assertEquals(newPrice, modelPosition.currentPrice());
     }
 
@@ -61,9 +60,8 @@ public class PortfolioServiceShould {
     public void createStopOrder_withoutTakeProfitStopOrder() {
         var builder = new PortfolioHandlerBuilder();
         var portfolio = builder.build();
-        var model = portfolio.getPortfolio();
         var position = new PositionBuilder().build();
-        model.addNewPosition(position.positionType(), position.filledOrder());
+        portfolio.addNewPosition(position.positionType(), position.filledOrder());
         var stopLossOrder = new StopOrderDto(StopOrderType.STOP_LOSS, 1, CREATED, BUY, ONE, ONE, "EURUSD", 100, "id");
         var takeProfitOrder = new StopOrderDto(StopOrderType.TAKE_PROFIT, 2, FILLED, SELL, ONE, ONE, "EURUSD", 100, "id");
 
@@ -78,10 +76,10 @@ public class PortfolioServiceShould {
 
         portfolio.createStopOrder(new PriceChangedEvent(null, new PriceBuilder().builderMap()));
 
-        assert_createStopOrder_withoutTakeProfitStopOrder(builder, model);
+        assert_createStopOrder_withoutTakeProfitStopOrder(builder, portfolio);
     }
 
-    private void assert_createStopOrder_withoutTakeProfitStopOrder(PortfolioHandlerBuilder builder, PortfolioModel model) {
+    private void assert_createStopOrder_withoutTakeProfitStopOrder(PortfolioHandlerBuilder builder, PortfolioService model) {
         ArgumentCaptor<StopOrderDto> placeStopOrderArgCapture = ArgumentCaptor.forClass(StopOrderDto.class);
         ArgumentCaptor<PositionDto> createStopOrdersArgCaptor = ArgumentCaptor.forClass(PositionDto.class);
 
@@ -99,9 +97,9 @@ public class PortfolioServiceShould {
     public void createStopOrder_withTakeProfitStopOrder() {
         var builder = new PortfolioHandlerBuilder();
         var portfolio = builder.build();
-        var model = portfolio.getPortfolio();
+
         var position = new PositionBuilder().build();
-        model.addNewPosition(position.positionType(), position.filledOrder());
+        portfolio.addNewPosition(position.positionType(), position.filledOrder());
         var stopLossOrder = new StopOrderDto(StopOrderType.STOP_LOSS, 1, CREATED, BUY, ONE, ONE, "EURUSD", 100, "id");
         var takeProfitOrder = new StopOrderDto(StopOrderType.TAKE_PROFIT, 2, FILLED, SELL, ONE, ONE, "EURUSD", 100, "id");
 
@@ -115,10 +113,10 @@ public class PortfolioServiceShould {
                 .thenReturn(takeProfitOrder);
 
         portfolio.createStopOrder(new PriceChangedEvent(null, null));
-        assert_createStopOrder_withTakeProfitStopOrder(builder, model);
+        assert_createStopOrder_withTakeProfitStopOrder(builder, portfolio);
     }
 
-    private void assert_createStopOrder_withTakeProfitStopOrder(PortfolioHandlerBuilder builder, PortfolioModel model) {
+    private void assert_createStopOrder_withTakeProfitStopOrder(PortfolioHandlerBuilder builder, PortfolioService model) {
         ArgumentCaptor<StopOrderDto> placeStopOrderArgCapture = ArgumentCaptor.forClass(StopOrderDto.class);
         ArgumentCaptor<PositionDto> createStopOrdersArgCaptor = ArgumentCaptor.forClass(PositionDto.class);
 
@@ -137,10 +135,9 @@ public class PortfolioServiceShould {
     public void handleStopOrder() {
         var builder = new PortfolioHandlerBuilder();
         var portfolio = builder.build();
-        var model = portfolio.getPortfolio();
-        var position = new PositionBuilder().build();
-        model.addNewPosition(position.positionType(), position.filledOrder());
 
+        var position = new PositionBuilder().build();
+        portfolio.addNewPosition(position.positionType(), position.filledOrder());
         var stopOrderDtoMap = new HashMap<Integer, StopOrderDto>();
         stopOrderDtoMap.put(0, new StopOrderBuilder().withStatus(FILLED).build());
 
@@ -169,17 +166,17 @@ public class PortfolioServiceShould {
                 .withPositionStatus(CLOSED)
                 .build();
 
-        when(builder.riskManagementService.processPositionExit(any(), any()))
+        when(builder.riskManagementService.getExitPositions(any(), any()))
                 .thenReturn(Arrays.asList(cancelledPosition));
 
-        var model = portfolio.getPortfolio();
+
         var position = new PositionBuilder().build();
-        model.addNewPosition(position.positionType(), position.filledOrder());
+        portfolio.addNewPosition(position.positionType(), position.filledOrder());
         var event = new PriceChangedEvent(null, null);
 
         portfolio.processExits(event, emptyList());
 
-        verify(builder.riskManagementService, times(1)).processPositionExit(any(), any());
+        verify(builder.riskManagementService, times(1)).getExitPositions(any(), any());
         verify(builder.orderService, times(1)).createOrderFromClosedPosition(any(), any());
         verify(builder.eventNotifier, times(1)).notify(any());
     }
@@ -192,9 +189,9 @@ public class PortfolioServiceShould {
                 .withPositionStatus(PositionDto.PositionStatus.FILLED)
                 .build();
 
-        var model = portfolio.getPortfolio();
-        model.addNewPosition(position.positionType(), position.filledOrder());
-        assertEquals(1, portfolio.getPortfolio().getPositionCollection().size());
+
+        portfolio.addNewPosition(position.positionType(), position.filledOrder());
+        assertEquals(1, portfolio.size());
 
         var priceMap = new HashMap<String, PriceDto>();
         priceMap.put("AUDUSD", new PriceDto(
@@ -217,10 +214,10 @@ public class PortfolioServiceShould {
     @Test
     public void returnPortfolio() {
         var portfolio = new PortfolioHandlerBuilder().build();
-        var model = portfolio.getPortfolio();
+
         var position = new PositionBuilder().build();
-        model.addNewPosition(position.positionType(), position.filledOrder());
-        assertEquals(1, portfolio.getPortfolio().getPositionCollection().size());
+        portfolio.addNewPosition(position.positionType(), position.filledOrder());
+        assertEquals(1, portfolio.size());
     }
 
     @Test
@@ -229,17 +226,17 @@ public class PortfolioServiceShould {
         var priceMap = new PriceBuilder().builderMap();
         var event = new PriceChangedEvent(LocalDateTime.now(), priceMap);
         var portfolio = builder.build();
-        var model = portfolio.getPortfolio();
+
         PositionDto position = new PositionBuilder().build();
-        model.addNewPosition(position.positionType(), position.filledOrder());
+        portfolio.addNewPosition(position.positionType(), position.filledOrder());
 
         var filledOrderDtoMap = new HashMap<String, FilledOrderDto>();
         when(builder.brokerService.getPositions()).thenReturn(filledOrderDtoMap);
 
         portfolio.processReconciliation(event);
 
-        assertEquals(0, portfolio.getPortfolio().getOpenPositions().size());
-        assertEquals(RECONCILIATION_FAILED, model.getPosition(position.identifier()).exitReason());
+        assertEquals(0, portfolio.size());
+        assertEquals(RECONCILIATION_FAILED, portfolio.getPosition(position.identifier()).exitReason());
     }
 
     @Test
@@ -248,9 +245,9 @@ public class PortfolioServiceShould {
         var priceMap = new PriceBuilder().builderMap();
         var event = new PriceChangedEvent(LocalDateTime.now(), priceMap);
         var portfolio = builder.build();
-        var model = portfolio.getPortfolio();
+
         PositionDto position = new PositionBuilder().build();
-        model.addNewPosition(position.positionType(), position.filledOrder());
+        portfolio.addNewPosition(position.positionType(), position.filledOrder());
 
         var filledOrderDtoMap = new HashMap<String, FilledOrderDto>();
         var filledOrderBuilder = new FilledOrderBuilder();
@@ -260,7 +257,7 @@ public class PortfolioServiceShould {
 
         portfolio.processReconciliation(event);
 
-        assertEquals(1, portfolio.getPortfolio().getOpenPositions().size());
-        assertNull(model.getPosition(position.identifier()).exitReason());
+        assertEquals(1, portfolio.size());
+        assertNull(portfolio.getPosition(position.identifier()).exitReason());
     }
 }
