@@ -14,10 +14,6 @@ import java.util.logging.Logger;
 class PositionExitChecker {
     private static Logger log = Logger.getLogger(PositionExitChecker.class.getSimpleName());
 
-    public PositionExitChecker() {
-
-    }
-
     public List<PositionDto> check(List<PositionDto> positions, List<SignalDto> signals) {
         if (positions.isEmpty()){
             return Collections.emptyList();

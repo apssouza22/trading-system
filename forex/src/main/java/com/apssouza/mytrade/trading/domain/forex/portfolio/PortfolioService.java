@@ -33,7 +33,7 @@ public class PortfolioService {
     private final RiskManagementService riskManagementService;
     private final EventNotifier eventNotifier;
     private static Logger log = Logger.getLogger(PortfolioService.class.getName());
-    private Map<Integer, StopOrderDto> currentStopOrders = new HashMap<>();
+    private final StopOrderHandler stopOrderHandler;
     private PositionCollection positions = new PositionCollection();
 
     public PortfolioService(
@@ -48,6 +48,14 @@ public class PortfolioService {
         this.portfolioBrokerChecker = portfolioBrokerChecker;
         this.riskManagementService = riskManagementService;
         this.eventNotifier = eventNotifier;
+        this.stopOrderHandler =  new StopOrderHandler(eventNotifier,executionHandler, riskManagementService);
+    }
+
+    public void createStopOrder(Event event){
+        stopOrderHandler.createStopOrder(event, getPositions());
+    }
+    public void handleStopOrder(Event event) {
+        stopOrderHandler.handleStopOrder(event, getPositions());
     }
 
     public void updatePositionsPrices(Map<String, PriceDto> price) {
@@ -57,83 +65,8 @@ public class PortfolioService {
         });
     }
 
-    public void createStopOrder(Event event) {
-        if (isEmpty()) {
-            return;
-        }
-        log.info("Creating stop loss...");
-        this.executionHandler.deleteStopOrders();
-        MultiPositionHandler.deleteAllMaps();
 
-        Map<Integer, StopOrderDto> stopOrders = new HashMap<>();
-        for (PositionDto position : getPositions()) {
-            var stops = riskManagementService.createStopOrders(position, event);
-            position = new PositionDto(position, stops);
-            var stopLoss = stops.get(STOP_LOSS);
-            log.info("Created stop loss - " + stopLoss);
-
-            StopOrderDto stopOrderLoss = this.executionHandler.placeStopOrder(stopLoss);
-            stopOrders.put(stopOrderLoss.id(), stopOrderLoss);
-            MultiPositionHandler.mapStopOrderToPosition(stopOrderLoss, position);
-
-            if (TradingParams.take_profit_stop_enabled) {
-                var stopOrderProfit = this.executionHandler.placeStopOrder(stops.get(TAKE_PROFIT));
-                log.info("Created take profit stop - " + stopOrderProfit);
-                stopOrders.put(stopOrderProfit.id(), stopOrderProfit);
-                MultiPositionHandler.mapStopOrderToPosition(stopOrderProfit, position);
-            }
-        }
-        this.currentStopOrders = stopOrders;
-    }
-
-    public void handleStopOrder(Event event) {
-        if (isEmpty()) {
-            return;
-        }
-        this.executionHandler.processStopOrders();
-        this.cancelOpenStopOrders();
-        List<StopOrderDto> filledOrders = this.getFilledStopOrders();
-        log.info("Total stop loss order filled " + filledOrders.size());
-
-        for (StopOrderDto stopOrder : filledOrders) {
-            eventNotifier.notify(new StopOrderFilledEvent(
-                    event.getTimestamp(),
-                    event.getPrice(),
-                    stopOrder
-            ));
-        }
-    }
-
-    private List<StopOrderDto> getFilledStopOrders() {
-        List<StopOrderDto> filledStopLoss = new ArrayList<>();
-        Map<Integer, StopOrderDto> stopOrders = this.executionHandler.getStopLossOrders();
-        Map<Integer, StopOrderDto> limitOrders = this.executionHandler.getLimitOrders();
-        stopOrders.putAll(limitOrders);
-        if (stopOrders.isEmpty()) {
-            return filledStopLoss;
-        }
-
-        for (Map.Entry<Integer, StopOrderDto> entry : this.currentStopOrders.entrySet()) {
-            StopOrderDto stopOrder = stopOrders.get(entry.getKey());
-            if (stopOrder.status() == StopOrderDto.StopOrderStatus.FILLED) {
-                filledStopLoss.add(stopOrder);
-            }
-        }
-        return filledStopLoss;
-
-    }
-
-    private void cancelOpenStopOrders() {
-        if (!this.currentStopOrders.isEmpty()) {
-            int count = this.executionHandler.cancelOpenStopOrders();
-            log.info("Cancelled " + count + " stop loss");
-
-            count = this.executionHandler.cancelOpenLimitOrders();
-            log.info("Cancelled " + count + " limit orders");
-        }
-    }
-
-    public synchronized void processExits(PriceChangedEvent event, List<SignalDto> signals) {
+    public synchronized void checkExits(PriceChangedEvent event, List<SignalDto> signals) {
         if (isEmpty()) {
             return;
         }

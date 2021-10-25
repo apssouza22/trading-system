@@ -174,7 +174,7 @@ public class PortfolioServiceShould {
         portfolio.addNewPosition(position.positionType(), position.filledOrder());
         var event = new PriceChangedEvent(null, null);
 
-        portfolio.processExits(event, emptyList());
+        portfolio.checkExits(event, emptyList());
 
         verify(builder.riskManagementService, times(1)).getExitPositions(any(), any());
         verify(builder.orderService, times(1)).createOrderFromClosedPosition(any(), any());
