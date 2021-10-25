@@ -1,6 +1,6 @@
 package com.apssouza.mytrade.trading.domain.forex.orderbook;
 
-import com.apssouza.mytrade.trading.domain.forex.common.Event;
+import com.apssouza.mytrade.trading.domain.forex.common.events.Event;
 import com.apssouza.mytrade.trading.domain.forex.common.observerinfra.Observer;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.FilledOrderDto;
 import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderDto;

@@ -1,8 +1,8 @@
 package com.apssouza.mytrade.trading.domain.forex.common.observerinfra;
 
-import com.apssouza.mytrade.trading.domain.forex.common.Event;
+import com.apssouza.mytrade.trading.domain.forex.common.events.Event;
 
 public interface Observer
 {
-    public void update(Event e);
+    void update(Event e);
 }

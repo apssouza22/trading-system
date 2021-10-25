@@ -1,7 +1,7 @@
 package com.apssouza.mytrade.trading.domain.forex.risk;
 
 import com.apssouza.mytrade.feed.api.PriceDto;
-import com.apssouza.mytrade.trading.domain.forex.feed.pricefeed.PriceChangedEvent;
+import com.apssouza.mytrade.trading.domain.forex.common.events.PriceChangedEvent;
 import com.apssouza.mytrade.trading.domain.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PositionDto;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PositionBuilder;

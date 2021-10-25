@@ -1,7 +1,9 @@
 package com.apssouza.mytrade.trading.domain.forex.session;
 
-import com.apssouza.mytrade.trading.domain.forex.common.Event;
+import com.apssouza.mytrade.trading.domain.forex.common.events.Event;
 import com.apssouza.mytrade.trading.domain.forex.common.ForexException;
+import com.apssouza.mytrade.trading.domain.forex.common.events.SessionFinishedEvent;
+import com.apssouza.mytrade.trading.domain.forex.common.observerinfra.EventNotifier;
 import com.apssouza.mytrade.trading.domain.forex.orderbook.BookHistoryService;
 
 import java.time.LocalDateTime;

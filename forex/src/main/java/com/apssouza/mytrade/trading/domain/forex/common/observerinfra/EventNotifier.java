@@ -1,12 +1,11 @@
 package com.apssouza.mytrade.trading.domain.forex.common.observerinfra;
 
-import com.apssouza.mytrade.trading.domain.forex.common.Event;
+import com.apssouza.mytrade.trading.domain.forex.common.events.Event;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Publisher implements Subject {
-
+public class EventNotifier implements Subject {
     private List<Observer> observers = new ArrayList<>();
 
     @Override

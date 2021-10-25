@@ -1,10 +1,10 @@
 package com.apssouza.mytrade.trading.domain.forex.portfolio;
 
-import com.apssouza.mytrade.trading.domain.forex.common.Event;
+import com.apssouza.mytrade.trading.domain.forex.common.events.Event;
 import com.apssouza.mytrade.trading.domain.forex.common.TradingParams;
 import com.apssouza.mytrade.trading.domain.forex.common.observerinfra.Observer;
 import com.apssouza.mytrade.trading.domain.forex.order.OrderDto;
-import com.apssouza.mytrade.trading.domain.forex.order.OrderFilledEvent;
+import com.apssouza.mytrade.trading.domain.forex.common.events.OrderFilledEvent;
 
 
 class FilledOrderListener implements Observer {

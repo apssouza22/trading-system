@@ -1,7 +1,7 @@
-package com.apssouza.mytrade.trading.domain.forex.session;
+package com.apssouza.mytrade.trading.domain.forex.common.events;
 
 import com.apssouza.mytrade.feed.api.PriceDto;
-import com.apssouza.mytrade.trading.domain.forex.common.Event;
+import com.apssouza.mytrade.trading.domain.forex.common.events.Event;
 
 import java.time.LocalDateTime;
 import java.util.Map;

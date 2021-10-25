@@ -1,10 +1,9 @@
 package com.apssouza.mytrade.trading.domain.forex.orderbook;
 
-import com.apssouza.mytrade.trading.domain.forex.common.Event;
+import com.apssouza.mytrade.trading.domain.forex.common.events.Event;
 import com.apssouza.mytrade.trading.domain.forex.common.TradingParams;
 import com.apssouza.mytrade.trading.domain.forex.common.observerinfra.Observer;
-import com.apssouza.mytrade.trading.domain.forex.order.OrderCreatedEvent;
-import com.apssouza.mytrade.trading.domain.forex.session.SessionFinishedEvent;
+import com.apssouza.mytrade.trading.domain.forex.common.events.SessionFinishedEvent;
 
 import java.io.IOException;
 

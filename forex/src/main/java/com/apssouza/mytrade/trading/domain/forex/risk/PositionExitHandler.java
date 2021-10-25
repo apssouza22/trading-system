@@ -5,7 +5,7 @@ import com.apssouza.mytrade.feed.api.SignalDto;
 import com.apssouza.mytrade.trading.domain.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioModel;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PositionDto;
-import com.apssouza.mytrade.trading.domain.forex.feed.pricefeed.PriceChangedEvent;
+import com.apssouza.mytrade.trading.domain.forex.common.events.PriceChangedEvent;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

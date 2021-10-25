@@ -1,8 +1,8 @@
 package com.apssouza.mytrade.trading.domain.forex.portfolio;
 
-import com.apssouza.mytrade.trading.domain.forex.common.Event;
+import com.apssouza.mytrade.trading.domain.forex.common.events.Event;
 import com.apssouza.mytrade.trading.domain.forex.common.observerinfra.Observer;
-import com.apssouza.mytrade.trading.domain.forex.session.EndedTradingDayEvent;
+import com.apssouza.mytrade.trading.domain.forex.common.events.EndedTradingDayEvent;
 
 import java.util.List;
 import java.util.logging.Logger;

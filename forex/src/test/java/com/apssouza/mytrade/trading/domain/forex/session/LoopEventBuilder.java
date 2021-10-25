@@ -1,7 +1,7 @@
 package com.apssouza.mytrade.trading.domain.forex.session;
 
 import com.apssouza.mytrade.feed.api.PriceDto;
-import com.apssouza.mytrade.trading.domain.forex.feed.pricefeed.PriceChangedEvent;
+import com.apssouza.mytrade.trading.domain.forex.common.events.PriceChangedEvent;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

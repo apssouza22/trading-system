@@ -1,4 +1,4 @@
-package com.apssouza.mytrade.trading.domain.forex.common;
+package com.apssouza.mytrade.trading.domain.forex.common.events;
 
 import com.apssouza.mytrade.feed.api.PriceDto;
 

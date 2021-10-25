@@ -1,9 +1,10 @@
 package com.apssouza.mytrade.trading.domain.forex.feed.pricefeed;
 
 import com.apssouza.mytrade.feed.api.PriceDto;
-import com.apssouza.mytrade.trading.domain.forex.session.EndedTradingDayEvent;
-import com.apssouza.mytrade.trading.domain.forex.common.Event;
-import com.apssouza.mytrade.trading.domain.forex.session.SessionFinishedEvent;
+import com.apssouza.mytrade.trading.domain.forex.common.events.PriceChangedEvent;
+import com.apssouza.mytrade.trading.domain.forex.common.events.EndedTradingDayEvent;
+import com.apssouza.mytrade.trading.domain.forex.common.events.Event;
+import com.apssouza.mytrade.trading.domain.forex.common.events.SessionFinishedEvent;
 import com.apssouza.mytrade.trading.domain.forex.common.ForexException;
 import com.apssouza.mytrade.trading.domain.forex.common.TradingHelper;
 

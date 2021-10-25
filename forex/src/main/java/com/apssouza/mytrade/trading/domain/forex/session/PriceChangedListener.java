@@ -2,14 +2,15 @@ package com.apssouza.mytrade.trading.domain.forex.session;
 
 import com.apssouza.mytrade.feed.api.SignalDto;
 import com.apssouza.mytrade.trading.domain.forex.broker.BrokerService;
-import com.apssouza.mytrade.trading.domain.forex.common.Event;
+import com.apssouza.mytrade.trading.domain.forex.common.events.Event;
 import com.apssouza.mytrade.trading.domain.forex.common.TradingParams;
+import com.apssouza.mytrade.trading.domain.forex.common.observerinfra.EventNotifier;
 import com.apssouza.mytrade.trading.domain.forex.common.observerinfra.Observer;
-import com.apssouza.mytrade.trading.domain.forex.feed.pricefeed.PriceChangedEvent;
-import com.apssouza.mytrade.trading.domain.forex.feed.signalfeed.SignalCreatedEvent;
+import com.apssouza.mytrade.trading.domain.forex.common.events.PriceChangedEvent;
+import com.apssouza.mytrade.trading.domain.forex.common.events.SignalCreatedEvent;
 import com.apssouza.mytrade.trading.domain.forex.feed.signalfeed.SignalFeedHandler;
 import com.apssouza.mytrade.trading.domain.forex.order.OrderDto;
-import com.apssouza.mytrade.trading.domain.forex.order.OrderFoundEvent;
+import com.apssouza.mytrade.trading.domain.forex.common.events.OrderFoundEvent;
 import com.apssouza.mytrade.trading.domain.forex.order.OrderService;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioService;
 

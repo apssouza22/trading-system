@@ -2,10 +2,12 @@ package com.apssouza.mytrade.trading.domain.forex.session;
 
 import com.apssouza.mytrade.trading.api.ExecutionType;
 import com.apssouza.mytrade.trading.api.SessionType;
-import com.apssouza.mytrade.trading.domain.forex.common.Event;
+import com.apssouza.mytrade.trading.domain.forex.common.events.EndedTradingDayEvent;
+import com.apssouza.mytrade.trading.domain.forex.common.events.Event;
 import com.apssouza.mytrade.trading.domain.forex.common.TradingParams;
 import com.apssouza.mytrade.trading.domain.forex.broker.BrokerService;
 import com.apssouza.mytrade.trading.domain.forex.broker.OrderExecutionFactory;
+import com.apssouza.mytrade.trading.domain.forex.common.observerinfra.EventNotifier;
 import com.apssouza.mytrade.trading.domain.forex.feed.FeedService;
 import com.apssouza.mytrade.trading.domain.forex.feed.pricefeed.PriceStream;
 import com.apssouza.mytrade.trading.domain.forex.feed.pricefeed.PriceStreamFactory;

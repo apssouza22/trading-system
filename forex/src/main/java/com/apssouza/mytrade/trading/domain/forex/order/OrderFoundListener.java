@@ -1,12 +1,13 @@
 package com.apssouza.mytrade.trading.domain.forex.order;
 
 import com.apssouza.mytrade.trading.domain.forex.broker.BrokerService;
-import com.apssouza.mytrade.trading.domain.forex.common.Event;
+import com.apssouza.mytrade.trading.domain.forex.common.events.Event;
+import com.apssouza.mytrade.trading.domain.forex.common.events.OrderFilledEvent;
+import com.apssouza.mytrade.trading.domain.forex.common.events.OrderFoundEvent;
 import com.apssouza.mytrade.trading.domain.forex.common.observerinfra.Observer;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.FilledOrderDto;
-import com.apssouza.mytrade.trading.domain.forex.portfolio.PositionClosedEvent;
 import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementService;
-import com.apssouza.mytrade.trading.domain.forex.session.EventNotifier;
+import com.apssouza.mytrade.trading.domain.forex.common.observerinfra.EventNotifier;
 import static com.apssouza.mytrade.trading.domain.forex.order.OrderDto.OrderOrigin.EXITS;
 
 import java.util.ArrayList;

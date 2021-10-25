@@ -1,10 +1,8 @@
 package com.apssouza.mytrade.trading.domain.forex.orderbook;
 
-import com.apssouza.mytrade.trading.domain.forex.common.Event;
+import com.apssouza.mytrade.trading.domain.forex.common.events.Event;
 import com.apssouza.mytrade.trading.domain.forex.common.observerinfra.Observer;
-import com.apssouza.mytrade.trading.domain.forex.order.OrderCreatedEvent;
-import com.apssouza.mytrade.trading.domain.forex.order.OrderFilledEvent;
-import com.apssouza.mytrade.trading.domain.forex.portfolio.PositionClosedEvent;
+import com.apssouza.mytrade.trading.domain.forex.common.events.OrderCreatedEvent;
 
 class OrderCreatedListener implements Observer {
     private final BookHistoryService historyHandler;

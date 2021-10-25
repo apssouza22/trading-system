@@ -1,9 +1,8 @@
 package com.apssouza.mytrade.trading.domain.forex.order;
 
-import com.apssouza.mytrade.trading.domain.forex.common.Event;
+import com.apssouza.mytrade.trading.domain.forex.common.events.Event;
 import com.apssouza.mytrade.trading.domain.forex.common.observerinfra.Observer;
-import com.apssouza.mytrade.trading.domain.forex.feed.pricefeed.PriceChangedEvent;
-import com.apssouza.mytrade.trading.domain.forex.portfolio.PositionClosedEvent;
+import com.apssouza.mytrade.trading.domain.forex.common.events.PositionClosedEvent;
 
 
 class PositionClosedListener implements Observer {

@@ -4,7 +4,7 @@ import com.apssouza.mytrade.trading.domain.forex.portfolio.PositionBuilder;
 import com.apssouza.mytrade.trading.domain.forex.feed.SignalBuilder;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PositionDto;
 import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementService;
-import com.apssouza.mytrade.trading.domain.forex.feed.signalfeed.SignalCreatedEvent;
+import com.apssouza.mytrade.trading.domain.forex.common.events.SignalCreatedEvent;
 import static com.apssouza.mytrade.trading.domain.forex.order.OrderDto.OrderAction.BUY;
 import static com.apssouza.mytrade.trading.domain.forex.order.OrderDto.OrderOrigin.EXITS;
 import static com.apssouza.mytrade.trading.domain.forex.order.OrderDto.OrderOrigin.STOP_ORDER;

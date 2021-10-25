@@ -1,10 +1,11 @@
 package com.apssouza.mytrade.trading.domain.forex.order;
 
-import com.apssouza.mytrade.trading.domain.forex.common.Event;
+import com.apssouza.mytrade.trading.domain.forex.common.events.Event;
+import com.apssouza.mytrade.trading.domain.forex.common.events.OrderCreatedEvent;
 import com.apssouza.mytrade.trading.domain.forex.common.observerinfra.Observer;
-import com.apssouza.mytrade.trading.domain.forex.feed.signalfeed.SignalCreatedEvent;
+import com.apssouza.mytrade.trading.domain.forex.common.events.SignalCreatedEvent;
 import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementService;
-import com.apssouza.mytrade.trading.domain.forex.session.EventNotifier;
+import com.apssouza.mytrade.trading.domain.forex.common.observerinfra.EventNotifier;
 
 import java.util.logging.Logger;
 
