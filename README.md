@@ -13,7 +13,7 @@ It has been developed for both retail traders and institutional hedge funds to a
 * Performance status report: Provide a performance status of your current trades.
 
 # Tech details
-* Java 16
+* Java 17
 * Event driven architecture
 * Maven multi-modules
 * Java modularization
