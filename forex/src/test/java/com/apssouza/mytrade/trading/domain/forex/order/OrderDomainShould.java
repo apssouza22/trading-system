@@ -24,7 +24,7 @@ import java.util.List;
 import junit.framework.TestCase;
 
 @RunWith(MockitoJUnitRunner.class)
-public class OrderServiceShould extends TestCase {
+public class OrderDomainShould extends TestCase {
 
     private RiskManagementService riskManagementService;
 
@@ -34,7 +34,7 @@ public class OrderServiceShould extends TestCase {
     }
 
     @Test
-    public void createOrderFromSignal() {
+    public void create_order_from_signal_event() {
         OrderService orderService = OrderHandlerFactory.create(this.riskManagementService);
         SignalBuilder signalBuilder = new SignalBuilder();
         signalBuilder.addSignal(LocalDateTime.MIN, "Buy");
@@ -44,7 +44,7 @@ public class OrderServiceShould extends TestCase {
     }
 
     @Test
-    public void createOrderFromClosedPosition_ofShortType() {
+    public void create_order_from_closed_position_of_short() {
         PositionBuilder positionBuilder = new PositionBuilder();
         positionBuilder.withPositionStatus(PositionDto.PositionStatus.CLOSED);
         positionBuilder.withType(PositionDto.PositionType.SHORT);
@@ -57,7 +57,7 @@ public class OrderServiceShould extends TestCase {
     }
 
     @Test
-    public void createOrderFromClosedPosition_ofLongType() {
+    public void create_order_from_closed_position_of_long() {
         PositionBuilder positionBuilder = new PositionBuilder();
         positionBuilder.withPositionStatus(PositionDto.PositionStatus.CLOSED);
         positionBuilder.withType(PositionDto.PositionType.LONG);
@@ -70,7 +70,7 @@ public class OrderServiceShould extends TestCase {
     }
 
     @Test
-    public void persistOrder() {
+    public void persist_order() {
         OrderService orderService = OrderHandlerFactory.create(riskManagementService);
         orderService.persist(new OrderBuilder().build());
         List<OrderDto> ordersByStatus = orderService.getOrderByStatus(CREATED);
@@ -78,7 +78,7 @@ public class OrderServiceShould extends TestCase {
     }
 
     @Test
-    public void updateOrderStatus() {
+    public void update_order_status() {
         OrderService orderService = OrderHandlerFactory.create(this.riskManagementService);
         var order = new OrderDto("AUDUSD", BUY, 10, STOP_ORDER, LocalDateTime.MIN, "123", CREATED);
         var createdOrder = orderService.persist(order);
@@ -88,11 +88,28 @@ public class OrderServiceShould extends TestCase {
     }
 
     @Test
-    public void returnOrdersByStatus() {
+    public void filter_orders_by_status() {
         OrderService orderService = OrderHandlerFactory.create(this.riskManagementService);
         var order = new OrderDto("AUDUSD", BUY, 10, STOP_ORDER, LocalDateTime.MIN, "123", CREATED);
         var createdOrder = orderService.persist(order);
         List<OrderDto> orderByStatus = orderService.getOrderByStatus(CREATED);
         assertEquals(createdOrder.id(), orderByStatus.get(0).id());
     }
+
+
+    @Test
+    public void handle_order_found_event() {
+        // TODO
+    }
+
+    @Test
+    public void handle_position_closed_event() {
+        // TODO
+    }
+
+    @Test
+    public void handle_signal_created_event() {
+        // TODO
+    }
+
 }

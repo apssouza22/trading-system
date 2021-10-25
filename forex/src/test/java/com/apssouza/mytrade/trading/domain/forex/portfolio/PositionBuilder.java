@@ -5,6 +5,7 @@ import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrde
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.EnumMap;
+import static java.math.BigDecimal.ONE;
 
 public class PositionBuilder {
 
@@ -15,7 +16,7 @@ public class PositionBuilder {
     LocalDateTime timestamp = LocalDateTime.MIN;
     String identifier = "AUDUSD";
     PositionDto.ExitReason exitReason = null;
-    FilledOrderDto filledOrder = null;
+    FilledOrderDto filledOrder = new FilledOrderDto(timestamp, symbol, null,qtd, price,identifier, 1);
     PositionDto.PositionStatus positionStatus = PositionDto.PositionStatus.FILLED;
     private EnumMap<StopOrderDto.StopOrderType, StopOrderDto> stopOrders = new EnumMap(StopOrderDto.StopOrderType.class);
 

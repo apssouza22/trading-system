@@ -36,11 +36,11 @@ import static java.math.BigDecimal.ONE;
 import static java.util.Collections.emptyList;
 
 @RunWith(MockitoJUnitRunner.class)
-public class PortfolioServiceShould {
+public class PortfolioShould {
 
 
     @Test
-    public void updatePositionsPrices() {
+    public void update_portfolio_balance() {
         var builder = new PortfolioHandlerBuilder();
         var portfolio = builder.build();
         var position = new PositionBuilder().build();
@@ -57,7 +57,7 @@ public class PortfolioServiceShould {
     }
 
     @Test
-    public void createStopOrder_withoutTakeProfitStopOrder() {
+    public void create_stop_loss_order() {
         var builder = new PortfolioHandlerBuilder();
         var portfolio = builder.build();
         var position = new PositionBuilder().build();
@@ -94,7 +94,7 @@ public class PortfolioServiceShould {
     }
 
     @Test
-    public void createStopOrder_withTakeProfitStopOrder() {
+    public void create_stop_loss_order_and_take_profit_order() {
         var builder = new PortfolioHandlerBuilder();
         var portfolio = builder.build();
 
@@ -132,7 +132,7 @@ public class PortfolioServiceShould {
     }
 
     @Test
-    public void handleStopOrder() {
+    public void handle_stop_orders_when_price_changes() {
         var builder = new PortfolioHandlerBuilder();
         var portfolio = builder.build();
 
@@ -158,7 +158,7 @@ public class PortfolioServiceShould {
     }
 
     @Test
-    public void processExits() {
+    public void process_exits_when_price_change() {
         var builder = new PortfolioHandlerBuilder();
         var portfolio = builder.build();
 
@@ -182,7 +182,7 @@ public class PortfolioServiceShould {
     }
 
     @Test
-    public void closeAllPositions() {
+    public void close_all_positions() {
         var builder = new PortfolioHandlerBuilder();
         var portfolio = builder.build();
         var position = new PositionBuilder()
@@ -194,14 +194,7 @@ public class PortfolioServiceShould {
         assertEquals(1, portfolio.size());
 
         var priceMap = new HashMap<String, PriceDto>();
-        priceMap.put("AUDUSD", new PriceDto(
-                LocalDateTime.MIN,
-                ONE,
-                ONE,
-                ONE,
-                ONE,
-                "AUDUSD"
-        ));
+        priceMap.put("AUDUSD", new PriceDto(LocalDateTime.MIN, ONE, ONE, ONE, ONE, "AUDUSD"));
         var event = new EndedTradingDayEvent(LocalDateTime.MIN, priceMap);
 
         var closedPositions = portfolio.closeAllPositions(END_OF_DAY, event);
@@ -212,7 +205,26 @@ public class PortfolioServiceShould {
     }
 
     @Test
-    public void returnPortfolio() {
+    public void close_a_position() {
+        var builder = new PortfolioHandlerBuilder();
+        var portfolio = builder.build();
+        var position = new PositionBuilder()
+                .withPositionStatus(PositionDto.PositionStatus.FILLED)
+                .build();
+
+
+        portfolio.addNewPosition(position.positionType(), position.filledOrder());
+        assertEquals(1, portfolio.size());
+
+        var priceMap = new HashMap<String, PriceDto>();
+        priceMap.put("AUDUSD", new PriceDto(LocalDateTime.MIN, ONE, ONE, ONE, ONE, "AUDUSD"));
+        portfolio.closePosition(position.identifier(), PositionDto.ExitReason.COUNTER_SIGNAL);
+
+        assertEquals(0, portfolio.getPositions().size());
+    }
+
+    @Test
+    public void add_new_position_to_portfolio() {
         var portfolio = new PortfolioHandlerBuilder().build();
 
         var position = new PositionBuilder().build();
@@ -221,7 +233,7 @@ public class PortfolioServiceShould {
     }
 
     @Test
-    public void processReconciliation_remotePortfolioNotInSync() {
+    public void process_reconciliation_with_broker_fail() {
         var builder = new PortfolioHandlerBuilder();
         var priceMap = new PriceBuilder().builderMap();
         var event = new PriceChangedEvent(LocalDateTime.now(), priceMap);
@@ -240,7 +252,7 @@ public class PortfolioServiceShould {
     }
 
     @Test
-    public void processReconciliation_remotePortfolioInSync() {
+    public void process_reconciliation_with_broker_success() {
         var builder = new PortfolioHandlerBuilder();
         var priceMap = new PriceBuilder().builderMap();
         var event = new PriceChangedEvent(LocalDateTime.now(), priceMap);
@@ -259,5 +271,21 @@ public class PortfolioServiceShould {
 
         assertEquals(1, portfolio.size());
         assertNull(portfolio.getPosition(position.identifier()).exitReason());
+    }
+
+
+    @Test
+    public void change_position_quantity() {
+        //TODO
+    }
+
+    @Test
+    public void handle_order_filled_event() {
+        //TODO
+    }
+
+    @Test
+    public void handle_stop_order_filled_event() {
+        //TODO
     }
 }
