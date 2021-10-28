@@ -1,6 +1,6 @@
 package com.apssouza.mytrade.trading.domain.forex.portfolio;
 
-import com.apssouza.mytrade.trading.domain.forex.broker.BrokerService;
+import com.apssouza.mytrade.trading.domain.forex.brokerintegration.BrokerIntegrationService;
 import com.apssouza.mytrade.trading.domain.forex.common.MultiPositionHandler;
 import com.apssouza.mytrade.trading.domain.forex.common.TradingParams;
 import com.apssouza.mytrade.trading.domain.forex.common.events.Event;
@@ -21,12 +21,12 @@ class StopOrderHandler {
 
     private static Logger log = Logger.getLogger(PortfolioService.class.getName());
     private final EventNotifier eventNotifier;
-    private final BrokerService executionHandler;
+    private final BrokerIntegrationService executionHandler;
     private final RiskManagementService riskManagementService;
 
     private Map<Integer, StopOrderDto> currentStopOrders = new HashMap<>();
 
-    public StopOrderHandler(final EventNotifier eventNotifier, final BrokerService executionHandler, final RiskManagementService riskManagementService) {
+    public StopOrderHandler(final EventNotifier eventNotifier, final BrokerIntegrationService executionHandler, final RiskManagementService riskManagementService) {
         this.eventNotifier = eventNotifier;
         this.executionHandler = executionHandler;
         this.riskManagementService = riskManagementService;

@@ -1,6 +1,6 @@
 package com.apssouza.mytrade.trading.domain.forex.order;
 
-import com.apssouza.mytrade.trading.domain.forex.broker.BrokerService;
+import com.apssouza.mytrade.trading.domain.forex.brokerintegration.BrokerIntegrationService;
 import com.apssouza.mytrade.trading.domain.forex.common.events.Event;
 import com.apssouza.mytrade.trading.domain.forex.common.events.OrderFilledEvent;
 import com.apssouza.mytrade.trading.domain.forex.common.events.OrderFoundEvent;
@@ -17,13 +17,13 @@ import java.util.logging.Logger;
 class OrderFoundListener implements Observer {
 
     private static Logger log = Logger.getLogger(OrderFoundListener.class.getSimpleName());
-    private final BrokerService executionHandler;
+    private final BrokerIntegrationService executionHandler;
     private final OrderService orderService;
     private final EventNotifier eventNotifier;
     private final RiskManagementService riskManagementService;
 
     public OrderFoundListener(
-            BrokerService executionHandler,
+            BrokerIntegrationService executionHandler,
             OrderService orderService,
             EventNotifier eventNotifier,
             RiskManagementService riskManagementService

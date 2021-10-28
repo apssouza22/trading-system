@@ -2,8 +2,8 @@ package com.apssouza.mytrade.trading.domain.forex.session;
 
 import com.apssouza.mytrade.trading.api.ExecutionType;
 import com.apssouza.mytrade.trading.api.SessionType;
-import com.apssouza.mytrade.trading.domain.forex.broker.BrokerService;
-import com.apssouza.mytrade.trading.domain.forex.broker.OrderExecutionFactory;
+import com.apssouza.mytrade.trading.domain.forex.brokerintegration.BrokerIntegrationService;
+import com.apssouza.mytrade.trading.domain.forex.brokerintegration.BrokerIntegrationFactory;
 import com.apssouza.mytrade.trading.domain.forex.common.TradingParams;
 import com.apssouza.mytrade.trading.domain.forex.common.events.EndedTradingDayEvent;
 import com.apssouza.mytrade.trading.domain.forex.common.events.Event;
@@ -13,9 +13,9 @@ import com.apssouza.mytrade.trading.domain.forex.feed.pricefeed.PriceStream;
 import com.apssouza.mytrade.trading.domain.forex.feed.pricefeed.PriceStreamFactory;
 import com.apssouza.mytrade.trading.domain.forex.feed.signalfeed.SignalFeedFactory;
 import com.apssouza.mytrade.trading.domain.forex.feed.signalfeed.SignalFeedHandler;
-import com.apssouza.mytrade.trading.domain.forex.order.OrderServiceFactory;
+import com.apssouza.mytrade.trading.domain.forex.order.OrderFactory;
 import com.apssouza.mytrade.trading.domain.forex.order.OrderService;
-import com.apssouza.mytrade.trading.domain.forex.orderbook.OrderBookServiceFactory;
+import com.apssouza.mytrade.trading.domain.forex.orderbook.OrderBookFactory;
 import com.apssouza.mytrade.trading.domain.forex.orderbook.OrderBookService;
 import com.apssouza.mytrade.trading.domain.forex.orderbook.CycleHistoryDto;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioFactory;
@@ -23,7 +23,7 @@ import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioService;
 import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementFactory;
 import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementService;
 import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderConfigDto;
-import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderFactory;
+import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderCreationFactory;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -43,7 +43,7 @@ public class TradingSession {
 
     protected SignalFeedHandler signalFeedHandler;
     private final FeedService feedModule;
-    protected BrokerService executionHandler;
+    protected BrokerIntegrationService executionHandler;
     protected OrderService orderService;
     protected OrderBookService historyHandler;
     protected PriceStream priceStream;
@@ -77,17 +77,17 @@ public class TradingSession {
 
     private void configSession() {
         this.signalFeedHandler = SignalFeedFactory.create(feedModule);
-        this.executionHandler = OrderExecutionFactory.factory(this.executionType);
-        this.historyHandler = OrderBookServiceFactory.create();
+        this.executionHandler = BrokerIntegrationFactory.factory(this.executionType);
+        this.historyHandler = OrderBookFactory.create();
         this.riskManagementService = RiskManagementFactory.create(
-                StopOrderFactory.factory(new StopOrderConfigDto(
+                StopOrderCreationFactory.factory(new StopOrderConfigDto(
                         TradingParams.hard_stop_loss_distance,
                         TradingParams.take_profit_distance_fixed,
                         TradingParams.entry_stop_loss_distance_fixed,
                         TradingParams.trailing_stop_loss_distance
                 ))
         );
-        this.orderService = OrderServiceFactory.create(this.riskManagementService);
+        this.orderService = OrderFactory.create(this.riskManagementService);
 
         eventNotifier = new EventNotifier();
         this.portfolioService = PortfolioFactory.create(
@@ -102,7 +102,7 @@ public class TradingSession {
     }
 
     private EventNotifier setListeners() {
-        var eventListeners = OrderServiceFactory.createListeners(
+        var eventListeners = OrderFactory.createListeners(
                 orderService,
                 riskManagementService,
                 executionHandler,
@@ -118,7 +118,7 @@ public class TradingSession {
                 orderService,
                 eventNotifier
         ));
-        eventListeners.addAll(OrderBookServiceFactory.createListeners(historyHandler));
+        eventListeners.addAll(OrderBookFactory.createListeners(historyHandler));
         eventListeners.forEach(eventNotifier::attach);
         return eventNotifier;
     }

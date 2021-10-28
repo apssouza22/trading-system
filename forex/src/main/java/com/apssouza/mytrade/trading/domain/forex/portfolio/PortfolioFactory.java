@@ -1,6 +1,6 @@
 package com.apssouza.mytrade.trading.domain.forex.portfolio;
 
-import com.apssouza.mytrade.trading.domain.forex.broker.BrokerService;
+import com.apssouza.mytrade.trading.domain.forex.brokerintegration.BrokerIntegrationService;
 import com.apssouza.mytrade.trading.domain.forex.common.observerinfra.Observer;
 import com.apssouza.mytrade.trading.domain.forex.order.OrderService;
 import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementService;
@@ -13,7 +13,7 @@ public class PortfolioFactory {
 
     public static PortfolioService create(
             OrderService orderService,
-            BrokerService executionHandler,
+            BrokerIntegrationService executionHandler,
             RiskManagementService riskManagementService,
             EventNotifier eventNotifier
     ) {

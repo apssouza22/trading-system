@@ -1,6 +1,6 @@
 package com.apssouza.mytrade.trading.domain.forex.order;
 
-import com.apssouza.mytrade.trading.domain.forex.broker.BrokerService;
+import com.apssouza.mytrade.trading.domain.forex.brokerintegration.BrokerIntegrationService;
 import com.apssouza.mytrade.trading.domain.forex.common.observerinfra.EventNotifier;
 import com.apssouza.mytrade.trading.domain.forex.common.observerinfra.Observer;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioService;
@@ -9,7 +9,7 @@ import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementService;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OrderServiceFactory {
+public class OrderFactory {
 
     public static OrderService create(RiskManagementService riskManagementService){
         return create(riskManagementService, new MemoryOrderDao());
@@ -22,7 +22,7 @@ public class OrderServiceFactory {
     public static List<Observer> createListeners(
             OrderService orderService,
             RiskManagementService riskManagementService,
-            BrokerService executionHandler,
+            BrokerIntegrationService executionHandler,
             EventNotifier eventNotifier,
             PortfolioService portfolioService
     ) {

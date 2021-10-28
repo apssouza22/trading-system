@@ -1,4 +1,4 @@
-package com.apssouza.mytrade.trading.domain.forex.broker;
+package com.apssouza.mytrade.trading.domain.forex.brokerintegration;
 
 import com.apssouza.mytrade.feed.api.PriceDto;
 import com.apssouza.mytrade.trading.domain.forex.order.OrderDto;
@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 /**
  * Simulated order execution simulates interactions with a broker
  */
-class SimulatedOrderExecution implements BrokerService {
+class SimulatedOrderExecution implements BrokerIntegrationService {
 
     private static final Logger log = Logger.getLogger(SimulatedOrderExecution.class.getSimpleName());
     private final MultiPositionPerCPairHandler multiPositionPerCPairHandler;

@@ -8,7 +8,7 @@ import com.apssouza.mytrade.trading.domain.forex.portfolio.PositionBuilder;
 import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderConfigDto;
 import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderCreator;
 import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderDto;
-import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderFactory;
+import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderCreationFactory;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -29,7 +29,7 @@ public class StopOrderCreatorFixedTest extends TestCase {
 
     @Before
     public void setUp() throws Exception {
-        this.obj = StopOrderFactory.factory(new StopOrderConfigDto(.1, .2, .2, .2));
+        this.obj = StopOrderCreationFactory.factory(new StopOrderConfigDto(.1, .2, .2, .2));
     }
 
     @Test

@@ -1,7 +1,7 @@
 package com.apssouza.mytrade.trading.domain.forex.session;
 
 import com.apssouza.mytrade.feed.api.SignalDto;
-import com.apssouza.mytrade.trading.domain.forex.broker.BrokerService;
+import com.apssouza.mytrade.trading.domain.forex.brokerintegration.BrokerIntegrationService;
 import com.apssouza.mytrade.trading.domain.forex.common.MultiPositionHandler;
 import com.apssouza.mytrade.trading.domain.forex.common.events.Event;
 import com.apssouza.mytrade.trading.domain.forex.common.TradingParams;
@@ -20,14 +20,14 @@ import java.util.List;
 
 class PriceChangedListener implements Observer {
 
-    private final BrokerService executionHandler;
+    private final BrokerIntegrationService executionHandler;
     private final PortfolioService portfolioService;
     private final SignalFeedHandler signalFeedHandler;
     private final OrderService orderService;
     private final EventNotifier eventNotifier;
 
     public PriceChangedListener(
-            BrokerService executionHandler,
+            BrokerIntegrationService executionHandler,
             PortfolioService portfolioService,
             SignalFeedHandler signalFeedHandler,
             OrderService orderService,

@@ -1,4 +1,4 @@
-package com.apssouza.mytrade.trading.domain.forex.broker;
+package com.apssouza.mytrade.trading.domain.forex.brokerintegration;
 
 import com.apssouza.mytrade.feed.api.PriceDto;
 import com.apssouza.mytrade.trading.domain.forex.order.OrderDto;
@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * Implementation to execute orders against the Broker called interactive broker
  */
-class InteractiveBrokerOrderExecution implements BrokerService {
+class InteractiveBrokerOrderExecution implements BrokerIntegrationService {
 
     private final String brokerHost;
     private final String brokerPort;

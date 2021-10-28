@@ -1,11 +1,11 @@
-package com.apssouza.mytrade.trading.domain.forex.broker;
+package com.apssouza.mytrade.trading.domain.forex.brokerintegration;
 
 import com.apssouza.mytrade.trading.api.ExecutionType;
 import com.apssouza.mytrade.trading.domain.forex.common.TradingParams;
 
-public class OrderExecutionFactory {
+public class BrokerIntegrationFactory {
 
-    public static BrokerService factory(ExecutionType executionType){
+    public static BrokerIntegrationService factory(ExecutionType executionType){
         if (executionType == ExecutionType.BROKER) {
             return new InteractiveBrokerOrderExecution(
                     TradingParams.brokerHost,

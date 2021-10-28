@@ -3,24 +3,18 @@ package com.apssouza.mytrade.trading.domain.forex.portfolio;
 import com.apssouza.mytrade.feed.api.PriceDto;
 import com.apssouza.mytrade.feed.api.SignalDto;
 import com.apssouza.mytrade.trading.domain.forex.common.events.Event;
-import com.apssouza.mytrade.trading.domain.forex.common.TradingParams;
-import com.apssouza.mytrade.trading.domain.forex.broker.BrokerService;
+import com.apssouza.mytrade.trading.domain.forex.brokerintegration.BrokerIntegrationService;
 import com.apssouza.mytrade.trading.domain.forex.common.events.PositionClosedEvent;
 import com.apssouza.mytrade.trading.domain.forex.common.events.PriceChangedEvent;
 import com.apssouza.mytrade.trading.domain.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.domain.forex.order.OrderService;
 import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementService;
 import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderDto;
-import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderFilledEvent;
 import com.apssouza.mytrade.trading.domain.forex.common.observerinfra.EventNotifier;
-import com.apssouza.mytrade.trading.domain.forex.common.MultiPositionHandler;
-import static com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderDto.StopOrderType.STOP_LOSS;
-import static com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderDto.StopOrderType.TAKE_PROFIT;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -28,7 +22,7 @@ import java.util.logging.Logger;
 class PortfolioServiceImpl implements PortfolioService {
 
     private final OrderService orderService;
-    private final BrokerService executionHandler;
+    private final BrokerIntegrationService executionHandler;
     private final PortfolioChecker portfolioBrokerChecker;
     private final RiskManagementService riskManagementService;
     private final EventNotifier eventNotifier;
@@ -38,7 +32,7 @@ class PortfolioServiceImpl implements PortfolioService {
 
     public PortfolioServiceImpl(
             OrderService orderService,
-            BrokerService executionHandler,
+            BrokerIntegrationService executionHandler,
             PortfolioChecker portfolioBrokerChecker,
             RiskManagementService riskManagementService,
             EventNotifier eventNotifier

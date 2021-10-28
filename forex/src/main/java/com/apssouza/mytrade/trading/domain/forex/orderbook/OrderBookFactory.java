@@ -5,7 +5,7 @@ import com.apssouza.mytrade.trading.domain.forex.common.observerinfra.Observer;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OrderBookServiceFactory {
+public class OrderBookFactory {
 
     public static OrderBookService create() {
         return new OrderBookServiceImpl(new TransactionsExporter());

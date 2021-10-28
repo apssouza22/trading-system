@@ -1,4 +1,4 @@
-package com.apssouza.mytrade.trading.domain.forex.broker;
+package com.apssouza.mytrade.trading.domain.forex.brokerintegration;
 
 import com.apssouza.mytrade.feed.api.PriceDto;
 import com.apssouza.mytrade.trading.domain.forex.order.OrderDto;
@@ -11,7 +11,7 @@ import java.util.Map;
 /**
  * Execute orders. This the interface communication with Brokers
  */
-public interface BrokerService {
+public interface BrokerIntegrationService {
     /**
      * Close all open positions
      */

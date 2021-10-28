@@ -2,7 +2,7 @@ package com.apssouza.mytrade.trading.api;
 
 import com.apssouza.mytrade.feed.api.FeedBuilder;
 import com.apssouza.mytrade.trading.domain.forex.common.ForexException;
-import com.apssouza.mytrade.trading.domain.forex.feed.FeedServiceFactory;
+import com.apssouza.mytrade.trading.domain.forex.feed.FeedFactory;
 import com.apssouza.mytrade.trading.domain.forex.orderbook.CycleHistoryDto;
 import com.apssouza.mytrade.trading.domain.forex.session.TradingSession;
 
@@ -47,7 +47,7 @@ public class ForexEngine {
                 .withEquity(BigDecimal.valueOf(100000L))
                 .withSessionType(SessionType.BACK_TEST)
                 .withExecutionType(ExecutionType.SIMULATED)
-                .withFeed(FeedServiceFactory.create(feed))
+                .withFeed(FeedFactory.create(feed))
                 .build();
         engine.start();
         System.out.println("finished session");

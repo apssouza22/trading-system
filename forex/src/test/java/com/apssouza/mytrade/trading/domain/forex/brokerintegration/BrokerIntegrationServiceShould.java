@@ -1,4 +1,4 @@
-package com.apssouza.mytrade.trading.domain.forex.broker;
+package com.apssouza.mytrade.trading.domain.forex.brokerintegration;
 
 import com.apssouza.mytrade.feed.api.PriceDto;
 import com.apssouza.mytrade.trading.api.ExecutionType;
@@ -23,14 +23,14 @@ import java.util.Map;
 import static com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderDto.StopOrderType.STOP_LOSS;
 
 @RunWith(MockitoJUnitRunner.class)
-public class BrokerServiceShould extends TestCase {
-    BrokerService simulatedBroker;
+public class BrokerIntegrationServiceShould extends TestCase {
+    BrokerIntegrationService simulatedBroker;
     private PriceDto price;
     private HashMap<String, PriceDto> priceDtoMap = new HashMap<>();
 
     @Before
     public void setUp() throws Exception {
-        simulatedBroker = OrderExecutionFactory.factory(ExecutionType.SIMULATED);
+        simulatedBroker = BrokerIntegrationFactory.factory(ExecutionType.SIMULATED);
         this.price = new PriceDto(LocalDateTime.MIN, BigDecimal.TEN, BigDecimal.TEN, BigDecimal.TEN, BigDecimal.TEN, "AUDUSD");
         this.priceDtoMap.put("AUDUSD", price);
         this.priceDtoMap.put("EURUSD", price);
