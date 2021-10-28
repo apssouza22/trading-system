@@ -10,9 +10,9 @@ import java.time.LocalDateTime;
 
 class HistoryStopOrderFilledListener implements Observer {
 
-    private final BookHistoryService historyHandler;
+    private final OrderBookService historyHandler;
 
-    public HistoryStopOrderFilledListener(BookHistoryService historyHandler) {
+    public HistoryStopOrderFilledListener(OrderBookService historyHandler) {
         this.historyHandler = historyHandler;
     }
 

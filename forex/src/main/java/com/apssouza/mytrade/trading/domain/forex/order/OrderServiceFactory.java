@@ -9,14 +9,14 @@ import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementService;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OrderHandlerFactory {
+public class OrderServiceFactory {
 
     public static OrderService create(RiskManagementService riskManagementService){
         return create(riskManagementService, new MemoryOrderDao());
     }
 
     public static OrderService create(RiskManagementService riskManagementService, OrderDao orderDao){
-        return new OrderService(orderDao, riskManagementService);
+        return new OrderServiceImpl(orderDao, riskManagementService);
     }
 
     public static List<Observer> createListeners(

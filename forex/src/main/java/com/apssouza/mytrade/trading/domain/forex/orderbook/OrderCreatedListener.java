@@ -5,9 +5,9 @@ import com.apssouza.mytrade.trading.domain.forex.common.observerinfra.Observer;
 import com.apssouza.mytrade.trading.domain.forex.common.events.OrderCreatedEvent;
 
 class OrderCreatedListener implements Observer {
-    private final BookHistoryService historyHandler;
+    private final OrderBookService historyHandler;
 
-    public OrderCreatedListener(BookHistoryService historyHandler) {
+    public OrderCreatedListener(OrderBookService historyHandler) {
         this.historyHandler = historyHandler;
     }
 

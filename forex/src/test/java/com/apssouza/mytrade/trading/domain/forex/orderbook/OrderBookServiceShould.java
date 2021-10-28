@@ -23,80 +23,80 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @RunWith(MockitoJUnitRunner.class)
-public class BookHistoryServiceShould extends TestCase {
+public class OrderBookServiceShould extends TestCase {
 
-    private BookHistoryService bookHistoryService;
+    private OrderBookService orderBookService;
     private TransactionsExporter transactionsExporter;
 
 
     @Before
     public  void setUp(){
         this.transactionsExporter = mock(TransactionsExporter.class);
-        this.bookHistoryService = new BookHistoryService(transactionsExporter);
+        this.orderBookService = new OrderBookServiceImpl(transactionsExporter);
     }
 
     @Test
     public void return_transactions_from_the_history() {
-        List<CycleHistoryDto> transactions = bookHistoryService.getTransactions();
+        List<CycleHistoryDto> transactions = orderBookService.getTransactions();
         assertTrue(transactions.isEmpty());
     }
 
     @Test
     public void start_history_cycle() {
-        bookHistoryService.startCycle(LocalDateTime.MIN);
-        bookHistoryService.endCycle();
-        List<CycleHistoryDto> transactions = bookHistoryService.getTransactions();
+        orderBookService.startCycle(LocalDateTime.MIN);
+        orderBookService.endCycle();
+        List<CycleHistoryDto> transactions = orderBookService.getTransactions();
         CycleHistoryDto cycleHistory = transactions.get(0);
         assertEquals(LocalDateTime.MIN, cycleHistory.getTime());
     }
 
     @Test
     public void end_history_cycle() {
-        bookHistoryService.endCycle();
-        List<CycleHistoryDto> transactions = bookHistoryService.getTransactions();
+        orderBookService.endCycle();
+        List<CycleHistoryDto> transactions = orderBookService.getTransactions();
         assertEquals(1, transactions.size());
     }
 
     @Test
     public void set_state_of_transaction() {
-        bookHistoryService.startCycle(LocalDateTime.MIN);
-        bookHistoryService.setState(TransactionDto.TransactionState.EXIT,"AUDUSD");
-        bookHistoryService.endCycle();
-        List<CycleHistoryDto> transactions = bookHistoryService.getTransactions();
+        orderBookService.startCycle(LocalDateTime.MIN);
+        orderBookService.setState(TransactionDto.TransactionState.EXIT,"AUDUSD");
+        orderBookService.endCycle();
+        List<CycleHistoryDto> transactions = orderBookService.getTransactions();
         CycleHistoryDto cycleHistory = transactions.get(0);
         assertEquals(TransactionDto.TransactionState.EXIT, cycleHistory.getTransactions().get("AUDUSD").getState());
     }
 
     @Test
     public void add_new_position_to_history() {
-        bookHistoryService.startCycle(LocalDateTime.MIN);
+        orderBookService.startCycle(LocalDateTime.MIN);
         PositionBuilder positionBuilder = new PositionBuilder();
         PositionDto position = positionBuilder.build();
-        bookHistoryService.addPosition(position);
-        bookHistoryService.endCycle();
-        List<CycleHistoryDto> transactions = bookHistoryService.getTransactions();
+        orderBookService.addPosition(position);
+        orderBookService.endCycle();
+        List<CycleHistoryDto> transactions = orderBookService.getTransactions();
         CycleHistoryDto cycleHistory = transactions.get(0);
         assertEquals(position, cycleHistory.getTransactions().get("AUDUSD").getPosition());
     }
 
     @Test
     public void add_new_order_filled_to_history() {
-        bookHistoryService.startCycle(LocalDateTime.MIN);
+        orderBookService.startCycle(LocalDateTime.MIN);
         FilledOrderDto orderDto =  new FilledOrderBuilder().build();
-        bookHistoryService.addOrderFilled(orderDto);
-        bookHistoryService.endCycle();
-        List<CycleHistoryDto> transactions = bookHistoryService.getTransactions();
+        orderBookService.addOrderFilled(orderDto);
+        orderBookService.endCycle();
+        List<CycleHistoryDto> transactions = orderBookService.getTransactions();
         CycleHistoryDto cycleHistory = transactions.get(0);
         assertEquals(orderDto, cycleHistory.getTransactions().get("AUDUSD").getFilledOrder());
     }
 
     @Test
     public void add_new_order_to_history() {
-        bookHistoryService.startCycle(LocalDateTime.MIN);
+        orderBookService.startCycle(LocalDateTime.MIN);
         OrderDto orderDto =  new OrderBuilder().build();
-        bookHistoryService.addOrder(orderDto);
-        bookHistoryService.endCycle();
-        List<CycleHistoryDto> transactions = bookHistoryService.getTransactions();
+        orderBookService.addOrder(orderDto);
+        orderBookService.endCycle();
+        List<CycleHistoryDto> transactions = orderBookService.getTransactions();
         CycleHistoryDto cycleHistory = transactions.get(0);
         assertEquals(orderDto, cycleHistory.getTransactions().get("AUDUSD").getOrder());
     }
@@ -104,14 +104,14 @@ public class BookHistoryServiceShould extends TestCase {
 
     @Test
     public void add_new_order_to_different_currency_pair() {
-        bookHistoryService.startCycle(LocalDateTime.MIN);
+        orderBookService.startCycle(LocalDateTime.MIN);
         OrderBuilder orderBuilder = new OrderBuilder();
         OrderDto orderDto =  orderBuilder.build();
         OrderDto orderDto2 =  orderBuilder.withIdentifier("EURUSD").withSymbol("EURUSD").build();
-        bookHistoryService.addOrder(orderDto);
-        bookHistoryService.addOrder(orderDto2);
-        bookHistoryService.endCycle();
-        List<CycleHistoryDto> transactions = bookHistoryService.getTransactions();
+        orderBookService.addOrder(orderDto);
+        orderBookService.addOrder(orderDto2);
+        orderBookService.endCycle();
+        List<CycleHistoryDto> transactions = orderBookService.getTransactions();
         CycleHistoryDto cycleHistory = transactions.get(0);
         assertEquals(orderDto, cycleHistory.getTransactions().get("AUDUSD").getOrder());
         assertEquals(orderDto2, cycleHistory.getTransactions().get("EURUSD").getOrder());
@@ -119,7 +119,7 @@ public class BookHistoryServiceShould extends TestCase {
 
     @Test
     public void export_history_to_csv() throws IOException {
-        bookHistoryService.export("files/test.csv");
+        orderBookService.export("files/test.csv");
         verify(transactionsExporter,atMostOnce()).exportCsv(any(), any());
     }
 }

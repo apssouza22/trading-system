@@ -5,14 +5,14 @@ import com.apssouza.mytrade.trading.domain.forex.common.observerinfra.Observer;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BookHistoryHandlerFactory {
+public class OrderBookServiceFactory {
 
-    public static BookHistoryService create() {
-        return new BookHistoryService(new TransactionsExporter());
+    public static OrderBookService create() {
+        return new OrderBookServiceImpl(new TransactionsExporter());
     }
 
     public static List<Observer> createListeners(
-            BookHistoryService bookHandler
+            OrderBookService bookHandler
     ) {
         var listeners = new ArrayList<Observer>();
         listeners.add(new HistoryStopOrderFilledListener(bookHandler));

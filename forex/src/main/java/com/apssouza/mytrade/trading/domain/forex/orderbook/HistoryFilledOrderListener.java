@@ -8,9 +8,9 @@ import com.apssouza.mytrade.trading.domain.forex.portfolio.FilledOrderDto;
 
 class HistoryFilledOrderListener implements Observer {
 
-    private final BookHistoryService historyHandler;
+    private final OrderBookService historyHandler;
 
-    public HistoryFilledOrderListener(BookHistoryService historyHandler) {
+    public HistoryFilledOrderListener(OrderBookService historyHandler) {
         this.historyHandler = historyHandler;
     }
 

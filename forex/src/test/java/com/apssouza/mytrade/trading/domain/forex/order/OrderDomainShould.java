@@ -35,7 +35,7 @@ public class OrderDomainShould extends TestCase {
 
     @Test
     public void create_order_from_signal_event() {
-        OrderService orderService = OrderHandlerFactory.create(this.riskManagementService);
+        OrderService orderService = OrderServiceFactory.create(this.riskManagementService);
         SignalBuilder signalBuilder = new SignalBuilder();
         signalBuilder.addSignal(LocalDateTime.MIN, "Buy");
         SignalCreatedEvent event = new SignalCreatedEvent(LocalDateTime.MIN, Collections.emptyMap(), signalBuilder.build());
@@ -50,7 +50,7 @@ public class OrderDomainShould extends TestCase {
         positionBuilder.withType(PositionDto.PositionType.SHORT);
         PositionDto position = positionBuilder.build();
 
-        OrderService orderService = OrderHandlerFactory.create(this.riskManagementService);
+        OrderService orderService = OrderServiceFactory.create(this.riskManagementService);
         OrderDto orderFromClosedPosition = orderService.createOrderFromClosedPosition(position, LocalDateTime.MIN);
         assertEquals(EXITS, orderFromClosedPosition.origin());
         assertEquals(BUY, orderFromClosedPosition.action());
@@ -63,7 +63,7 @@ public class OrderDomainShould extends TestCase {
         positionBuilder.withType(PositionDto.PositionType.LONG);
         PositionDto position = positionBuilder.build();
 
-        OrderService orderService = OrderHandlerFactory.create(this.riskManagementService);
+        OrderService orderService = OrderServiceFactory.create(this.riskManagementService);
         OrderDto orderFromClosedPosition = orderService.createOrderFromClosedPosition(position, LocalDateTime.MIN);
         assertEquals(EXITS, orderFromClosedPosition.origin());
         assertEquals(OrderDto.OrderAction.SELL, orderFromClosedPosition.action());
@@ -71,7 +71,7 @@ public class OrderDomainShould extends TestCase {
 
     @Test
     public void persist_order() {
-        OrderService orderService = OrderHandlerFactory.create(riskManagementService);
+        OrderService orderService = OrderServiceFactory.create(riskManagementService);
         orderService.persist(new OrderBuilder().build());
         List<OrderDto> ordersByStatus = orderService.getOrderByStatus(CREATED);
         assertNotNull(ordersByStatus.get(0));
@@ -79,7 +79,7 @@ public class OrderDomainShould extends TestCase {
 
     @Test
     public void update_order_status() {
-        OrderService orderService = OrderHandlerFactory.create(this.riskManagementService);
+        OrderService orderService = OrderServiceFactory.create(this.riskManagementService);
         var order = new OrderDto("AUDUSD", BUY, 10, STOP_ORDER, LocalDateTime.MIN, "123", CREATED);
         var createdOrder = orderService.persist(order);
         orderService.updateOrderStatus(createdOrder.id(), EXECUTED);
@@ -89,7 +89,7 @@ public class OrderDomainShould extends TestCase {
 
     @Test
     public void filter_orders_by_status() {
-        OrderService orderService = OrderHandlerFactory.create(this.riskManagementService);
+        OrderService orderService = OrderServiceFactory.create(this.riskManagementService);
         var order = new OrderDto("AUDUSD", BUY, 10, STOP_ORDER, LocalDateTime.MIN, "123", CREATED);
         var createdOrder = orderService.persist(order);
         List<OrderDto> orderByStatus = orderService.getOrderByStatus(CREATED);

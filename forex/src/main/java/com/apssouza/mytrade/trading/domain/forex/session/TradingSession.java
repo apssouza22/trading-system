@@ -13,10 +13,10 @@ import com.apssouza.mytrade.trading.domain.forex.feed.pricefeed.PriceStream;
 import com.apssouza.mytrade.trading.domain.forex.feed.pricefeed.PriceStreamFactory;
 import com.apssouza.mytrade.trading.domain.forex.feed.signalfeed.SignalFeedFactory;
 import com.apssouza.mytrade.trading.domain.forex.feed.signalfeed.SignalFeedHandler;
-import com.apssouza.mytrade.trading.domain.forex.order.OrderHandlerFactory;
+import com.apssouza.mytrade.trading.domain.forex.order.OrderServiceFactory;
 import com.apssouza.mytrade.trading.domain.forex.order.OrderService;
-import com.apssouza.mytrade.trading.domain.forex.orderbook.BookHistoryHandlerFactory;
-import com.apssouza.mytrade.trading.domain.forex.orderbook.BookHistoryService;
+import com.apssouza.mytrade.trading.domain.forex.orderbook.OrderBookServiceFactory;
+import com.apssouza.mytrade.trading.domain.forex.orderbook.OrderBookService;
 import com.apssouza.mytrade.trading.domain.forex.orderbook.CycleHistoryDto;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioFactory;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioService;
@@ -45,7 +45,7 @@ public class TradingSession {
     private final FeedService feedModule;
     protected BrokerService executionHandler;
     protected OrderService orderService;
-    protected BookHistoryService historyHandler;
+    protected OrderBookService historyHandler;
     protected PriceStream priceStream;
     protected PortfolioService portfolioService;
     protected boolean processedEndDay;
@@ -78,7 +78,7 @@ public class TradingSession {
     private void configSession() {
         this.signalFeedHandler = SignalFeedFactory.create(feedModule);
         this.executionHandler = OrderExecutionFactory.factory(this.executionType);
-        this.historyHandler = BookHistoryHandlerFactory.create();
+        this.historyHandler = OrderBookServiceFactory.create();
         this.riskManagementService = RiskManagementFactory.create(
                 StopOrderFactory.factory(new StopOrderConfigDto(
                         TradingParams.hard_stop_loss_distance,
@@ -87,7 +87,7 @@ public class TradingSession {
                         TradingParams.trailing_stop_loss_distance
                 ))
         );
-        this.orderService = OrderHandlerFactory.create(this.riskManagementService);
+        this.orderService = OrderServiceFactory.create(this.riskManagementService);
 
         eventNotifier = new EventNotifier();
         this.portfolioService = PortfolioFactory.create(
@@ -102,7 +102,7 @@ public class TradingSession {
     }
 
     private EventNotifier setListeners() {
-        var eventListeners = OrderHandlerFactory.createListeners(
+        var eventListeners = OrderServiceFactory.createListeners(
                 orderService,
                 riskManagementService,
                 executionHandler,
@@ -118,7 +118,7 @@ public class TradingSession {
                 orderService,
                 eventNotifier
         ));
-        eventListeners.addAll(BookHistoryHandlerFactory.createListeners(historyHandler));
+        eventListeners.addAll(OrderBookServiceFactory.createListeners(historyHandler));
         eventListeners.forEach(eventNotifier::attach);
         return eventNotifier;
     }

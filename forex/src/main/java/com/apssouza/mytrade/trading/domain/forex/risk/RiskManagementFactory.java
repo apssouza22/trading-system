@@ -5,7 +5,7 @@ import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrde
 public class RiskManagementFactory {
 
     public static RiskManagementService create(StopOrderCreator stopOrderCreator) {
-        return new RiskManagementService(
+        return new RiskManagementServiceImpl(
                 new PositionExitChecker(),
                 stopOrderCreator
         );

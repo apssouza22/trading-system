@@ -9,11 +9,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class BookHistoryService {
+class OrderBookServiceImpl implements OrderBookService {
     private final TransactionsExporter transactionsExporter;
     public List<CycleHistoryDto> transactions = new CopyOnWriteArrayList<>();
 
-    public BookHistoryService(TransactionsExporter transactionsExporter) {
+    public OrderBookServiceImpl(TransactionsExporter transactionsExporter) {
         this.transactionsExporter = transactionsExporter;
     }
 

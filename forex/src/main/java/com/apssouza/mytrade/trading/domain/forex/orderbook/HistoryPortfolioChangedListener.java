@@ -6,9 +6,9 @@ import com.apssouza.mytrade.trading.domain.forex.common.events.PortfolioChangedE
 
 class HistoryPortfolioChangedListener implements Observer {
 
-    private final BookHistoryService bookHandler;
+    private final OrderBookService bookHandler;
 
-    public HistoryPortfolioChangedListener(BookHistoryService bookHandler) {
+    public HistoryPortfolioChangedListener(OrderBookService bookHandler) {
         this.bookHandler = bookHandler;
     }
 

@@ -36,7 +36,7 @@ import static java.math.BigDecimal.ONE;
 import static java.util.Collections.emptyList;
 
 @RunWith(MockitoJUnitRunner.class)
-public class PortfolioShould {
+public class PortfolioDomainShould {
 
 
     @Test

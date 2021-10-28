@@ -9,9 +9,9 @@ import java.io.IOException;
 
 class SessionFinishedListener implements Observer {
 
-    private final BookHistoryService historyHandler;
+    private final OrderBookService historyHandler;
 
-    public SessionFinishedListener(BookHistoryService historyHandler) {
+    public SessionFinishedListener(OrderBookService historyHandler) {
         this.historyHandler = historyHandler;
     }
 

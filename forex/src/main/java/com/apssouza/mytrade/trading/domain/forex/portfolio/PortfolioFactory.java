@@ -18,7 +18,7 @@ public class PortfolioFactory {
             EventNotifier eventNotifier
     ) {
         var reconciliationHandler = new PortfolioChecker(executionHandler);
-        return new PortfolioService(
+        return new PortfolioServiceImpl(
                 orderService,
                 executionHandler,
                 reconciliationHandler,
