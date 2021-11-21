@@ -24,6 +24,7 @@ import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementFactory;
 import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementService;
 import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderConfigDto;
 import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderCreationFactory;
+import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderCreator;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -76,20 +77,19 @@ public class TradingSession {
     }
 
     private void configSession() {
+        StopOrderConfigDto stopOrderDto = new StopOrderConfigDto(
+                TradingParams.hard_stop_loss_distance,
+                TradingParams.take_profit_distance_fixed,
+                TradingParams.entry_stop_loss_distance_fixed,
+                TradingParams.trailing_stop_loss_distance
+        );
+        StopOrderCreator stopOrderCreator = StopOrderCreationFactory.factory(stopOrderDto);
         this.signalFeedHandler = SignalFeedFactory.create(feedModule);
         this.executionHandler = BrokerIntegrationFactory.factory(this.executionType);
         this.historyHandler = OrderBookFactory.create();
-        this.riskManagementService = RiskManagementFactory.create(
-                StopOrderCreationFactory.factory(new StopOrderConfigDto(
-                        TradingParams.hard_stop_loss_distance,
-                        TradingParams.take_profit_distance_fixed,
-                        TradingParams.entry_stop_loss_distance_fixed,
-                        TradingParams.trailing_stop_loss_distance
-                ))
-        );
+        this.riskManagementService = RiskManagementFactory.create(stopOrderCreator);
         this.orderService = OrderFactory.create(this.riskManagementService);
-
-        eventNotifier = new EventNotifier();
+        this.eventNotifier = new EventNotifier();
         this.portfolioService = PortfolioFactory.create(
                 this.orderService,
                 this.executionHandler,
@@ -97,7 +97,6 @@ public class TradingSession {
                 eventNotifier
         );
         this.eventNotifier = setListeners();
-
         this.priceStream = PriceStreamFactory.create(this.sessionType, eventQueue, this.feedModule);
     }
 
