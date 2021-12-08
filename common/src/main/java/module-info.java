@@ -1,6 +1,8 @@
 module com.apssouza.mytrade.common {
     requires java.logging;
     requires java.sql;
-    exports com.apssouza.mytrade.common.misc.helper.time;
-    exports com.apssouza.mytrade.common.misc.helper.file;
+    requires cfg4j.core;
+    requires org.slf4j;
+    exports com.apssouza.mytrade.common.time;
+    exports com.apssouza.mytrade.common.file;
 }

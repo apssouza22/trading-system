@@ -1,6 +1,6 @@
 package com.apssouza.mytrade.trading.domain.forex.risk;
 
-import com.apssouza.mytrade.common.misc.helper.time.MarketTimeHelper;
+import com.apssouza.mytrade.common.time.MarketTimeHelper;
 import com.apssouza.mytrade.feed.api.SignalDto;
 import com.apssouza.mytrade.trading.domain.forex.common.TradingParams;
 import com.apssouza.mytrade.trading.domain.forex.common.events.Event;

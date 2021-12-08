@@ -13,4 +13,11 @@
     <groupId>com.apssouza.mytrade</groupId>
     <artifactId>common</artifactId>
     <version>1.0-SNAPSHOT</version>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.cfg4j</groupId>
+            <artifactId>cfg4j-core</artifactId>
+        </dependency>
+    </dependencies>
 </project>

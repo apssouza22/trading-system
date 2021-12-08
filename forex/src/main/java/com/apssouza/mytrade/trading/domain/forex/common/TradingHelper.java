@@ -2,7 +2,7 @@ package com.apssouza.mytrade.trading.domain.forex.common;
 
 import com.apssouza.mytrade.trading.domain.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PositionDto;
-import com.apssouza.mytrade.common.misc.helper.time.DayHelper;
+import com.apssouza.mytrade.common.time.DayHelper;
 
 import java.time.LocalDateTime;
 

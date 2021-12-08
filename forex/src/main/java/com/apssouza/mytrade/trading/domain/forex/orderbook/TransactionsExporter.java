@@ -1,6 +1,6 @@
 package com.apssouza.mytrade.trading.domain.forex.orderbook;
 
-import com.apssouza.mytrade.common.misc.helper.file.WriteFileHelper;
+import com.apssouza.mytrade.common.file.WriteFileHelper;
 
 import java.io.File;
 import java.io.IOException;

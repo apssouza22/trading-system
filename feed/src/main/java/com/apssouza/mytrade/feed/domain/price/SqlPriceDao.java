@@ -1,6 +1,6 @@
 package com.apssouza.mytrade.feed.domain.price;
 
-import com.apssouza.mytrade.common.misc.helper.time.DateTimeConverter;
+import com.apssouza.mytrade.common.time.DateTimeConverter;
 import com.apssouza.mytrade.feed.api.PriceDto;
 
 import java.sql.*;

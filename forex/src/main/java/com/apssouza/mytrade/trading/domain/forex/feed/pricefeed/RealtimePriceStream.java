@@ -1,6 +1,6 @@
 package com.apssouza.mytrade.trading.domain.forex.feed.pricefeed;
 
-import com.apssouza.mytrade.common.misc.helper.time.DateTimeHelper;
+import com.apssouza.mytrade.common.time.DateTimeHelper;
 import com.apssouza.mytrade.feed.api.PriceDto;
 import com.apssouza.mytrade.trading.domain.forex.common.events.Event;
 import com.apssouza.mytrade.trading.domain.forex.common.TradingHelper;

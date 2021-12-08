@@ -1,4 +1,4 @@
-package com.apssouza.mytrade.common.misc.helper.file;
+package com.apssouza.mytrade.common.file;
 
 import java.io.BufferedReader;
 import java.io.IOException;

@@ -4,7 +4,7 @@ import com.apssouza.mytrade.trading.domain.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderDto;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.FilledOrderDto;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PositionDto;
-import com.apssouza.mytrade.common.misc.helper.time.DateTimeHelper;
+import com.apssouza.mytrade.common.time.DateTimeHelper;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;

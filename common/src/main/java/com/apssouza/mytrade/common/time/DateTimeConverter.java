@@ -1,4 +1,4 @@
-package com.apssouza.mytrade.common.misc.helper.time;
+package com.apssouza.mytrade.common.time;
 
 
 import java.time.LocalDate;
