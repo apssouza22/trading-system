@@ -3,6 +3,8 @@ Simple High frequency trading with backtesting simulation and live trading engin
 
 It has been developed for both retail traders and institutional hedge funds to aid strategy development and deployment.
 
+<a href="https://www.buymeacoffee.com/apssouza"><img src="https://miro.medium.com/max/654/1*rQv8JgstmK0juxP-Kb4IGg.jpeg"></a>
+
 ## Features
 * Persistence: Persistence is achieved through the H2
 * Backtesting: Run a simulation of your buy/sell strategy.
