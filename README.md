@@ -1,7 +1,10 @@
 # FXyou  ![Build status](https://github.com/apssouza22/trading-system/actions/workflows/ci.yml/badge.svg) [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=apssouza22_trading-system&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=apssouza22_trading-system) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=apssouza22_trading-system&metric=alert_status)](https://sonarcloud.io/dashboard?id=apssouza22_trading-system)
 Simple High frequency trading with backtesting simulation and live trading engine written in Java.
 
-It has been developed for both retail traders and institutional hedge funds to aid strategy development and deployment.
+## Disclaimer
+This software is for educational purposes only. Do not risk money which you are afraid to lose. USE THE SOFTWARE AT YOUR OWN RISK. THE AUTHORS AND ALL AFFILIATES ASSUME NO RESPONSIBILITY FOR YOUR TRADING RESULTS.
+
+Always start by running a trading bot in Dry-run and do not engage money before you understand how it works and what profit/loss you should expect.
 
 <a href="https://www.buymeacoffee.com/apssouza"><img src="https://miro.medium.com/max/654/1*rQv8JgstmK0juxP-Kb4IGg.jpeg"></a>
 
