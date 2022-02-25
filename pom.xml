@@ -36,7 +36,7 @@
 
     <jacoco.version>0.8.5</jacoco.version>
     <junit.version>4.13.1</junit.version>
-    <h2.version>2.0.206</h2.version>
+    <h2.version>2.1.210</h2.version>
     <mockito-core.version>3.12.4</mockito-core.version>
     <mytrade.version>1.0-SNAPSHOT</mytrade.version>
     <sonar.organization>apssouza22-github</sonar.organization>
