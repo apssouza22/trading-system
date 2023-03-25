@@ -20,8 +20,8 @@ public class Application {
 
 
     public static void main(String[] args) {
-        var springApplication = new SpringApplication(Application.class, Application.class);
-        springApplication.run(args);
+//        var springApplication = new SpringApplication(Application.class, Application.class);
+//        springApplication.run(args);
 
         var date = of(2018, 9, 10);
         var systemName = "signal_test";
