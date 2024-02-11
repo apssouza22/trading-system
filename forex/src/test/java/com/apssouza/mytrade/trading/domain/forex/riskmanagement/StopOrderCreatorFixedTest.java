@@ -1,14 +1,14 @@
-package com.apssouza.mytrade.trading.domain.forex.risk;
+package com.apssouza.mytrade.trading.domain.forex.riskmanagement;
 
 import com.apssouza.mytrade.feed.api.PriceDto;
 import com.apssouza.mytrade.trading.domain.forex.common.events.PriceChangedEvent;
 import com.apssouza.mytrade.trading.domain.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PositionDto;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PositionBuilder;
-import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderConfigDto;
-import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderCreator;
-import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderDto;
-import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderCreationFactory;
+import com.apssouza.mytrade.trading.domain.forex.riskmanagement.stopordercreation.StopOrderConfigDto;
+import com.apssouza.mytrade.trading.domain.forex.riskmanagement.stopordercreation.StopOrderCreator;
+import com.apssouza.mytrade.trading.domain.forex.riskmanagement.stopordercreation.StopOrderDto;
+import com.apssouza.mytrade.trading.domain.forex.riskmanagement.stopordercreation.StopOrderCreationFactory;
 
 import org.junit.Before;
 import org.junit.Test;

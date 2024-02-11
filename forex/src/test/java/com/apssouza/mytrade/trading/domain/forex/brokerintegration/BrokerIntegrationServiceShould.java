@@ -7,7 +7,7 @@ import com.apssouza.mytrade.trading.domain.forex.order.StopOrderBuilder;
 import com.apssouza.mytrade.trading.domain.forex.order.*;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.FilledOrderDto;
 import com.apssouza.mytrade.trading.domain.forex.common.TradingParams;
-import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderDto;
+import com.apssouza.mytrade.trading.domain.forex.riskmanagement.stopordercreation.StopOrderDto;
 
 import junit.framework.TestCase;
 import org.junit.Before;
@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderDto.StopOrderType.STOP_LOSS;
+import static com.apssouza.mytrade.trading.domain.forex.riskmanagement.stopordercreation.StopOrderDto.StopOrderType.STOP_LOSS;
 
 @RunWith(MockitoJUnitRunner.class)
 public class BrokerIntegrationServiceShould extends TestCase {

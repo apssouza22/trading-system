@@ -8,8 +8,8 @@ import com.apssouza.mytrade.trading.domain.forex.common.events.PositionClosedEve
 import com.apssouza.mytrade.trading.domain.forex.common.events.PriceChangedEvent;
 import com.apssouza.mytrade.trading.domain.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.domain.forex.order.OrderService;
-import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementService;
-import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderDto;
+import com.apssouza.mytrade.trading.domain.forex.riskmanagement.RiskManagementService;
+import com.apssouza.mytrade.trading.domain.forex.riskmanagement.stopordercreation.StopOrderDto;
 import com.apssouza.mytrade.trading.domain.forex.common.observerinfra.EventNotifier;
 
 import java.math.BigDecimal;

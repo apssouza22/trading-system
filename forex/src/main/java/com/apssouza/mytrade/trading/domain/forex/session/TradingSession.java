@@ -20,11 +20,11 @@ import com.apssouza.mytrade.trading.domain.forex.orderbook.OrderBookService;
 import com.apssouza.mytrade.trading.domain.forex.orderbook.CycleHistoryDto;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioFactory;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioService;
-import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementFactory;
-import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementService;
-import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderConfigDto;
-import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderCreationFactory;
-import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderCreator;
+import com.apssouza.mytrade.trading.domain.forex.riskmanagement.RiskManagementFactory;
+import com.apssouza.mytrade.trading.domain.forex.riskmanagement.RiskManagementService;
+import com.apssouza.mytrade.trading.domain.forex.riskmanagement.stopordercreation.StopOrderConfigDto;
+import com.apssouza.mytrade.trading.domain.forex.riskmanagement.stopordercreation.StopOrderCreationFactory;
+import com.apssouza.mytrade.trading.domain.forex.riskmanagement.stopordercreation.StopOrderCreator;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

@@ -1,11 +1,10 @@
 package com.apssouza.mytrade.trading.domain.forex.portfolio;
 
-import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderDto;
+import com.apssouza.mytrade.trading.domain.forex.riskmanagement.stopordercreation.StopOrderDto;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.EnumMap;
-import static java.math.BigDecimal.ONE;
 
 public class PositionBuilder {
 

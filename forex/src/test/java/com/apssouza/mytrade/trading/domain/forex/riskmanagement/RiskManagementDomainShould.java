@@ -1,14 +1,14 @@
-package com.apssouza.mytrade.trading.domain.forex.risk;
+package com.apssouza.mytrade.trading.domain.forex.riskmanagement;
 
 import com.apssouza.mytrade.trading.domain.forex.common.TradingParams;
 import com.apssouza.mytrade.trading.domain.forex.order.StopOrderBuilder;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PositionDto;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PositionBuilder;
-import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.RiskManagementBuilder;
-import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderDto.StopOrderType;
+import com.apssouza.mytrade.trading.domain.forex.riskmanagement.stopordercreation.RiskManagementBuilder;
+import com.apssouza.mytrade.trading.domain.forex.riskmanagement.stopordercreation.StopOrderDto.StopOrderType;
 import com.apssouza.mytrade.trading.domain.forex.session.LoopEventBuilder;
-import static com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderDto.StopOrderType.ENTRY_STOP;
-import static com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderDto.StopOrderType.STOP_LOSS;
+import static com.apssouza.mytrade.trading.domain.forex.riskmanagement.stopordercreation.StopOrderDto.StopOrderType.ENTRY_STOP;
+import static com.apssouza.mytrade.trading.domain.forex.riskmanagement.stopordercreation.StopOrderDto.StopOrderType.STOP_LOSS;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

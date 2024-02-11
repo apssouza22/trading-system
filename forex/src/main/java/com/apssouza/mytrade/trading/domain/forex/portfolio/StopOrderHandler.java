@@ -5,11 +5,11 @@ import com.apssouza.mytrade.trading.domain.forex.common.MultiPositionHandler;
 import com.apssouza.mytrade.trading.domain.forex.common.TradingParams;
 import com.apssouza.mytrade.trading.domain.forex.common.events.Event;
 import com.apssouza.mytrade.trading.domain.forex.common.observerinfra.EventNotifier;
-import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementService;
-import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderDto;
-import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderFilledEvent;
-import static com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderDto.StopOrderType.STOP_LOSS;
-import static com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderDto.StopOrderType.TAKE_PROFIT;
+import com.apssouza.mytrade.trading.domain.forex.riskmanagement.RiskManagementService;
+import com.apssouza.mytrade.trading.domain.forex.riskmanagement.stopordercreation.StopOrderDto;
+import com.apssouza.mytrade.trading.domain.forex.riskmanagement.stopordercreation.StopOrderFilledEvent;
+import static com.apssouza.mytrade.trading.domain.forex.riskmanagement.stopordercreation.StopOrderDto.StopOrderType.STOP_LOSS;
+import static com.apssouza.mytrade.trading.domain.forex.riskmanagement.stopordercreation.StopOrderDto.StopOrderType.TAKE_PROFIT;
 
 import java.util.ArrayList;
 import java.util.HashMap;

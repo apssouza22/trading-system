@@ -3,7 +3,7 @@ package com.apssouza.mytrade.trading.domain.forex.portfolio;
 import com.apssouza.mytrade.trading.domain.forex.brokerintegration.BrokerIntegrationService;
 import com.apssouza.mytrade.trading.domain.forex.common.observerinfra.Observer;
 import com.apssouza.mytrade.trading.domain.forex.order.OrderService;
-import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementService;
+import com.apssouza.mytrade.trading.domain.forex.riskmanagement.RiskManagementService;
 import com.apssouza.mytrade.trading.domain.forex.common.observerinfra.EventNotifier;
 
 import java.util.Arrays;

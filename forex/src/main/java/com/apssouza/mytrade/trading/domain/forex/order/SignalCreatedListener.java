@@ -5,7 +5,7 @@ import com.apssouza.mytrade.trading.domain.forex.common.events.OrderCreatedEvent
 import com.apssouza.mytrade.trading.domain.forex.common.observerinfra.Observer;
 import com.apssouza.mytrade.trading.domain.forex.common.events.SignalCreatedEvent;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioService;
-import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementService;
+import com.apssouza.mytrade.trading.domain.forex.riskmanagement.RiskManagementService;
 import com.apssouza.mytrade.trading.domain.forex.common.observerinfra.EventNotifier;
 
 import java.util.logging.Logger;

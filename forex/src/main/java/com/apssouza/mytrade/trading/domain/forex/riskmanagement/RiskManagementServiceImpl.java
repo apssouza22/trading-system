@@ -1,4 +1,4 @@
-package com.apssouza.mytrade.trading.domain.forex.risk;
+package com.apssouza.mytrade.trading.domain.forex.riskmanagement;
 
 import com.apssouza.mytrade.common.time.MarketTimeHelper;
 import com.apssouza.mytrade.feed.api.SignalDto;
@@ -7,9 +7,9 @@ import com.apssouza.mytrade.trading.domain.forex.common.events.Event;
 import com.apssouza.mytrade.trading.domain.forex.order.OrderDto;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.FilledOrderDto;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PositionDto;
-import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderCreator;
-import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderDto;
-import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderDto.StopOrderType;
+import com.apssouza.mytrade.trading.domain.forex.riskmanagement.stopordercreation.StopOrderCreator;
+import com.apssouza.mytrade.trading.domain.forex.riskmanagement.stopordercreation.StopOrderDto;
+import com.apssouza.mytrade.trading.domain.forex.riskmanagement.stopordercreation.StopOrderDto.StopOrderType;
 
 import java.util.EnumMap;
 import java.util.List;

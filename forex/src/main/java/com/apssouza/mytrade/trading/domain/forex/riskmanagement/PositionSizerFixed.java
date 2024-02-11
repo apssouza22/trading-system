@@ -1,4 +1,4 @@
-package com.apssouza.mytrade.trading.domain.forex.risk;
+package com.apssouza.mytrade.trading.domain.forex.riskmanagement;
 
 class PositionSizerFixed{
 

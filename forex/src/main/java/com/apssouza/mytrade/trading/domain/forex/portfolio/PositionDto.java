@@ -3,7 +3,7 @@ package com.apssouza.mytrade.trading.domain.forex.portfolio;
 import com.apssouza.mytrade.trading.domain.forex.common.NumberHelper;
 import com.apssouza.mytrade.trading.domain.forex.common.Symbol;
 import com.apssouza.mytrade.trading.domain.forex.order.OrderDto;
-import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderDto;
+import com.apssouza.mytrade.trading.domain.forex.riskmanagement.stopordercreation.StopOrderDto;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

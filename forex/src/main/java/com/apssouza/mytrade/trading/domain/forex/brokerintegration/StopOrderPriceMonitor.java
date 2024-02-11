@@ -2,7 +2,7 @@ package com.apssouza.mytrade.trading.domain.forex.brokerintegration;
 
 import com.apssouza.mytrade.feed.api.PriceDto;
 import com.apssouza.mytrade.trading.domain.forex.order.OrderDto;
-import com.apssouza.mytrade.trading.domain.forex.risk.stopordercreation.StopOrderDto;
+import com.apssouza.mytrade.trading.domain.forex.riskmanagement.stopordercreation.StopOrderDto;
 
 import java.util.*;
 

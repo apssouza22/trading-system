@@ -4,7 +4,7 @@ import com.apssouza.mytrade.trading.domain.forex.brokerintegration.BrokerIntegra
 import com.apssouza.mytrade.trading.domain.forex.common.observerinfra.EventNotifier;
 import com.apssouza.mytrade.trading.domain.forex.common.observerinfra.Observer;
 import com.apssouza.mytrade.trading.domain.forex.portfolio.PortfolioService;
-import com.apssouza.mytrade.trading.domain.forex.risk.RiskManagementService;
+import com.apssouza.mytrade.trading.domain.forex.riskmanagement.RiskManagementService;
 
 import java.util.ArrayList;
 import java.util.List;
